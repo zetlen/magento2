@@ -5,15 +5,15 @@
 
 define([
     'Magento_Ui/js/form/components/fieldset',
-    'Magento_Ui/js/core/app'
-], function (Fieldset, app) {
+    'Magento_Ui/js/core/app',
+], function(Fieldset, app) {
     'use strict';
 
     return Fieldset.extend({
         defaults: {
             listens: {
-                '${ $.provider }:additionalAttributes': 'onAttributeAdd'
-            }
+                '${ $.provider }:additionalAttributes': 'onAttributeAdd',
+            },
         },
 
         /**
@@ -21,8 +21,8 @@ define([
          *
          * @param {Object} listOfNewAttributes
          */
-        onAttributeAdd: function (listOfNewAttributes) {
+        onAttributeAdd: function(listOfNewAttributes) {
             app(listOfNewAttributes, true);
-        }
+        },
     });
 });

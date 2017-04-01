@@ -7,11 +7,11 @@ define([
     'jquery',
     'mage/storage',
     'Magento_Ui/js/model/messageList',
-    'Magento_Customer/js/customer-data'
-], function ($, storage, globalMessageList, customerData) {
+    'Magento_Customer/js/customer-data',
+], function($, storage, globalMessageList, customerData) {
     'use strict';
 
-    var callbacks = [],
+    let callbacks = [],
 
         /**
          * @param {Object} loginData
@@ -19,21 +19,21 @@ define([
          * @param {*} isGlobal
          * @param {Object} messageContainer
          */
-        action = function (loginData, redirectUrl, isGlobal, messageContainer) {
+        action = function(loginData, redirectUrl, isGlobal, messageContainer) {
             messageContainer = messageContainer || globalMessageList;
 
             return storage.post(
                 'customer/ajax/login',
                 JSON.stringify(loginData),
                 isGlobal
-            ).done(function (response) {
+            ).done(function(response) {
                 if (response.errors) {
                     messageContainer.addErrorMessage(response);
-                    callbacks.forEach(function (callback) {
+                    callbacks.forEach(function(callback) {
                         callback(loginData);
                     });
                 } else {
-                    callbacks.forEach(function (callback) {
+                    callbacks.forEach(function(callback) {
                         callback(loginData);
                     });
                     customerData.invalidate(['customer']);
@@ -46,11 +46,11 @@ define([
                         location.reload();
                     }
                 }
-            }).fail(function () {
+            }).fail(function() {
                 messageContainer.addErrorMessage({
-                    'message': 'Could not authenticate. Please try again later'
+                    'message': 'Could not authenticate. Please try again later',
                 });
-                callbacks.forEach(function (callback) {
+                callbacks.forEach(function(callback) {
                     callback(loginData);
                 });
             });
@@ -59,7 +59,7 @@ define([
     /**
      * @param {Function} callback
      */
-    action.registerLoginCallback = function (callback) {
+    action.registerLoginCallback = function(callback) {
         callbacks.push(callback);
     };
 

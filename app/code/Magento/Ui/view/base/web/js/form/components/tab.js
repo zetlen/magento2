@@ -7,22 +7,22 @@
  * @api
  */
 define([
-    'uiCollection'
-], function (Collection) {
+    'uiCollection',
+], function(Collection) {
     'use strict';
 
     return Collection.extend({
         defaults: {
-            uniqueProp:     'active',
-            active:         false,
-            wasActivated:   false
+            uniqueProp: 'active',
+            active: false,
+            wasActivated: false,
         },
 
         /**
          * Extends instance with defaults. Invokes parent initialize method.
          * Calls initListeners and pushParams methods.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .setUnique();
         },
@@ -32,7 +32,7 @@ define([
          * Defines observable properties of instance.
          * @return {Object} - reference to instance
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('active wasActivated');
 
@@ -42,13 +42,13 @@ define([
         /**
          * Sets active property to true, then invokes pushParams method.
          */
-        activate: function () {
+        activate: function() {
             this.active(true);
             this.wasActivated(true);
 
             this.setUnique();
 
             return true;
-        }
+        },
     });
 });

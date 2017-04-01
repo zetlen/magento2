@@ -5,8 +5,8 @@
 define([
     'ko',
     'jquery',
-    '../template/renderer'
-], function (ko, $, renderer) {
+    '../template/renderer',
+], function(ko, $, renderer) {
     'use strict';
 
     /**
@@ -24,13 +24,13 @@ define([
          * Adds event handler which automatically
          * selects inputs' element text when field gets focused.
          */
-        init: function (element, valueAccessor) {
-            var enabled = ko.unwrap(valueAccessor());
+        init: function(element, valueAccessor) {
+            let enabled = ko.unwrap(valueAccessor());
 
             if (enabled !== false) {
                 $(element).on('focus', onFocus);
             }
-        }
+        },
     };
 
     renderer.addAttribute('autoselect');

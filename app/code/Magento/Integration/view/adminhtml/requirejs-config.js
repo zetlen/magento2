@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            integration: 'Magento_Integration/js/integration'
-        }
-    }
+            integration: 'Magento_Integration/js/integration',
+        },
+    },
 };

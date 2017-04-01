@@ -10,15 +10,15 @@ define([
     'underscore',
     'mageUtils',
     'Magento_Ui/js/lib/collapsible',
-    'mage/translate'
-], function (Component, $, ko, _, utils, Collapsible) {
+    'mage/translate',
+], function(Component, $, ko, _, utils, Collapsible) {
     'use strict';
 
-    //connect items with observableArrays
+    // connect items with observableArrays
     ko.bindingHandlers.sortableList = {
         /** @inheritdoc */
-        init: function (element, valueAccessor) {
-            var list = valueAccessor();
+        init: function(element, valueAccessor) {
+            let list = valueAccessor();
 
             $(element).sortable({
                 axis: 'y',
@@ -26,38 +26,38 @@ define([
                 tolerance: 'pointer',
 
                 /** @inheritdoc */
-                update: function (event, ui) {
-                    var item = ko.contextFor(ui.item[0]).$data,
+                update: function(event, ui) {
+                    let item = ko.contextFor(ui.item[0]).$data,
                         position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
 
-                    if (ko.contextFor(ui.item[0]).$index() != position) { //eslint-disable-line eqeqeq
+                    if (ko.contextFor(ui.item[0]).$index() != position) { // eslint-disable-line eqeqeq
                         if (position >= 0) {
                             list.remove(item);
                             list.splice(position, 0, item);
                         }
                         ui.item.remove();
                     }
-                }
+                },
             });
-        }
+        },
     };
 
     return Collapsible.extend({
         defaults: {
             notificationMessage: {
                 text: null,
-                error: null
+                error: null,
             },
             createOptionsUrl: null,
             attributes: [],
-            stepInitialized: false
+            stepInitialized: false,
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
-            this.createAttribute = _.wrap(this.createAttribute, function () {
-                var args = _.toArray(arguments),
+            this.createAttribute = _.wrap(this.createAttribute, function() {
+                let args = _.toArray(arguments),
                     createAttribute = args.shift();
 
                 return this.doInitSavedOptions(createAttribute.apply(this, args));
@@ -66,7 +66,7 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super().observe(['attributes']);
 
             return this;
@@ -75,21 +75,21 @@ define([
         /**
          * Create option.
          */
-        createOption: function () {
+        createOption: function() {
             // this - current attribute
             this.options.push({
-                value: 0,
-                label: '',
-                id: utils.uniqueid(),
+                "value": 0,
+                "label": '',
+                "id": utils.uniqueid(),
                 'attribute_id': this.id,
-                'is_new': true
+                'is_new': true,
             });
         },
 
         /**
          * @param {Object} option
          */
-        saveOption: function (option) {
+        saveOption: function(option) {
             if (!_.isEmpty(option.label)) {
                 this.options.remove(option);
                 this.options.push(option);
@@ -100,14 +100,14 @@ define([
         /**
          * @param {Object} option
          */
-        removeOption: function (option) {
+        removeOption: function(option) {
             this.options.remove(option);
         },
 
         /**
          * @param {String} attribute
          */
-        removeAttribute: function (attribute) {
+        removeAttribute: function(attribute) {
             this.attributes.remove(attribute);
             this.wizard.setNotificationMessage(
                 $.mage.__('An attribute has been removed. This attribute will no longer appear in your configurations.')
@@ -119,9 +119,9 @@ define([
          * @param {*} index
          * @return {Object}
          */
-        createAttribute: function (attribute, index) {
+        createAttribute: function(attribute, index) {
             attribute.chosenOptions = ko.observableArray([]);
-            attribute.options = ko.observableArray(_.map(attribute.options, function (option) {
+            attribute.options = ko.observableArray(_.map(attribute.options, function(option) {
                 option.id = utils.uniqueid();
 
                 return option;
@@ -138,25 +138,25 @@ define([
          * @param {Number} index
          * @return {Boolean}
          */
-        initialOpened: function (index) {
+        initialOpened: function(index) {
             return index < 3;
         },
 
         /**
          * Save attribute.
          */
-        saveAttribute: function () {
-            var errorMessage = $.mage.__('Select options for all attributes or remove unused attributes.');
+        saveAttribute: function() {
+            let errorMessage = $.mage.__('Select options for all attributes or remove unused attributes.');
 
-            this.attributes.each(function (attribute) {
+            this.attributes.each(function(attribute) {
                 attribute.chosen = [];
 
                 if (!attribute.chosenOptions.getLength()) {
                     throw new Error(errorMessage);
                 }
-                attribute.chosenOptions.each(function (id) {
+                attribute.chosenOptions.each(function(id) {
                     attribute.chosen.push(attribute.options.findWhere({
-                        id: id
+                        id: id,
                     }));
                 });
             });
@@ -169,28 +169,28 @@ define([
         /**
          * @param {Object} attribute
          */
-        selectAllAttributes: function (attribute) {
+        selectAllAttributes: function(attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'id'));
         },
 
         /**
          * @param {Object} attribute
          */
-        deSelectAllAttributes: function (attribute) {
+        deSelectAllAttributes: function(attribute) {
             attribute.chosenOptions.removeAll();
         },
 
         /**
          * @return {Boolean}
          */
-        saveOptions: function () {
-            var options = [];
+        saveOptions: function() {
+            let options = [];
 
-            this.attributes.each(function (attribute) {
-                attribute.chosenOptions.each(function (id) {
-                    var option = attribute.options.findWhere({
-                        id: id,
-                        'is_new': true
+            this.attributes.each(function(attribute) {
+                attribute.chosenOptions.each(function(id) {
+                    let option = attribute.options.findWhere({
+                        "id": id,
+                        'is_new': true,
                     });
 
                     if (option) {
@@ -206,14 +206,14 @@ define([
                 type: 'POST',
                 url: this.createOptionsUrl,
                 data: {
-                    options: options
+                    options: options,
                 },
-                showLoader: true
-            }).done(function (savedOptions) {
-                this.attributes.each(function (attribute) {
-                    _.each(savedOptions, function (newOptionId, oldOptionId) {
-                        var option = attribute.options.findWhere({
-                            id: oldOptionId
+                showLoader: true,
+            }).done(function(savedOptions) {
+                this.attributes.each(function(attribute) {
+                    _.each(savedOptions, function(newOptionId, oldOptionId) {
+                        let option = attribute.options.findWhere({
+                            id: oldOptionId,
                         });
 
                         if (option) {
@@ -224,23 +224,22 @@ define([
                         }
                     });
                 });
-
             }.bind(this));
         },
 
         /**
          * @param {*} attributeIds
          */
-        requestAttributes: function (attributeIds) {
+        requestAttributes: function(attributeIds) {
             $.ajax({
                 type: 'POST',
                 url: this.optionsUrl,
                 data: {
-                    attributes: attributeIds
+                    attributes: attributeIds,
                 },
-                showLoader: true
-            }).done(function (attributes) {
-                attributes = _.sortBy(attributes, function (attribute) {
+                showLoader: true,
+            }).done(function(attributes) {
+                attributes = _.sortBy(attributes, function(attribute) {
                     return this.wizard.data.attributesIds.indexOf(attribute.id);
                 }.bind(this));
                 this.attributes(_.map(attributes, this.createAttribute));
@@ -251,14 +250,14 @@ define([
          * @param {*} attribute
          * @return {*}
          */
-        doInitSavedOptions: function (attribute) {
-            var selectedOptions, selectedOptionsIds, selectedAttribute = _.findWhere(this.initData.attributes, {
-                id: attribute.id
+        doInitSavedOptions: function(attribute) {
+            let selectedOptions, selectedOptionsIds, selectedAttribute = _.findWhere(this.initData.attributes, {
+                id: attribute.id,
             });
 
             if (selectedAttribute) {
                 selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
-                selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
+                selectedOptionsIds = _.pluck(_.filter(attribute.options(), function(option) {
                     return _.contains(selectedOptions, option.value);
                 }), 'id');
                 attribute.chosenOptions(selectedOptionsIds);
@@ -271,7 +270,7 @@ define([
         /**
          * @param {Object} wizard
          */
-        render: function (wizard) {
+        render: function(wizard) {
             this.wizard = wizard;
             this.requestAttributes(wizard.data.attributesIds());
         },
@@ -279,7 +278,7 @@ define([
         /**
          * @param {Object} wizard
          */
-        force: function (wizard) {
+        force: function(wizard) {
             this.saveOptions();
             this.saveAttribute(wizard);
 
@@ -289,8 +288,8 @@ define([
         /**
          * @param {Object} wizard
          */
-        back: function (wizard) {
+        back: function(wizard) {
             wizard.data.attributesIds(this.attributes().pluck('id'));
-        }
+        },
     });
 });

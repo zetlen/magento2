@@ -7,8 +7,8 @@ define([
     'uiClass',
     'Magento_Paypal/js/rule',
     'mageUtils',
-    'underscore'
-], function ($, Class, Rule, utils, _) {
+    'underscore',
+], function($, Class, Rule, utils, _) {
     'use strict';
 
     return Class.extend({
@@ -27,12 +27,12 @@ define([
             /**
              * An attribute of the element responsible for the activation of the payment method (data attribute)
              */
-            enableButton:   '[data-enable="payment"]',
+            enableButton: '[data-enable="payment"]',
 
             /**
              * An attribute of the element responsible for the activation of the Payflow Express (data attribute)
              */
-            enableExpress:  '[data-enable="express"]',
+            enableExpress: '[data-enable="express"]',
 
             /**
              * An attribute of the element responsible for the activation of the
@@ -43,34 +43,34 @@ define([
             /**
              * An attribute of the element responsible for the activation of the Payflow Bml (data attribute)
              */
-            enableBml:      '[data-enable="bml"]',
+            enableBml: '[data-enable="bml"]',
 
             /**
              * An attribute of the element responsible for the activation of the PayPal Bml (data attribute)
              */
-            enableBmlPayPal:      '[data-enable="bml-api"]',
+            enableBmlPayPal: '[data-enable="bml-api"]',
 
             /**
              * An attribute of the element responsible for the visibility of the PayPal Merchant Id (data attribute)
              */
-            dependsMerchantId:  '[data-enable="merchant-id"]',
+            dependsMerchantId: '[data-enable="merchant-id"]',
 
             /**
              * An attribute of the element responsible for the visibility of the Payflow Bml Sort Order (data attribute)
              */
-            dependsBmlSortOrder:    '[data-enable="bml-sort-order"]',
+            dependsBmlSortOrder: '[data-enable="bml-sort-order"]',
 
             /**
              * An attribute of the element responsible for the visibility of the PayPal Bml Sort Order (data attribute)
              */
-            dependsBmlApiSortOrder:    '[data-enable="bml-api-sort-order"]',
+            dependsBmlApiSortOrder: '[data-enable="bml-api-sort-order"]',
 
             /**
              * Templates element selectors
              */
             templates: {
-                elementSelector: 'div.section-config tr[id$="${ $.identifier }"]:first'
-            }
+                elementSelector: 'div.section-config tr[id$="${ $.identifier }"]:first',
+            },
         },
 
         /**
@@ -80,7 +80,7 @@ define([
          * @param {String} identifier
          * @returns {exports.initialize}
          */
-        initialize: function (config, identifier) {
+        initialize: function(config, identifier) {
             this.initConfig(config);
             this.$self = this.createElement(identifier);
 
@@ -92,24 +92,22 @@ define([
          *
          * @returns {exports.initEvents}
          */
-        initEvents: function () {
-            _.each(this.config.events, function (elementEvents, selector) {
-
-                var solution = this,
+        initEvents: function() {
+            _.each(this.config.events, function(elementEvents, selector) {
+                let solution = this,
                     selectorButton = solution.$self.find(selector),
                     $self = solution.$self,
                     events = elementEvents;
 
-                selectorButton.on(solution.systemEvent, function () {
-                    _.each(events, function (elementEvent, name) {
-
-                        var predicate = elementEvent.predicate,
+                selectorButton.on(solution.systemEvent, function() {
+                    _.each(events, function(elementEvent, name) {
+                        let predicate = elementEvent.predicate,
                             result = true,
 
                             /**
                              * @param {Function} functionPredicate
                              */
-                            predicateCallback = function (functionPredicate) {
+                            predicateCallback = function(functionPredicate) {
                                 result = functionPredicate(solution, predicate.message, predicate.argument);
 
                                 if (result) {
@@ -122,7 +120,7 @@ define([
                         if (solution.getValue($(this)) === elementEvent.value) {
                             if (predicate.name) {
                                 require([
-                                    'Magento_Paypal/js/predicate/' + predicate.name
+                                    'Magento_Paypal/js/predicate/' + predicate.name,
                                 ], predicateCallback);
                             } else {
                                 $self.trigger(name);
@@ -139,7 +137,7 @@ define([
          * @param {Object} $element
          * @returns {*}
          */
-        getValue: function ($element) {
+        getValue: function($element) {
             if ($element.is(':checkbox')) {
                 return $element.prop('checked') ? '1' : '0';
             }
@@ -152,16 +150,13 @@ define([
          *
          * @returns {exports.addListeners}
          */
-        addListeners: function () {
+        addListeners: function() {
+            _.each(this.config.relations, function(rules, targetName) {
+                let $target = this.createElement(targetName);
 
-            _.each(this.config.relations, function (rules, targetName) {
-
-                var $target = this.createElement(targetName);
-
-                _.each(rules, function (instances, instanceName) {
-
-                    _.each(instances, function (instance) {
-                        var handler = new Rule({
+                _.each(rules, function(instances, instanceName) {
+                    _.each(instances, function(instance) {
+                        let handler = new Rule({
                             name: instanceName,
                             $target: $target,
                             $owner: this.$self,
@@ -176,8 +171,8 @@ define([
                                 dependsBmlSortOrder: this.dependsBmlSortOrder,
                                 dependsBmlApiSortOrder: this.dependsBmlApiSortOrder,
                                 solutionsElements: this.solutionsElements,
-                                argument: instance.argument
-                            }
+                                argument: instance.argument,
+                            },
                         });
 
                         if (instance.event === ':load') {
@@ -200,13 +195,13 @@ define([
          * @param {String} identifier
          * @returns {*}
          */
-        createElement: function (identifier) {
+        createElement: function(identifier) {
             if (identifier === ':self') {
                 return this.$self;
             }
 
             return $(utils.template(this.templates.elementSelector, {
-                'identifier': identifier
+                'identifier': identifier,
             }));
         },
 
@@ -216,10 +211,10 @@ define([
          * @param {Object} elements
          * @returns {exports.setSolutionsElements}
          */
-        setSolutionsElements: function (elements) {
+        setSolutionsElements: function(elements) {
             this.solutionsElements = elements;
 
             return this;
-        }
+        },
     });
 });

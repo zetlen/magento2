@@ -7,15 +7,15 @@ define([
     'jquery',
     'uiComponent',
     'Magento_Captcha/js/model/captcha',
-    'Magento_Captcha/js/model/captchaList'
-], function ($, Component, Captcha, captchaList) {
+    'Magento_Captcha/js/model/captchaList',
+], function($, Component, Captcha, captchaList) {
     'use strict';
 
-    var captchaConfig;
+    let captchaConfig;
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Captcha/checkout/captcha'
+            template: 'Magento_Captcha/checkout/captcha',
         },
         dataScope: 'global',
         currentCaptcha: null,
@@ -23,17 +23,17 @@ define([
         /**
          * @return {*}
          */
-        captchaValue: function () {
+        captchaValue: function() {
             return this.currentCaptcha.getCaptchaValue();
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             if (window[this.configSource] && window[this.configSource].captcha) {
                 captchaConfig = window[this.configSource].captcha;
-                $.each(captchaConfig, function (formId, captchaData) {
+                $.each(captchaConfig, function(formId, captchaData) {
                     captchaData.formId = formId;
                     captchaList.add(Captcha(captchaData));
                 });
@@ -43,78 +43,78 @@ define([
         /**
          * @return {Boolean}
          */
-        getIsLoading: function () {
+        getIsLoading: function() {
             return this.currentCaptcha !== null ? this.currentCaptcha.isLoading : false;
         },
 
         /**
          * @return {null|Object}
          */
-        getCurrentCaptcha: function () {
+        getCurrentCaptcha: function() {
             return this.currentCaptcha;
         },
 
         /**
          * @param {Object} captcha
          */
-        setCurrentCaptcha: function (captcha) {
+        setCurrentCaptcha: function(captcha) {
             this.currentCaptcha = captcha;
         },
 
         /**
          * @return {String|null}
          */
-        getFormId: function () {
+        getFormId: function() {
             return this.currentCaptcha !== null ? this.currentCaptcha.getFormId() : null;
         },
 
         /**
          * @return {Boolean}
          */
-        getIsVisible: function () {
+        getIsVisible: function() {
             return this.currentCaptcha !== null ? this.currentCaptcha.getIsVisible() : false;
         },
 
         /**
          * @param {Boolean} flag
          */
-        setIsVisible: function (flag) {
+        setIsVisible: function(flag) {
             this.currentCaptcha.setIsVisible(flag);
         },
 
         /**
          * @return {Boolean}
          */
-        isRequired: function () {
+        isRequired: function() {
             return this.currentCaptcha !== null ? this.currentCaptcha.getIsRequired() : false;
         },
 
         /**
          * @return {Boolean}
          */
-        isCaseSensitive: function () {
+        isCaseSensitive: function() {
             return this.currentCaptcha !== null ? this.currentCaptcha.getIsCaseSensitive() : false;
         },
 
         /**
          * @return {String|Number|null}
          */
-        imageHeight: function () {
+        imageHeight: function() {
             return this.currentCaptcha !== null ? this.currentCaptcha.getImageHeight() : null;
         },
 
         /**
          * @return {String|null}
          */
-        getImageSource: function () {
+        getImageSource: function() {
             return this.currentCaptcha !== null ? this.currentCaptcha.getImageSource() : null;
         },
 
         /**
          * Refresh captcha.
          */
-        refresh: function () {
+        refresh: function() {
             this.currentCaptcha.refresh();
-        }
+        },
     });
 });

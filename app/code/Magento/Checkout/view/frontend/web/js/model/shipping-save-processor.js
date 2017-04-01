@@ -4,20 +4,20 @@
  */
 
 define([
-    'Magento_Checkout/js/model/shipping-save-processor/default'
-], function (defaultProcessor) {
+    'Magento_Checkout/js/model/shipping-save-processor/default',
+], function(defaultProcessor) {
     'use strict';
 
-    var processors = [];
+    let processors = [];
 
-    processors['default'] =  defaultProcessor;
+    processors['default'] = defaultProcessor;
 
     return {
         /**
          * @param {String} type
          * @param {*} processor
          */
-        registerProcessor: function (type, processor) {
+        registerProcessor: function(type, processor) {
             processors[type] = processor;
         },
 
@@ -25,8 +25,8 @@ define([
          * @param {String} type
          * @return {Array}
          */
-        saveShippingInformation: function (type) {
-            var rates = [];
+        saveShippingInformation: function(type) {
+            let rates = [];
 
             if (processors[type]) {
                 rates = processors[type].saveShippingInformation();
@@ -35,6 +35,6 @@ define([
             }
 
             return rates;
-        }
+        },
     };
 });

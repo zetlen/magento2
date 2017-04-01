@@ -7,10 +7,10 @@
  @version 0.0.1
  @requires jQuery & jQuery UI
  */
-define(['jquery', 'jquery/ui'], function ($) {
+define(['jquery', 'jquery/ui'], function($) {
     'use strict';
 
-    var videoRegister = {
+    let videoRegister = {
         _register: {},
 
         /**
@@ -19,7 +19,7 @@ define(['jquery', 'jquery/ui'], function ($) {
          * @param {String} api
          * @returns {bool}
          */
-        isRegistered: function (api) {
+        isRegistered: function(api) {
             return this._register[api] !== undefined;
         },
 
@@ -29,7 +29,7 @@ define(['jquery', 'jquery/ui'], function ($) {
          * @param {String} api
          * @returns {bool}
          */
-        isLoaded: function (api) {
+        isLoaded: function(api) {
             return this._register[api] !== undefined && this._register[api] === true;
         },
 
@@ -38,10 +38,10 @@ define(['jquery', 'jquery/ui'], function ($) {
          * @param {String} api
          * @param {bool} loaded
          */
-        register: function (api, loaded) {
+        register: function(api, loaded) {
             loaded = loaded || false;
             this._register[api] = loaded;
-        }
+        },
     };
 
     $.widget('mage.productVideoLoader', {
@@ -49,7 +49,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * @private
          */
-        _create: function () {
+        _create: function() {
             switch (this.element.data('type')) {
                 case 'youtube':
                     this.element.videoYoutube();
@@ -68,9 +68,9 @@ define(['jquery', 'jquery/ui'], function ($) {
                         /**
                          * join name with message
                          */
-                        toString: function () {
+                        toString: function() {
                             return this.name + ': ' + this.message;
-                        }
+                        },
                     };
             }
         },
@@ -79,7 +79,7 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Initializes variables
          * @private
          */
-        _initialize: function () {
+        _initialize: function() {
             this._params = this.element.data('params') || {};
             this._code = this.element.data('code');
             this._width = this.element.data('width');
@@ -101,35 +101,35 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Abstract play command
          */
-        play: function () {
+        play: function() {
             this._player.play();
         },
 
         /**
          * Abstract pause command
          */
-        pause: function () {
+        pause: function() {
             this._player.pause();
         },
 
         /**
          * Abstract stop command
          */
-        stop: function () {
+        stop: function() {
             this._player.stop();
         },
 
         /**
          * Abstract playing command
          */
-        playing: function () {
+        playing: function() {
             return this._player.playing();
         },
 
         /**
          * Destroyer
          */
-        destroy: function () {
+        destroy: function() {
             this._player.destroy();
         },
 
@@ -137,12 +137,12 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Calculates ratio for responsive videos
          * @private
          */
-        _calculateRatio: function () {
+        _calculateRatio: function() {
             if (!this._responsive) {
                 return;
             }
             this.element.css('paddingBottom', this._height / this._width * 100 + '%');
-        }
+        },
     });
 
     $.widget('mage.videoYoutube', $.mage.productVideoLoader, {
@@ -151,8 +151,8 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Initialization of the Youtube widget
          * @private
          */
-        _create: function () {
-            var self = this;
+        _create: function() {
+            let self = this;
 
             this._initialize();
 
@@ -163,7 +163,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                 /**
                  * Handle event
                  */
-                'youtubeapiready': function () {
+                'youtubeapiready': function() {
                     if (self._player !== undefined) {
                         return;
                     }
@@ -196,7 +196,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                             /**
                              * Event observer
                              */
-                            onStateChange: function (data) {
+                            "onStateChange": function(data) {
                                 switch (window.parseInt(data.data, 10)) {
                                     case 1:
                                         self._playing = true;
@@ -211,11 +211,11 @@ define(['jquery', 'jquery/ui'], function ($) {
                                 if (data.data === window.YT.PlayerState.ENDED && self._loop) {
                                     self._player.playVideo();
                                 }
-                            }
-                        }
+                            },
+                        },
 
                     });
-                }
+                },
             });
 
             this._loadApi();
@@ -225,8 +225,8 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Loads Youtube API and triggers event, when loaded
          * @private
          */
-        _loadApi: function () {
-            var element,
+        _loadApi: function() {
+            let element,
                 scriptTag;
 
             if (videoRegister.isRegistered('youtube')) {
@@ -248,7 +248,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             /**
              * Event observe and handle
              */
-            window.onYouTubeIframeAPIReady = function () {
+            window.onYouTubeIframeAPIReady = function() {
                 $(window).trigger('youtubeapiready');
                 videoRegister.register('youtube', true);
             };
@@ -257,7 +257,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Play command for Youtube
          */
-        play: function () {
+        play: function() {
             this._player.playVideo();
             this._playing = true;
         },
@@ -265,7 +265,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Pause command for Youtube
          */
-        pause: function () {
+        pause: function() {
             this._player.pauseVideo();
             this._playing = false;
         },
@@ -273,7 +273,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Stop command for Youtube
          */
-        stop: function () {
+        stop: function() {
             this._player.stopVideo();
             this._playing = false;
         },
@@ -281,7 +281,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Playing command for Youtube
          */
-        playing: function () {
+        playing: function() {
             return this._playing;
         },
 
@@ -289,10 +289,10 @@ define(['jquery', 'jquery/ui'], function ($) {
          * stops and unloads player
          * @private
          */
-        destroy: function () {
+        destroy: function() {
             this.stop();
             this._player.destroy();
-        }
+        },
     });
 
     $.widget('mage.videoVimeo', $.mage.productVideoLoader, {
@@ -301,8 +301,8 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Initialize the Vimeo widget
          * @private
          */
-        _create: function () {
-            var timestamp,
+        _create: function() {
+            let timestamp,
                 additionalParams = '',
                 src;
 
@@ -336,7 +336,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             this._player = window.$f(this.element.children(':first')[0]);
 
             // Froogaloop throws error without a registered ready event
-            this._player.addEvent('ready', function (id) {
+            this._player.addEvent('ready', function(id) {
                 $('#' + id).closest('.fotorama__stage__frame').addClass('fotorama__product-video--loaded');
             });
         },
@@ -344,7 +344,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Play command for Vimeo
          */
-        play: function () {
+        play: function() {
             this._player.api('play');
             this._playing = true;
         },
@@ -352,7 +352,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Pause command for Vimeo
          */
-        pause: function () {
+        pause: function() {
             this._player.api('pause');
             this._playing = false;
         },
@@ -360,7 +360,7 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Stop command for Vimeo
          */
-        stop: function () {
+        stop: function() {
             this._player.api('unload');
             this._playing = false;
         },
@@ -368,8 +368,8 @@ define(['jquery', 'jquery/ui'], function ($) {
         /**
          * Playing command for Vimeo
          */
-        playing: function () {
+        playing: function() {
             return this._playing;
-        }
+        },
     });
 });

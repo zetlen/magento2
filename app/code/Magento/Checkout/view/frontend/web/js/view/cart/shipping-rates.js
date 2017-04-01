@@ -11,19 +11,19 @@ define([
     'Magento_Catalog/js/price-utils',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/action/select-shipping-method',
-    'Magento_Checkout/js/checkout-data'
-], function (ko, _, Component, shippingService, priceUtils, quote, selectShippingMethodAction, checkoutData) {
+    'Magento_Checkout/js/checkout-data',
+], function(ko, _, Component, shippingService, priceUtils, quote, selectShippingMethodAction, checkoutData) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/cart/shipping-rates'
+            template: 'Magento_Checkout/cart/shipping-rates',
         },
         isVisible: ko.observable(!quote.isVirtual()),
         isLoading: shippingService.isLoading,
         shippingRates: shippingService.getShippingRates(),
         shippingRateGroups: ko.observableArray([]),
-        selectedShippingMethod: ko.computed(function () {
+        selectedShippingMethod: ko.computed(function() {
             return quote.shippingMethod() ?
                 quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
                 null;
@@ -32,15 +32,15 @@ define([
         /**
          * @override
          */
-        initObservable: function () {
-            var self = this;
+        initObservable: function() {
+            let self = this;
 
             this._super();
 
-            this.shippingRates.subscribe(function (rates) {
+            this.shippingRates.subscribe(function(rates) {
                 self.shippingRateGroups([]);
-                _.each(rates, function (rate) {
-                    var carrierTitle = rate['carrier_title'];
+                _.each(rates, function(rate) {
+                    let carrierTitle = rate['carrier_title'];
 
                     if (self.shippingRateGroups.indexOf(carrierTitle) === -1) {
                         self.shippingRateGroups.push(carrierTitle);
@@ -55,8 +55,8 @@ define([
          * Get shipping rates for specific group based on title.
          * @returns Array
          */
-        getRatesForGroup: function (shippingRateGroupTitle) {
-            return _.filter(this.shippingRates(), function (rate) {
+        getRatesForGroup: function(shippingRateGroupTitle) {
+            return _.filter(this.shippingRates(), function(rate) {
                 return shippingRateGroupTitle === rate['carrier_title'];
             });
         },
@@ -65,7 +65,7 @@ define([
          * Format shipping price.
          * @returns {String}
          */
-        getFormattedPrice: function (price) {
+        getFormattedPrice: function(price) {
             return priceUtils.formatPrice(price, quote.getPriceFormat());
         },
 
@@ -74,11 +74,11 @@ define([
          * @param {String} methodData
          * @returns bool
          */
-        selectShippingMethod: function (methodData) {
+        selectShippingMethod: function(methodData) {
             selectShippingMethodAction(methodData);
             checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '_' + methodData['method_code']);
 
             return true;
-        }
+        },
     });
 });

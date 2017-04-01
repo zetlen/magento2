@@ -9,30 +9,30 @@ define([
     'mageUtils',
     'uiComponent',
     'uiLayout',
-    'Magento_Checkout/js/model/quote'
-], function ($, ko, utils, Component, layout, quote) {
+    'Magento_Checkout/js/model/quote',
+], function($, ko, utils, Component, layout, quote) {
     'use strict';
 
-    var defaultRendererTemplate = {
+    let defaultRendererTemplate = {
         parent: '${ $.$data.parentName }',
         name: '${ $.$data.name }',
-        component: 'Magento_Checkout/js/view/shipping-information/address-renderer/default'
+        component: 'Magento_Checkout/js/view/shipping-information/address-renderer/default',
     };
 
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-information/list',
-            rendererTemplates: {}
+            rendererTemplates: {},
         },
 
         /** @inheritdoc */
-        initialize: function () {
-            var self = this;
+        initialize: function() {
+            let self = this;
 
             this._super()
                 .initChildren();
 
-            quote.shippingAddress.subscribe(function (address) {
+            quote.shippingAddress.subscribe(function(address) {
                 self.createRendererComponent(address);
             });
 
@@ -40,7 +40,7 @@ define([
         },
 
         /** @inheritdoc */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
             // the list of child components that are responsible for address rendering
             this.rendererComponents = {};
@@ -49,7 +49,7 @@ define([
         },
 
         /** @inheritdoc */
-        initChildren: function () {
+        initChildren: function() {
             return this;
         },
 
@@ -58,10 +58,10 @@ define([
          *
          * @param {Object} address
          */
-        createRendererComponent: function (address) {
-            var rendererTemplate, templateData, rendererComponent;
+        createRendererComponent: function(address) {
+            let rendererTemplate, templateData, rendererComponent;
 
-            $.each(this.rendererComponents, function (index, component) {
+            $.each(this.rendererComponents, function(index, component) {
                 component.visible(false);
             });
 
@@ -75,7 +75,7 @@ define([
                     defaultRendererTemplate;
                 templateData = {
                     parentName: this.name,
-                    name: address.getType()
+                    name: address.getType(),
                 };
 
                 rendererComponent = utils.template(rendererTemplate, templateData);
@@ -83,12 +83,12 @@ define([
                     rendererComponent,
                     {
                         address: ko.observable(address),
-                        visible: ko.observable(true)
+                        visible: ko.observable(true),
                     }
                 );
                 layout([rendererComponent]);
                 this.rendererComponents[address.getType()] = rendererComponent;
             }
-        }
+        },
     });
 });

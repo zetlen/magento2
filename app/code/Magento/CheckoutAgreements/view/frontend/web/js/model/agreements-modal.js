@@ -6,8 +6,8 @@
 define([
     'jquery',
     'Magento_Ui/js/modal/modal',
-    'mage/translate'
-], function ($, modal, $t) {
+    'mage/translate',
+], function($, modal, $t) {
     'use strict';
 
     return {
@@ -18,8 +18,8 @@ define([
          *
          * @param {HTMLElement} element
          */
-        createModal: function (element) {
-            var options;
+        createModal: function(element) {
+            let options;
 
             this.modalWindow = element;
             options = {
@@ -34,18 +34,18 @@ define([
                         class: 'action secondary action-hide-popup',
 
                         /** @inheritdoc */
-                        click: function () {
+                        click: function() {
                             this.closeModal();
-                        }
-                    }
-                ]
+                        },
+                    },
+                ],
             };
             modal(options, $(this.modalWindow));
         },
 
         /** Show login popup window */
-        showModal: function () {
+        showModal: function() {
             $(this.modalWindow).modal('openModal');
-        }
+        },
     };
 });

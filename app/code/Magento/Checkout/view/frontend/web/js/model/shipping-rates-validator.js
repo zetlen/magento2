@@ -12,8 +12,8 @@ define([
     './postcode-validator',
     'mage/translate',
     'uiRegistry',
-    'Magento_Checkout/js/model/quote'
-], function (
+    'Magento_Checkout/js/model/quote',
+], function(
     $,
     ko,
     shippingRatesValidationRules,
@@ -25,7 +25,7 @@ define([
 ) {
     'use strict';
 
-    var checkoutConfig = window.checkoutConfig,
+    let checkoutConfig = window.checkoutConfig,
         validators = [],
         observedElements = [],
         postcodeElement = null,
@@ -39,7 +39,7 @@ define([
          * @param {String} carrier
          * @param {Object} validator
          */
-        registerValidator: function (carrier, validator) {
+        registerValidator: function(carrier, validator) {
             if (checkoutConfig.activeCarriers.indexOf(carrier) !== -1) {
                 validators.push(validator);
             }
@@ -49,8 +49,8 @@ define([
          * @param {Object} address
          * @return {Boolean}
          */
-        validateAddressData: function (address) {
-            return validators.some(function (validator) {
+        validateAddressData: function(address) {
+            return validators.some(function(validator) {
                 return validator.validate(address);
             });
         },
@@ -60,8 +60,8 @@ define([
          *
          * @param {String} formPath
          */
-        initFields: function (formPath) {
-            var self = this,
+        initFields: function(formPath) {
+            let self = this,
                 elements = shippingRatesValidationRules.getObservableFields();
 
             if ($.inArray(postcodeElementName, elements) === -1) {
@@ -69,7 +69,7 @@ define([
                 elements.push(postcodeElementName);
             }
 
-            $.each(elements, function (index, field) {
+            $.each(elements, function(index, field) {
                 uiRegistry.async(formPath + '.' + field)(self.doElementBinding.bind(self));
             });
         },
@@ -81,8 +81,8 @@ define([
          * @param {Boolean} force
          * @param {Number} delay
          */
-        doElementBinding: function (element, force, delay) {
-            var observableFields = shippingRatesValidationRules.getObservableFields();
+        doElementBinding: function(element, force, delay) {
+            let observableFields = shippingRatesValidationRules.getObservableFields();
 
             if (element && (observableFields.indexOf(element.index) !== -1 || force)) {
                 if (element.index !== postcodeElementName) {
@@ -101,10 +101,10 @@ define([
          * @param {Boolean} force
          * @param {Number} delay
          */
-        bindChangeHandlers: function (elements, force, delay) {
-            var self = this;
+        bindChangeHandlers: function(elements, force, delay) {
+            let self = this;
 
-            $.each(elements, function (index, elem) {
+            $.each(elements, function(index, elem) {
                 self.doElementBinding(elem, force, delay);
             });
         },
@@ -113,19 +113,19 @@ define([
          * @param {Object} element
          * @param {Number} delay
          */
-        bindHandler: function (element, delay) {
-            var self = this;
+        bindHandler: function(element, delay) {
+            let self = this;
 
             delay = typeof delay === 'undefined' ? self.validateDelay : delay;
 
             if (element.component.indexOf('/group') !== -1) {
-                $.each(element.elems(), function (index, elem) {
+                $.each(element.elems(), function(index, elem) {
                     self.bindHandler(elem);
                 });
             } else {
-                element.on('value', function () {
+                element.on('value', function() {
                     clearTimeout(self.validateAddressTimeout);
-                    self.validateAddressTimeout = setTimeout(function () {
+                    self.validateAddressTimeout = setTimeout(function() {
                         self.postcodeValidation();
                         self.validateFields();
                     }, delay);
@@ -137,8 +137,8 @@ define([
         /**
          * @return {*}
          */
-        postcodeValidation: function () {
-            var countryId = $('select[name="country_id"]').val(),
+        postcodeValidation: function() {
+            let countryId = $('select[name="country_id"]').val(),
                 validationResult,
                 warnMessage;
 
@@ -165,8 +165,8 @@ define([
         /**
          * Convert form data to quote address and validate fields for shipping rates
          */
-        validateFields: function () {
-            var addressFlat = addressConverter.formDataProviderToFlatData(
+        validateFields: function() {
+            let addressFlat = addressConverter.formDataProviderToFlatData(
                     this.collectObservedData(),
                     'shippingAddress'
                 ),
@@ -184,14 +184,14 @@ define([
          *
          * @returns {*}
          */
-        collectObservedData: function () {
-            var observedValues = {};
+        collectObservedData: function() {
+            let observedValues = {};
 
-            $.each(observedElements, function (index, field) {
+            $.each(observedElements, function(index, field) {
                 observedValues[field.dataScope] = field.value();
             });
 
             return observedValues;
-        }
+        },
     };
 });

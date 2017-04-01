@@ -4,8 +4,8 @@
  */
 
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
     /**
@@ -13,7 +13,7 @@ define([
      * @param {jQuery.Event} e
      */
     function onToggle(config, e) {
-        var elem = $(e.currentTarget),
+        let elem = $(e.currentTarget),
             expandedClassName = config.expandedClassName || 'cart-tax-total-expanded';
 
         elem.toggleClass(expandedClassName);
@@ -21,7 +21,7 @@ define([
         $(config.itemTaxId).toggle();
     }
 
-    return function (data, el) {
+    return function(data, el) {
         $(el).on('click', onToggle.bind(null, data));
     };
 });

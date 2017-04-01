@@ -9,13 +9,13 @@
 define([
     'mageUtils',
     'moment',
-    './column'
-], function (utils, moment, Column) {
+    './column',
+], function(utils, moment, Column) {
     'use strict';
 
     return Column.extend({
         defaults: {
-            dateFormat: 'MMM d, YYYY h:mm:ss A'
+            dateFormat: 'MMM d, YYYY h:mm:ss A',
         },
 
         /**
@@ -23,7 +23,7 @@ define([
          *
          * @returns {DateColumn} Chainable.
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
             this.dateFormat = utils.normalizeDate(this.dateFormat);
@@ -36,14 +36,14 @@ define([
          *
          * @returns {String} Formatted date.
          */
-        getLabel: function (value, format) {
-            var date = moment(this._super());
+        getLabel: function(value, format) {
+            let date = moment(this._super());
 
             date = date.isValid() ?
                 date.format(format || this.dateFormat) :
                 '';
 
             return date;
-        }
+        },
     });
 });

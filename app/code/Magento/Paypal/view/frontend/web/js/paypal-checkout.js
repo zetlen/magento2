@@ -8,8 +8,8 @@ define([
     'Magento_Ui/js/modal/confirm',
     'Magento_Customer/js/customer-data',
     'jquery/ui',
-    'mage/mage'
-], function ($, confirm, customerData) {
+    'mage/mage',
+], function($, confirm, customerData) {
     'use strict';
 
     $.widget('mage.paypalCheckout', {
@@ -18,16 +18,16 @@ define([
                 'form:not(#product_addtocart_form_from_popup):has(input[name="product"][value=%1])',
             productId: 'input[type="hidden"][name="product"]',
             ppCheckoutSelector: '[data-role=pp-checkout-url]',
-            ppCheckoutInput: '<input type="hidden" data-role="pp-checkout-url" name="return_url" value=""/>'
+            ppCheckoutInput: '<input type="hidden" data-role="pp-checkout-url" name="return_url" value=""/>',
         },
 
         /**
          * Initialize store credit events
          * @private
          */
-        _create: function () {
-            this.element.on('click', '[data-action="checkout-form-submit"]', $.proxy(function (e) {
-                var $target = $(e.target),
+        _create: function() {
+            this.element.on('click', '[data-action="checkout-form-submit"]', $.proxy(function(e) {
+                let $target = $(e.target),
                     returnUrl = $target.data('checkout-url'),
                     productId = $target.closest('form').find(this.options.productId).val(),
                     originalForm = this.options.originalForm.replace('%1', productId),
@@ -45,7 +45,7 @@ define([
                              * Confirmation handler
                              *
                              */
-                            confirm: function () {
+                            confirm: function() {
                                 returnUrl = billingAgreement().confirmUrl;
                                 self._redirect(returnUrl, originalForm);
                             },
@@ -54,12 +54,12 @@ define([
                              * Cancel confirmation handler
                              *
                              */
-                            cancel: function (event) {
+                            cancel: function(event) {
                                 if (event && !$(event.target).hasClass('action-close')) {
                                     self._redirect(returnUrl);
                                 }
-                            }
-                        }
+                            },
+                        },
                     });
                 } else {
                     this._redirect(returnUrl, originalForm);
@@ -73,8 +73,8 @@ define([
          * @param {HTMLElement} originalForm
          *
          */
-        _redirect: function (returnUrl, originalForm) {
-            var $form,
+        _redirect: function(returnUrl, originalForm) {
+            let $form,
                 ppCheckoutInput;
 
             if (this.options.isCatalogProduct) {
@@ -93,7 +93,7 @@ define([
             } else {
                 $.mage.redirect(returnUrl);
             }
-        }
+        },
     });
 
     return $.mage.paypalCheckout;

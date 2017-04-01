@@ -4,8 +4,8 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/form/element/abstract'
-], function (_, Acstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function(_, Acstract) {
     'use strict';
 
     return Acstract.extend({
@@ -13,7 +13,7 @@ define([
             prefixName: '',
             prefixElementName: '',
             elementName: '',
-            suffixName: ''
+            suffixName: '',
         },
 
         /**
@@ -22,7 +22,7 @@ define([
          * @param  {Object} config
          * @returns {Object} Chainable.
          */
-        initConfig: function (config) {
+        initConfig: function(config) {
             this._super(config);
 
             this.configureDataScope();
@@ -33,8 +33,8 @@ define([
         /**
          * Configure data scope.
          */
-        configureDataScope: function () {
-            var recordId,
+        configureDataScope: function() {
+            let recordId,
                 prefixName,
                 suffixName;
 
@@ -67,8 +67,8 @@ define([
          * @param {String} dataScopeString
          * @returns {String}
          */
-        dataScopeToHtmlArray: function (dataScopeString) {
-            var dataScopeArray, dataScope, reduceFunction;
+        dataScopeToHtmlArray: function(dataScopeString) {
+            let dataScopeArray, dataScope, reduceFunction;
 
             /**
              * Reduce
@@ -77,7 +77,7 @@ define([
              * @param {String} curr
              * @returns {String}
              */
-            reduceFunction = function (prev, curr) {
+            reduceFunction = function(prev, curr) {
                 return prev + '[' + curr + ']';
             };
 
@@ -95,11 +95,11 @@ define([
          *
          * @param {Object} parents
          */
-        deleteRecord: function (parents) {
+        deleteRecord: function(parents) {
             this.value(1);
             parents[1].deleteRecord(parents[0].index, parents[0].recordId);
 
             return this;
-        }
+        },
     });
 });

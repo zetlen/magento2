@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery'], function ($) {
+define(['jquery'], function($) {
     'use strict';
 
-    return function (config, element) {
+    return function(config, element) {
         $(element).addClass(config.class);
     };
 });

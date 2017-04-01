@@ -7,13 +7,13 @@ define([
     'jquery',
     'priceUtils',
     'priceOptions',
-    'jquery/ui'
-], function ($, utils) {
+    'jquery/ui',
+], function($, utils) {
     'use strict';
 
-    var globalOptions = {
+    let globalOptions = {
             fromSelector: 'form',
-            dropdownsSelector: '[data-role=calendar-dropdown]'
+            dropdownsSelector: '[data-role=calendar-dropdown]',
         },
         optionHandler = {};
 
@@ -25,14 +25,14 @@ define([
      * @return {Function} function that return object { optionHash : optionAdditionalPrice }
      */
     function onCalendarDropdownChange(siblings) {
-        return function (element, optionConfig) {
-            var changes = {},
+        return function(element, optionConfig) {
+            let changes = {},
                 optionId = utils.findOptionId(element),
                 overhead = optionConfig[optionId].prices,
                 isNeedToUpdate = true,
                 optionHash = 'price-option-calendar-' + optionId;
 
-            siblings.each(function (index, el) {
+            siblings.each(function(index, el) {
                 isNeedToUpdate = isNeedToUpdate && !!$(el).val();
             });
 
@@ -59,7 +59,7 @@ define([
      * @param {jQuery} dropdowns
      */
     function onDateChange(dropdowns) {
-        var daysNodes,
+        let daysNodes,
             curMonth, curYear, expectedDays,
             options, needed,
             month = dropdowns.filter('[data-calendar-role=month]'),
@@ -73,7 +73,7 @@ define([
             expectedDays = getDaysInMonth(curMonth, curYear);
 
             if (daysNodes.length - 1 > expectedDays) { // remove unnecessary option nodes
-                daysNodes.each(function (i, e) {
+                daysNodes.each(function(i, e) {
                     if (e.value > expectedDays) {
                         $(e).remove();
                     }
@@ -82,7 +82,7 @@ define([
                 options = [];
                 needed = expectedDays - daysNodes.length + 1;
 
-                while (needed--) { //eslint-disable-line max-depth
+                while (needed--) { // eslint-disable-line max-depth
                     options.push(
                         '<option value="' + (expectedDays - needed) + '">' + (expectedDays - needed) + '</option>'
                     );
@@ -100,7 +100,7 @@ define([
          * @private
          */
         _create: function initOptionDate() {
-            var field = this.element,
+            let field = this.element,
                 form = field.closest(this.options.fromSelector),
                 dropdowns = $(this.options.dropdownsSelector, field),
                 dateOptionId;
@@ -115,7 +115,7 @@ define([
                 dropdowns.data('role', dateOptionId);
                 dropdowns.on('change', onDateChange.bind(this, dropdowns));
             }
-        }
+        },
     });
 
     return $.mage.priceOptionDate;

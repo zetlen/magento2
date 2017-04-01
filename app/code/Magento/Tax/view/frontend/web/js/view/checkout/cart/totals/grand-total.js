@@ -4,16 +4,16 @@
  */
 
 define([
-    'Magento_Tax/js/view/checkout/summary/grand-total'
-], function (Component) {
+    'Magento_Tax/js/view/checkout/summary/grand-total',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         /**
          * @override
          */
-        isDisplayed: function () {
+        isDisplayed: function() {
             return true;
-        }
+        },
     });
 });

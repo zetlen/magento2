@@ -5,8 +5,8 @@
 
 define([
     'ko',
-    './customer-addresses'
-], function (ko, defaultProvider) {
+    './customer-addresses',
+], function(ko, defaultProvider) {
     'use strict';
 
     return ko.observableArray(defaultProvider.getAddressItems());

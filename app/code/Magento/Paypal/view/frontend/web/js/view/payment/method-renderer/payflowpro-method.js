@@ -9,13 +9,13 @@ define([
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Checkout/js/action/set-payment-information',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Vault/js/view/payment/vault-enabler'
-], function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader, VaultEnabler) {
+    'Magento_Vault/js/view/payment/vault-enabler',
+], function($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader, VaultEnabler) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Paypal/payment/payflowpro-form'
+            template: 'Magento_Paypal/payment/payflowpro-form',
         },
         placeOrderHandler: null,
         validateHandler: null,
@@ -23,7 +23,7 @@ define([
         /**
          * @returns {exports.initialize}
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.vaultEnabler = new VaultEnabler();
             this.vaultEnabler.setPaymentCode(this.getVaultCode());
@@ -34,50 +34,50 @@ define([
         /**
          * @param {Function} handler
          */
-        setPlaceOrderHandler: function (handler) {
+        setPlaceOrderHandler: function(handler) {
             this.placeOrderHandler = handler;
         },
 
         /**
          * @param {Function} handler
          */
-        setValidateHandler: function (handler) {
+        setValidateHandler: function(handler) {
             this.validateHandler = handler;
         },
 
         /**
          * @returns {Object}
          */
-        context: function () {
+        context: function() {
             return this;
         },
 
         /**
          * @returns {Boolean}
          */
-        isShowLegend: function () {
+        isShowLegend: function() {
             return true;
         },
 
         /**
          * @returns {String}
          */
-        getCode: function () {
+        getCode: function() {
             return 'payflowpro';
         },
 
         /**
          * @returns {Boolean}
          */
-        isActive: function () {
+        isActive: function() {
             return true;
         },
 
         /**
          * @override
          */
-        placeOrder: function () {
-            var self = this;
+        placeOrder: function() {
+            let self = this;
 
             if (this.validateHandler() && additionalValidators.validate()) {
                 this.isPlaceOrderActionAllowed(false);
@@ -85,15 +85,15 @@ define([
                 $.when(
                     setPaymentInformationAction(this.messageContainer, self.getData())
                 ).done(
-                    function () {
+                    function() {
                         self.placeOrderHandler().fail(
-                            function () {
+                            function() {
                                 fullScreenLoader.stopLoader();
                             }
                         );
                     }
                 ).always(
-                    function () {
+                    function() {
                         self.isPlaceOrderActionAllowed(true);
                         fullScreenLoader.stopLoader();
                     }
@@ -104,15 +104,15 @@ define([
         /**
          * @returns {Object}
          */
-        getData: function () {
-            var data = {
+        getData: function() {
+            let data = {
                 'method': this.getCode(),
                 'additional_data': {
                     'cc_type': this.creditCardType(),
                     'cc_exp_year': this.creditCardExpYear(),
                     'cc_exp_month': this.creditCardExpMonth(),
-                    'cc_last_4': this.creditCardNumber().substr(-4)
-                }
+                    'cc_last_4': this.creditCardNumber().substr(-4),
+                },
             };
 
             this.vaultEnabler.visitAdditionalData(data);
@@ -123,15 +123,15 @@ define([
         /**
          * @returns {Bool}
          */
-        isVaultEnabled: function () {
+        isVaultEnabled: function() {
             return this.vaultEnabler.isVaultEnabled();
         },
 
         /**
          * @returns {String}
          */
-        getVaultCode: function () {
+        getVaultCode: function() {
             return 'payflowpro_cc_vault';
-        }
+        },
     });
 });

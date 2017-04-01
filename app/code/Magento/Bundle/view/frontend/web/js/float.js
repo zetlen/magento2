@@ -5,20 +5,20 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.float', {
         options: {
-            productOptionsSelector: '#product-options-wrapper'
+            productOptionsSelector: '#product-options-wrapper',
         },
 
         /**
          * Bind handlers to scroll event
          * @private
          */
-        _create: function () {
+        _create: function() {
             $(window).on('scroll', $.proxy(this._setTop, this));
         },
 
@@ -26,8 +26,8 @@ define([
          * float bundleSummary on windowScroll
          * @private
          */
-        _setTop: function () {
-            var starTop, offset, maxTop, allowedTop;
+        _setTop: function() {
+            let starTop, offset, maxTop, allowedTop;
 
             if (this.element.is(':visible')) {
                 starTop = $(this.options.productOptionsSelector).offset().top;
@@ -53,6 +53,6 @@ define([
                     this.element.css('top', allowedTop);
                 }
             }
-        }
+        },
     });
 });

@@ -4,12 +4,12 @@
  */
 
 define([
-    'underscore'
-], function (_) {
+    'underscore',
+], function(_) {
     'use strict';
 
-    return function (methods) {
-        _.each(methods, function (method) {
+    return function(methods) {
+        _.each(methods, function(method) {
             if (method.hasOwnProperty('code')) {
                 method.method = method.code;
                 delete method.code;

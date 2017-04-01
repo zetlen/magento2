@@ -8,8 +8,8 @@ define([
     'mageUtils',
     'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/parse-date',
     'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-month-validator',
-    'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-year-validator'
-], function (utils, parseDate, expirationMonth, expirationYear) {
+    'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-year-validator',
+], function(utils, parseDate, expirationMonth, expirationYear) {
     'use strict';
 
     /**
@@ -24,12 +24,12 @@ define([
             isValid: isValid,
             isPotentiallyValid: isPotentiallyValid,
             month: month,
-            year: year
+            year: year,
         };
     }
 
-    return function (value) {
-        var date,
+    return function(value) {
+        let date,
             monthValid,
             yearValid;
 

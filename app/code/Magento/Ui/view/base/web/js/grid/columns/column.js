@@ -10,8 +10,8 @@ define([
     'underscore',
     'uiRegistry',
     'mageUtils',
-    'uiElement'
-], function (_, registry, utils, Element) {
+    'uiElement',
+], function(_, registry, utils, Element) {
     'use strict';
 
     return Element.extend({
@@ -26,21 +26,21 @@ define([
             draggable: true,
             fieldClass: {},
             ignoreTmpls: {
-                fieldAction: true
+                fieldAction: true,
             },
             statefull: {
                 visible: true,
-                sorting: true
+                sorting: true,
             },
             imports: {
-                exportSorting: 'sorting'
+                exportSorting: 'sorting',
             },
             listens: {
-                '${ $.provider }:params.sorting.field': 'onSortChange'
+                '${ $.provider }:params.sorting.field': 'onSortChange',
             },
             modules: {
-                source: '${ $.provider }'
-            }
+                source: '${ $.provider }',
+            },
         },
 
         /**
@@ -48,7 +48,7 @@ define([
          *
          * @returns {Column} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initFieldClass();
 
@@ -60,15 +60,15 @@ define([
          *
          * @returns {Column} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track([
                     'visible',
                     'sorting',
-                    'disableAction'
+                    'disableAction',
                 ])
                 .observe([
-                    'dragging'
+                    'dragging',
                 ]);
 
             return this;
@@ -79,9 +79,9 @@ define([
          *
          * @returns {Column} Chainable.
          */
-        initFieldClass: function () {
+        initFieldClass: function() {
             _.extend(this.fieldClass, {
-                _dragging: this.dragging
+                _dragging: this.dragging,
             });
 
             return this;
@@ -95,8 +95,8 @@ define([
          *      If not specified, then all columns stored properties will be used.
          * @returns {Column} Chainable.
          */
-        applyState: function (state, property) {
-            var namespace = this.storageConfig.root;
+        applyState: function(state, property) {
+            let namespace = this.storageConfig.root;
 
             if (property) {
                 namespace += '.' + property;
@@ -115,7 +115,7 @@ define([
          *      be removed from a column.
          * @returns {Column} Chainable.
          */
-        sort: function (enable) {
+        sort: function(enable) {
             if (!this.sortable) {
                 return this;
             }
@@ -132,7 +132,7 @@ define([
          *
          * @returns {Column} Chainable.
          */
-        sortDescending: function () {
+        sortDescending: function() {
             if (this.sortable) {
                 this.sorting = 'desc';
             }
@@ -145,7 +145,7 @@ define([
          *
          * @returns {Column} Chainable.
          */
-        sortAscending: function () {
+        sortAscending: function() {
             if (this.sortable) {
                 this.sorting = 'asc';
             }
@@ -158,7 +158,7 @@ define([
          *
          * @returns {Column} Chainable.
          */
-        toggleSorting: function () {
+        toggleSorting: function() {
             this.sorting === 'asc' ?
                 this.sortDescending() :
                 this.sortAscending();
@@ -171,7 +171,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isSorted: function () {
+        isSorted: function() {
             return !!this.sorting;
         },
 
@@ -179,14 +179,14 @@ define([
          * Exports sorting data to the dataProvider if
          * sorting of a column is enabled.
          */
-        exportSorting: function () {
+        exportSorting: function() {
             if (!this.sorting) {
                 return;
             }
 
             this.source('set', 'params.sorting', {
                 field: this.index,
-                direction: this.sorting
+                direction: this.sorting,
             });
         },
 
@@ -196,7 +196,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasFieldAction: function () {
+        hasFieldAction: function() {
             return !!this.fieldAction || !!this.fieldActions;
         },
 
@@ -217,7 +217,7 @@ define([
          *          params: ['${ $.$data.rowIndex }', true]
          *      }
          */
-        applyFieldAction: function (rowIndex) {
+        applyFieldAction: function(rowIndex) {
             if (!this.hasFieldAction() || this.disableAction) {
                 return this;
             }
@@ -238,13 +238,13 @@ define([
          * @param {Object} action - Action (fieldAction) to be applied
          *
          */
-        applySingleAction: function (rowIndex, action) {
-            var callback;
+        applySingleAction: function(rowIndex, action) {
+            let callback;
 
             action = action || this.fieldAction;
             action = utils.template(action, {
                 column: this,
-                rowIndex: rowIndex
+                rowIndex: rowIndex,
             }, true);
 
             callback = this._getFieldCallback(action);
@@ -260,7 +260,7 @@ define([
          * @param {Object} record - Record object with which action is associated.
          * @returns {Function|Undefined}
          */
-        getFieldHandler: function (record) {
+        getFieldHandler: function(record) {
             if (this.hasFieldAction()) {
                 return this.applyFieldAction.bind(this, record._rowIndex);
             }
@@ -273,8 +273,8 @@ define([
          * @returns {Function|Boolean} Callback function or false
          *      value if it was impossible create a callback.
          */
-        _getFieldCallback: function (action) {
-            var args     = action.params || [],
+        _getFieldCallback: function(action) {
+            let args = action.params || [],
                 callback = action.target;
 
             if (action.provider && action.target) {
@@ -287,7 +287,7 @@ define([
                 return false;
             }
 
-            return function () {
+            return function() {
                 callback.apply(callback, args);
             };
         },
@@ -298,7 +298,7 @@ define([
          * @param {Object} record - Data to be preprocessed.
          * @returns {String}
          */
-        getLabel: function (record) {
+        getLabel: function(record) {
             return record[this.index];
         },
 
@@ -307,7 +307,7 @@ define([
          *
          * @returns {Object}
          */
-        getFieldClass: function () {
+        getFieldClass: function() {
             return this.fieldClass;
         },
 
@@ -316,7 +316,7 @@ define([
          *
          * @returns {String}
          */
-        getHeader: function () {
+        getHeader: function() {
             return this.headerTmpl;
         },
 
@@ -325,7 +325,7 @@ define([
          *
          * @returns {String}
          */
-        getBody: function () {
+        getBody: function() {
             return this.bodyTmpl;
         },
 
@@ -334,10 +334,10 @@ define([
          *
          * @param {Srting} field - Field by which current sorting is performed.
          */
-        onSortChange: function (field) {
+        onSortChange: function(field) {
             if (field !== this.index) {
                 this.sort(false);
             }
-        }
+        },
     });
 });

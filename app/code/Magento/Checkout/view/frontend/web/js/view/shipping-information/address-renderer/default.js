@@ -5,23 +5,23 @@
 
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+], function(Component, customerData) {
     'use strict';
 
-    var countryData = customerData.get('directory-data');
+    let countryData = customerData.get('directory-data');
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/shipping-information/address-renderer/default'
+            template: 'Magento_Checkout/shipping-information/address-renderer/default',
         },
 
         /**
          * @param {*} countryId
          * @return {String}
          */
-        getCountryName: function (countryId) {
+        getCountryName: function(countryId) {
             return countryData()[countryId] != undefined ? countryData()[countryId].name : ''; //eslint-disable-line
-        }
+        },
     });
 });

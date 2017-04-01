@@ -10,8 +10,8 @@ define([
     'underscore',
     'Magento_Ui/js/modal/alert',
     'uiRegistry',
-    'mage/translate'
-], function (Component, $, ko, _, alert, registry, $t) {
+    'mage/translate',
+], function(Component, $, ko, _, alert, registry, $t) {
     'use strict';
 
     /**
@@ -44,25 +44,25 @@ define([
                 associatedProductGrid: '${ $.configurableProductGrid }',
                 wizardButtonElement: '${ $.wizardModalButtonName }',
                 formElement: '${ $.formName }',
-                attributeSetHandlerModal: '${ $.attributeSetHandler }'
+                attributeSetHandlerModal: '${ $.attributeSetHandler }',
             },
             imports: {
                 attributeSetName: '${ $.provider }:configurableNewAttributeSetName',
                 attributeSetId: '${ $.provider }:configurableExistingAttributeSetId',
                 attributeSetSelection: '${ $.provider }:configurableAffectedAttributeSet',
-                productPrice: '${ $.provider }:data.product.price'
+                productPrice: '${ $.provider }:data.product.price',
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
                 usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }',
                 attributesData: '${ $.provider }:${ $.dataScopeAttributesData }',
                 attributeCodes: '${ $.provider }:${ $.dataScopeAttributeCodes }',
-                skeletonAttributeSet: '${ $.provider }:data.new-variations-attribute-set-id'
-            }
+                skeletonAttributeSet: '${ $.provider }:data.new-variations-attribute-set-id',
+            },
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             this.changeButtonWizard();
@@ -71,7 +71,7 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super().observe(
                 'actions opened attributes productMatrix value usedAttributes attributesData attributeCodes'
             );
@@ -84,22 +84,22 @@ define([
          * @return {Object}
          * @private
          */
-        _makeProduct: function (product) {
-            var productId = product['entity_id'] || product.productId || null,
+        _makeProduct: function(product) {
+            let productId = product['entity_id'] || product.productId || null,
                 attributes = _.pick(product, this.attributes.pluck('code')),
-                options = _.map(attributes, function (option, attribute) {
-                    var oldOptions = _.findWhere(this.attributes(), {
-                            code: attribute
+                options = _.map(attributes, function(option, attribute) {
+                    let oldOptions = _.findWhere(this.attributes(), {
+                            code: attribute,
                         }).options,
                         result;
 
                     if (_.isFunction(oldOptions)) {
                         result = oldOptions.findWhere({
-                            value: option
+                            value: option,
                         });
                     } else {
                         result = _.findWhere(oldOptions, {
-                            value: option
+                            value: option,
                         });
                     }
 
@@ -110,7 +110,7 @@ define([
                 attribute: JSON.stringify(attributes),
                 editable: false,
                 images: {
-                    preview: product['thumbnail_src']
+                    preview: product['thumbnail_src'],
                 },
                 name: product.name || product.sku,
                 options: options,
@@ -121,7 +121,7 @@ define([
                 sku: product.sku,
                 status: product.status === undefined ? 1 : parseInt(product.status, 10),
                 variationKey: this.getVariationKey(options),
-                weight: product.weight || null
+                weight: product.weight || null,
             };
         },
 
@@ -129,7 +129,7 @@ define([
          * @param {String} name
          * @return {String|Number|Array}
          */
-        getProductValue: function (name) {
+        getProductValue: function(name) {
             name = name.split('/').join('][');
 
             return $('[name="product[' + name + ']"]:enabled:not(.ignore-validate)', this.productForm).val();
@@ -140,8 +140,8 @@ define([
          * @param {String} field
          * @return {String}
          */
-        getRowId: function (data, field) {
-            var key = data.variationKey;
+        getRowId: function(data, field) {
+            let key = data.variationKey;
 
             return 'variations-matrix-' + key + '-' + field;
         },
@@ -151,8 +151,8 @@ define([
          * @param {String} field
          * @return {String}
          */
-        getVariationRowName: function (variation, field) {
-            var result;
+        getVariationRowName: function(variation, field) {
+            let result;
 
             if (variation.productId) {
                 result = 'configurations[' + variation.productId + '][' + field.split('/').join('][') + ']';
@@ -167,7 +167,7 @@ define([
          * @param {*} variations
          * @param {*} attributes
          */
-        render: function (variations, attributes) {
+        render: function(variations, attributes) {
             this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
@@ -179,7 +179,7 @@ define([
         /**
          * Change button wizard.
          */
-        changeButtonWizard: function () {
+        changeButtonWizard: function() {
             if (this.variations.length) {
                 this.wizardButtonElement().title(this.wizardModalButtonTitle);
             }
@@ -188,46 +188,46 @@ define([
         /**
          * @param {Array} variations
          */
-        handleValue: function (variations) {
-            var tmpArray = [];
+        handleValue: function(variations) {
+            let tmpArray = [];
 
-            _.each(variations, function (variation) {
-                var attributes = _.reduce(variation.options, function (memo, option) {
-                    var attribute = {};
+            _.each(variations, function(variation) {
+                let attributes = _.reduce(variation.options, function(memo, option) {
+                    let attribute = {};
 
                     attribute[option['attribute_code']] = option.value;
 
                     return _.extend(memo, attribute);
                 }, {}),
                     gallery = {
-                        images: {}
+                        images: {},
                     },
                     types = {};
 
-                _.each(variation.images.images, function (image) {
+                _.each(variation.images.images, function(image) {
                     gallery.images[image['file_id']] = {
                         position: image.position,
                         file: image.file,
                         disabled: image.disabled,
-                        label: image.label || ''
+                        label: image.label || '',
                     };
-                    _.each(image.galleryTypes, function (type) {
+                    _.each(image.galleryTypes, function(type) {
                         types[type] = image.file;
                     });
                 }, this);
 
                 tmpArray.push(_.extend(variation, types, {
-                    productId: variation.productId || null,
-                    name: variation.name || variation.sku,
-                    priceCurrency: this.currencySymbol,
-                    weight: variation.weight,
-                    attribute: JSON.stringify(attributes),
-                    variationKey: this.getVariationKey(variation.options),
-                    editable: variation.editable === undefined ? 0 : 1,
-                    productUrl: this.buildProductUrl(variation.productId),
-                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
-                    newProduct: variation.productId ? 0 : 1,
-                    'media_gallery': gallery
+                    "productId": variation.productId || null,
+                    "name": variation.name || variation.sku,
+                    "priceCurrency": this.currencySymbol,
+                    "weight": variation.weight,
+                    "attribute": JSON.stringify(attributes),
+                    "variationKey": this.getVariationKey(variation.options),
+                    "editable": variation.editable === undefined ? 0 : 1,
+                    "productUrl": this.buildProductUrl(variation.productId),
+                    "status": variation.status === undefined ? 1 : parseInt(variation.status, 10),
+                    "newProduct": variation.productId ? 0 : 1,
+                    'media_gallery': gallery,
                 }));
             }, this);
 
@@ -237,22 +237,22 @@ define([
         /**
          * Handle attributes.
          */
-        handleAttributes: function () {
-            var tmpArray = [],
+        handleAttributes: function() {
+            let tmpArray = [],
                 codesArray = [],
                 tmpOptions = {},
                 option = {},
                 position = 0,
                 values = {};
 
-            _.each(this.attributes(), function (attribute) {
+            _.each(this.attributes(), function(attribute) {
                 tmpArray.push(attribute.id);
                 codesArray.push(attribute.code);
                 values = {};
-                _.each(attribute.chosen, function (row) {
+                _.each(attribute.chosen, function(row) {
                     values[row.value] = {
                         'include': '1',
-                        'value_index': row.value
+                        'value_index': row.value,
                     };
                 }, this);
                 option = {
@@ -260,7 +260,7 @@ define([
                     'code': attribute.code,
                     'label': attribute.label,
                     'position': position,
-                    'values': values
+                    'values': values,
                 };
                 tmpOptions[attribute.id] = option;
                 position++;
@@ -277,25 +277,25 @@ define([
          *
          * @returns {Array}
          */
-        getAttributesOptions: function () {
+        getAttributesOptions: function() {
             return this.showVariations() ? this.productMatrix()[0].options : [];
         },
 
         /**
          * @return {Boolean}
          */
-        showVariations: function () {
+        showVariations: function() {
             return this.productMatrix().length > 0;
         },
 
         /**
          * @param {Array} variations
          */
-        populateVariationMatrix: function (variations) {
+        populateVariationMatrix: function(variations) {
             this.productMatrix([]);
-            _.each(variations, function (variation) {
-                var attributes = _.reduce(variation.options, function (memo, option) {
-                    var attribute = {};
+            _.each(variations, function(variation) {
+                let attributes = _.reduce(variation.options, function(memo, option) {
+                    let attribute = {};
 
                     attribute[option['attribute_code']] = option.value;
 
@@ -310,7 +310,7 @@ define([
                     variationKey: this.getVariationKey(variation.options),
                     editable: variation.editable === undefined ? !variation.productId : variation.editable,
                     productUrl: this.buildProductUrl(variation.productId),
-                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10)
+                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
                 }));
             }, this);
         },
@@ -318,7 +318,7 @@ define([
         /**
          * @param {*} productId
          */
-        buildProductUrl: function (productId) {
+        buildProductUrl: function(productId) {
             return this.productUrl.replace('%id%', productId);
         },
 
@@ -326,7 +326,7 @@ define([
          * @param {Object} options
          * @return {String}
          */
-        getVariationKey: function (options) {
+        getVariationKey: function(options) {
             return _.pluck(options, 'value').sort().join('-');
         },
 
@@ -334,17 +334,17 @@ define([
          * @param {*} options
          * @return {*|null}
          */
-        getProductIdByOptions: function (options) {
+        getProductIdByOptions: function(options) {
             return this.productAttributesMap[this.getVariationKey(options)] || null;
         },
 
         /**
          * Init product attributes map
          */
-        initProductAttributesMap: function () {
+        initProductAttributesMap: function() {
             if (this.productAttributesMap === null) {
                 this.productAttributesMap = {};
-                _.each(this.variations, function (product) {
+                _.each(this.variations, function(product) {
                     this.productAttributesMap[this.getVariationKey(product.options)] = product.productId;
                 }.bind(this));
             }
@@ -353,15 +353,15 @@ define([
         /**
          * @param {Array} attributes
          */
-        disableConfigurableAttributes: function (attributes) {
-            var element;
+        disableConfigurableAttributes: function(attributes) {
+            let element;
 
-            _.each(this.disabledAttributes, function (attribute) {
+            _.each(this.disabledAttributes, function(attribute) {
                 registry.get('index = ' + attribute).disabled(false);
             });
             this.disabledAttributes = [];
 
-            _.each(attributes, function (attribute) {
+            _.each(attributes, function(attribute) {
                 element = registry.get('index = ' + attribute.code);
 
                 if (!_.isUndefined(element)) {
@@ -375,14 +375,14 @@ define([
          * Get currency symbol
          * @returns {String}
          */
-        getCurrencySymbol: function () {
+        getCurrencySymbol: function() {
             return this.currencySymbol;
         },
 
         /**
          * Chose action for the form save button
          */
-        saveFormHandler: function () {
+        saveFormHandler: function() {
             this.serializeData();
 
             if (this.checkForNewAttributes()) {
@@ -406,7 +406,7 @@ define([
          *   - configurable-matrix-serialized;
          *   - associated_product_ids_serialized.
          */
-        serializeData: function () {
+        serializeData: function() {
             this.source.data['configurable-matrix-serialized'] =
                 JSON.stringify(this.source.data['configurable-matrix']);
 
@@ -422,10 +422,10 @@ define([
          * Check for newly added attributes
          * @returns {Boolean}
          */
-        checkForNewAttributes: function () {
-            var element, newAttributes = false;
+        checkForNewAttributes: function() {
+            let element, newAttributes = false;
 
-            _.each(this.source.get('data.attribute_codes'), function (attribute) {
+            _.each(this.source.get('data.attribute_codes'), function(attribute) {
                 element = registry.get('index = ' + attribute);
 
                 if (_.isUndefined(element)) {
@@ -440,8 +440,8 @@ define([
          * New attributes handler
          * @returns {Boolean}
          */
-        addNewAttributeSetHandler: function () {
-            var choosenAttributeSetOption;
+        addNewAttributeSetHandler: function() {
+            let choosenAttributeSetOption;
 
             this.formElement().validate();
 
@@ -471,8 +471,8 @@ define([
          * Handles new attribute set creation
          * @returns {Boolean}
          */
-        createNewAttributeSet: function () {
-            var messageBoxElement = registry.get('index = affectedAttributeSetError');
+        createNewAttributeSet: function() {
+            let messageBoxElement = registry.get('index = affectedAttributeSetError');
 
             messageBoxElement.visible(false);
 
@@ -480,15 +480,15 @@ define([
                 type: 'POST',
                 url: this.attributeSetCreationUrl,
                 data: {
-                    gotoEdit: 1,
+                    "gotoEdit": 1,
                     'attribute_set_name': this.attributeSetName,
                     'skeleton_set': this.skeletonAttributeSet,
-                    'return_session_messages_only': 1
+                    'return_session_messages_only': 1,
                 },
                 dataType: 'json',
                 showLoader: true,
-                context: this
-            }).success(function (data) {
+                context: this,
+            }).success(function(data) {
                 if (!data.error) {
                     this.set(
                         'skeletonAttributeSet',
@@ -503,13 +503,13 @@ define([
                 }
 
                 return false;
-            }).error(function (xhr) {
+            }).error(function(xhr) {
                 if (xhr.statusText === 'abort') {
                     return;
                 }
 
                 alert({
-                    content: $t('Something went wrong.')
+                    content: $t('Something went wrong.'),
                 });
             });
 
@@ -519,7 +519,7 @@ define([
         /**
          * Closes attribute set handler modal and process product form
          */
-        closeDialogAndProcessForm: function () {
+        closeDialogAndProcessForm: function() {
             this.attributeSetHandlerModal().closeModal();
             this.formElement().save(this.formSaveParams[0], this.formSaveParams[1]);
         },
@@ -528,8 +528,8 @@ define([
          * Retrieves product price
          * @returns {*}
          */
-        getProductPrice: function () {
+        getProductPrice: function() {
             return this.productPrice;
-        }
+        },
     });
 });

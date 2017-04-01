@@ -10,8 +10,8 @@ define([
     'underscore',
     'mage/translate',
     './multiselect',
-    'uiRegistry'
-], function (_, $t, Column, registry) {
+    'uiRegistry',
+], function(_, $t, Column, registry) {
     'use strict';
 
     return Column.extend({
@@ -21,21 +21,21 @@ define([
             fieldClass: {
                 'admin__scope-old': true,
                 'data-grid-onoff-cell': true,
-                'data-grid-checkbox-cell': false
+                'data-grid-checkbox-cell': false,
             },
             imports: {
-                selectedData: '${ $.provider }:data.selectedData'
+                selectedData: '${ $.provider }:data.selectedData',
             },
             listens: {
-                '${ $.provider }:reloaded': 'setDefaultSelections'
-            }
+                '${ $.provider }:reloaded': 'setDefaultSelections',
+            },
         },
 
         /**
          * @param {Number} id
          * @returns {*}
          */
-        getLabel: function (id) {
+        getLabel: function(id) {
             return this.selected.indexOf(id) !== -1 ? $t('On') : $t('Off');
         },
 
@@ -43,8 +43,8 @@ define([
          * Sets the ids for preselected elements
          * @returns void
          */
-        setDefaultSelections: function () {
-            var positionCacheValid = registry.get('position_cache_valid'),
+        setDefaultSelections: function() {
+            let positionCacheValid = registry.get('position_cache_valid'),
                 selectedFromCache = registry.get('selected_cache'),
                 key,
                 i;
@@ -98,8 +98,8 @@ define([
          * @param {Number} actionId
          * @returns {Boolean}
          */
-        isActionRelevant: function (actionId) {
-            var relevant = true;
+        isActionRelevant: function(actionId) {
+            let relevant = true;
 
             switch (actionId) {
                 case 'selectPage':
@@ -107,7 +107,7 @@ define([
                     break;
 
                 case 'deselectPage':
-                    relevant =  this.isPageSelected();
+                    relevant = this.isPageSelected();
                     break;
             }
 
@@ -120,12 +120,12 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        updateState: function () {
-            var positionCacheValid = registry.get('position_cache_valid'),
-                totalRecords    = this.totalRecords(),
-                selected        = this.selected().length,
-                excluded        = this.excluded().length,
-                totalSelected   = this.totalSelected(),
+        updateState: function() {
+            let positionCacheValid = registry.get('position_cache_valid'),
+                totalRecords = this.totalRecords(),
+                selected = this.selected().length,
+                excluded = this.excluded().length,
+                totalSelected = this.totalSelected(),
                 allSelected;
 
             if (positionCacheValid && this.selected().length > 0) {
@@ -154,6 +154,6 @@ define([
             this.indetermine(totalSelected && !allSelected);
 
             return this;
-        }
+        },
     });
 });

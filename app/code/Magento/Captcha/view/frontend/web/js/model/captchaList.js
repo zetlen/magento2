@@ -3,16 +3,16 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery'], function ($) {
+define(['jquery'], function($) {
     'use strict';
 
-    var captchaList = [];
+    let captchaList = [];
 
     return {
         /**
          * @param {Object} captcha
          */
-        add: function (captcha) {
+        add: function(captcha) {
             captchaList.push(captcha);
         },
 
@@ -20,10 +20,10 @@ define(['jquery'], function ($) {
          * @param {String} formId
          * @return {Object}
          */
-        getCaptchaByFormId: function (formId) {
-            var captcha = null;
+        getCaptchaByFormId: function(formId) {
+            let captcha = null;
 
-            $.each(captchaList, function (key, item) {
+            $.each(captchaList, function(key, item) {
                 if (formId === item.formId) {
                     captcha = item;
 
@@ -37,8 +37,8 @@ define(['jquery'], function ($) {
         /**
          * @return {Array}
          */
-        getCaptchaList: function () {
+        getCaptchaList: function() {
             return captchaList;
-        }
+        },
     };
 });

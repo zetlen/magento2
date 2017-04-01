@@ -4,21 +4,21 @@
  */
 
 define([
-    'uiComponent'
-], function (Component) {
+    'uiComponent',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/review/actions/default'
+            template: 'Magento_Checkout/review/actions/default',
         },
 
         /**
          * @param {Object} parent
          * @return {Function}
          */
-        placeOrder: function (parent) {
+        placeOrder: function(parent) {
             return parent.placeOrder.bind(parent);
-        }
+        },
     });
 });

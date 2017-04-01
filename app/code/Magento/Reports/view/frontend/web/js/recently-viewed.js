@@ -5,23 +5,23 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.recentlyViewedProducts', {
         options: {
             localStorageKey: 'recently-viewed-products',
             productBlock: '#widget_viewed_item',
-            viewedContainer: 'ol'
+            viewedContainer: 'ol',
         },
 
         /**
          * Bind events to the appropriate handlers.
          * @private
          */
-        _create: function () {
-            var productHtml = $(this.options.productBlock).html(),
+        _create: function() {
+            let productHtml = $(this.options.productBlock).html(),
                 productSku = $(this.options.productBlock).data('sku'),
                 products = JSON.parse(window.localStorage.getItem(this.options.localStorageKey)),
                 productsLength, maximum, showed, index;
@@ -50,7 +50,7 @@ define([
             products.sku.unshift(productSku);
             products.html.unshift(productHtml);
             window.localStorage.setItem(this.options.localStorageKey, JSON.stringify(products));
-        }
+        },
     });
 
     return $.mage.recentlyViewedProducts;

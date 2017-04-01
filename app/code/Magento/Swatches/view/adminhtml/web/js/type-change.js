@@ -4,15 +4,14 @@
  */
 require([
     'jquery',
-    'mage/translate'
-], function ($) {
+    'mage/translate',
+], function($) {
     'use strict';
 
-    $(function () {
-
+    $(function() {
         // disabled select only
-        $('select#frontend_input:disabled').each(function () {
-            var select = $(this),
+        $('select#frontend_input:disabled').each(function() {
+            let select = $(this),
                 currentValue = select.find('option:selected').val(),
                 enabledTypes = ['select', 'swatch_visual', 'swatch_text'],
                 warning = $('<label>')
@@ -20,13 +19,13 @@ require([
                     .text($.mage.__('These changes affect all related products.'))
                     .addClass('mage-error')
                     .attr({
-                        generated: true, for: select.attr('id')
+                        generated: true, for: select.attr('id'),
                     }),
 
                 /**
                  * Toggle hint about changes types
                  */
-                toggleWarning = function () {
+                toggleWarning = function() {
                     if (select.find('option:selected').val() === currentValue) {
                         warning.hide();
                     } else {
@@ -37,7 +36,7 @@ require([
                 /**
                  * Remove unsupported options
                  */
-                removeOption = function () {
+                removeOption = function() {
                     if (!~enabledTypes.indexOf($(this).val())) {
                         $(this).remove();
                     }

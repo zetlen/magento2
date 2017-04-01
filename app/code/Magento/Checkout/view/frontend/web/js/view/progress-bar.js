@@ -9,21 +9,21 @@ define([
     'ko',
     'uiComponent',
     'Magento_Checkout/js/model/step-navigator',
-    'jquery/jquery.hashchange'
-], function ($, _, ko, Component, stepNavigator) {
+    'jquery/jquery.hashchange',
+], function($, _, ko, Component, stepNavigator) {
     'use strict';
 
-    var steps = stepNavigator.steps;
+    let steps = stepNavigator.steps;
 
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/progress-bar',
-            visible: true
+            visible: true,
         },
         steps: steps,
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
             $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
             stepNavigator.handleHash();
@@ -34,14 +34,14 @@ define([
          * @param {*} itemTwo
          * @return {*|Number}
          */
-        sortItems: function (itemOne, itemTwo) {
+        sortItems: function(itemOne, itemTwo) {
             return stepNavigator.sortItems(itemOne, itemTwo);
         },
 
         /**
          * @param {Object} step
          */
-        navigateTo: function (step) {
+        navigateTo: function(step) {
             stepNavigator.navigateTo(step.code);
         },
 
@@ -49,8 +49,8 @@ define([
          * @param {Object} item
          * @return {*|Boolean}
          */
-        isProcessed: function (item) {
+        isProcessed: function(item) {
             return stepNavigator.isProcessed(item.code);
-        }
+        },
     });
 });

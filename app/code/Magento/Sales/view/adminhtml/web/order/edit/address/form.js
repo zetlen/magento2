@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
     /**
@@ -13,14 +13,14 @@ define([
      * @param {Array} config
      * @param {String} element
      */
-    return function (config, element) {
-        var form = $(element),
+    return function(config, element) {
+        let form = $(element),
             regionId = form.find('#region_id'),
 
             /**
              * Set region callback
              */
-            setRegion = function () {
+            setRegion = function() {
                 form.find('#region').val(regionId.filter(':visible').find(':selected').text());
             };
 

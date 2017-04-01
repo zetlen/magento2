@@ -7,15 +7,15 @@
  * @api
  */
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function(Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             links: {
-                value: false
-            }
+                value: false,
+            },
         },
 
         /**
@@ -24,8 +24,8 @@ define([
          * @param {Number} index
          * @param {Number} id
          */
-        deleteRecord: function (index, id) {
+        deleteRecord: function(index, id) {
             this.bubble('deleteRecord', index, id);
-        }
+        },
     });
 });

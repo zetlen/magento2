@@ -8,11 +8,11 @@ define([
     'Magento_Customer/js/customer-data',
     'jquery',
     'mage/mage',
-    'mage/decorate'
-], function (Component, customerData, $) {
+    'mage/decorate',
+], function(Component, customerData, $) {
     'use strict';
 
-    var sidebarInitialized = false;
+    let sidebarInitialized = false;
 
     /**
      * Initialize sidebar
@@ -28,11 +28,11 @@ define([
 
     return Component.extend({
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.compareProducts = customerData.get('compare-products');
 
             initSidebar();
-        }
+        },
     });
 });

@@ -5,24 +5,24 @@
 
 define([
     'mage/storage',
-    'Magento_Checkout/js/model/url-builder'
-], function (storage, urlBuilder) {
+    'Magento_Checkout/js/model/url-builder',
+], function(storage, urlBuilder) {
     'use strict';
 
-    return function (deferred, email) {
+    return function(deferred, email) {
         return storage.post(
             urlBuilder.createUrl('/customers/isEmailAvailable', {}),
             JSON.stringify({
-                customerEmail: email
+                customerEmail: email,
             }),
             false
-        ).done(function (isEmailAvailable) {
+        ).done(function(isEmailAvailable) {
             if (isEmailAvailable) {
                 deferred.resolve();
             } else {
                 deferred.reject();
             }
-        }).fail(function () {
+        }).fail(function() {
             deferred.reject();
         });
     };

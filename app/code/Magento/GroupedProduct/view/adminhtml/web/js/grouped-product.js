@@ -9,8 +9,8 @@ define([
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
-    'mage/adminhtml/grid'
-], function ($, mageTemplate) {
+    'mage/adminhtml/grid',
+], function($, mageTemplate) {
     'use strict';
 
     $.widget('mage.groupedProduct', {
@@ -18,23 +18,23 @@ define([
          * Create widget
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.$grid = this.element.find('[data-role=grouped-product-grid]');
             this.$grid.sortable({
                 distance: 8,
                 items: '[data-role=row]',
                 tolerance: 'pointer',
                 cancel: ':input',
-                update: $.proxy(function () {
+                update: $.proxy(function() {
                     this.element.trigger('resort');
-                }, this)
+                }, this),
             });
 
             this.productTmpl = mageTemplate('#group-product-template');
 
             $.each(
                 this.$grid.data('products'),
-                $.proxy(function (index, product) {
+                $.proxy(function(index, product) {
                     this._add(null, product);
                 }, this)
             );
@@ -42,7 +42,7 @@ define([
             this._on({
                 'add': '_add',
                 'resort': '_resort',
-                'click [data-column=actions] [data-role=delete]': '_remove'
+                'click [data-column=actions] [data-role=delete]': '_remove',
             });
 
             this._bindDialog();
@@ -55,18 +55,18 @@ define([
          * @param {Object} product
          * @private
          */
-        _add: function (event, product) {
-            var tmpl,
+        _add: function(event, product) {
+            let tmpl,
                 productExists;
 
             productExists = this.$grid.find('[data-role=id]')
-                .filter(function (index, element) {
-                    return $(element).val() == product.id; //eslint-disable-line eqeqeq
+                .filter(function(index, element) {
+                    return $(element).val() == product.id; // eslint-disable-line eqeqeq
                 }).length;
 
             if (!productExists) {
                 tmpl = this.productTmpl({
-                    data: product
+                    data: product,
                 });
 
                 $(tmpl).appendTo(this.$grid.find('tbody'));
@@ -78,7 +78,7 @@ define([
          * @param {EventObject} event
          * @private
          */
-        _remove: function (event) {
+        _remove: function(event) {
             $(event.target).closest('[data-role=row]').remove();
             this.element.trigger('resort');
             this._updateGridVisibility();
@@ -88,8 +88,8 @@ define([
          * Resort products
          * @private
          */
-        _resort: function () {
-            this.element.find('[data-role=position]').each($.proxy(function (index, element) {
+        _resort: function() {
+            this.element.find('[data-role=position]').each($.proxy(function(index, element) {
                 $(element).val(index + 1);
             }, this));
         },
@@ -99,8 +99,8 @@ define([
          *
          * @private
          */
-        _bindDialog: function () {
-            var widget = this,
+        _bindDialog: function() {
+            let widget = this,
                 selectedProductList = {},
                 popup = $('[data-role=add-product-dialog]'),
                 gridPopup;
@@ -112,33 +112,33 @@ define([
                 modalClass: 'grouped',
 
                 /** @inheritdoc */
-                open: function () {
+                open: function() {
                     $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
                 },
                 buttons: [{
-                    id: 'grouped-product-dialog-apply-button',
-                    text: $.mage.__('Add Selected Products'),
+                    "id": 'grouped-product-dialog-apply-button',
+                    "text": $.mage.__('Add Selected Products'),
                     'class': 'action-primary action-add',
 
                     /** @inheritdoc */
-                    click: function () {
-                        $.each(selectedProductList, function (index, product) {
+                    "click": function() {
+                        $.each(selectedProductList, function(index, product) {
                             widget._add(null, product);
                         });
                         widget._resort();
                         widget._updateGridVisibility();
                         popup.modal('closeModal');
-                    }
-                }]
+                    },
+                }],
             });
 
-            popup.on('click', '[data-role=row]', function (event) {
-                var target = $(event.target);
+            popup.on('click', '[data-role=row]', function(event) {
+                let target = $(event.target);
 
                 if (!target.is('input')) {
                     target.closest('[data-role=row]')
                         .find('[data-column=entity_ids] input')
-                        .prop('checked', function (element, value) {
+                        .prop('checked', function(element, value) {
                             return !value;
                         })
                         .trigger('change');
@@ -148,14 +148,14 @@ define([
             popup.on(
                 'change',
                 '[data-role=row] [data-column=entity_ids] input',
-                $.proxy(function (event) {
-                    var element = $(event.target),
+                $.proxy(function(event) {
+                    let element = $(event.target),
                         product = {};
 
                     if (element.is(':checked')) {
                         product.id = element.val();
                         product.qty = 0;
-                        element.closest('[data-role=row]').find('[data-column]').each(function (index, el) {
+                        element.closest('[data-role=row]').find('[data-column]').each(function(index, el) {
                             product[$(el).data('column')] = $.trim($(el).text());
                         });
                         selectedProductList[product.id] = product;
@@ -167,25 +167,25 @@ define([
 
             gridPopup = $(this.options.gridPopup).data('gridObject');
 
-            $('[data-role=add-product]').on('click', function (event) {
+            $('[data-role=add-product]').on('click', function(event) {
                 event.preventDefault();
                 popup.modal('openModal');
                 gridPopup.reload();
                 selectedProductList = {};
             });
 
-            $('#' + gridPopup.containerId).on('gridajaxsettings', function (event, ajaxSettings) {
-                var ids = widget.$grid.find('[data-role=id]').map(function (index, element) {
+            $('#' + gridPopup.containerId).on('gridajaxsettings', function(event, ajaxSettings) {
+                let ids = widget.$grid.find('[data-role=id]').map(function(index, element) {
                     return $(element).val();
                 }).toArray();
 
                 ajaxSettings.data.filter = $.extend(ajaxSettings.data.filter || {}, {
-                    'entity_ids': ids
+                    'entity_ids': ids,
                 });
-            }).on('gridajax', function (event, ajaxRequest) {
-                ajaxRequest.done(function () {
-                    popup.find('[data-role=row] [data-column=entity_ids] input').each(function (index, element) {
-                        var $element = $(element);
+            }).on('gridajax', function(event, ajaxRequest) {
+                ajaxRequest.done(function() {
+                    popup.find('[data-role=row] [data-column=entity_ids] input').each(function(index, element) {
+                        let $element = $(element);
 
                         $element.prop('checked', !!selectedProductList[$element.val()]);
                     });
@@ -197,12 +197,12 @@ define([
          * Show or hide message
          * @private
          */
-        _updateGridVisibility: function () {
-            var showGrid = this.element.find('[data-role=id]').length > 0;
+        _updateGridVisibility: function() {
+            let showGrid = this.element.find('[data-role=id]').length > 0;
 
             this.element.find('.grid-container').toggle(showGrid);
             this.element.find('.no-products-message').toggle(!showGrid);
-        }
+        },
     });
 
     return $.mage.groupedProduct;

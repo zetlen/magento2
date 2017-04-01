@@ -10,8 +10,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiCollection'
-], function (_, utils, layout, Collection) {
+    'uiCollection',
+], function(_, utils, layout, Collection) {
     'use strict';
 
     /**
@@ -24,7 +24,7 @@ define([
         return {
             label: elem.label,
             preview: elem.getPreview(),
-            elem: elem
+            elem: elem,
         };
     }
 
@@ -35,9 +35,9 @@ define([
      * @returns {Object}
      */
     function removeEmpty(data) {
-        var result = utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
+        let result = utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
 
-        return utils.mapRecursive(result, function (value) {
+        return utils.mapRecursive(result, function(value) {
             return _.isString(value) ? value.trim() : value;
         });
     }
@@ -49,10 +49,10 @@ define([
             _processed: [],
             columnsProvider: 'ns = ${ $.ns }, componentType = columns',
             applied: {
-                placeholder: true
+                placeholder: true,
             },
             filters: {
-                placeholder: true
+                placeholder: true,
             },
             templates: {
                 filters: {
@@ -63,51 +63,51 @@ define([
                         dataScope: '${ $.$data.column.index }',
                         label: '${ $.$data.column.label }',
                         imports: {
-                            visible: '${ $.$data.column.name }:visible'
-                        }
+                            visible: '${ $.$data.column.name }:visible',
+                        },
                     },
                     text: {
                         component: 'Magento_Ui/js/form/element/abstract',
-                        template: 'ui/grid/filters/field'
+                        template: 'ui/grid/filters/field',
                     },
                     select: {
                         component: 'Magento_Ui/js/form/element/select',
                         template: 'ui/grid/filters/field',
                         options: '${ JSON.stringify($.$data.column.options) }',
-                        caption: ' '
+                        caption: ' ',
                     },
                     dateRange: {
                         component: 'Magento_Ui/js/grid/filters/range',
-                        rangeType: 'date'
+                        rangeType: 'date',
                     },
                     textRange: {
                         component: 'Magento_Ui/js/grid/filters/range',
-                        rangeType: 'text'
-                    }
-                }
+                        rangeType: 'text',
+                    },
+                },
             },
             chipsConfig: {
                 name: '${ $.name }_chips',
                 provider: '${ $.chipsConfig.name }',
-                component: 'Magento_Ui/js/grid/filters/chips'
+                component: 'Magento_Ui/js/grid/filters/chips',
             },
             listens: {
                 active: 'updatePreviews',
-                applied: 'cancel updateActive'
+                applied: 'cancel updateActive',
             },
             statefull: {
-                applied: true
+                applied: true,
             },
             exports: {
-                applied: '${ $.provider }:params.filters'
+                applied: '${ $.provider }:params.filters',
             },
             imports: {
-                'onColumnsUpdate': '${ $.columnsProvider }:elems'
+                'onColumnsUpdate': '${ $.columnsProvider }:elems',
             },
             modules: {
                 columns: '${ $.columnsProvider }',
-                chips: '${ $.chipsConfig.provider }'
-            }
+                chips: '${ $.chipsConfig.provider }',
+            },
         },
 
         /**
@@ -115,7 +115,7 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'updateActive');
 
             this._super()
@@ -130,11 +130,11 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track({
                     active: [],
-                    previews: []
+                    previews: [],
                 });
 
             return this;
@@ -145,7 +145,7 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        initChips: function () {
+        initChips: function() {
             layout([this.chipsConfig]);
 
             this.chips('insertChild', this.name);
@@ -158,7 +158,7 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        initElement: function (elem) {
+        initElement: function(elem) {
             this._super();
 
             elem.on('elems', this.updateActive);
@@ -175,7 +175,7 @@ define([
          *      filter will be cleared. Otherwise, clears all data.
          * @returns {Filters} Chainable.
          */
-        clear: function (filter) {
+        clear: function(filter) {
             filter ?
                 filter.clear() :
                 _.invoke(this.active, 'clear');
@@ -190,7 +190,7 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        apply: function () {
+        apply: function() {
             this.set('applied', removeEmpty(this.filters));
 
             return this;
@@ -201,7 +201,7 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        cancel: function () {
+        cancel: function() {
             this.set('filters', utils.copy(this.applied));
 
             return this;
@@ -215,8 +215,8 @@ define([
          *      to completely replace current filters data or to extend it.
          * @returns {Filters} Chainable.
          */
-        setData: function (data, partial) {
-            var filters = partial ? this.filters : {};
+        setData: function(data, partial) {
+            let filters = partial ? this.filters : {};
 
             data = utils.extend({}, filters, data);
 
@@ -231,9 +231,9 @@ define([
          * @param {Column} column - Column component for which to create a filter.
          * @returns {Filters} Chainable.
          */
-        addFilter: function (column) {
-            var index       = column.index,
-                processed   = this._processed,
+        addFilter: function(column) {
+            let index = column.index,
+                processed = this._processed,
                 filter;
 
             if (!column.filter || _.contains(processed, index)) {
@@ -255,10 +255,10 @@ define([
          * @param {Column} column - Column component whith a basic filter declaration.
          * @returns {Object} Filters' configuration.
          */
-        buildFilter: function (column) {
-            var filters = this.templates.filters,
-                filter  = column.filter,
-                type    = filters[filter.filterType];
+        buildFilter: function(column) {
+            let filters = this.templates.filters,
+                filter = column.filter,
+                type = filters[filter.filterType];
 
             if (_.isObject(filter) && type) {
                 filter = utils.extend({}, type, filter);
@@ -270,7 +270,7 @@ define([
 
             return utils.template(filter, {
                 filters: this,
-                column: column
+                column: column,
             }, true, true);
         },
 
@@ -279,8 +279,8 @@ define([
          *
          * @returns {Array}
          */
-        getRanges: function () {
-            return this.elems.filter(function (filter) {
+        getRanges: function() {
+            return this.elems.filter(function(filter) {
                 return filter.isRange;
             });
         },
@@ -290,8 +290,8 @@ define([
          *
          * @returns {Array}
          */
-        getPlain: function () {
-            return this.elems.filter(function (filter) {
+        getPlain: function() {
+            return this.elems.filter(function(filter) {
                 return !filter.isRange;
             });
         },
@@ -302,7 +302,7 @@ define([
          * @param {Object} filter
          * @returns {Boolean}
          */
-        isFilterVisible: function (filter) {
+        isFilterVisible: function(filter) {
             return filter.visible() || this.isFilterActive(filter);
         },
 
@@ -312,7 +312,7 @@ define([
          * @param {Object} filter
          * @returns {Boolean}
          */
-        isFilterActive: function (filter) {
+        isFilterActive: function(filter) {
             return _.contains(this.active, filter);
         },
 
@@ -321,7 +321,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasVisible: function () {
+        hasVisible: function() {
             return this.elems.some(this.isFilterVisible, this);
         },
 
@@ -331,10 +331,10 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        updateActive: function () {
-            var applied = _.keys(this.applied);
+        updateActive: function() {
+            let applied = _.keys(this.applied);
 
-            this.active = this.elems.filter(function (elem) {
+            this.active = this.elems.filter(function(elem) {
                 return _.contains(applied, elem.index);
             });
 
@@ -346,7 +346,7 @@ define([
          *
          * @returns {Number}
          */
-        countActive: function () {
+        countActive: function() {
             return this.active.length;
         },
 
@@ -356,8 +356,8 @@ define([
          * @param {Array} filters - Filters to be processed.
          * @returns {Filters} Chainable.
          */
-        updatePreviews: function (filters) {
-            var previews = filters.map(extractPreview);
+        updatePreviews: function(filters) {
+            let previews = filters.map(extractPreview);
 
             this.previews = _.compact(previews);
 
@@ -369,8 +369,8 @@ define([
          *
          * @param {Array} columns - Current columns list.
          */
-        onColumnsUpdate: function (columns) {
+        onColumnsUpdate: function(columns) {
             columns.forEach(this.addFilter, this);
-        }
+        },
     });
 });

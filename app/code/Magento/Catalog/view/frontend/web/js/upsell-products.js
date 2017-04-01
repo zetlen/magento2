@@ -5,20 +5,20 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.upsellProducts', {
         options: {
-            elementsSelector: '.item.product'
+            elementsSelector: '.item.product',
         },
 
         /**
          * Bind events to the appropriate handlers.
          * @private
          */
-        _create: function () {
+        _create: function() {
             this._showUpsellProducts(
                 this.element.find(this.options.elementsSelector),
                 this.element.data('limit'),
@@ -33,8 +33,8 @@ define([
          * @param {Boolean} shuffle
          * @private
          */
-        _showUpsellProducts: function (elements, limit, shuffle) {
-            var index;
+        _showUpsellProducts: function(elements, limit, shuffle) {
+            let index;
 
             if (shuffle) {
                 this._shuffle(elements);

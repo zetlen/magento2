@@ -4,8 +4,8 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/multiselect'
-], function (Multiselect) {
+    'Magento_Ui/js/form/element/multiselect',
+], function(Multiselect) {
     'use strict';
 
     return Multiselect.extend({
@@ -13,10 +13,10 @@ define([
         /**
          * Disable required validation, when 'use config option' checked
          */
-        handleRequired: function (newValue) {
+        handleRequired: function(newValue) {
             this.validation['required-entry'] = !newValue;
             this.required(!newValue);
             this.error(false);
-        }
+        },
     });
 });

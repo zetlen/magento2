@@ -6,51 +6,51 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/summary/shipping',
-    'Magento_Checkout/js/model/quote'
-], function ($, Component, quote) {
+    'Magento_Checkout/js/model/quote',
+], function($, Component, quote) {
     'use strict';
 
-    var displayMode = window.checkoutConfig.reviewShippingDisplayMode;
+    let displayMode = window.checkoutConfig.reviewShippingDisplayMode;
 
     return Component.extend({
         defaults: {
             displayMode: displayMode,
-            template: 'Magento_Tax/checkout/summary/shipping'
+            template: 'Magento_Tax/checkout/summary/shipping',
         },
 
         /**
          * @return {Boolean}
          */
-        isBothPricesDisplayed: function () {
-            return this.displayMode == 'both'; //eslint-disable-line eqeqeq
+        isBothPricesDisplayed: function() {
+            return this.displayMode == 'both'; // eslint-disable-line eqeqeq
         },
 
         /**
          * @return {Boolean}
          */
-        isIncludingDisplayed: function () {
-            return this.displayMode == 'including'; //eslint-disable-line eqeqeq
+        isIncludingDisplayed: function() {
+            return this.displayMode == 'including'; // eslint-disable-line eqeqeq
         },
 
         /**
          * @return {Boolean}
          */
-        isExcludingDisplayed: function () {
-            return this.displayMode == 'excluding'; //eslint-disable-line eqeqeq
+        isExcludingDisplayed: function() {
+            return this.displayMode == 'excluding'; // eslint-disable-line eqeqeq
         },
 
         /**
          * @return {*|Boolean}
          */
-        isCalculated: function () {
+        isCalculated: function() {
             return this.totals() && this.isFullMode() && quote.shippingMethod() != null;
         },
 
         /**
          * @return {*}
          */
-        getIncludingValue: function () {
-            var price;
+        getIncludingValue: function() {
+            let price;
 
             if (!this.isCalculated()) {
                 return this.notCalculatedMessage;
@@ -63,8 +63,8 @@ define([
         /**
          * @return {*}
          */
-        getExcludingValue: function () {
-            var price;
+        getExcludingValue: function() {
+            let price;
 
             if (!this.isCalculated()) {
                 return this.notCalculatedMessage;
@@ -72,6 +72,6 @@ define([
             price = this.totals()['shipping_amount'];
 
             return this.getFormattedPrice(price);
-        }
+        },
     });
 });

@@ -6,19 +6,19 @@
 define([
     'Magento_Ui/js/form/element/single-checkbox',
     'underscore',
-    'uiRegistry'
-], function (checkbox, _, registry) {
+    'uiRegistry',
+], function(checkbox, _, registry) {
     'use strict';
 
     return checkbox.extend({
-        defaults: {
-            valueFromConfig: ''
+        "defaults": {
+            valueFromConfig: '',
         },
 
         /**
          * @returns {Element}
          */
-        initObservable: function () {
+        "initObservable": function() {
             return this
                 ._super()
                 .observe(['valueFromConfig']);
@@ -27,7 +27,7 @@ define([
         /**
          * @inheritdoc
          */
-        initialize: function () {
+        "initialize": function() {
             this._super();
             this.onCheckedChanged(this.checked());
 
@@ -37,8 +37,8 @@ define([
         /**
          * @inheritdoc
          */
-        'onCheckedChanged': function (newChecked) {
-            var valueFromConfig = this.valueFromConfig();
+        'onCheckedChanged': function(newChecked) {
+            let valueFromConfig = this.valueFromConfig();
 
             if (newChecked && (_.isArray(valueFromConfig) && valueFromConfig.length === 0 || valueFromConfig === 1)) {
                 this.changeVisibleDisabled(this.inputField, true, true, 1);
@@ -64,10 +64,10 @@ define([
          * @param {Boolean} disabled
          * @param {Null|Number} valueFromConfig
          */
-        changeVisibleDisabled: function (filter, visible, disabled, valueFromConfig) {
+        "changeVisibleDisabled": function(filter, visible, disabled, valueFromConfig) {
             registry.async(filter)(
-                function (currentComponent) {
-                    var initialValue = currentComponent.initialValue;
+                function(currentComponent) {
+                    let initialValue = currentComponent.initialValue;
 
                     if (_.isString(initialValue) || initialValue === 0 || valueFromConfig === 1) {
                         currentComponent.value(1);
@@ -79,6 +79,6 @@ define([
                     currentComponent.disabled(disabled);
                 }
             );
-        }
+        },
     });
 });

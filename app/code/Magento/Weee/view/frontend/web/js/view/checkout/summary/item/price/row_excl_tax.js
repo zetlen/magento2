@@ -4,21 +4,21 @@
  */
 
 define([
-    'Magento_Weee/js/view/checkout/summary/item/price/weee'
-], function (weee) {
+    'Magento_Weee/js/view/checkout/summary/item/price/weee',
+], function(weee) {
     'use strict';
 
     return weee.extend({
         defaults: {
-            template: 'Magento_Weee/checkout/summary/item/price/row_excl_tax'
+            template: 'Magento_Weee/checkout/summary/item/price/row_excl_tax',
         },
 
         /**
          * @param {Object} item
          * @return {Number}
          */
-        getFinalRowDisplayPriceExclTax: function (item) {
-            var rowTotalExclTax = parseFloat(item['row_total']);
+        getFinalRowDisplayPriceExclTax: function(item) {
+            let rowTotalExclTax = parseFloat(item['row_total']);
 
             if (!window.checkoutConfig.getIncludeWeeeFlag) {
                 rowTotalExclTax += parseFloat(item['weee_tax_applied_amount']);
@@ -31,8 +31,8 @@ define([
          * @param {Object} item
          * @return {Number}
          */
-        getRowDisplayPriceExclTax: function (item) {
-            var rowTotalExclTax = parseFloat(item['row_total']);
+        getRowDisplayPriceExclTax: function(item) {
+            let rowTotalExclTax = parseFloat(item['row_total']);
 
             if (window.checkoutConfig.getIncludeWeeeFlag) {
                 rowTotalExclTax += this.getRowWeeeTaxExclTax(item);
@@ -45,19 +45,19 @@ define([
          * @param {Object} item
          * @return {Number}
          */
-        getRowWeeeTaxExclTax: function (item) {
-            var totalWeeeTaxExclTaxApplied = 0,
+        getRowWeeeTaxExclTax: function(item) {
+            let totalWeeeTaxExclTaxApplied = 0,
                 weeeTaxAppliedAmounts;
 
             if (item['weee_tax_applied']) {
                 weeeTaxAppliedAmounts = JSON.parse(item['weee_tax_applied']);
-                weeeTaxAppliedAmounts.forEach(function (weeeTaxAppliedAmount) {
+                weeeTaxAppliedAmounts.forEach(function(weeeTaxAppliedAmount) {
                     totalWeeeTaxExclTaxApplied += parseFloat(Math.max(weeeTaxAppliedAmount['row_amount'], 0));
                 });
             }
 
             return totalWeeeTaxExclTaxApplied;
-        }
+        },
 
     });
 });

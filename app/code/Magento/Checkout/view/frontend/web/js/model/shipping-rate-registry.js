@@ -3,17 +3,17 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
-    var cache = [];
+    let cache = [];
 
     return {
         /**
          * @param {String} addressKey
          * @return {*}
          */
-        get: function (addressKey) {
+        get: function(addressKey) {
             if (cache[addressKey]) {
                 return cache[addressKey];
             }
@@ -25,8 +25,8 @@ define([], function () {
          * @param {String} addressKey
          * @param {*} data
          */
-        set: function (addressKey, data) {
+        set: function(addressKey, data) {
             cache[addressKey] = data;
-        }
+        },
     };
 });

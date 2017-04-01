@@ -9,8 +9,8 @@
 define([
     'underscore',
     'uiCollection',
-    'uiRegistry'
-], function (_, uiCollection, registry) {
+    'uiRegistry',
+], function(_, uiCollection, registry) {
     'use strict';
 
     return uiCollection.extend({
@@ -21,21 +21,21 @@ define([
             label: '',
             positionProvider: 'position',
             imports: {
-                data: '${ $.provider }:${ $.dataScope }'
+                data: '${ $.provider }:${ $.dataScope }',
             },
             listens: {
                 position: 'initPosition',
-                elems: 'setColumnVisibileListener'
+                elems: 'setColumnVisibileListener',
             },
             links: {
-                position: '${ $.name }.${ $.positionProvider }:value'
+                position: '${ $.name }.${ $.positionProvider }:value',
             },
             exports: {
-                recordId: '${ $.provider }:${ $.dataScope }.record_id'
+                recordId: '${ $.provider }:${ $.dataScope }.record_id',
             },
             modules: {
-                parentComponent: '${ $.parentName }'
-            }
+                parentComponent: '${ $.parentName }',
+            },
         },
 
         /**
@@ -45,20 +45,18 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initialize: function () {
-            var self = this;
+        initialize: function() {
+            let self = this;
 
             this._super();
 
-            registry.async(this.name + '.' + this.positionProvider)(function (component) {
-
+            registry.async(this.name + '.' + this.positionProvider)(function(component) {
                 /**
                  * Overwrite hasChanged method
                  *
                  * @returns {Boolean}
                  */
-                component.hasChanged = function () {
-
+                component.hasChanged = function() {
                     /* eslint-disable eqeqeq */
                     return this.value().toString() != this.initialValue.toString();
 
@@ -79,7 +77,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
             this.label = this.label || this.headerLabel;
@@ -92,14 +90,14 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track('position')
                 .observe([
                     'visible',
                     'disabled',
                     'data',
-                    'label'
+                    'label',
                 ]);
 
             return this;
@@ -110,8 +108,8 @@ define([
          *
          * @param {Number} position - element position
          */
-        initPosition: function (position) {
-            var pos = ~~position;
+        initPosition: function(position) {
+            let pos = ~~position;
 
             this.parentComponent().setMaxPosition(pos, this);
 
@@ -123,8 +121,8 @@ define([
         /**
          * Set column visibility listener
          */
-        setColumnVisibileListener: function () {
-            var elem = _.find(this.elems(), function (curElem) {
+        setColumnVisibileListener: function() {
+            let elem = _.find(this.elems(), function(curElem) {
                 return !curElem.hasOwnProperty('visibleListener');
             });
 
@@ -146,7 +144,7 @@ define([
          *
          * @param {Object} data
          */
-        childVisibleListener: function (data) {
+        childVisibleListener: function(data) {
             this.setVisibilityColumn(data.index, data.visible());
         },
 
@@ -154,12 +152,12 @@ define([
          * Reset data to initial value.
          * Call method reset on child elements.
          */
-        reset: function () {
-            var elems = this.elems(),
+        reset: function() {
+            let elems = this.elems(),
                 nameIsEqual,
                 dataScopeIsEqual;
 
-            _.each(elems, function (elem) {
+            _.each(elems, function(elem) {
                 nameIsEqual = this.name + '.' + this.positionProvider === elem.name;
                 dataScopeIsEqual = this.dataScope === elem.dataScope;
 
@@ -176,12 +174,12 @@ define([
          *
          * @returns {Collection} Chainable.
          */
-        clear: function () {
-            var elems = this.elems(),
+        clear: function() {
+            let elems = this.elems(),
                 nameIsEqual,
                 dataScopeIsEqual;
 
-            _.each(elems, function (elem) {
+            _.each(elems, function(elem) {
                 nameIsEqual = this.name + '.' + this.positionProvider === elem.name;
                 dataScopeIsEqual = this.dataScope === elem.dataScope;
 
@@ -200,7 +198,7 @@ define([
          *
          * @returns {String}
          */
-        getLabel: function (label) {
+        getLabel: function(label) {
             if (_.isString(label)) {
                 this.label(label);
             } else if (label && this.label()) {
@@ -217,8 +215,8 @@ define([
          *
          * @param {Boolean} state
          */
-        setVisible: function (state) {
-            this.elems.each(function (cell) {
+        setVisible: function(state) {
+            this.elems.each(function(cell) {
                 cell.visible(state);
             });
         },
@@ -229,8 +227,8 @@ define([
          * @param {Number} index
          * @param {Boolean} state
          */
-        setVisibilityColumn: function (index, state) {
-            var elems = this.elems(),
+        setVisibilityColumn: function(index, state) {
+            let elems = this.elems(),
                 curElem = parseInt(index, 10),
                 label;
 
@@ -240,10 +238,10 @@ define([
 
             if (_.isNaN(curElem)) {
                 _.findWhere(elems, {
-                    index: index
+                    index: index,
                 }).visible(state);
                 label = _.findWhere(this.parentComponent().labels(), {
-                    name: index
+                    name: index,
                 });
                 label.visible() !== state ? label.visible(state) : false;
             } else {
@@ -256,8 +254,8 @@ define([
          *
          * @param {Boolean} state
          */
-        setDisabled: function (state) {
-            this.elems.each(function (cell) {
+        setDisabled: function(state) {
+            this.elems.each(function(cell) {
                 cell.disabled(state);
             });
         },
@@ -268,9 +266,9 @@ define([
          * @param {Number} index
          * @param {Boolean} state
          */
-        setDisabledColumn: function (index, state) {
+        setDisabledColumn: function(index, state) {
             index = ~~index;
             this.elems()[index].disabled(state);
-        }
+        },
     });
 });

@@ -11,9 +11,9 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Checkout/js/action/get-payment-information'
+        'Magento_Checkout/js/action/get-payment-information',
     ],
-    function ($,
+    function($,
               quote,
               urlBuilder,
               storage,
@@ -24,8 +24,8 @@ define(
     ) {
         'use strict';
 
-        return function (messageContainer) {
-            var serviceUrl,
+        return function(messageContainer) {
+            let serviceUrl,
                 payload;
 
             /**
@@ -33,17 +33,17 @@ define(
              */
             if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/billing-address', {
-                    cartId: quote.getQuoteId()
+                    cartId: quote.getQuoteId(),
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
-                    address: quote.billingAddress()
+                    address: quote.billingAddress(),
                 };
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/billing-address', {});
                 payload = {
                     cartId: quote.getQuoteId(),
-                    address: quote.billingAddress()
+                    address: quote.billingAddress(),
                 };
             }
 
@@ -52,16 +52,16 @@ define(
             return storage.post(
                 serviceUrl, JSON.stringify(payload)
             ).done(
-                function () {
-                    var deferred = $.Deferred();
+                function() {
+                    let deferred = $.Deferred();
 
                     getPaymentInformationAction(deferred);
-                    $.when(deferred).done(function () {
+                    $.when(deferred).done(function() {
                         fullScreenLoader.stopLoader();
                     });
                 }
             ).fail(
-                function (response) {
+                function(response) {
                     errorProcessor.process(response, messageContainer);
                     fullScreenLoader.stopLoader();
                 }

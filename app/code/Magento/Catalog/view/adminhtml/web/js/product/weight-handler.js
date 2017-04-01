@@ -4,8 +4,8 @@
  */
 
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
     return {
@@ -14,7 +14,7 @@ define([
          * Get weight
          * @returns {*|jQuery|HTMLElement}
          */
-        $weight: function () {
+        "$weight": function() {
             return $('#weight');
         },
 
@@ -22,7 +22,7 @@ define([
          * Weight Switcher
          * @returns {*|jQuery|HTMLElement}
          */
-        $weightSwitcher: function () {
+        "$weightSwitcher": function() {
             return $('[data-role=weight-switcher]');
         },
 
@@ -30,21 +30,21 @@ define([
          * Is locked
          * @returns {*}
          */
-        isLocked: function () {
+        "isLocked": function() {
             return this.$weight().is('[data-locked]');
         },
 
         /**
          * Disabled
          */
-        disabled: function () {
+        "disabled": function() {
             this.$weight().addClass('ignore-validate').prop('disabled', true);
         },
 
         /**
          * Enabled
          */
-        enabled: function () {
+        "enabled": function() {
             this.$weight().removeClass('ignore-validate').prop('disabled', false);
         },
 
@@ -52,14 +52,14 @@ define([
          * Switch Weight
          * @returns {*}
          */
-        switchWeight: function () {
+        "switchWeight": function() {
             return this.productHasWeightBySwitcher() ? this.enabled() : this.disabled();
         },
 
         /**
          * Hide weight switcher
          */
-        hideWeightSwitcher: function () {
+        "hideWeightSwitcher": function() {
             this.$weightSwitcher().hide();
         },
 
@@ -67,7 +67,7 @@ define([
          * Has weight swither
          * @returns {*}
          */
-        hasWeightSwither: function () {
+        "hasWeightSwither": function() {
             return this.$weightSwitcher().is(':visible');
         },
 
@@ -75,7 +75,7 @@ define([
          * Has weight
          * @returns {*}
          */
-        hasWeight: function () {
+        "hasWeight": function() {
             return this.$weight.is(':visible');
         },
 
@@ -83,7 +83,7 @@ define([
          * Product has weight
          * @returns {Bool}
          */
-        productHasWeightBySwitcher: function () {
+        "productHasWeightBySwitcher": function() {
             return $('input:checked', this.$weightSwitcher()).val() === '1';
         },
 
@@ -91,8 +91,8 @@ define([
          * Change
          * @param {String} data
          */
-        change: function (data) {
-            var value = data !== undefined ? +data : !this.productHasWeightBySwitcher();
+        "change": function(data) {
+            let value = data !== undefined ? +data : !this.productHasWeightBySwitcher();
 
             $('input[value=' + value + ']', this.$weightSwitcher()).prop('checked', true);
             this.switchWeight();
@@ -101,7 +101,7 @@ define([
         /**
          * Constructor component
          */
-        'Magento_Catalog/js/product/weight-handler': function () {
+        'Magento_Catalog/js/product/weight-handler': function() {
             this.bindAll();
 
             if (this.hasWeightSwither()) {
@@ -112,8 +112,8 @@ define([
         /**
          * Bind all
          */
-        bindAll: function () {
+        "bindAll": function() {
             this.$weightSwitcher().find('input').on('change', this.switchWeight.bind(this));
-        }
+        },
     };
 });

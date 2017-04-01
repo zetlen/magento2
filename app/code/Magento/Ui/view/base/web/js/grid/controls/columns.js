@@ -10,8 +10,8 @@ define([
     'underscore',
     'mageUtils',
     'mage/translate',
-    'uiCollection'
-], function (_, utils, $t, Collection) {
+    'uiCollection',
+], function(_, utils, $t, Collection) {
     'use strict';
 
     return Collection.extend({
@@ -23,11 +23,11 @@ define([
             displayArea: 'dataGridActions',
             columnsProvider: 'ns = ${ $.ns }, componentType = columns',
             imports: {
-                addColumns: '${ $.columnsProvider }:elems'
+                addColumns: '${ $.columnsProvider }:elems',
             },
             templates: {
-                headerMsg: $t('${ $.visible } out of ${ $.total } visible')
-            }
+                headerMsg: $t('${ $.visible } out of ${ $.total } visible'),
+            },
         },
 
         /**
@@ -35,7 +35,7 @@ define([
          *
          * @returns {Columns} Chainable.
          */
-        reset: function () {
+        reset: function() {
             this.elems.each('applyState', 'default', 'visible');
 
             return this;
@@ -46,7 +46,7 @@ define([
          *
          * @returns {Columns} Chainable.
          */
-        cancel: function () {
+        cancel: function() {
             this.elems.each('applyState', '', 'visible');
 
             return this;
@@ -58,9 +58,9 @@ define([
          * @param {Array} columns - Elements array that will be added to component.
          * @returns {Columns} Chainable.
          */
-        addColumns: function (columns) {
+        addColumns: function(columns) {
             columns = _.where(columns, {
-                controlVisibility: true
+                controlVisibility: true,
             });
 
             this.insertChild(columns);
@@ -74,7 +74,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasOverflow: function () {
+        hasOverflow: function() {
             return this.elems().length > this.viewportSize;
         },
 
@@ -86,8 +86,8 @@ define([
          * @param {Object} elem
          * @returns {Boolean}
          */
-        isDisabled: function (elem) {
-            var visible = this.countVisible();
+        isDisabled: function(elem) {
+            let visible = this.countVisible();
 
             return elem.visible ?
                     visible === this.minVisible :
@@ -99,7 +99,7 @@ define([
          *
          * @returns {Number}
          */
-        countVisible: function () {
+        countVisible: function() {
             return this.elems.filter('visible').length;
         },
 
@@ -108,11 +108,11 @@ define([
          *
          * @returns {String}
          */
-        getHeaderMessage: function () {
+        getHeaderMessage: function() {
             return utils.template(this.templates.headerMsg, {
                 visible: this.countVisible(),
-                total: this.elems().length
+                total: this.elems().length,
             });
-        }
+        },
     });
 });

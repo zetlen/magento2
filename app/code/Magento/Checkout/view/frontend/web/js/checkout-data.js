@@ -8,24 +8,24 @@
  */
 define([
     'jquery',
-    'Magento_Customer/js/customer-data'
-], function ($, storage) {
+    'Magento_Customer/js/customer-data',
+], function($, storage) {
     'use strict';
 
-    var cacheKey = 'checkout-data',
+    let cacheKey = 'checkout-data',
         checkoutData,
 
         /**
          * @return {*}
          */
-        getData = function () {
+        getData = function() {
             return storage.get(cacheKey)();
         },
 
         /**
          * @param {Object} data
          */
-        saveData = function (data) {
+        saveData = function(data) {
             storage.set(cacheKey, data);
         };
 
@@ -38,7 +38,7 @@ define([
             'selectedPaymentMethod': null,
             'selectedBillingAddress': null,
             'billingAddressFormData': null,
-            'newCustomerBillingAddress': null
+            'newCustomerBillingAddress': null,
         };
         saveData(checkoutData);
     }
@@ -47,8 +47,8 @@ define([
         /**
          * @param {Object} data
          */
-        setSelectedShippingAddress: function (data) {
-            var obj = getData();
+        setSelectedShippingAddress: function(data) {
+            let obj = getData();
 
             obj.selectedShippingAddress = data;
             saveData(obj);
@@ -57,15 +57,15 @@ define([
         /**
          * @return {*}
          */
-        getSelectedShippingAddress: function () {
+        getSelectedShippingAddress: function() {
             return getData().selectedShippingAddress;
         },
 
         /**
          * @param {Object} data
          */
-        setShippingAddressFromData: function (data) {
-            var obj = getData();
+        setShippingAddressFromData: function(data) {
+            let obj = getData();
 
             obj.shippingAddressFromData = data;
             saveData(obj);
@@ -74,15 +74,15 @@ define([
         /**
          * @return {*}
          */
-        getShippingAddressFromData: function () {
+        getShippingAddressFromData: function() {
             return getData().shippingAddressFromData;
         },
 
         /**
          * @param {Object} data
          */
-        setNewCustomerShippingAddress: function (data) {
-            var obj = getData();
+        setNewCustomerShippingAddress: function(data) {
+            let obj = getData();
 
             obj.newCustomerShippingAddress = data;
             saveData(obj);
@@ -91,15 +91,15 @@ define([
         /**
          * @return {*}
          */
-        getNewCustomerShippingAddress: function () {
+        getNewCustomerShippingAddress: function() {
             return getData().newCustomerShippingAddress;
         },
 
         /**
          * @param {Object} data
          */
-        setSelectedShippingRate: function (data) {
-            var obj = getData();
+        setSelectedShippingRate: function(data) {
+            let obj = getData();
 
             obj.selectedShippingRate = data;
             saveData(obj);
@@ -108,15 +108,15 @@ define([
         /**
          * @return {*}
          */
-        getSelectedShippingRate: function () {
+        getSelectedShippingRate: function() {
             return getData().selectedShippingRate;
         },
 
         /**
          * @param {Object} data
          */
-        setSelectedPaymentMethod: function (data) {
-            var obj = getData();
+        setSelectedPaymentMethod: function(data) {
+            let obj = getData();
 
             obj.selectedPaymentMethod = data;
             saveData(obj);
@@ -125,15 +125,15 @@ define([
         /**
          * @return {*}
          */
-        getSelectedPaymentMethod: function () {
+        getSelectedPaymentMethod: function() {
             return getData().selectedPaymentMethod;
         },
 
         /**
          * @param {Object} data
          */
-        setSelectedBillingAddress: function (data) {
-            var obj = getData();
+        setSelectedBillingAddress: function(data) {
+            let obj = getData();
 
             obj.selectedBillingAddress = data;
             saveData(obj);
@@ -142,15 +142,15 @@ define([
         /**
          * @return {*}
          */
-        getSelectedBillingAddress: function () {
+        getSelectedBillingAddress: function() {
             return getData().selectedBillingAddress;
         },
 
         /**
          * @param {Object} data
          */
-        setBillingAddressFromData: function (data) {
-            var obj = getData();
+        setBillingAddressFromData: function(data) {
+            let obj = getData();
 
             obj.billingAddressFromData = data;
             saveData(obj);
@@ -159,15 +159,15 @@ define([
         /**
          * @return {*}
          */
-        getBillingAddressFromData: function () {
+        getBillingAddressFromData: function() {
             return getData().billingAddressFromData;
         },
 
         /**
          * @param {Object} data
          */
-        setNewCustomerBillingAddress: function (data) {
-            var obj = getData();
+        setNewCustomerBillingAddress: function(data) {
+            let obj = getData();
 
             obj.newCustomerBillingAddress = data;
             saveData(obj);
@@ -176,15 +176,15 @@ define([
         /**
          * @return {*}
          */
-        getNewCustomerBillingAddress: function () {
+        getNewCustomerBillingAddress: function() {
             return getData().newCustomerBillingAddress;
         },
 
         /**
          * @return {*}
          */
-        getValidatedEmailValue: function () {
-            var obj = getData();
+        getValidatedEmailValue: function() {
+            let obj = getData();
 
             return obj.validatedEmailValue ? obj.validatedEmailValue : '';
         },
@@ -192,8 +192,8 @@ define([
         /**
          * @param {String} email
          */
-        setValidatedEmailValue: function (email) {
-            var obj = getData();
+        setValidatedEmailValue: function(email) {
+            let obj = getData();
 
             obj.validatedEmailValue = email;
             saveData(obj);
@@ -202,8 +202,8 @@ define([
         /**
          * @return {*}
          */
-        getInputFieldEmailValue: function () {
-            var obj = getData();
+        getInputFieldEmailValue: function() {
+            let obj = getData();
 
             return obj.inputFieldEmailValue ? obj.inputFieldEmailValue : '';
         },
@@ -211,11 +211,11 @@ define([
         /**
          * @param {String} email
          */
-        setInputFieldEmailValue: function (email) {
-            var obj = getData();
+        setInputFieldEmailValue: function(email) {
+            let obj = getData();
 
             obj.inputFieldEmailValue = email;
             saveData(obj);
-        }
+        },
     };
 });

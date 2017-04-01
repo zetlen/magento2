@@ -13,11 +13,11 @@ define([
     'mage/translate',
     'ko',
     'jquery',
-    'Magento_Ui/js/lib/view/utils/async'
-], function (_, Abstract, keyCodes, $t, ko, $) {
+    'Magento_Ui/js/lib/view/utils/async',
+], function(_, Abstract, keyCodes, $t, ko, $) {
     'use strict';
 
-    var isTouchDevice = typeof document.ontouchstart !== 'undefined';
+    let isTouchDevice = typeof document.ontouchstart !== 'undefined';
 
     /**
      * Processing options list
@@ -29,7 +29,7 @@ define([
      * @return {Array} Plain options list
      */
     function flattenCollection(array, separator, created) {
-        var i = 0,
+        let i = 0,
             length,
             childCollection;
 
@@ -61,7 +61,7 @@ define([
      * @returns {Array} Array with levels
      */
     function setProperty(array, separator, level, path) {
-        var i = 0,
+        let i = 0,
             length,
             nextLevel,
             nextPath;
@@ -75,7 +75,7 @@ define([
             if (array[i]) {
                 _.extend(array[i], {
                     level: level,
-                    path: path
+                    path: path,
                 });
             }
 
@@ -98,7 +98,7 @@ define([
      *      and cache options with plain and tree list
      */
     function parseOptions(nodes) {
-        var caption,
+        let caption,
             value,
             cacheNodes,
             copyNodes;
@@ -107,7 +107,7 @@ define([
         copyNodes = JSON.parse(JSON.stringify(nodes));
         cacheNodes = flattenCollection(copyNodes, 'optgroup');
 
-        nodes = _.map(nodes, function (node) {
+        nodes = _.map(nodes, function(node) {
             value = node.value;
 
             if (value == null || value === '') {
@@ -123,8 +123,8 @@ define([
             options: _.compact(nodes),
             cacheOptions: {
                 plain: _.compact(cacheNodes),
-                tree: _.compact(nodes)
-            }
+                tree: _.compact(nodes),
+            },
         };
     }
 
@@ -162,19 +162,19 @@ define([
             actionTargetSelector: '.action-menu-item',
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
-                lotPlaceholders: $t('Selected')
+                lotPlaceholders: $t('Selected'),
             },
             separator: 'optgroup',
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList',
-                options: 'checkOptionsList'
+                options: 'checkOptionsList',
             },
             presets: {
                 single: {
                     showCheckbox: false,
                     chipsEnabled: false,
-                    closeBtn: false
+                    closeBtn: false,
                 },
                 optgroup: {
                     showCheckbox: false,
@@ -182,9 +182,9 @@ define([
                     optgroupLabels: true,
                     openLevelsAction: false,
                     labelsDecoration: true,
-                    showOpenLevelsActionIcon: false
-                }
-            }
+                    showOpenLevelsActionIcon: false,
+                },
+            },
         },
 
         /**
@@ -192,7 +192,7 @@ define([
          *
          * @returns {UISelect} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             $.async(
@@ -211,8 +211,8 @@ define([
          * @param  {Object} config
          * @returns {Object} Chainable.
          */
-        initConfig: function (config) {
-            var result = parseOptions(config.options),
+        initConfig: function(config) {
+            let result = parseOptions(config.options),
                 defaults = this.constructor.defaults,
                 multiple = _.isBoolean(config.multiple) ? config.multiple : defaults.multiple,
                 type = config.selectType || defaults.selectType,
@@ -234,8 +234,8 @@ define([
         /**
          * Check child optgroup
          */
-        hasChildList: function () {
-            return _.find(this.options(), function (option) {
+        hasChildList: function() {
+            return _.find(this.options(), function(option) {
                 return !!option[this.separator];
             }, this);
         },
@@ -243,7 +243,7 @@ define([
         /**
          * Check tree mode
          */
-        isTree: function () {
+        isTree: function() {
             return this.hasChildList() && this.selectType !== 'optgroup';
         },
 
@@ -253,14 +253,14 @@ define([
          * @param {Object} data
          * @returns {Boolean}
          */
-        addLastElement: function (data) {
+        addLastElement: function(data) {
             if (!data.hasOwnProperty(this.separator)) {
                 !this.cacheOptions.lastOptions ? this.cacheOptions.lastOptions = [] : false;
 
                 if (!_.findWhere(
                     this.cacheOptions.lastOptions,
                         {
-                            value: data.value
+                            value: data.value,
                         }
                     )
                 ) {
@@ -279,7 +279,7 @@ define([
          *
          * @param {Array} options - ui select options
          */
-        checkOptionsList: function (options) {
+        checkOptionsList: function(options) {
             if (options.length > this.cacheOptions.plain.length) {
                 this.cacheOptions.plain = options;
                 this.setCaption();
@@ -289,7 +289,7 @@ define([
         /**
          * Check label decoration
          */
-        isLabelDecoration: function (data) {
+        isLabelDecoration: function(data) {
             return data.hasOwnProperty(this.separator) && this.labelsDecoration;
         },
 
@@ -299,7 +299,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super();
             this.observe([
                 'listVisible',
@@ -308,11 +308,11 @@ define([
                 'options',
                 'itemsQuantity',
                 'filterInputValue',
-                'filterOptionsFocus'
+                'filterOptionsFocus',
             ]);
 
             this.filterInputValue.extend({
-                rateLimit: this.filterRateLimit
+                rateLimit: this.filterRateLimit,
             });
 
             return this;
@@ -323,13 +323,13 @@ define([
          *
          * @returns {Object} Object with handlers function name.
          */
-        keyDownHandlers: function () {
+        keyDownHandlers: function() {
             return {
                 enterKey: this.enterKeyHandler,
                 escapeKey: this.escapeKeyHandler,
                 spaceKey: this.enterKeyHandler,
                 pageUpKey: this.pageUpKeyHandler,
-                pageDownKey: this.pageDownKeyHandler
+                pageDownKey: this.pageDownKeyHandler,
             };
         },
 
@@ -340,8 +340,8 @@ define([
          *
          * @returns {Boolean} level visibility.
          */
-        showLevels: function (data) {
-            var curLevel = ++data.level,
+        showLevels: function(data) {
+            let curLevel = ++data.level,
                 isVisible;
 
             if (data.visible) {
@@ -366,7 +366,7 @@ define([
          *
          * @returns {Boolean} level visibility.
          */
-        getLevelVisibility: function (data) {
+        getLevelVisibility: function(data) {
             if (data.visible) {
                 return data.visible();
             }
@@ -380,14 +380,14 @@ define([
          * @param {Object} option
          * @param {Array} options
          */
-        setOption: function (option, options) {
-            var copyOptionsTree;
+        setOption: function(option, options) {
+            let copyOptionsTree;
 
             options = options || this.cacheOptions.tree;
 
-            _.each(options, function (opt) {
-                if (opt.value == option.parent) { //eslint-disable-line eqeqeq
-                    delete  option.parent;
+            _.each(options, function(opt) {
+                if (opt.value == option.parent) { // eslint-disable-line eqeqeq
+                    delete option.parent;
                     opt[this.separator] ? opt[this.separator].push(option) : opt[this.separator] = [option];
                     copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
                     this.cacheOptions.plain = flattenCollection(copyOptionsTree, this.separator);
@@ -401,7 +401,7 @@ define([
         /**
          * Handler outerClick event. Closed options list
          */
-        outerClick: function () {
+        outerClick: function() {
             this.listVisible() ? this.listVisible(false) : false;
 
             if (isTouchDevice) {
@@ -414,8 +414,8 @@ define([
          *
          * @returns {Boolean} Returned true for emersion events
          */
-        filterOptionsKeydown: function (data, event) {
-            var key = keyCodes[event.keyCode];
+        filterOptionsKeydown: function(data, event) {
+            let key = keyCodes[event.keyCode];
 
             !this.isTabKey(event) ? event.stopPropagation() : false;
 
@@ -433,8 +433,8 @@ define([
         /**
          * Filtered options list by value from filter options list
          */
-        filterOptionsList: function () {
-            var value = this.filterInputValue().trim().toLowerCase(),
+        filterOptionsList: function() {
+            let value = this.filterInputValue().trim().toLowerCase(),
                 array = [];
 
             if (value && value.length < 2) {
@@ -454,7 +454,6 @@ define([
             this.showPath ? this.renderPath = true : false;
 
             if (this.filterInputValue()) {
-
                 array = this.selectType === 'optgroup' ?
                     this._getFilteredArray(this.cacheOptions.lastOptions, value) :
                     this._getFilteredArray(this.cacheOptions.plain, value);
@@ -481,8 +480,8 @@ define([
          *
          * @returns {Array} filters result
          */
-        _getFilteredArray: function (list, value) {
-            var i = 0,
+        _getFilteredArray: function(list, value) {
+            let i = 0,
                 array = [],
                 curOption;
 
@@ -490,7 +489,7 @@ define([
                 curOption = list[i].label.toLowerCase();
 
                 if (curOption.indexOf(value) > -1) {
-                    array.push(list[i]); /*eslint max-depth: [2, 4]*/
+                    array.push(list[i]); /* eslint max-depth: [2, 4]*/
                 }
             }
 
@@ -503,13 +502,13 @@ define([
          * @param {Object} data - option data
          * @returns {String} path
          */
-        getPath: function (data) {
-            var pathParts,
+        getPath: function(data) {
+            let pathParts,
                 createdPath = '';
 
             if (this.renderPath) {
                 pathParts = data.path.split('.');
-                _.each(pathParts, function (curData) {
+                _.each(pathParts, function(curData) {
                     createdPath = createdPath ? createdPath + ' / ' + curData : curData;
                 });
 
@@ -522,7 +521,7 @@ define([
          *
          * @param {Object} data - option data
          */
-        _setItemsQuantity: function (data) {
+        _setItemsQuantity: function(data) {
             if (this.showFilteredQuantity) {
                 data || parseInt(data, 10) === 0 ?
                     this.itemsQuantity(data + ' ' + this.quantityPlaceholder) :
@@ -533,7 +532,7 @@ define([
         /**
          * Remove element from selected array
          */
-        removeSelected: function (value, data, event) {
+        removeSelected: function(value, data, event) {
             event ? event.stopPropagation() : false;
             this.value.remove(value);
         },
@@ -543,7 +542,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isTabKey: function (event) {
+        isTabKey: function(event) {
             return keyCodes[event.keyCode] === 'tabKey';
         },
 
@@ -552,7 +551,7 @@ define([
          *
          * @returns {Object} Chainable
          */
-        cleanHoveredElement: function () {
+        cleanHoveredElement: function() {
             if (this.hoveredElement) {
                 $(this.hoveredElement)
                     .children(this.actionTargetSelector)
@@ -570,7 +569,7 @@ define([
          * @param {String} value - option value
          * @return {Boolean}
          */
-        isSelected: function (value) {
+        isSelected: function(value) {
             return this.multiple ? _.contains(this.value(), value) : this.value() === value;
         },
 
@@ -580,7 +579,7 @@ define([
          * @param {Object} data - element data
          * @return {Boolean}
          */
-        isOptgroupLabels: function (data) {
+        isOptgroupLabels: function(data) {
             return data.hasOwnProperty(this.separator) && this.optgroupLabels;
         },
 
@@ -590,8 +589,8 @@ define([
          * @param {Object} data - element data
          * @return {Boolean}
          */
-        isHovered: function (data) {
-            var element = this.hoveredElement,
+        isHovered: function(data) {
+            let element = this.hoveredElement,
                 elementData;
 
             if (!element) {
@@ -608,7 +607,7 @@ define([
          *
          * @returns {Object} Chainable
          */
-        toggleListVisible: function () {
+        toggleListVisible: function() {
             this.listVisible(!this.listVisible());
 
             return this;
@@ -619,13 +618,13 @@ define([
          *
          * @returns {Array} array labels
          */
-        getSelected: function () {
-            var selected = this.value();
+        getSelected: function() {
+            let selected = this.value();
 
-            return this.cacheOptions.plain.filter(function (opt) {
+            return this.cacheOptions.plain.filter(function(opt) {
                 return _.isArray(selected) ?
                     _.contains(selected, opt.value) :
-                selected == opt.value;//eslint-disable-line eqeqeq
+                selected == opt.value;// eslint-disable-line eqeqeq
             });
         },
 
@@ -635,8 +634,8 @@ define([
          * @param {Object} data - selected option data
          * @returns {Object} Chainable
          */
-        toggleOptionSelected: function (data) {
-            var isSelected = this.isSelected(data.value);
+        toggleOptionSelected: function(data) {
+            let isSelected = this.isSelected(data.value);
 
             if (this.lastSelectable && data.hasOwnProperty(this.separator)) {
                 return this;
@@ -648,7 +647,7 @@ define([
                 }
                 this.listVisible(false);
             } else {
-                if (!isSelected) { /*eslint no-lonely-if: 0*/
+                if (!isSelected) { /* eslint no-lonely-if: 0*/
                     this.value.push(data.value);
                 } else {
                     this.value(_.without(this.value(), data.value));
@@ -663,8 +662,8 @@ define([
          *
          * @param {Object} data - element data
          */
-        openChildLevel: function (data) {
-            var contextElement = data,
+        openChildLevel: function(data) {
+            let contextElement = data,
                 isVisible;
 
             if (
@@ -688,7 +687,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasData: function () {
+        hasData: function() {
             if (!this.value()) {
                 this.value([]);
             }
@@ -699,15 +698,15 @@ define([
         /**
          * @deprecated
          */
-        onMousemove: function () {},
+        onMousemove: function() {},
 
         /**
          * Handles hover on list items.
          *
          * @param {Object} event - mousemove event
          */
-        onDelegatedMouseMouve: function (event) {
-            var target = $(event.currentTarget).closest(this.visibleOptionSelector)[0];
+        onDelegatedMouseMouve: function(event) {
+            let target = $(event.currentTarget).closest(this.visibleOptionSelector)[0];
 
             if (this.isCursorPositionChange(event) || this.hoveredElement === target) {
                 return;
@@ -724,10 +723,10 @@ define([
          *
          * @returns {Number}
          */
-        getOptionIndex: function (data) {
-            var index;
+        getOptionIndex: function(data) {
+            let index;
 
-            _.each(this.cacheOptions.plain, function (opt, id) {
+            _.each(this.cacheOptions.plain, function(opt, id) {
                 if (data.value === opt.value) {
                     index = id;
                 }
@@ -741,10 +740,10 @@ define([
          *
          * @param {Object} event - mousemove event
          */
-        setCursorPosition: function (event) {
+        setCursorPosition: function(event) {
             this.cursorPosition = {
                 x: event.pageX,
-                y: event.pageY
+                y: event.pageY,
             };
         },
 
@@ -754,7 +753,7 @@ define([
          * @param {Object} event - mousemove event
          * @returns {Boolean}
          */
-        isCursorPositionChange: function (event) {
+        isCursorPositionChange: function(event) {
             return this.cursorPosition &&
                 this.cursorPosition.x === event.pageX &&
                 this.cursorPosition.y === event.pageY;
@@ -765,7 +764,7 @@ define([
          * @param {Object} ctx
          * @param {Object} event - focus event
          */
-        onFocusIn: function (ctx, event) {
+        onFocusIn: function(ctx, event) {
             !this.cacheUiSelect ? this.cacheUiSelect = event.target : false;
             this.multiselectFocus(true);
         },
@@ -774,7 +773,7 @@ define([
          * Set false to observable variable multiselectFocus
          * and close list
          */
-        onFocusOut: function () {
+        onFocusOut: function() {
             this.multiselectFocus(false);
         },
 
@@ -782,8 +781,7 @@ define([
          * Handler enter key, if select list is closed - open select,
          * if select list is open toggle selected current option
          */
-        enterKeyHandler: function () {
-
+        enterKeyHandler: function() {
             if (this.filterOptionsFocus()) {
                 return false;
             }
@@ -800,7 +798,7 @@ define([
         /**
          * Handler escape key, if select list is open - closes it,
          */
-        escapeKeyHandler: function () {
+        escapeKeyHandler: function() {
             this.listVisible() ? this.setListVisible(false) : false;
         },
 
@@ -808,7 +806,7 @@ define([
          * Handler pageDown key, selected next option in list, if current option is last
          * selected first option in list
          */
-        pageDownKeyHandler: function () {
+        pageDownKeyHandler: function() {
             this._setHoverToElement(1);
         },
 
@@ -819,8 +817,8 @@ define([
          *
          * @returns {Object} jQuery element
          */
-        _getElemByData: function (data) {
-            var i = 0,
+        _getElemByData: function(data) {
+            let i = 0,
                 list = $(this.cacheUiSelect).find('li'),
                 length = this.options().length,
                 result;
@@ -839,10 +837,10 @@ define([
          *
          * @param {Number} direction - iterator
          */
-        _setHoverToElement: function (direction) {
-            var element;
+        _setHoverToElement: function(direction) {
+            let element;
 
-            if (direction ===  1) {
+            if (direction === 1) {
                 element = this._getNextElement();
             } else if (direction === -1) {
                 element = this._getPreviousElement();
@@ -860,8 +858,8 @@ define([
          *
          * @param {Number} element - element index
          */
-        _scrollTo: function (element) {
-            var curEl = $(element).children(this.actionTargetSelector),
+        _scrollTo: function(element) {
+            let curEl = $(element).children(this.actionTargetSelector),
                 wrapper = $(this.rootList),
                 curElPos = {},
                 wrapperPos = {};
@@ -883,7 +881,7 @@ define([
          * Handler pageUp key, selected previous option in list, if current option is first -
          * selected last option in list
          */
-        pageUpKeyHandler: function () {
+        pageUpKeyHandler: function() {
             this._setHoverToElement(-1);
         },
 
@@ -894,8 +892,8 @@ define([
          * @param {Object} event - keydown event
          * @returns {Boolean} if handler for this event doesn't found return true
          */
-        keydownSwitcher: function (data, event) {
-            var keyName = keyCodes[event.keyCode];
+        keydownSwitcher: function(data, event) {
+            let keyName = keyCodes[event.keyCode];
 
             if (this.isTabKey(event)) {
                 if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {
@@ -920,8 +918,8 @@ define([
         /**
          * Set caption
          */
-        setCaption: function () {
-            var length;
+        setCaption: function() {
+            let length;
 
             if (!_.isArray(this.value()) && this.value()) {
                 length = 1;
@@ -948,7 +946,7 @@ define([
          *
          * @param {Boolean} value - variable for set list visible status
          */
-        setListVisible: function (value) {
+        setListVisible: function(value) {
             this.listVisible(value);
         },
 
@@ -958,10 +956,10 @@ define([
          *
          * @returns {String}
          */
-        getPreview: function () {
-            var selected = this.getSelected();
+        getPreview: function() {
+            let selected = this.getSelected();
 
-            return selected.map(function (option) {
+            return selected.map(function(option) {
                 return option.label;
             }).join(', ');
         },
@@ -972,9 +970,9 @@ define([
          *
          * @returns {Element}
          */
-        _getPreviousElement: function () {
-            var currentElement = this.hoveredElement,
-                lastElement    = this._getLastIn(this.rootList),
+        _getPreviousElement: function() {
+            let currentElement = this.hoveredElement,
+                lastElement = this._getLastIn(this.rootList),
                 previousElement;
 
             if (!currentElement) {
@@ -995,9 +993,9 @@ define([
          *
          * @returns {Element}
          */
-        _getNextElement: function () {
-            var currentElement = this.hoveredElement,
-                firstElement   = this._getFirstIn(this.rootList);
+        _getNextElement: function() {
+            let currentElement = this.hoveredElement,
+                firstElement = this._getFirstIn(this.rootList);
 
             if (!currentElement) {
                 return firstElement;
@@ -1015,7 +1013,7 @@ define([
          * @param {Element} scope
          * @returns {Element}
          */
-        _getFirstIn: function (scope) {
+        _getFirstIn: function(scope) {
             return $(scope).find(this.visibleOptionSelector)[0];
         },
 
@@ -1025,7 +1023,7 @@ define([
          * @param {Element} scope
          * @returns {Element}
          */
-        _getLastIn: function (scope) {
+        _getLastIn: function(scope) {
             return $(scope).find(this.visibleOptionSelector).last()[0];
         },
 
@@ -1035,7 +1033,7 @@ define([
          * @param {Element} scope
          * @returns {jQueryCollection}
          */
-        _getParentsOf: function (scope) {
+        _getParentsOf: function(scope) {
             return $(scope).parents(this.visibleOptionSelector);
         },
 
@@ -1045,7 +1043,7 @@ define([
          * @param {Element} scope
          * @returns {Element}
          */
-        _getFirstParentOf: function (scope) {
+        _getFirstParentOf: function(scope) {
             return this._getParentsOf(scope)[0];
         },
 
@@ -1054,7 +1052,7 @@ define([
          *
          * @param {Element} element
          */
-        _hoverTo: function (element) {
+        _hoverTo: function(element) {
             if (this.hoveredElement) {
                 $(this.hoveredElement)
                     .children(this.actionTargetSelector)
@@ -1073,8 +1071,8 @@ define([
          *
          * @param {Element} element
          */
-        onRootListRender: function (element) {
-            var targetSelector = 'li > ' + this.actionTargetSelector;
+        onRootListRender: function(element) {
+            let targetSelector = 'li > ' + this.actionTargetSelector;
 
             this.rootList = element;
 
@@ -1083,6 +1081,6 @@ define([
                 targetSelector,
                 this.onDelegatedMouseMouve.bind(this)
             );
-        }
+        },
     });
 });

@@ -4,8 +4,8 @@
  */
 
 define([
-    './messages'
-], function (Messages) {
+    './messages',
+], function(Messages) {
     'use strict';
 
     return new Messages();

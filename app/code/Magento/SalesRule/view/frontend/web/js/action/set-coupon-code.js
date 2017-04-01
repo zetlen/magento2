@@ -17,14 +17,14 @@ define([
     'mage/translate',
     'Magento_Checkout/js/action/get-payment-information',
     'Magento_Checkout/js/model/totals',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function (ko, $, quote, urlManager, errorProcessor, messageContainer, storage, $t, getPaymentInformationAction,
+    'Magento_Checkout/js/model/full-screen-loader',
+], function(ko, $, quote, urlManager, errorProcessor, messageContainer, storage, $t, getPaymentInformationAction,
     totals, fullScreenLoader
 ) {
     'use strict';
 
-    return function (couponCode, isApplied) {
-        var quoteId = quote.getQuoteId(),
+    return function(couponCode, isApplied) {
+        let quoteId = quote.getQuoteId(),
             url = urlManager.getApplyCouponUrl(couponCode, quoteId),
             message = $t('Your coupon was successfully applied.');
 
@@ -34,8 +34,8 @@ define([
             url,
             {},
             false
-        ).done(function (response) {
-            var deferred;
+        ).done(function(response) {
+            let deferred;
 
             if (response) {
                 deferred = $.Deferred();
@@ -43,15 +43,15 @@ define([
                 isApplied(true);
                 totals.isLoading(true);
                 getPaymentInformationAction(deferred);
-                $.when(deferred).done(function () {
+                $.when(deferred).done(function() {
                     fullScreenLoader.stopLoader();
                     totals.isLoading(false);
                 });
                 messageContainer.addSuccessMessage({
-                    'message': message
+                    'message': message,
                 });
             }
-        }).fail(function (response) {
+        }).fail(function(response) {
             fullScreenLoader.stopLoader();
             totals.isLoading(false);
             errorProcessor.process(response, messageContainer);

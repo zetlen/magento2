@@ -4,8 +4,8 @@
  */
 
 define([
-    'Magento_Weee/js/view/checkout/summary/weee'
-], function (Component) {
+    'Magento_Weee/js/view/checkout/summary/weee',
+], function(Component) {
     'use strict';
 
     return Component.extend({
@@ -13,8 +13,8 @@ define([
         /**
          * @override
          */
-        isFullMode: function () {
+        isFullMode: function() {
             return true;
-        }
+        },
     });
 });

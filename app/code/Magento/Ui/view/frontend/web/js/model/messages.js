@@ -8,13 +8,13 @@
  */
 define([
     'ko',
-    'uiClass'
-], function (ko, Class) {
+    'uiClass',
+], function(ko, Class) {
     'use strict';
 
     return Class.extend({
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initObservable();
 
@@ -22,7 +22,7 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this.errorMessages = ko.observableArray([]);
             this.successMessages = ko.observableArray([]);
 
@@ -35,8 +35,8 @@ define([
          * @param {Object} type
          * @returns {Boolean}
          */
-        add: function (messageObj, type) {
-            var expr = /([%])\w+/g,
+        add: function(messageObj, type) {
+            let expr = /([%])\w+/g,
                 message;
 
             if (!messageObj.hasOwnProperty('parameters')) {
@@ -45,7 +45,7 @@ define([
 
                 return true;
             }
-            message = messageObj.message.replace(expr, function (varName) {
+            message = messageObj.message.replace(expr, function(varName) {
                 varName = varName.substr(1);
 
                 if (messageObj.parameters.hasOwnProperty(varName)) {
@@ -66,7 +66,7 @@ define([
          * @param {Object} message
          * @return {*|Boolean}
          */
-        addSuccessMessage: function (message) {
+        addSuccessMessage: function(message) {
             return this.add(message, this.successMessages);
         },
 
@@ -76,7 +76,7 @@ define([
          * @param {Object} message
          * @return {*|Boolean}
          */
-        addErrorMessage: function (message) {
+        addErrorMessage: function(message) {
             return this.add(message, this.errorMessages);
         },
 
@@ -85,7 +85,7 @@ define([
          *
          * @return {Array}
          */
-        getErrorMessages: function () {
+        getErrorMessages: function() {
             return this.errorMessages;
         },
 
@@ -94,7 +94,7 @@ define([
          *
          * @return {Array}
          */
-        getSuccessMessages: function () {
+        getSuccessMessages: function() {
             return this.successMessages;
         },
 
@@ -103,16 +103,16 @@ define([
          *
          * @return {Boolean}
          */
-        hasMessages: function () {
+        hasMessages: function() {
             return this.errorMessages().length > 0 || this.successMessages().length > 0;
         },
 
         /**
          * Removes stored messages.
          */
-        clear: function () {
+        clear: function() {
             this.errorMessages.removeAll();
             this.successMessages.removeAll();
-        }
+        },
     });
 });

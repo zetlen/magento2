@@ -9,8 +9,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'mage/validation/validation',
-    'mage/dataPost'
-], function ($, mageTemplate, alert) {
+    'mage/dataPost',
+], function($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.wishlist', {
@@ -22,19 +22,19 @@ define([
             addToCartSelector: '[data-role=tocart]',
             addAllToCartSelector: '[data-role=all-tocart]',
             commentInputType: 'textarea',
-            infoList: false
+            infoList: false,
         },
 
         /**
          * Bind handlers to events.
          */
-        _create: function () {
-            var _this = this;
+        _create: function() {
+            let _this = this;
 
             if (!this.options.infoList) {
                 this.element
-                    .on('addToCart', function (event, context) {
-                        var urlParams;
+                    .on('addToCart', function(event, context) {
+                        let urlParams;
 
                         event.stopPropagation(event);
                         $(context).data('stop-processing', true);
@@ -45,7 +45,7 @@ define([
 
                         return false;
                     })
-                    .on('click', this.options.btnRemoveSelector, $.proxy(function (event) {
+                    .on('click', this.options.btnRemoveSelector, $.proxy(function(event) {
                         event.preventDefault();
                         $.mage.dataPost().postData($(event.currentTarget).data('post-remove'));
                     }, this))
@@ -57,9 +57,9 @@ define([
             // Setup validation for the form
             this.element.mage('validation', {
                 /** @inheritdoc */
-                errorPlacement: function (error, element) {
+                errorPlacement: function(error, element) {
                     error.insertAfter(element.next());
-                }
+                },
             });
         },
 
@@ -71,8 +71,8 @@ define([
          * @param {Event} event
          * @private
          */
-        _beforeAddToCart: function (event) {
-            var elem = $(event.currentTarget),
+        _beforeAddToCart: function(event) {
+            let elem = $(event.currentTarget),
                 itemId = elem.data(this.options.dataAttribute),
                 qtyName = $.validator.format(this.options.nameFormat, itemId),
                 qtyValue = elem.parents().find('[name="' + qtyName + '"]').val(),
@@ -80,7 +80,7 @@ define([
 
             if (params) {
                 params.data = $.extend({}, params.data, {
-                    'qty': qtyValue
+                    'qty': qtyValue,
                 });
                 elem.data('post', params);
             }
@@ -91,8 +91,8 @@ define([
          * @private
          * @param {jQuery} elem - clicked 'add to cart' button
          */
-        _getItemsToCartParams: function (elem) {
-            var itemId, url, qtyName, qtyValue;
+        _getItemsToCartParams: function(elem) {
+            let itemId, url, qtyName, qtyValue;
 
             if (elem.data(this.options.dataAttribute)) {
                 itemId = elem.data(this.options.dataAttribute);
@@ -110,11 +110,11 @@ define([
          * Add all wish list items to cart
          * @private
          */
-        _addAllWItemsToCart: function () {
-            var urlParams = this.options.addAllToCartUrl,
+        _addAllWItemsToCart: function() {
+            let urlParams = this.options.addAllToCartUrl,
                 separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
 
-            this.element.find(this.options.qtySelector).each(function (index, element) {
+            this.element.find(this.options.qtySelector).each(function(index, element) {
                 urlParams.action += separator + $(element).prop('name') + '=' + encodeURIComponent($(element).val());
                 separator = '&';
             });
@@ -126,33 +126,33 @@ define([
          * @private
          * @param {Event} e
          */
-        _focusComment: function (e) {
-            var commentInput = e.currentTarget;
+        _focusComment: function(e) {
+            let commentInput = e.currentTarget;
 
             if (commentInput.value === '' || commentInput.value === this.options.commentString) {
                 commentInput.value = commentInput.value === this.options.commentString ?
                     '' : this.options.commentString;
             }
-        }
+        },
     });
 
     // Extension for mage.wishlist - Select All checkbox
     $.widget('mage.wishlist', $.mage.wishlist, {
         options: {
             selectAllCheckbox: '#select-all',
-            parentContainer: '#wishlist-table'
+            parentContainer: '#wishlist-table',
         },
 
         /** @inheritdoc */
-        _create: function () {
-            var selectAllCheckboxParent, checkboxCount;
+        _create: function() {
+            let selectAllCheckboxParent, checkboxCount;
 
             this._super();
             selectAllCheckboxParent = $(this.options.selectAllCheckbox).parents(this.options.parentContainer);
             checkboxCount = selectAllCheckboxParent
                 .find('input:checkbox:not(' + this.options.selectAllCheckbox + ')').length;
             // If Select all checkbox is checked, check all item checkboxes, if unchecked, uncheck all item checkboxes
-            $(this.options.selectAllCheckbox).on('click', function () {
+            $(this.options.selectAllCheckbox).on('click', function() {
                 selectAllCheckboxParent.find('input:checkbox').attr('checked', $(this).is(':checked'));
             });
             // If all item checkboxes are checked, check select all checkbox,
@@ -160,23 +160,23 @@ define([
             selectAllCheckboxParent.on(
                 'click',
                 'input:checkbox:not(' + this.options.selectAllCheckbox + ')',
-                $.proxy(function () {
-                    var checkedCount = selectAllCheckboxParent
+                $.proxy(function() {
+                    let checkedCount = selectAllCheckboxParent
                         .find('input:checkbox:checked:not(' + this.options.selectAllCheckbox + ')').length;
 
                     $(this.options.selectAllCheckbox).attr('checked', checkboxCount === checkedCount);
                 }, this)
             );
-        }
+        },
     });
     // Extension for mage.wishlist info add to cart
     $.widget('mage.wishlist', $.mage.wishlist, {
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._super();
 
             if (this.options.infoList) {
-                this.element.on('addToCart', $.proxy(function (event, context) {
+                this.element.on('addToCart', $.proxy(function(event, context) {
                     this.element.find('input:checkbox').attr('checked', false);
                     $(context).closest('tr').find('input:checkbox').attr('checked', true);
                     this.element.submit();
@@ -189,48 +189,48 @@ define([
          * validate checkbox selection.
          * @private
          */
-        _checkBoxValidate: function () {
+        _checkBoxValidate: function() {
             this.element.validation({
-                submitHandler: $.proxy(function (form) {
+                submitHandler: $.proxy(function(form) {
                     if ($(form).find('input:checkbox:checked').length) {
                         form.submit();
                     } else {
                         alert({
-                            content: this.options.checkBoxValidationMessage
+                            content: this.options.checkBoxValidationMessage,
                         });
                     }
-                }, this)
+                }, this),
             });
-        }
+        },
     });
 
     // Extension for mage.wishlist - Add Wishlist item to Gift Registry
     $.widget('mage.wishlist', $.mage.wishlist, {
         options: {
             formTmplSelector: '#form-tmpl',
-            formTmplId: '#wishlist-hidden-form'
+            formTmplId: '#wishlist-hidden-form',
         },
 
         /** @inheritdoc */
-        _create: function () {
-            var _this = this;
+        _create: function() {
+            let _this = this;
 
             this._super();
-            this.element.on('click', '[data-wishlist-to-giftregistry]', function () {
-                var json = $(this).data('wishlist-to-giftregistry'),
+            this.element.on('click', '[data-wishlist-to-giftregistry]', function() {
+                let json = $(this).data('wishlist-to-giftregistry'),
                     tmplJson = {
                         item: json.itemId,
                         entity: json.entity,
-                        url: json.url
+                        url: json.url,
                     },
                     html = mageTemplate(_this.options.formTmplSelector, {
-                        data: tmplJson
+                        data: tmplJson,
                     });
 
                 $(html).appendTo('body');
                 $(_this.options.formTmplId).submit();
             });
-        }
+        },
     });
 
     return $.mage.wishlist;

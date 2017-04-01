@@ -3,12 +3,12 @@
  * See COPYING.txt for license details.
  */
 
-define(['uiComponent'], function (Component) {
+define(['uiComponent'], function(Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            displayArea: 'beforePlaceOrder'
-        }
+            displayArea: 'beforePlaceOrder',
+        },
     });
 });

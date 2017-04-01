@@ -4,59 +4,58 @@
  */
 
 define([
-    "Magento_Ui/js/lib/view/utils/async",
-    "jquery/ui",
-    "mage/translate",
-    "prototype",
-    "Magento_Ui/js/modal/modal"
-], function(jQuery){
-
+    'Magento_Ui/js/lib/view/utils/async',
+    'jquery/ui',
+    'mage/translate',
+    'prototype',
+    'Magento_Ui/js/modal/modal'
+], function(jQuery) {
     window.ProductConfigure = Class.create();
 
     ProductConfigure.prototype = {
 
-        listTypes:                  $H({}),
-        current:                    $H({}),
-        itemsFilter:                $H({}),
-        blockWindow:                null,
-        blockForm:                  null,
-        blockFormFields:            null,
-        blockFormAdd:               null,
-        blockFormConfirmed:         null,
-        blockConfirmed:             null,
-        blockIFrame:                null,
-        blockCancelBtn:             null,
-        blockMask:                  null,
-        blockMsg:                   null,
-        blockMsgError:              null,
-        windowHeight:               null,
-        confirmedCurrentId:         null,
-        confirmCallback:            {},
-        cancelCallback:             {},
-        onLoadIFrameCallback:       {},
-        showWindowCallback:         {},
-        beforeSubmitCallback:       {},
-        iFrameJSVarname:            null,
-        _listTypeId:                1,
+        listTypes: $H({}),
+        current: $H({}),
+        itemsFilter: $H({}),
+        blockWindow: null,
+        blockForm: null,
+        blockFormFields: null,
+        blockFormAdd: null,
+        blockFormConfirmed: null,
+        blockConfirmed: null,
+        blockIFrame: null,
+        blockCancelBtn: null,
+        blockMask: null,
+        blockMsg: null,
+        blockMsgError: null,
+        windowHeight: null,
+        confirmedCurrentId: null,
+        confirmCallback: {},
+        cancelCallback: {},
+        onLoadIFrameCallback: {},
+        showWindowCallback: {},
+        beforeSubmitCallback: {},
+        iFrameJSVarname: null,
+        _listTypeId: 1,
 
         /**
          * Initialize object
          */
         initialize: function() {
-            var self = this;
+            let self = this;
 
             this._initWindowElements();
-            jQuery.async('#product_composite_configure',function (el) {
+            jQuery.async('#product_composite_configure', function(el) {
                 self.dialog = jQuery(el).modal({
                     title: jQuery.mage.__('Configure Product'),
                     type: 'slide',
                     buttons: [{
-                        text: jQuery.mage.__('OK'),
+                        "text": jQuery.mage.__('OK'),
                         'class': 'action-primary',
-                        click: function () {
+                        "click": function() {
                             self.onConfirmBtn();
-                        }
-                    }]
+                        },
+                    }],
                 });
             });
         },
@@ -65,24 +64,24 @@ define([
          * Initialize window elements
          */
         _initWindowElements: function() {
-            this.blockWindow                = $('product_composite_configure');
-            this.blockForm                  = $('product_composite_configure_form');
-            this.blockFormFields            = $('product_composite_configure_form_fields');
-            this.blockFormAdd               = $('product_composite_configure_form_additional');
-            this.blockFormConfirmed         = $('product_composite_configure_form_confirmed');
-            this.blockConfirmed             = $('product_composite_configure_confirmed');
-            this.blockIFrame                = $('product_composite_configure_iframe');
-            this.blockCancelBtn             = $('product_composite_configure_form_cancel');
-            this.blockMsg                   = $('product_composite_configure_messages');
-            this.blockMsgError              = this.blockMsg.select('.message.error div')[0];
-            this.iFrameJSVarname            = this.blockForm.select('input[name="as_js_varname"]')[0].value;
+            this.blockWindow = $('product_composite_configure');
+            this.blockForm = $('product_composite_configure_form');
+            this.blockFormFields = $('product_composite_configure_form_fields');
+            this.blockFormAdd = $('product_composite_configure_form_additional');
+            this.blockFormConfirmed = $('product_composite_configure_form_confirmed');
+            this.blockConfirmed = $('product_composite_configure_confirmed');
+            this.blockIFrame = $('product_composite_configure_iframe');
+            this.blockCancelBtn = $('product_composite_configure_form_cancel');
+            this.blockMsg = $('product_composite_configure_messages');
+            this.blockMsgError = this.blockMsg.select('.message.error div')[0];
+            this.iFrameJSVarname = this.blockForm.select('input[name="as_js_varname"]')[0].value;
         },
 
         /**
          * Returns next unique list type id
          */
-        _generateListTypeId: function () {
-            return '_internal_lt_' + (this._listTypeId++);
+        _generateListTypeId: function() {
+            return '_internal_lt_' + this._listTypeId++;
         },
 
         /**
@@ -115,7 +114,8 @@ define([
          * @return type string
          */
         addComplexListType: function(types, urlSubmit) {
-            var type = this._generateListTypeId();
+            let type = this._generateListTypeId();
+
             this.listTypes[type] = {};
             this.listTypes[type].complexTypes = types;
             this.listTypes[type].urlSubmit = urlSubmit;
@@ -146,7 +146,7 @@ define([
          * @param itemId
          * @return string
          */
-        _getConfirmedBlockId: function (listType, itemId) {
+        _getConfirmedBlockId: function(listType, itemId) {
             return this.blockConfirmed.id + '[' + listType + '][' + itemId + ']';
         },
 
@@ -157,9 +157,10 @@ define([
          * @param itemId
          * @return bool
          */
-        itemConfigured: function (listType, itemId) {
-            var confirmedBlockId = this._getConfirmedBlockId(listType, itemId);
-            var itemBlock = $(confirmedBlockId);
+        itemConfigured: function(listType, itemId) {
+            let confirmedBlockId = this._getConfirmedBlockId(listType, itemId);
+            let itemBlock = $(confirmedBlockId);
+
             return !!(itemBlock && itemBlock.innerHTML);
         },
 
@@ -197,12 +198,14 @@ define([
             if (!this.listTypes[listType].urlFetch) {
                 return false;
             }
-            var url = this.listTypes[listType].urlFetch;
+            let url = this.listTypes[listType].urlFetch;
+
             if (url) {
                 new Ajax.Request(url, {
                     parameters: {id: itemId},
                     onSuccess: function(transport) {
-                        var response = transport.responseText;
+                        let response = transport.responseText;
+
                         if (response.isJSON()) {
                             response = response.evalJSON();
                             if (response.error) {
@@ -213,22 +216,24 @@ define([
                                 this._showWindow();
                             }
                         } else if (response) {
-                            response = response + '';
+                            response += '';
                             this.blockFormFields.update(response);
 
                             // Add special div to hold mage data, e.g. scripts to execute on every popup show
-                            var mageData = {};
-                            var scripts = response.extractScripts();
+                            let mageData = {};
+                            let scripts = response.extractScripts();
+
                             mageData.scripts = scripts;
 
-                            var scriptHolder = new Element('div', {'style': 'display:none'});
+                            let scriptHolder = new Element('div', {'style': 'display:none'});
+
                             scriptHolder.mageData = mageData;
                             this.blockFormFields.insert(scriptHolder);
 
                             // Show window
                             this._showWindow();
                         }
-                    }.bind(this)
+                    }.bind(this),
                 });
             }
         },
@@ -268,14 +273,15 @@ define([
          *
          * @param listType scope name
          */
-        submit: function (listType) {
+        submit: function(listType) {
             // prepare data
             if (listType) {
                 this.current.listType = listType;
                 this.current.itemId = null;
             }
-            var urlConfirm = this.listTypes[this.current.listType].urlConfirm;
-            var urlSubmit = this.listTypes[this.current.listType].urlSubmit;
+            let urlConfirm = this.listTypes[this.current.listType].urlConfirm;
+            let urlSubmit = this.listTypes[this.current.listType].urlSubmit;
+
             if (!urlConfirm && !urlSubmit) {
                 return false;
             }
@@ -285,7 +291,8 @@ define([
             } else {
                 this.blockForm.action = urlSubmit;
 
-                var complexTypes = this.listTypes[this.current.listType].complexTypes;
+                let complexTypes = this.listTypes[this.current.listType].complexTypes;
+
                 if (complexTypes) {
                     this.addFields([new Element('input', {type: 'hidden', name: 'configure_complex_list_types', value: complexTypes.join(',')})]);
                 }
@@ -294,12 +301,14 @@ define([
 
                 // Disable item controls that duplicate added fields (e.g. sometimes qty controls can intersect)
                 // so they won't be submitted
-                var tagNames = ['input', 'select', 'textarea'];
+                let tagNames = ['input', 'select', 'textarea'];
 
-                var names = {}; // Map of added field names
+                let names = {}; // Map of added field names
+
                 for (var i = 0, len = tagNames.length; i < len; i++) {
                     var tagName = tagNames[i];
                     var elements = this.blockFormAdd.getElementsByTagName(tagName);
+
                     for (var index = 0, elLen = elements.length; index < elLen; index++) {
                         names[elements[index].name] = true;
                     }
@@ -308,8 +317,10 @@ define([
                 for (var i = 0, len = tagNames.length; i < len; i++) {
                     var tagName = tagNames[i];
                     var elements = this.blockFormConfirmed.getElementsByTagName(tagName);
+
                     for (var index = 0, elLen = elements.length; index < elLen; index++) {
-                        var element = elements[index];
+                        let element = elements[index];
+
                         if (names[element.name]) {
                             element.setAttribute('configure_disabled', 1);
                             element.setAttribute('configure_prev_disabled', element.disabled ? 1 : 0);
@@ -348,14 +359,15 @@ define([
          * Triggered when form was submitted and iFrame was loaded. Get response from iFrame and handle it
          */
         onLoadIFrame: function() {
-            this.blockFormConfirmed.select('[configure_disabled=1]').each(function (element) {
+            this.blockFormConfirmed.select('[configure_disabled=1]').each(function(element) {
                 element.disabled = element.getAttribute('configure_prev_disabled') == '1';
             });
 
             this._processFieldsData('form_confirmed_to_confirmed');
 
-            var response = this.blockIFrame.contentWindow[this.iFrameJSVarname];
-            if (response && "object" == typeof response) {
+            let response = this.blockIFrame.contentWindow[this.iFrameJSVarname];
+
+            if (response && 'object' == typeof response) {
                 if (this.listTypes[this.current.listType].urlConfirm) {
                     if (response.ok) {
                         this._closeWindow();
@@ -384,7 +396,8 @@ define([
          * Helper for fetching content from iFrame
          */
         _getIFrameContent: function() {
-            var content = (this.blockIFrame.contentWindow || this.blockIFrame.contentDocument);
+            let content = this.blockIFrame.contentWindow || this.blockIFrame.contentDocument;
+
             if (content.document) {
                 content=content.document;
             }
@@ -395,8 +408,9 @@ define([
          * Helper to find qty of currently confirmed item
          */
         getCurrentConfirmedQtyElement: function() {
-            var elms = $(this.confirmedCurrentId).getElementsByTagName('input');
-            for (var i = 0; i < elms.length; i++) {
+            let elms = $(this.confirmedCurrentId).getElementsByTagName('input');
+
+            for (let i = 0; i < elms.length; i++) {
                 if (elms[i].name == 'qty') {
                     return elms[i];
                 }
@@ -407,8 +421,9 @@ define([
          * Helper to find qty of active form
          */
         getCurrentFormQtyElement: function() {
-            var elms = this.blockFormFields.getElementsByTagName('input');
-            for (var i = 0; i < elms.length; i++) {
+            let elms = this.blockFormFields.getElementsByTagName('input');
+
+            for (let i = 0; i < elms.length; i++) {
                 if (elms[i].name == 'qty') {
                     return elms[i];
                 }
@@ -420,7 +435,7 @@ define([
          */
         _showWindow: function() {
             this.dialog.modal('openModal');
-            //this._toggleSelectsExceptBlock(false);
+            // this._toggleSelectsExceptBlock(false);
 
             if (Object.isFunction(this.showWindowCallback[this.current.listType])) {
                 this.showWindowCallback[this.current.listType]();
@@ -430,7 +445,7 @@ define([
         /**
          * toggles Selects states (for IE) except those to be shown in popup
          */
-        /*_toggleSelectsExceptBlock: function(flag) {
+        /* _toggleSelectsExceptBlock: function(flag) {
          if(Prototype.Browser.IE){
          if (this.blockForm) {
          var states = new Array;
@@ -452,8 +467,8 @@ define([
          */
         _closeWindow: function() {
             this.dialog.modal('closeModal');
-            //this.blockWindow.style.display = 'none';
-            //this.clean('window');
+            // this.blockWindow.style.display = 'none';
+            // this.clean('window');
         },
 
         /**
@@ -512,12 +527,13 @@ define([
          * @param method can be 'all' or 'current'
          */
         clean: function(method) {
-            var listInfo = null;
-            var listTypes = null;
-            var removeConfirmed = function (listTypes) {
+            let listInfo = null;
+            let listTypes = null;
+            let removeConfirmed = function(listTypes) {
                 this.blockConfirmed.childElements().each(function(elm) {
-                    for (var i = 0, len = listTypes.length; i < len; i++) {
-                        var pattern = this.blockConfirmed.id + '[' + listTypes[i] + ']';
+                    for (let i = 0, len = listTypes.length; i < len; i++) {
+                        let pattern = this.blockConfirmed.id + '[' + listTypes[i] + ']';
+
                         if (elm.id.indexOf(pattern) == 0) {
                             elm.remove();
                             break;
@@ -576,7 +592,6 @@ define([
          * @param method can be 'item_confirm', 'item_restore', 'current_confirmed_to_form', 'form_confirmed_to_confirmed'
          */
         _processFieldsData: function(method) {
-
             /**
              * Internal function for rename fields names of some list type
              * if listType is not specified, then it won't be added as prefix to all names
@@ -584,38 +599,40 @@ define([
              * @param method can be 'current_confirmed_to_form', 'form_confirmed_to_confirmed'
              * @param blockItem
              */
-            var _renameFields = function(method, blockItem, listType) {
-                var pattern         = null;
-                var patternFlat     = null;
-                var replacement     = null;
-                var replacementFlat = null
-                var scopeArr        = blockItem.id.match(/.*\[\w+\]\[([^\]]+)\]$/);
-                var itemId          = scopeArr[1];
+            let _renameFields = function(method, blockItem, listType) {
+                let pattern = null;
+                let patternFlat = null;
+                let replacement = null;
+                let replacementFlat = null;
+                let scopeArr = blockItem.id.match(/.*\[\w+\]\[([^\]]+)\]$/);
+                let itemId = scopeArr[1];
+
                 if (method == 'current_confirmed_to_form') {
-                    pattern         = RegExp('(\\w+)(\\[?)');
-                    patternFlat     = RegExp('(\\w+)');
-                    replacement     = 'item[' + itemId + '][$1]$2';
+                    pattern = RegExp('(\\w+)(\\[?)');
+                    patternFlat = RegExp('(\\w+)');
+                    replacement = 'item[' + itemId + '][$1]$2';
                     replacementFlat = 'item_' + itemId + '_$1';
                     if (listType) {
                         replacement = 'list[' + listType + '][item][' + itemId + '][$1]$2';
                         replacementFlat = 'list_' + listType + '_' + replacementFlat;
                     }
                 } else if (method == 'form_confirmed_to_confirmed') {
-                    var stPattern = 'item\\[' + itemId + '\\]\\[(\\w+)\\](.*)';
-                    var stPatternFlat = 'item_' + itemId + '_(\\w+)';
+                    let stPattern = 'item\\[' + itemId + '\\]\\[(\\w+)\\](.*)';
+                    let stPatternFlat = 'item_' + itemId + '_(\\w+)';
+
                     if (listType) {
                         stPattern = 'list\\[' + listType + '\\]\\[item\\]\\[' + itemId + '\\]\\[(\\w+)\\](.*)';
                         stPatternFlat = 'list_' + listType + '_' + stPatternFlat;
                     }
-                    pattern         = new RegExp(stPattern);
-                    patternFlat     = new RegExp(stPatternFlat);
-                    replacement     = '$1$2';
+                    pattern = new RegExp(stPattern);
+                    patternFlat = new RegExp(stPatternFlat);
+                    replacement = '$1$2';
                     replacementFlat = '$1';
                 } else {
                     return false;
                 }
-                var rename = function (elms) {
-                    for (var i = 0; i < elms.length; i++) {
+                let rename = function(elms) {
+                    for (let i = 0; i < elms.length; i++) {
                         if (elms[i].name && elms[i].type == 'file') {
                             elms[i].name = elms[i].name.replace(patternFlat, replacementFlat);
                         } else if (elms[i].name) {
@@ -623,10 +640,11 @@ define([
                         }
                     }
                 };
+
                 rename(blockItem.getElementsByTagName('input'));
                 rename(blockItem.getElementsByTagName('select'));
                 rename(blockItem.getElementsByTagName('textarea'));
-            }.bind(this);
+            };
 
             switch (method) {
                 case 'item_confirm':
@@ -644,8 +662,10 @@ define([
 
                     // clone confirmed to form
                     var mageData = null;
+
                     $(this.confirmedCurrentId).childElements().each(function(elm) {
-                        var cloned = elm.cloneNode(true);
+                        let cloned = elm.cloneNode(true);
+
                         if (elm.mageData) {
                             cloned.mageData = elm.mageData;
                             mageData = elm.mageData;
@@ -655,8 +675,8 @@ define([
 
                     // get confirmed values
                     var fieldsValue = {};
-                    var getConfirmedValues = function (elms) {
-                        for (var i = 0; i < elms.length; i++) {
+                    var getConfirmedValues = function(elms) {
+                        for (let i = 0; i < elms.length; i++) {
                             if (elms[i].name) {
                                 if ('undefined' == typeof fieldsValue[elms[i].name] ) {
                                     fieldsValue[elms[i].name] = {};
@@ -672,14 +692,15 @@ define([
                                 }
                             }
                         }
-                    }.bind(this);
+                    };
+
                     getConfirmedValues($(this.confirmedCurrentId).getElementsByTagName('input'));
                     getConfirmedValues($(this.confirmedCurrentId).getElementsByTagName('select'));
                     getConfirmedValues($(this.confirmedCurrentId).getElementsByTagName('textarea'));
 
                     // restore confirmed values
-                    var restoreConfirmedValues = function (elms) {
-                        for (var i = 0; i < elms.length; i++) {
+                    var restoreConfirmedValues = function(elms) {
+                        for (let i = 0; i < elms.length; i++) {
                             if ('undefined' != typeof fieldsValue[elms[i].name]) {
                                 if (elms[i].type != 'file') {
                                     if (elms[i].type == 'checkbox') {
@@ -694,7 +715,8 @@ define([
                                 }
                             }
                         }
-                    }.bind(this);
+                    };
+
                     restoreConfirmedValues(this.blockFormFields.getElementsByTagName('input'));
                     restoreConfirmedValues(this.blockFormFields.getElementsByTagName('select'));
                     restoreConfirmedValues(this.blockFormFields.getElementsByTagName('textarea'));
@@ -714,19 +736,22 @@ define([
                     break;
                 case 'current_confirmed_to_form':
                     var allowedListTypes = {};
+
                     allowedListTypes[this.current.listType] = true;
                     var listInfo = this.listTypes[this.current.listType];
+
                     if (listInfo.complexTypes) {
-                        for (var i = 0, len = listInfo.complexTypes.length; i < len; i++) {
+                        for (let i = 0, len = listInfo.complexTypes.length; i < len; i++) {
                             allowedListTypes[listInfo.complexTypes[i]] = true;
                         }
                     }
 
                     this.blockFormConfirmed.update();
                     this.blockConfirmed.childElements().each(function(blockItem) {
-                        var scopeArr    = blockItem.id.match(/.*\[(\w+)\]\[([^\]]+)\]$/);
-                        var listType    = scopeArr[1];
-                        var itemId    = scopeArr[2];
+                        let scopeArr = blockItem.id.match(/.*\[(\w+)\]\[([^\]]+)\]$/);
+                        let listType = scopeArr[1];
+                        let itemId = scopeArr[2];
+
                         if (allowedListTypes[listType] && (!this.itemsFilter[listType]
                             || this.itemsFilter[listType].indexOf(itemId) != -1)) {
                             _renameFields(method, blockItem, listInfo.complexTypes ? listType : null);
@@ -736,9 +761,11 @@ define([
                     break;
                 case 'form_confirmed_to_confirmed':
                     var listInfo = this.listTypes[this.current.listType];
+
                     this.blockFormConfirmed.childElements().each(function(blockItem) {
-                        var scopeArr = blockItem.id.match(/.*\[(\w+)\]\[([^\]]+)\]$/);
-                        var listType = scopeArr[1];
+                        let scopeArr = blockItem.id.match(/.*\[(\w+)\]\[([^\]]+)\]$/);
+                        let listType = scopeArr[1];
+
                         _renameFields(method, blockItem, listInfo.complexTypes ? listType : null);
                         this.blockConfirmed.insert(blockItem);
                     }.bind(this));
@@ -752,9 +779,9 @@ define([
          * @param object element
          * @param object event
          */
-        changeOptionQty: function(element, event)
-        {
-            var checkQty = true;
+        changeOptionQty: function(element, event)        {
+            let checkQty = true;
+
             if ('undefined' != typeof event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     checkQty = false;
@@ -763,7 +790,7 @@ define([
             if (checkQty && (Number(element.value) <= 0 || isNaN(Number(element.value)))) {
                 element.value = 1;
             }
-        }
+        },
     };
 
     productConfigure = new ProductConfigure();

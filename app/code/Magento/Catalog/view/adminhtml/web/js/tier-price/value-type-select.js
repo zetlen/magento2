@@ -6,19 +6,19 @@
 define([
     'Magento_Ui/js/form/element/select',
     'uiRegistry',
-    'underscore'
-], function (Select, uiRegistry, _) {
+    'underscore',
+], function(Select, uiRegistry, _) {
     'use strict';
 
     return Select.extend({
         defaults: {
-            prices: {}
+            prices: {},
         },
 
         /**
          * {@inheritdoc}
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .prepareForm();
         },
@@ -26,7 +26,7 @@ define([
         /**
          * {@inheritdoc}
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             this.initialValue = this.getInitialValue();
 
             if (this.value.peek() !== this.initialValue) {
@@ -41,16 +41,16 @@ define([
         /**
          * {@inheritdoc}
          */
-        prepareForm: function () {
-            var elements = this.getElementsByPrices(),
+        prepareForm: function() {
+            let elements = this.getElementsByPrices(),
                 prices = this.prices,
                 currencyType = _.keys(prices)[0],
                 select = this;
 
-            uiRegistry.get(elements, function () {
-                _.each(arguments, function (currentValue) {
+            uiRegistry.get(elements, function() {
+                _.each(arguments, function(currentValue) {
                     if (parseFloat(currentValue.value()) > 0) {
-                        _.each(prices, function (priceValue, priceKey) {
+                        _.each(prices, function(priceValue, priceKey) {
                             if (priceValue === currentValue.name) {
                                 currencyType = priceKey;
                             }
@@ -66,10 +66,10 @@ define([
         /**
          * @returns {Array}
          */
-        getElementsByPrices: function () {
-            var elements = [];
+        getElementsByPrices: function() {
+            let elements = [];
 
-            _.each(this.prices, function (currentValue) {
+            _.each(this.prices, function(currentValue) {
                 elements.push(currentValue);
             });
 
@@ -79,8 +79,8 @@ define([
         /**
          * Callback that fires when 'value' property is updated
          */
-        onUpdate: function () {
-            var value = this.value(),
+        onUpdate: function() {
+            let value = this.value(),
                 prices = this.prices,
                 select = this,
                 parentDataScopeArr = this.dataScope.split('.'),
@@ -90,13 +90,13 @@ define([
             parentDataScopeArr.pop();
             parentDataScope = parentDataScopeArr.join('.');
 
-            uiRegistry.get(elements, function () {
-                var sourceData = select.source.get(parentDataScope);
+            uiRegistry.get(elements, function() {
+                let sourceData = select.source.get(parentDataScope);
 
-                _.each(arguments, function (currentElement) {
-                    var index;
+                _.each(arguments, function(currentElement) {
+                    let index;
 
-                    _.each(prices, function (priceValue, priceKey) {
+                    _.each(prices, function(priceValue, priceKey) {
                         if (priceValue === currentElement.name) {
                             index = priceKey;
                         }
@@ -113,6 +113,6 @@ define([
                 });
                 select.source.set(parentDataScope, sourceData);
             });
-        }
+        },
     });
 });

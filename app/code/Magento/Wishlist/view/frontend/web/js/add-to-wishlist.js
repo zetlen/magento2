@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.addToWishlist', {
@@ -16,19 +16,19 @@ define([
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option',
-            qtyInfo: '#qty'
+            qtyInfo: '#qty',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._bind();
         },
 
         /**
          * @private
          */
-        _bind: function () {
-            var options = this.options,
+        _bind: function() {
+            let options = this.options,
                 dataUpdateFunc = '_updateWishlistData',
                 changeCustomOption = 'change ' + options.customOptionsInfo,
                 changeQty = 'change ' + options.qtyInfo,
@@ -58,18 +58,18 @@ define([
          * @param {jQuery.Event} event
          * @private
          */
-        _updateWishlistData: function (event) {
-            var dataToAdd = {},
+        _updateWishlistData: function(event) {
+            let dataToAdd = {},
                 isFileUploaded = false,
                 self = this;
 
-            if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
+            if (event.handleObj.selector == this.options.qtyInfo) { // eslint-disable-line eqeqeq
                 this._updateAddToWishlistButton({});
                 event.stopPropagation();
 
                 return;
             }
-            $(event.handleObj.selector).each(function (index, element) {
+            $(event.handleObj.selector).each(function(index, element) {
                 if ($(element).is('input[type=text]') ||
                     $(element).is('input[type=email]') ||
                     $(element).is('input[type=number]') ||
@@ -100,15 +100,15 @@ define([
          * @param {Object} dataToAdd
          * @private
          */
-        _updateAddToWishlistButton: function (dataToAdd) {
-            var self = this;
+        _updateAddToWishlistButton: function(dataToAdd) {
+            let self = this;
 
-            $('[data-action="add-to-wishlist"]').each(function (index, element) {
-                var params = $(element).data('post');
+            $('[data-action="add-to-wishlist"]').each(function(index, element) {
+                let params = $(element).data('post');
 
                 if (!params) {
                     params = {
-                        'data': {}
+                        'data': {},
                     };
                 }
 
@@ -117,7 +117,7 @@ define([
                 }
 
                 params.data = $.extend({}, params.data, dataToAdd, {
-                    'qty': $(self.options.qtyInfo).val()
+                    'qty': $(self.options.qtyInfo).val(),
                 });
                 $(element).data('post', params);
             });
@@ -129,10 +129,10 @@ define([
          * @return {Object}
          * @private
          */
-        _arrayDiffByKeys: function (array1, array2) {
-            var result = {};
+        _arrayDiffByKeys: function(array1, array2) {
+            let result = {};
 
-            $.each(array1, function (key, value) {
+            $.each(array1, function(key, value) {
                 if (key.indexOf('option') === -1) {
                     return;
                 }
@@ -150,8 +150,8 @@ define([
          * @return {Object}
          * @private
          */
-        _getElementData: function (element) {
-            var data, elementName, elementValue;
+        _getElementData: function(element) {
+            let data, elementName, elementValue;
 
             element = $(element);
             data = {};
@@ -159,18 +159,18 @@ define([
             elementValue = element.val();
 
             if (element.is('select[multiple]') && elementValue !== null) {
-                if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq
+                if (elementName.substr(elementName.length - 2) == '[]') { // eslint-disable-line eqeqeq
                     elementName = elementName.substring(0, elementName.length - 2);
                 }
-                $.each(elementValue, function (key, option) {
+                $.each(elementValue, function(key, option) {
                     data[elementName + '[' + option + ']'] = option;
                 });
             } else {
-                if (elementValue) { //eslint-disable-line no-lonely-if
-                    if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
+                if (elementValue) { // eslint-disable-line no-lonely-if
+                    if (elementName.substr(elementName.length - 2) == '[]') { // eslint-disable-line eqeqeq, max-depth
                         elementName = elementName.substring(0, elementName.length - 2);
 
-                        if (elementValue) { //eslint-disable-line max-depth
+                        if (elementValue) { // eslint-disable-line max-depth
                             data[elementName + '[' + elementValue + ']'] = elementValue;
                         }
                     } else {
@@ -187,10 +187,10 @@ define([
          * @param {Object} dataToAdd
          * @private
          */
-        _removeExcessiveData: function (params, dataToAdd) {
-            var dataToRemove = this._arrayDiffByKeys(params.data, dataToAdd);
+        _removeExcessiveData: function(params, dataToAdd) {
+            let dataToRemove = this._arrayDiffByKeys(params.data, dataToAdd);
 
-            $.each(dataToRemove, function (key) {
+            $.each(dataToRemove, function(key) {
                 delete params.data[key];
             });
         },
@@ -198,11 +198,11 @@ define([
         /**
          * Bind form submit.
          */
-        bindFormSubmit: function () {
-            var self = this;
+        bindFormSubmit: function() {
+            let self = this;
 
-            $('[data-action="add-to-wishlist"]').on('click', function (event) {
-                var element, params, form, action;
+            $('[data-action="add-to-wishlist"]').on('click', function(event) {
+                let element, params, form, action;
 
                 event.stopPropagation();
                 event.preventDefault();
@@ -216,7 +216,7 @@ define([
                     $('<input>', {
                         type: 'hidden',
                         name: 'id',
-                        value: params.data.id
+                        value: params.data.id,
                     }).appendTo(form);
                 }
 
@@ -226,7 +226,7 @@ define([
 
                 $(form).attr('action', action).submit();
             });
-        }
+        },
     });
 
     return $.mage.addToWishlist;

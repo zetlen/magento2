@@ -7,15 +7,15 @@
  * @api
  */
 define([
-    './abstract'
-], function (Abstract) {
+    './abstract',
+], function(Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             cols: 15,
             rows: 2,
-            elementTmpl: 'ui/form/element/textarea'
-        }
+            elementTmpl: 'ui/form/element/textarea',
+        },
     });
 });

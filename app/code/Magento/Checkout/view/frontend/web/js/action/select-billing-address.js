@@ -5,14 +5,14 @@
 
 define([
     'jquery',
-    '../model/quote'
-], function ($, quote) {
+    '../model/quote',
+], function($, quote) {
     'use strict';
 
-    return function (billingAddress) {
-        var address = null;
+    return function(billingAddress) {
+        let address = null;
 
-        if (quote.shippingAddress() && billingAddress.getCacheKey() == //eslint-disable-line eqeqeq
+        if (quote.shippingAddress() && billingAddress.getCacheKey() == // eslint-disable-line eqeqeq
             quote.shippingAddress().getCacheKey()
         ) {
             address = $.extend({}, billingAddress);

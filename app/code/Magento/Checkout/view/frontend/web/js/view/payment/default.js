@@ -18,8 +18,8 @@ define([
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Ui/js/model/messages',
     'uiLayout',
-    'Magento_Checkout/js/action/redirect-on-success'
-], function (
+    'Magento_Checkout/js/action/redirect-on-success',
+], function(
     ko,
     $,
     Component,
@@ -45,7 +45,7 @@ define([
         /**
          * After place order callback
          */
-        afterPlaceOrder: function () {
+        afterPlaceOrder: function() {
             // Override this function and put after place order logic here
         },
 
@@ -54,19 +54,19 @@ define([
          *
          * @return {exports}
          */
-        initialize: function () {
-            var billingAddressCode,
+        initialize: function() {
+            let billingAddressCode,
                 billingAddressData,
                 defaultAddressData;
 
             this._super().initChildren();
-            quote.billingAddress.subscribe(function (address) {
+            quote.billingAddress.subscribe(function(address) {
                 this.isPlaceOrderActionAllowed(address !== null);
             }, this);
             checkoutDataResolver.resolveBillingAddress();
 
             billingAddressCode = 'billingAddress' + this.getCode();
-            registry.async('checkoutProvider')(function (checkoutProvider) {
+            registry.async('checkoutProvider')(function(checkoutProvider) {
                 defaultAddressData = checkoutProvider.get(billingAddressCode);
 
                 if (defaultAddressData === undefined) {
@@ -81,7 +81,7 @@ define([
                         $.extend(true, {}, defaultAddressData, billingAddressData)
                     );
                 }
-                checkoutProvider.on(billingAddressCode, function (providerBillingAddressData) {
+                checkoutProvider.on(billingAddressCode, function(providerBillingAddressData) {
                     checkoutData.setBillingAddressFromData(providerBillingAddressData);
                 }, billingAddressCode);
             });
@@ -94,7 +94,7 @@ define([
          *
          * @returns {Component} Chainable.
          */
-        initChildren: function () {
+        initChildren: function() {
             this.messageContainer = new Messages();
             this.createMessagesComponent();
 
@@ -106,16 +106,15 @@ define([
          *
          * @returns {Component} Chainable.
          */
-        createMessagesComponent: function () {
-
-            var messagesComponent = {
+        createMessagesComponent: function() {
+            let messagesComponent = {
                 parent: this.name,
                 name: this.name + '.messages',
                 displayArea: 'messages',
                 component: 'Magento_Ui/js/view/messages',
                 config: {
-                    messageContainer: this.messageContainer
-                }
+                    messageContainer: this.messageContainer,
+                },
             };
 
             layout([messagesComponent]);
@@ -126,8 +125,8 @@ define([
         /**
          * Place order.
          */
-        placeOrder: function (data, event) {
-            var self = this;
+        placeOrder: function(data, event) {
+            let self = this;
 
             if (event) {
                 event.preventDefault();
@@ -138,11 +137,11 @@ define([
 
                 this.getPlaceOrderDeferredObject()
                     .fail(
-                        function () {
+                        function() {
                             self.isPlaceOrderActionAllowed(true);
                         }
                     ).done(
-                        function () {
+                        function() {
                             self.afterPlaceOrder();
 
                             if (self.redirectAfterPlaceOrder) {
@@ -160,7 +159,7 @@ define([
         /**
          * @return {*}
          */
-        getPlaceOrderDeferredObject: function () {
+        getPlaceOrderDeferredObject: function() {
             return $.when(
                 placeOrderAction(this.getData(), this.messageContainer)
             );
@@ -169,70 +168,70 @@ define([
         /**
          * @return {Boolean}
          */
-        selectPaymentMethod: function () {
+        selectPaymentMethod: function() {
             selectPaymentMethodAction(this.getData());
             checkoutData.setSelectedPaymentMethod(this.item.method);
 
             return true;
         },
 
-        isChecked: ko.computed(function () {
+        isChecked: ko.computed(function() {
             return quote.paymentMethod() ? quote.paymentMethod().method : null;
         }),
 
-        isRadioButtonVisible: ko.computed(function () {
+        isRadioButtonVisible: ko.computed(function() {
             return paymentService.getAvailablePaymentMethods().length !== 1;
         }),
 
         /**
          * Get payment method data
          */
-        getData: function () {
+        getData: function() {
             return {
                 'method': this.item.method,
                 'po_number': null,
-                'additional_data': null
+                'additional_data': null,
             };
         },
 
         /**
          * Get payment method type.
          */
-        getTitle: function () {
+        getTitle: function() {
             return this.item.title;
         },
 
         /**
          * Get payment method code.
          */
-        getCode: function () {
+        getCode: function() {
             return this.item.method;
         },
 
         /**
          * @return {Boolean}
          */
-        validate: function () {
+        validate: function() {
             return true;
         },
 
         /**
          * @return {String}
          */
-        getBillingAddressFormName: function () {
+        getBillingAddressFormName: function() {
             return 'billing-address-form-' + this.item.method;
         },
 
         /**
          * Dispose billing address subscriptions
          */
-        disposeSubscriptions: function () {
+        disposeSubscriptions: function() {
             // dispose all active subscriptions
-            var billingAddressCode = 'billingAddress' + this.getCode();
+            let billingAddressCode = 'billingAddress' + this.getCode();
 
-            registry.async('checkoutProvider')(function (checkoutProvider) {
+            registry.async('checkoutProvider')(function(checkoutProvider) {
                 checkoutProvider.off(billingAddressCode);
             });
-        }
+        },
     });
 });

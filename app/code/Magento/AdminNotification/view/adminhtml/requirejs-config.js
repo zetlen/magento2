@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
             systemMessageDialog: 'Magento_AdminNotification/system/notification',
-            toolbarEntry:   'Magento_AdminNotification/toolbar_entry'
-        }
-    }
+            toolbarEntry: 'Magento_AdminNotification/toolbar_entry',
+        },
+    },
 };

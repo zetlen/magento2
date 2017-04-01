@@ -4,8 +4,8 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function(Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -13,14 +13,14 @@ define([
             valueUpdate: 'input',
             isInteger: true,
             validation: {
-                'validate-number': true
-            }
+                'validate-number': true,
+            },
         },
 
         /**
          * @inheritdoc
          */
-        onUpdate: function () {
+        onUpdate: function() {
             this.validation['validate-digits'] = this.isInteger;
             this._super();
         },
@@ -28,11 +28,11 @@ define([
         /**
          * @inheritdoc
          */
-        hasChanged: function () {
-            var notEqual = this.value() !== this.initialValue.toString();
+        hasChanged: function() {
+            let notEqual = this.value() !== this.initialValue.toString();
 
             return !this.visible() ? false : notEqual;
-        }
+        },
 
     });
 });

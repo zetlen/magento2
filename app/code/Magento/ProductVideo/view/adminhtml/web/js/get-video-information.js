@@ -2,16 +2,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+/* jshint browser:true jquery:true*/
 define([
     'jquery',
     'Magento_Ui/js/modal/alert',
     'jquery/ui',
-    'mage/translate'
-], function ($, alert) {
+    'mage/translate',
+], function($, alert) {
         'use strict';
 
-        var videoRegister = {
+        let videoRegister = {
             _register: {},
 
             /**
@@ -20,7 +20,7 @@ define([
              * @param {String} api
              * @returns {bool}
              */
-            isRegistered: function (api) {
+            isRegistered: function(api) {
                 return this._register[api] !== undefined;
             },
 
@@ -30,7 +30,7 @@ define([
              * @param {String} api
              * @returns {bool}
              */
-            isLoaded: function (api) {
+            isLoaded: function(api) {
                 return this._register[api] !== undefined && this._register[api] === true;
             },
 
@@ -39,10 +39,10 @@ define([
              * @param {String} api
              * @param {bool} loaded
              */
-            register: function (api, loaded) {
+            register: function(api, loaded) {
                 loaded = loaded || false;
                 this._register[api] = loaded;
-            }
+            },
         };
 
         $.widget('mage.productVideoLoader', {
@@ -50,7 +50,7 @@ define([
             /**
              * @private
              */
-            _create: function () {
+            _create: function() {
                 switch (this.element.data('type')) {
                     case 'youtube':
                         this.element.videoYoutube();
@@ -69,9 +69,9 @@ define([
                             /**
                              * Return string
                              */
-                            toString: function () {
+                            toString: function() {
                                 return this.name + ': ' + this.message;
-                            }
+                            },
                         };
                 }
             },
@@ -80,7 +80,7 @@ define([
              * Initializes variables
              * @private
              */
-            _initialize: function () {
+            _initialize: function() {
                 this._params = this.element.data('params') || {};
                 this._code = this.element.data('code');
                 this._width = this.element.data('width');
@@ -100,35 +100,35 @@ define([
             /**
              * Abstract play command
              */
-            play: function () {
+            play: function() {
                 this._player.play();
             },
 
             /**
              * Abstract pause command
              */
-            pause: function () {
+            pause: function() {
                 this._player.pause();
             },
 
             /**
              * Abstract stop command
              */
-            stop: function () {
+            stop: function() {
                 this._player.stop();
             },
 
             /**
              * Abstract playing command
              */
-            playing: function () {
+            playing: function() {
                 return this._player.playing();
             },
 
             /**
              * Abstract destroying command
              */
-            destroy: function () {
+            destroy: function() {
                 this._player.destroy();
             },
 
@@ -136,12 +136,12 @@ define([
              * Calculates ratio for responsive videos
              * @private
              */
-            _calculateRatio: function () {
+            _calculateRatio: function() {
                 if (!this._responsive) {
                     return;
                 }
                 this.element.css('paddingBottom', this._height / this._width * 100 + '%');
-            }
+            },
         });
 
         $.widget('mage.videoYoutube', $.mage.productVideoLoader, {
@@ -150,8 +150,8 @@ define([
              * Initialization of the Youtube widget
              * @private
              */
-            _create: function () {
-                var self = this;
+            _create: function() {
+                let self = this;
 
                 this._initialize();
 
@@ -163,7 +163,7 @@ define([
                      * Youtube state check
                      * @private
                      */
-                    'youtubeapiready': function () {
+                    'youtubeapiready': function() {
                         if (self._player !== undefined) {
                             return;
                         }
@@ -190,7 +190,7 @@ define([
                                 /**
                                  * State change flag init
                                  */
-                                onStateChange: function (data) {
+                                "onStateChange": function(data) {
                                     switch (window.parseInt(data.data, 10)) {
                                         case 1:
                                             self._playing = true;
@@ -201,11 +201,11 @@ define([
                                     }
 
                                     self._trigger('statechange', {}, data);
-                                }
-                            }
+                                },
+                            },
 
                         });
-                    }
+                    },
                 });
 
                 this._loadApi();
@@ -215,8 +215,8 @@ define([
              * Loads Youtube API and triggers event, when loaded
              * @private
              */
-            _loadApi: function () {
-                var element,
+            _loadApi: function() {
+                let element,
                     scriptTag;
 
                 if (videoRegister.isRegistered('youtube')) {
@@ -238,7 +238,7 @@ define([
                 /**
                  * Trigger youtube api ready event
                  */
-                window.onYouTubeIframeAPIReady = function () {
+                window.onYouTubeIframeAPIReady = function() {
                     $(window).trigger('youtubeapiready');
                     videoRegister.register('youtube', true);
                 };
@@ -247,7 +247,7 @@ define([
             /**
              * Play command for Youtube
              */
-            play: function () {
+            play: function() {
                 this._player.playVideo();
                 this._playing = true;
             },
@@ -255,7 +255,7 @@ define([
             /**
              * Pause command for Youtube
              */
-            pause: function () {
+            pause: function() {
                 this._player.pauseVideo();
                 this._playing = false;
             },
@@ -263,7 +263,7 @@ define([
             /**
              * Stop command for Youtube
              */
-            stop: function () {
+            stop: function() {
                 this._player.stopVideo();
                 this._playing = false;
             },
@@ -271,7 +271,7 @@ define([
             /**
              * Playing command for Youtube
              */
-            playing: function () {
+            playing: function() {
                 return this._playing;
             },
 
@@ -279,10 +279,10 @@ define([
              * stops and unloads player
              * @private
              */
-            destroy: function () {
+            destroy: function() {
                 this.stop();
                 this._player.destroy();
-            }
+            },
         });
 
         $.widget('mage.videoVimeo', $.mage.productVideoLoader, {
@@ -291,8 +291,8 @@ define([
              * Initialize the Vimeo widget
              * @private
              */
-            _create: function () {
-                var timestamp,
+            _create: function() {
+                let timestamp,
                     src,
                     additionalParams;
 
@@ -316,14 +316,13 @@ define([
                         .attr('height', this._height)
                         .attr('src', src)
                 );
-
-            }
+            },
         });
 
         $.widget('mage.videoData', {
             options: {
                 youtubeKey: '',
-                eventSource: '' //where is data going from - focus out or click on button
+                eventSource: '', // where is data going from - focus out or click on button
             },
 
             _REQUEST_VIDEO_INFORMATION_TRIGGER: 'request_video_information',
@@ -345,11 +344,11 @@ define([
             /**
              * @private
              */
-            _init: function () {
+            _init: function() {
                 this.element.on(this._START_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
                 this.element.on(this._ERROR_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onVideoInvalid, this));
                 this.element.on(this._FINISH_UPDATE_INFORMATION_TRIGGER, $.proxy(
-                    function () {
+                    function() {
                         this._currentVideoUrl = null;
                     }, this
                 ));
@@ -359,8 +358,8 @@ define([
             /**
              * @private
              */
-            _onUrlValidateHandler: function (event, callback, forceVideo) {
-                var url = this.element.val(),
+            _onUrlValidateHandler: function(event, callback, forceVideo) {
+                let url = this.element.val(),
                     videoInfo;
 
                 videoInfo = this._validateURL(url, forceVideo);
@@ -375,8 +374,8 @@ define([
             /**
              * @private
              */
-            _onRequestHandler: function () {
-                var url = this.element.val(),
+            _onRequestHandler: function() {
+                let url = this.element.val(),
                     self = this,
                     videoInfo,
                     type,
@@ -390,7 +389,7 @@ define([
                 this._currentVideoUrl = url;
 
                 this.element.trigger(this._REQUEST_VIDEO_INFORMATION_TRIGGER, {
-                    url: url
+                    url: url,
                 });
 
                 if (!url) {
@@ -411,7 +410,7 @@ define([
                  * @private
                  */
                 function _onYouTubeLoaded(data) {
-                    var tmp,
+                    let tmp,
                         uploadedFormatted,
                         respData,
                         createErrorMessage;
@@ -421,8 +420,8 @@ define([
                      *
                      * @returns {String}
                      */
-                    createErrorMessage = function () {
-                        var error = data.error,
+                    createErrorMessage = function() {
+                        let error = data.error,
                             errors = error.errors,
                             i,
                             errLength = errors.length,
@@ -470,7 +469,7 @@ define([
                         description: tmp.snippet.description,
                         thumbnail: tmp.snippet.thumbnails.high.url,
                         videoId: videoInfo.id,
-                        videoProvider: videoInfo.type
+                        videoProvider: videoInfo.type,
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -481,7 +480,7 @@ define([
                  * @private
                  */
                 function _onVimeoLoaded(data) {
-                    var tmp,
+                    let tmp,
                         respData;
 
                     if (data.length < 1) {
@@ -499,7 +498,7 @@ define([
                         description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
                         thumbnail: tmp['thumbnail_large'],
                         videoId: videoInfo.id,
-                        videoProvider: videoInfo.type
+                        videoProvider: videoInfo.type,
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -516,11 +515,11 @@ define([
                         this.options.youtubeKey + '&alt=json&callback=?';
                     $.getJSON(googleapisUrl,
                         {
-                            format: 'json'
+                            format: 'json',
                         },
                         $.proxy(_onYouTubeLoaded, self)
                     ).fail(
-                        function () {
+                        function() {
                             self._onRequestError('Video not found');
                         }
                     );
@@ -529,17 +528,17 @@ define([
                         url: window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json',
                         dataType: 'jsonp',
                         data: {
-                            format: 'json'
+                            format: 'json',
                         },
                         timeout: 5000,
-                        success:  $.proxy(_onVimeoLoaded, self),
+                        success: $.proxy(_onVimeoLoaded, self),
 
                         /**
                          * @private
                          */
-                        error: function () {
+                        error: function() {
                             self._onRequestError($.mage.__('Video not found'));
-                        }
+                        },
                     });
                 }
             },
@@ -547,18 +546,18 @@ define([
             /**
              * @private
              */
-            _onVideoInvalid: function (event, data) {
+            _onVideoInvalid: function(event, data) {
                 this._videoInformation = null;
                 this.element.val('');
                 alert({
-                    content: 'Error: "' + data + '"'
+                    content: 'Error: "' + data + '"',
                 });
             },
 
             /**
              * @private
              */
-            _onRequestError: function (error) {
+            _onRequestError: function(error) {
                 this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
                 this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, false);
                 this._currentVideoUrl = null;
@@ -567,8 +566,8 @@ define([
             /**
              * @private
              */
-            _formatYoutubeDuration: function (duration) {
-                var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/),
+            _formatYoutubeDuration: function(duration) {
+                let match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/),
                     hours = parseInt(match[1], 10) || 0,
                     minutes = parseInt(match[2], 10) || 0,
                     seconds = parseInt(match[3], 10) || 0;
@@ -579,15 +578,15 @@ define([
             /**
              * @private
              */
-            _formatVimeoDuration: function (seconds) {
+            _formatVimeoDuration: function(seconds) {
                 return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
             },
 
             /**
              * @private
              */
-            _parseHref: function (href) {
-                var a = document.createElement('a');
+            _parseHref: function(href) {
+                let a = document.createElement('a');
 
                 a.href = href;
 
@@ -597,8 +596,8 @@ define([
             /**
              * @private
              */
-            _validateURL: function (href, forceVideo) {
-                var id,
+            _validateURL: function(href, forceVideo) {
+                let id,
                     type,
                     ampersandPosition,
                     vimeoRegex;
@@ -609,7 +608,6 @@ define([
                 href = this._parseHref(href);
 
                 if (href.host.match(/youtube\.com/) && href.search) {
-
                     id = href.search.split('v=')[1];
 
                     if (id) {
@@ -620,14 +618,13 @@ define([
                     if (id && ampersandPosition !== -1) {
                         id = id.substring(0, ampersandPosition);
                     }
-
                 } else if (href.host.match(/youtube\.com|youtu\.be/)) {
                     id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
                     type = 'youtube';
                 } else if (href.host.match(/vimeo\.com/)) {
                     type = 'vimeo';
                     vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
-                        '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|video\\/|)(\\d+)(?:$|\\/|\\?)'
+                        '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|video\\/|)(\\d+)(?:$|\\/|\\?)',
                     ].join(''));
 
                     if (href.href.match(vimeoRegex) != null) {
@@ -641,8 +638,8 @@ define([
                 }
 
                 return id ? {
-                    id: id, type: type, s: href.search.replace(/^\?/, '')
+                    id: id, type: type, s: href.search.replace(/^\?/, ''),
                 } : false;
-            }
+            },
         });
     });

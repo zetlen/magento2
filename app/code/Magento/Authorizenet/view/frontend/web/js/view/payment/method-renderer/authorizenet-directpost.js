@@ -6,15 +6,15 @@
 define([
     'jquery',
     'Magento_Payment/js/view/payment/iframe',
-    'mage/translate'
+    'mage/translate',
 ],
-function ($, Component, $t) {
+function($, Component, $t) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_Authorizenet/payment/authorizenet-directpost',
-            timeoutMessage: $t('Sorry, but something went wrong. Please contact the seller.')
+            timeoutMessage: $t('Sorry, but something went wrong. Please contact the seller.'),
         },
         placeOrderHandler: null,
         validateHandler: null,
@@ -22,43 +22,43 @@ function ($, Component, $t) {
         /**
          * @param {Object} handler
          */
-        setPlaceOrderHandler: function (handler) {
+        setPlaceOrderHandler: function(handler) {
             this.placeOrderHandler = handler;
         },
 
         /**
          * @param {Object} handler
          */
-        setValidateHandler: function (handler) {
+        setValidateHandler: function(handler) {
             this.validateHandler = handler;
         },
 
         /**
          * @returns {Object}
          */
-        context: function () {
+        context: function() {
             return this;
         },
 
         /**
          * @returns {Boolean}
          */
-        isShowLegend: function () {
+        isShowLegend: function() {
             return true;
         },
 
         /**
          * @returns {String}
          */
-        getCode: function () {
+        getCode: function() {
             return 'authorizenet_directpost';
         },
 
         /**
          * @returns {Boolean}
          */
-        isActive: function () {
+        isActive: function() {
             return true;
-        }
+        },
     });
 });

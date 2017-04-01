@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
     return {
@@ -12,14 +12,14 @@ define([], function () {
         /**
          * @param {Object} popUp
          */
-        setPopup: function (popUp) {
+        setPopup: function(popUp) {
             this.popUp = popUp;
         },
 
         /**
          * Show popup.
          */
-        show: function () {
+        show: function() {
             if (this.popUp) {
                 this.popUp.modal('openModal');
             }
@@ -28,10 +28,10 @@ define([], function () {
         /**
          * Hide popup.
          */
-        hide: function () {
+        hide: function() {
             if (this.popUp) {
                 this.popUp.modal('closeModal');
             }
-        }
+        },
     };
 });

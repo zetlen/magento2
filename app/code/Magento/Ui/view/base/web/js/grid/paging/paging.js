@@ -11,8 +11,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiElement'
-], function (ko, _, utils, layout, Element) {
+    'uiElement',
+], function(ko, _, utils, layout, Element) {
     'use strict';
 
     return Element.extend({
@@ -28,31 +28,31 @@ define([
                 name: '${ $.name }_sizes',
                 storageConfig: {
                     provider: '${ $.storageConfig.provider }',
-                    namespace: '${ $.storageConfig.namespace }'
-                }
+                    namespace: '${ $.storageConfig.namespace }',
+                },
             },
 
             imports: {
                 pageSize: '${ $.sizesConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
-                totalRecords: '${ $.provider }:data.totalRecords'
+                totalRecords: '${ $.provider }:data.totalRecords',
             },
 
             exports: {
                 pageSize: '${ $.provider }:params.paging.pageSize',
-                current: '${ $.provider }:params.paging.current'
+                current: '${ $.provider }:params.paging.current',
             },
 
             listens: {
                 'pages': 'onPagesChange',
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
-                '${ $.provider }:params.filters': 'goFirst'
+                '${ $.provider }:params.filters': 'goFirst',
             },
 
             modules: {
-                sizes: '${ $.sizesConfig.name }'
-            }
+                sizes: '${ $.sizesConfig.name }',
+            },
         },
 
         /**
@@ -60,7 +60,7 @@ define([
          *
          * @returns {Paging} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initSizes()
                 .updateCounter();
@@ -73,14 +73,14 @@ define([
          *
          * @returns {Paging} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track([
                     'totalSelected',
                     'totalRecords',
                     'pageSize',
                     'pages',
-                    'current'
+                    'current',
                 ]);
 
             this._current = ko.pureComputed({
@@ -91,12 +91,12 @@ define([
                  * Sets current observable to result of validation.
                  * Calls reload method then.
                  */
-                write: function (value) {
+                write: function(value) {
                     this.setPage(value)
                         ._current.notifySubscribers(this.current);
                 },
 
-                owner: this
+                owner: this,
             });
 
             return this;
@@ -107,7 +107,7 @@ define([
          *
          * @returns {Paging} Chainable.
          */
-        initSizes: function () {
+        initSizes: function() {
             layout([this.sizesConfig]);
 
             return this;
@@ -118,7 +118,7 @@ define([
          *
          * @returns {Number}
          */
-        getFirstItemIndex: function () {
+        getFirstItemIndex: function() {
             return this.pageSize * (this.current - 1) + 1;
         },
 
@@ -127,8 +127,8 @@ define([
          *
          * @returns {Number}
          */
-        getLastItemIndex: function () {
-            var lastItem = this.getFirstItemIndex() + this.pageSize - 1;
+        getLastItemIndex: function() {
+            let lastItem = this.getFirstItemIndex() + this.pageSize - 1;
 
             return this.totalRecords < lastItem ? this.totalRecords : lastItem;
         },
@@ -139,7 +139,7 @@ define([
          * @param {(Number|String)} value - New value of the cursor.
          * @returns {Paging} Chainable.
          */
-        setPage: function (value) {
+        setPage: function(value) {
             this.current = this.normalize(value);
 
             return this;
@@ -150,7 +150,7 @@ define([
          *
          * @returns {Paging} Chainable.
          */
-        next: function () {
+        next: function() {
             this.setPage(this.current + 1);
 
             return this;
@@ -161,7 +161,7 @@ define([
          *
          * @returns {Paging} Chainable.
          */
-        prev: function () {
+        prev: function() {
             this.setPage(this.current - 1);
 
             return this;
@@ -172,7 +172,7 @@ define([
          *
          * @returns {Paging} Chainable.
          */
-        goFirst: function () {
+        goFirst: function() {
             this.current = 1;
 
             return this;
@@ -183,7 +183,7 @@ define([
          *
          * @returns {Paging} Chainable.
          */
-        goLast: function () {
+        goLast: function() {
             this.current = this.pages;
 
             return this;
@@ -194,7 +194,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isFirst: function () {
+        isFirst: function() {
             return this.current === 1;
         },
 
@@ -203,14 +203,14 @@ define([
          *
          * @returns {Boolean}
          */
-        isLast: function () {
+        isLast: function() {
             return this.current === this.pages;
         },
 
         /**
          * Updates number of pages.
          */
-        updateCounter: function () {
+        updateCounter: function() {
             this.pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
 
             return this;
@@ -222,11 +222,11 @@ define([
          *
          * @returns {Number} Updated cursor value.
          */
-        updateCursor: function () {
-            var cursor  = this.current - 1,
-                size    = this.pageSize,
+        updateCursor: function() {
+            let cursor = this.current - 1,
+                size = this.pageSize,
                 oldSize = this.previousSize,
-                delta   = cursor * (oldSize  - size) / size;
+                delta = cursor * (oldSize - size) / size;
 
             delta = size > oldSize ?
                 Math.ceil(delta) :
@@ -248,7 +248,7 @@ define([
          * @param {(Number|String)} value - Value to be normalized.
          * @returns {Number}
          */
-        normalize: function (value) {
+        normalize: function(value) {
             value = +value;
 
             if (isNaN(value)) {
@@ -261,7 +261,7 @@ define([
         /**
          * Handles changes of the page size.
          */
-        onPageSizeChange: function () {
+        onPageSizeChange: function() {
             this.updateCounter()
                 .updateCursor();
         },
@@ -269,8 +269,8 @@ define([
         /**
          * Handles changes of the pages amount.
          */
-        onPagesChange: function () {
+        onPagesChange: function() {
             this.updateCursor();
-        }
+        },
     });
 });

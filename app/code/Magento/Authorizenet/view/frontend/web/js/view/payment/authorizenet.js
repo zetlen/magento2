@@ -5,15 +5,15 @@
 
 define([
     'uiComponent',
-    'Magento_Checkout/js/model/payment/renderer-list'
+    'Magento_Checkout/js/model/payment/renderer-list',
 ],
-function (Component, rendererList) {
+function(Component, rendererList) {
     'use strict';
 
     rendererList.push(
         {
             type: 'authorizenet_directpost',
-            component: 'Magento_Authorizenet/js/view/payment/method-renderer/authorizenet-directpost'
+            component: 'Magento_Authorizenet/js/view/payment/method-renderer/authorizenet-directpost',
         }
     );
 

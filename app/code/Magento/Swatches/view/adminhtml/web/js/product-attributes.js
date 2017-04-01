@@ -7,12 +7,12 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/prompt',
     'uiRegistry',
-    'collapsable'
-], function ($, alert, prompt, rg) {
+    'collapsable',
+], function($, alert, prompt, rg) {
     'use strict';
 
-    return function (optionConfig) {
-        var swatchProductAttributes = {
+    return function(optionConfig) {
+        let swatchProductAttributes = {
                 frontendInput: $('#frontend_input'),
                 isFilterable: $('#is_filterable'),
                 isFilterableInSearch: $('#is_filterable_in_search'),
@@ -46,14 +46,14 @@ define([
                 /**
                  * @this {swatchProductAttributes}
                  */
-                toggleApplyVisibility: function (select) {
+                toggleApplyVisibility: function(select) {
                     if ($(select).val() === 1) {
                         $(select).next('select').removeClass('no-display');
                         $(select).next('select').removeClass('ignore-validate');
                     } else {
                         $(select).next('select').addClass('no-display');
                         $(select).next('select').addClass('ignore-validate');
-                        $(select).next('select option:selected').each(function () {
+                        $(select).next('select option:selected').each(function() {
                             this.selected = false;
                         });
                     }
@@ -62,8 +62,8 @@ define([
                 /**
                  * @this {swatchProductAttributes}
                  */
-                checkOptionsPanelVisibility: function () {
-                    var selectOptionsPanel = $('#manage-options-panel'),
+                checkOptionsPanelVisibility: function() {
+                    let selectOptionsPanel = $('#manage-options-panel'),
                         visualOptionsPanel = $('#swatch-visual-options-panel'),
                         textOptionsPanel = $('#swatch-text-options-panel');
 
@@ -90,7 +90,7 @@ define([
                 /**
                  * @this {swatchProductAttributes}
                  */
-                bindAttributeInputType: function () {
+                bindAttributeInputType: function() {
                     this.checkOptionsPanelVisibility();
                     this.switchDefaultValueField();
 
@@ -157,7 +157,7 @@ define([
                 /**
                  * @this {swatchProductAttributes}
                  */
-                switchIsFilterable: function () {
+                switchIsFilterable: function() {
                     if (this.isFilterable.selectedIndex === 0) {
                         this._disable(this.position);
                     } else {
@@ -168,8 +168,8 @@ define([
                 /**
                  * @this {swatchProductAttributes}
                  */
-                switchDefaultValueField: function () {
-                    var currentValue = this.frontendInput.val(),
+                switchDefaultValueField: function() {
+                    let currentValue = this.frontendInput.val(),
                         defaultValueTextVisibility = false,
                         defaultValueTextareaVisibility = false,
                         defaultValueDateVisibility = false,
@@ -238,7 +238,7 @@ define([
                         this.setRowVisibility(this.isUnique, false);
                         this.setRowVisibility(this.frontendClass, false);
                     } else if (optionConfig.hiddenFields[currentValue]) {
-                        $.each(optionConfig.hiddenFields[currentValue], function (key, option) {
+                        $.each(optionConfig.hiddenFields[currentValue], function(key, option) {
                             switch (option) {
                                 case '_front_fieldset':
                                     thing.tabsFront.hide();
@@ -273,7 +273,7 @@ define([
                     this.setRowVisibility(this.useProductImageForSwatch, useProductImageForSwatch);
                     this.setRowVisibility(this.updateProductPreviewImage, defaultValueUpdateImage);
 
-                    $('input[name=\'default[]\']').each(function () {
+                    $('input[name=\'default[]\']').each(function() {
                         $(this).attr('type', optionDefaultInputType);
                     });
                 },
@@ -281,7 +281,7 @@ define([
                 /**
                  * @this {swatchProductAttributes}
                  */
-                showDefaultRows: function () {
+                showDefaultRows: function() {
                     this.setRowVisibility(this.isRequired, true);
                     this.setRowVisibility(this.isUnique, true);
                     this.setRowVisibility(this.frontendClass, true);
@@ -292,7 +292,7 @@ define([
                  * @param {Boolean} isVisible
                  * @this {swatchProductAttributes}
                  */
-                setRowVisibility: function (el, isVisible) {
+                setRowVisibility: function(el, isVisible) {
                     if (isVisible) {
                         el.show();
                         el.closest('.field').show();
@@ -306,7 +306,7 @@ define([
                  * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
-                _disable: function (el) {
+                _disable: function(el) {
                     el.attr('disabled', 'disabled');
                 },
 
@@ -314,7 +314,7 @@ define([
                  * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
-                _enable: function (el) {
+                _enable: function(el) {
                     if (!el.attr('readonly')) {
                         el.removeAttr('disabled');
                     }
@@ -324,7 +324,7 @@ define([
                  * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
-                _showPanel: function (el) {
+                _showPanel: function(el) {
                     el.closest('.fieldset').show();
                     this._render(el.attr('id'));
                 },
@@ -333,7 +333,7 @@ define([
                  * @param {Object} el
                  * @this {swatchProductAttributes}
                  */
-                _hidePanel: function (el) {
+                _hidePanel: function(el) {
                     el.closest('.fieldset').hide();
                 },
 
@@ -341,8 +341,8 @@ define([
                  * @param {String} id
                  * @this {swatchProductAttributes}
                  */
-                _render: function (id) {
-                    rg.get(id, function () {
+                _render: function(id) {
+                    rg.get(id, function() {
                         $('#' + id).trigger('render');
                     });
                 },
@@ -351,8 +351,7 @@ define([
                  * @param {String} promptMessage
                  * @this {swatchProductAttributes}
                  */
-                saveAttributeInNewSet: function (promptMessage) {
-
+                saveAttributeInNewSet: function(promptMessage) {
                     prompt({
                         content: promptMessage,
                         actions: {
@@ -361,8 +360,8 @@ define([
                              * @param {String} val
                              * @this {actions}
                              */
-                            confirm: function (val) {
-                                var rules = ['required-entry', 'validate-no-html-tags'],
+                            confirm: function(val) {
+                                let rules = ['required-entry', 'validate-no-html-tags'],
                                     newAttributeSetNameInputId = $('#new_attribute_set_name'),
                                     editForm = $('#edit_form'),
                                     newAttributeSetName = val,
@@ -375,7 +374,7 @@ define([
                                 for (i = 0; i < rules.length; i++) {
                                     if (!$.validator.methods[rules[i]](newAttributeSetName)) {
                                         alert({
-                                            content: $.validator.messages[rules[i]]
+                                            content: $.validator.messages[rules[i]],
                                         });
 
                                         return;
@@ -389,23 +388,23 @@ define([
                                             type: 'hidden',
                                             id: newAttributeSetNameInputId,
                                             name: 'new_attribute_set_name',
-                                            value: newAttributeSetName
+                                            value: newAttributeSetName,
                                         })
                                     );
                                 }
                                 // Temporary solution will replaced after refactoring of attributes functionality
                                 editForm.triggerHandler('save');
-                            }
-                        }
+                            },
+                        },
                     });
-                }
+                },
             };
 
-        $(function () {
-            $('#frontend_input').bind('change', function () {
+        $(function() {
+            $('#frontend_input').bind('change', function() {
                 swatchProductAttributes.bindAttributeInputType();
             });
-            $('#is_filterable').bind('change', function () {
+            $('#is_filterable').bind('change', function() {
                 swatchProductAttributes.switchIsFilterable();
             });
 

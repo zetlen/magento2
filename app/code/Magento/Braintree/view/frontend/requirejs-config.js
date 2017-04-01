@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            braintree: 'https://js.braintreegateway.com/js/braintree-2.25.0.min.js'
-        }
-    }
+            braintree: 'https://js.braintreegateway.com/js/braintree-2.25.0.min.js',
+        },
+    },
 };

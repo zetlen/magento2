@@ -8,23 +8,23 @@
  */
 define([
     'underscore',
-    './tab'
-], function (_, Tab) {
+    './tab',
+], function(_, Tab) {
     'use strict';
 
     return Tab.extend({
         defaults: {
-            uniqueNs:   'params.activeArea',
-            template:   'ui/area',
-            changed:    false,
-            loading:    false
+            uniqueNs: 'params.activeArea',
+            template: 'ui/area',
+            changed: false,
+            loading: false,
         },
 
         /**
          * Extends instance with defaults. Invokes parent initialize method.
          * Calls initListeners and pushParams methods.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'onChildrenUpdate', 'onContentLoading');
 
             return this._super();
@@ -35,7 +35,7 @@ define([
          * Defines observable properties of instance.
          * @return {Object} - reference to instance
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('changed loading');
 
@@ -48,12 +48,12 @@ define([
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */
-        initElement: function (elem) {
+        initElement: function(elem) {
             this._super();
 
             elem.on({
-                'update':   this.onChildrenUpdate,
-                'loading':  this.onContentLoading
+                'update': this.onChildrenUpdate,
+                'loading': this.onContentLoading,
             });
 
             return this;
@@ -67,7 +67,7 @@ define([
          *
          * @param  {Boolean} hasChanged
          */
-        onChildrenUpdate: function (hasChanged) {
+        onChildrenUpdate: function(hasChanged) {
             if (!hasChanged) {
                 hasChanged = _.some(this.delegate('hasChanged'));
             }
@@ -78,8 +78,8 @@ define([
         /**
          * Callback that sets loading property to true.
          */
-        onContentLoading: function (isLoading) {
+        onContentLoading: function(isLoading) {
             this.loading(isLoading);
-        }
+        },
     });
 });

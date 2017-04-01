@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/form/element/select'
-], function ($, Abstract) {
+    'Magento_Ui/js/form/element/select',
+], function($, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -17,7 +17,7 @@ define([
          * @param {String} value
          * @returns {Boolean}
          */
-        isRelevant: function (value) {
+        isRelevant: function(value) {
             if (!value || $.inArray(value, ['drop_down', 'radio', 'checkbox', 'multiple']) !== -1) {
                 this.reset();
                 this.disabled(true);
@@ -28,6 +28,6 @@ define([
             this.disabled(false);
 
             return true;
-        }
+        },
     });
 });

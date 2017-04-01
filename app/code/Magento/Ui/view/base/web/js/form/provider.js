@@ -10,8 +10,8 @@ define([
     'underscore',
     'uiElement',
     './client',
-    'mageUtils'
-], function (_, Element, Client, utils) {
+    'mageUtils',
+], function(_, Element, Client, utils) {
     'use strict';
 
     return Element.extend({
@@ -19,9 +19,9 @@ define([
             clientConfig: {
                 urls: {
                     save: '${ $.submit_url }',
-                    beforeSave: '${ $.validate_url }'
-                }
-            }
+                    beforeSave: '${ $.validate_url }',
+                },
+            },
         },
 
         /**
@@ -29,7 +29,7 @@ define([
          *
          * @returns {Provider} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initClient();
 
@@ -41,7 +41,7 @@ define([
          *
          * @returns {Provider} Chainable.
          */
-        initClient: function () {
+        initClient: function() {
             this.client = new Client(this.clientConfig);
 
             return this;
@@ -53,8 +53,8 @@ define([
          * @param {Object} [options] - Addtitional request options.
          * @returns {Provider} Chainable.
          */
-        save: function (options) {
-            var data = this.get('data');
+        save: function(options) {
+            let data = this.get('data');
 
             this.client.save(data, options);
 
@@ -70,7 +70,7 @@ define([
          *
          * @returns {Provider}
          */
-        updateConfig: function (isProvider, newData, oldData) {
+        updateConfig: function(isProvider, newData, oldData) {
             if (isProvider === true) {
                 this.setData(oldData, newData, this);
             }
@@ -86,14 +86,14 @@ define([
          * @param {Provider} current
          * @param {String} parentPath
          */
-        setData: function (oldData, newData, current, parentPath) {
-            _.each(newData, function (val, key) {
+        setData: function(oldData, newData, current, parentPath) {
+            _.each(newData, function(val, key) {
                 if (_.isObject(val) || _.isArray(val)) {
                     this.setData(oldData[key], val, current[key], utils.fullPath(parentPath, key));
-                } else if (val != oldData[key] && oldData[key] == current[key]) {//eslint-disable-line eqeqeq
+                } else if (val != oldData[key] && oldData[key] == current[key]) {// eslint-disable-line eqeqeq
                     this.set(utils.fullPath(parentPath, key), val);
                 }
             }, this);
-        }
+        },
     });
 });

@@ -3,13 +3,13 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
-    var licenseRegExp   = /<!--[\s\S]*?-->/,
-        defaultPlugin   = 'text',
-        defaultExt      = 'html';
+    let licenseRegExp = /<!--[\s\S]*?-->/,
+        defaultPlugin = 'text',
+        defaultExt = 'html';
 
     /**
      * Checks of provided string contains a file extension.
@@ -48,7 +48,7 @@ define([
      * @returns {String}
      */
     function removeLicense(content) {
-        return content.replace(licenseRegExp, function (match) {
+        return content.replace(licenseRegExp, function(match) {
             return ~match.indexOf('/**') ? '' : match;
         });
     }
@@ -63,8 +63,8 @@ define([
          * @param {String} path - Path to the template or a DOM selector.
          * @returns {jQueryPromise}
          */
-        loadTemplate: function (path) {
-            var content = this.loadFromNode(path),
+        loadTemplate: function(path) {
+            let content = this.loadFromNode(path),
                 defer;
 
             if (content) {
@@ -85,12 +85,12 @@ define([
          * @param {String} path - Path to the template.
          * @returns {jQueryPromise}
          */
-        loadFromFile: function (path) {
-            var loading = $.Deferred();
+        loadFromFile: function(path) {
+            let loading = $.Deferred();
 
             path = this.formatPath(path);
 
-            require([path], function (template) {
+            require([path], function(template) {
                 template = removeLicense(template);
 
                 loading.resolve(template);
@@ -106,8 +106,8 @@ define([
          * @returns {String|Boolean} If specified node doesn't exists
          *      'false' will be returned, otherwise returns node's content.
          */
-        loadFromNode: function (selector) {
-            var node;
+        loadFromNode: function(selector) {
+            let node;
 
             try {
                 node =
@@ -127,8 +127,8 @@ define([
          * @param {String} path - Path to be processed.
          * @returns {String} Formatted path.
          */
-        formatPath: function (path) {
-            var result = path;
+        formatPath: function(path) {
+            let result = path;
 
             if (!hasPlugin(path)) {
                 result = defaultPlugin + '!' + result;
@@ -143,6 +143,6 @@ define([
             }
 
             return result.replace(/^([^\/]+)/g, '$1/template');
-        }
+        },
     };
 });

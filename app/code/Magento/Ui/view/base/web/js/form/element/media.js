@@ -8,15 +8,15 @@
  */
 define([
     'mageUtils',
-    './abstract'
-], function (utils, Abstract) {
+    './abstract',
+], function(utils, Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             links: {
-                value: ''
-            }
+                value: '',
+            },
         },
 
         /**
@@ -24,7 +24,7 @@ define([
          *
          * @returns {Media} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initFormId();
 
@@ -36,17 +36,17 @@ define([
          *
          * @returns {Media} Chainable.
          */
-        initFormId: function () {
-            var namespace;
+        initFormId: function() {
+            let namespace;
 
             if (this.formId) {
                 return this;
             }
 
-            namespace   = this.name.split('.');
+            namespace = this.name.split('.');
             this.formId = namespace[0];
 
             return this;
-        }
+        },
     });
 });

@@ -6,8 +6,8 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/element/select'
-], function (_, uiRegistry, select) {
+    'Magento_Ui/js/form/element/select',
+], function(_, uiRegistry, select) {
     'use strict';
 
     return select.extend({
@@ -15,8 +15,7 @@ define([
         /**
          * Hide fields on coupon tab
          */
-        onUpdate: function () {
-
+        onUpdate: function() {
             /* eslint-disable eqeqeq */
             if (this.value() != this.displayOnlyForCouponType) {
                 uiRegistry.get('sales_rule_form.sales_rule_form.rule_information.use_auto_generation').checked(false);
@@ -28,8 +27,8 @@ define([
         /**
          * Enable/disable fields on Coupons tab
          */
-        enableDisableFields: function () {
-            var selector,
+        enableDisableFields: function() {
+            let selector,
                 isUseAutoGenerationChecked,
                 couponType,
                 disableAuto;
@@ -45,10 +44,10 @@ define([
             disableAuto = couponType === 3 || isUseAutoGenerationChecked;
             _.each(
                 document.querySelectorAll(selector),
-                function (element) {
+                function(element) {
                     element.disabled = !disableAuto;
                 }
             );
-        }
+        },
     });
 });

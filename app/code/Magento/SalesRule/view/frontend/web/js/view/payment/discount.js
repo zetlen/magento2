@@ -9,11 +9,11 @@ define([
     'uiComponent',
     'Magento_Checkout/js/model/quote',
     'Magento_SalesRule/js/action/set-coupon-code',
-    'Magento_SalesRule/js/action/cancel-coupon'
-], function ($, ko, Component, quote, setCouponCodeAction, cancelCouponAction) {
+    'Magento_SalesRule/js/action/cancel-coupon',
+], function($, ko, Component, quote, setCouponCodeAction, cancelCouponAction) {
     'use strict';
 
-    var totals = quote.getTotals(),
+    let totals = quote.getTotals(),
         couponCode = ko.observable(null),
         isApplied;
 
@@ -24,7 +24,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_SalesRule/payment/discount'
+            template: 'Magento_SalesRule/payment/discount',
         },
         couponCode: couponCode,
 
@@ -36,7 +36,7 @@ define([
         /**
          * Coupon code application procedure
          */
-        apply: function () {
+        apply: function() {
             if (this.validate()) {
                 setCouponCodeAction(couponCode(), isApplied);
             }
@@ -45,7 +45,7 @@ define([
         /**
          * Cancel using coupon
          */
-        cancel: function () {
+        cancel: function() {
             if (this.validate()) {
                 couponCode('');
                 cancelCouponAction(isApplied);
@@ -57,10 +57,10 @@ define([
          *
          * @returns {Boolean}
          */
-        validate: function () {
-            var form = '#discount-form';
+        validate: function() {
+            let form = '#discount-form';
 
             return $(form).validation() && $(form).validation('isValid');
-        }
+        },
     });
 });

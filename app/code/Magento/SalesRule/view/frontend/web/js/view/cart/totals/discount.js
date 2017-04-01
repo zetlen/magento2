@@ -4,13 +4,13 @@
  */
 
 define([
-    'Magento_SalesRule/js/view/summary/discount'
-], function (Component) {
+    'Magento_SalesRule/js/view/summary/discount',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_SalesRule/cart/totals/discount'
+            template: 'Magento_SalesRule/cart/totals/discount',
         },
 
         /**
@@ -18,8 +18,8 @@ define([
          *
          * @returns {Boolean}
          */
-        isDisplayed: function () {
-            return this.getPureValue() != 0; //eslint-disable-line eqeqeq
-        }
+        isDisplayed: function() {
+            return this.getPureValue() != 0; // eslint-disable-line eqeqeq
+        },
     });
 });

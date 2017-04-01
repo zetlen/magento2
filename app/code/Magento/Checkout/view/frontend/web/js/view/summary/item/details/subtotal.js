@@ -4,22 +4,22 @@
  */
 
 define([
-    'Magento_Checkout/js/view/summary/abstract-total'
-], function (viewModel) {
+    'Magento_Checkout/js/view/summary/abstract-total',
+], function(viewModel) {
     'use strict';
 
     return viewModel.extend({
         defaults: {
             displayArea: 'after_details',
-            template: 'Magento_Checkout/summary/item/details/subtotal'
+            template: 'Magento_Checkout/summary/item/details/subtotal',
         },
 
         /**
          * @param {Object} quoteItem
          * @return {*|String}
          */
-        getValue: function (quoteItem) {
+        getValue: function(quoteItem) {
             return this.getFormattedPrice(quoteItem['row_total']);
-        }
+        },
     });
 });

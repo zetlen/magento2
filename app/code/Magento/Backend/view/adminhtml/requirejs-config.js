@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            'mediaUploader':  'Magento_Backend/js/media-uploader'
-        }
-    }
+            'mediaUploader': 'Magento_Backend/js/media-uploader',
+        },
+    },
 };

@@ -5,13 +5,13 @@
 
 /* @api */
 define([
-    'Magento_Checkout/js/view/payment/default'
-], function (Component) {
+    'Magento_Checkout/js/view/payment/default',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_OfflinePayments/payment/checkmo'
+            template: 'Magento_OfflinePayments/payment/checkmo',
         },
 
         /**
@@ -19,7 +19,7 @@ define([
          *
          * @return {*}
          */
-        getMailingAddress: function () {
+        getMailingAddress: function() {
             return window.checkoutConfig.payment.checkmo.mailingAddress;
         },
 
@@ -28,8 +28,8 @@ define([
          *
          * @return {*}
          */
-        getPayableTo: function () {
+        getPayableTo: function() {
             return window.checkoutConfig.payment.checkmo.payableTo;
-        }
+        },
     });
 });

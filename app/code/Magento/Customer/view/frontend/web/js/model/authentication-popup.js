@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/modal/modal'
-], function ($, modal) {
+    'Magento_Ui/js/modal/modal',
+], function($, modal) {
     'use strict';
 
     return {
@@ -17,15 +17,15 @@ define([
          *
          * @param {HTMLElement} element
          */
-        createPopUp: function (element) {
-            var options = {
+        createPopUp: function(element) {
+            let options = {
                 'type': 'popup',
                 'modalClass': 'popup-authentication',
                 'focus': '[name=username]',
                 'responsive': true,
                 'innerScroll': true,
                 'trigger': '.proceed-to-checkout',
-                'buttons': []
+                'buttons': [],
             };
 
             this.modalWindow = element;
@@ -33,8 +33,8 @@ define([
         },
 
         /** Show login popup window */
-        showModal: function () {
+        showModal: function() {
             $(this.modalWindow).modal('openModal');
-        }
+        },
     };
 });

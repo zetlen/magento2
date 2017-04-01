@@ -11,8 +11,8 @@ define([
     'underscore',
     'ko',
     './abstract',
-    'Magento_Variable/variables'
-], function ($, _, ko, Abstract) {
+    'Magento_Variable/variables',
+], function($, _, ko, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -21,30 +21,30 @@ define([
             value: '',
             $wysiwygEditorButton: '',
             links: {
-                value: '${ $.provider }:${ $.dataScope }'
+                value: '${ $.provider }:${ $.dataScope }',
             },
             template: 'ui/form/field',
             elementTmpl: 'ui/form/element/wysiwyg',
-            content:        '',
-            showSpinner:    false,
-            loading:        false,
+            content: '',
+            showSpinner: false,
+            loading: false,
             listens: {
-                disabled: 'setDisabled'
-            }
+                disabled: 'setDisabled',
+            },
         },
 
         /**
          *
          * @returns {} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initNodeListener();
 
             $.async({
                 component: this,
-                selector: 'button'
-            }, function (element) {
+                selector: 'button',
+            }, function(element) {
                 this.$wysiwygEditorButton = $(element);
             }.bind(this));
 
@@ -55,7 +55,7 @@ define([
          *
          * @returns {exports}
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('value');
 
@@ -66,10 +66,10 @@ define([
          *
          * @returns {} Chainable.
          */
-        initNodeListener: function () {
+        initNodeListener: function() {
             $.async({
                 component: this,
-                selector: this.elementSelector
+                selector: this.elementSelector,
             }, this.setElementNode.bind(this));
 
             return this;
@@ -79,9 +79,9 @@ define([
          *
          * @param {HTMLElement} node
          */
-        setElementNode: function (node) {
+        setElementNode: function(node) {
             $(node).bindings({
-                value: this.value
+                value: this.value,
             });
         },
 
@@ -90,12 +90,12 @@ define([
          *
          * @param {Boolean} status
          */
-        setDisabled: function (status) {
+        setDisabled: function(status) {
             this.$wysiwygEditorButton.attr('disabled', status);
 
             /* eslint-disable no-undef */
             if (tinyMCE) {
-                _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
+                _.each(tinyMCE.activeEditor.controlManager.controls, function(property, index, controls) {
                     controls[property.id].setDisabled(status);
                 });
 
@@ -103,6 +103,6 @@ define([
             }
 
             /* eslint-enable  no-undef*/
-        }
+        },
     });
 });

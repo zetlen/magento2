@@ -4,7 +4,7 @@
  */
 
 /* @api */
-define([], function () {
+define([], function() {
     'use strict';
 
     /**
@@ -15,7 +15,7 @@ define([], function () {
     function resultWrapper(isValid, isPotentiallyValid) {
         return {
             isValid: isValid,
-            isPotentiallyValid: isPotentiallyValid
+            isPotentiallyValid: isPotentiallyValid,
         };
     }
 
@@ -27,8 +27,8 @@ define([], function () {
      * @param {Number} maxLength
      * @return {Object}
      */
-    return function (value, maxLength) {
-        var DEFAULT_LENGTH = 3;
+    return function(value, maxLength) {
+        let DEFAULT_LENGTH = 3;
 
         maxLength = maxLength || DEFAULT_LENGTH;
 

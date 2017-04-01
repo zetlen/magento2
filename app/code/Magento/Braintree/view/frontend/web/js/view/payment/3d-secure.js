@@ -2,15 +2,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 
 define([
     'jquery',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
-    'mage/translate'
-], function ($, braintree, quote, $t) {
+    'mage/translate',
+], function($, braintree, quote, $t) {
     'use strict';
 
     return {
@@ -20,7 +20,7 @@ define([
          * Set 3d secure config
          * @param {Object} config
          */
-        setConfig: function (config) {
+        setConfig: function(config) {
             this.config = config;
             this.config.thresholdAmount = parseFloat(config.thresholdAmount);
         },
@@ -29,7 +29,7 @@ define([
          * Get code
          * @returns {String}
          */
-        getCode: function () {
+        getCode: function() {
             return 'three_d_secure';
         },
 
@@ -38,8 +38,8 @@ define([
          * @param {Object} context
          * @returns {Object}
          */
-        validate: function (context) {
-            var client = braintree.getApiClient(),
+        validate: function(context) {
+            let client = braintree.getApiClient(),
                 state = $.Deferred(),
                 totalAmount = quote.totals()['base_grand_total'],
                 billingAddress = quote.billingAddress();
@@ -52,9 +52,9 @@ define([
 
             client.verify3DS({
                 amount: totalAmount,
-                creditCard: context.paymentMethodNonce
-            }, function (error, response) {
-                var liability;
+                creditCard: context.paymentMethodNonce,
+            }, function(error, response) {
+                let liability;
 
                 if (error) {
                     state.reject(error.message);
@@ -64,7 +64,7 @@ define([
 
                 liability = {
                     shifted: response.verificationDetails.liabilityShifted,
-                    shiftPossible: response.verificationDetails.liabilityShiftPossible
+                    shiftPossible: response.verificationDetails.liabilityShiftPossible,
                 };
 
                 if (liability.shifted || !liability.shifted && !liability.shiftPossible) {
@@ -83,7 +83,7 @@ define([
          * @param {Number} amount
          * @returns {Boolean}
          */
-        isAmountAvailable: function (amount) {
+        isAmountAvailable: function(amount) {
             amount = parseFloat(amount);
 
             return amount >= this.config.thresholdAmount;
@@ -94,8 +94,8 @@ define([
          * @param {String} countryId
          * @returns {Boolean}
          */
-        isCountryAvailable: function (countryId) {
-            var key,
+        isCountryAvailable: function(countryId) {
+            let key,
                 specificCountries = this.config.specificCountries;
 
             // all countries are available
@@ -110,6 +110,6 @@ define([
             }
 
             return false;
-        }
+        },
     };
 });

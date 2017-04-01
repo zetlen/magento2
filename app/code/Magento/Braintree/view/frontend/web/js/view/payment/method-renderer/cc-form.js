@@ -2,8 +2,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define(
     [
         'underscore',
@@ -14,9 +14,9 @@ define(
         'mage/translate',
         'Magento_Braintree/js/validator',
         'Magento_Braintree/js/view/payment/validator-handler',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Checkout/js/model/full-screen-loader',
     ],
-    function (
+    function(
         _,
         $,
         Component,
@@ -57,7 +57,7 @@ define(
                      * Triggers on payment nonce receive
                      * @param {Object} response
                      */
-                    onPaymentMethodReceived: function (response) {
+                    onPaymentMethodReceived: function(response) {
                         this.beforePlaceOrder(response);
                     },
 
@@ -66,7 +66,7 @@ define(
                      *
                      * @param {Object} checkout
                      */
-                    onReady: function (checkout) {
+                    onReady: function(checkout) {
                         braintree.checkout = checkout;
                         braintree.onReady();
                     },
@@ -75,7 +75,7 @@ define(
                      * Triggers on any Braintree error
                      * @param {Object} response
                      */
-                    onError: function (response) {
+                    onError: function(response) {
                         braintree.showError($t('Payment ' + this.getTitle() + ' can\'t be initialized'));
                         throw response.message;
                     },
@@ -83,13 +83,13 @@ define(
                     /**
                      * Triggers when customer click "Cancel"
                      */
-                    onCancelled: function () {
+                    onCancelled: function() {
                         this.paymentMethodNonce = null;
-                    }
+                    },
                 },
                 imports: {
-                    onActiveChange: 'active'
-                }
+                    onActiveChange: 'active',
+                },
             },
 
             /**
@@ -97,7 +97,7 @@ define(
              *
              * @returns {exports.initObservable}
              */
-            initObservable: function () {
+            initObservable: function() {
                 validator.setConfig(window.checkoutConfig.payment[this.getCode()]);
                 this._super()
                     .observe(['active']);
@@ -112,7 +112,7 @@ define(
              *
              * @returns {String}
              */
-            getCode: function () {
+            getCode: function() {
                 return this.code;
             },
 
@@ -121,8 +121,8 @@ define(
              *
              * @returns {Boolean}
              */
-            isActive: function () {
-                var active = this.getCode() === this.isChecked();
+            isActive: function() {
+                let active = this.getCode() === this.isChecked();
 
                 this.active(active);
 
@@ -133,7 +133,7 @@ define(
              * Triggers when payment method change
              * @param {Boolean} isActive
              */
-            onActiveChange: function (isActive) {
+            onActiveChange: function(isActive) {
                 if (!isActive) {
                     return;
                 }
@@ -144,13 +144,13 @@ define(
             /**
              * Init config
              */
-            initClientConfig: function () {
+            initClientConfig: function() {
                 // Advanced fraud tools settings
                 if (this.hasFraudProtection()) {
                     this.clientConfig = _.extend(this.clientConfig, this.kountConfig());
                 }
 
-                _.each(this.clientConfig, function (fn, name) {
+                _.each(this.clientConfig, function(fn, name) {
                     if (typeof fn === 'function') {
                         this.clientConfig[name] = fn.bind(this);
                     }
@@ -160,8 +160,8 @@ define(
             /**
              * Init Braintree configuration
              */
-            initBraintree: function () {
-                var intervalId = setInterval(function () {
+            initBraintree: function() {
+                var intervalId = setInterval(function() {
                     // stop loader when frame will be loaded
                     if ($('#braintree-hosted-field-number').length) {
                         clearInterval(intervalId);
@@ -170,7 +170,7 @@ define(
                 }, 500);
 
                 if (braintree.checkout) {
-                    braintree.checkout.teardown(function () {
+                    braintree.checkout.teardown(function() {
                         braintree.checkout = null;
                     });
                 }
@@ -183,12 +183,12 @@ define(
             /**
              * @returns {Object}
              */
-            kountConfig: function () {
-                var config = {
+            kountConfig: function() {
+                let config = {
                     dataCollector: {
                         kount: {
-                            environment: this.getEnvironment()
-                        }
+                            environment: this.getEnvironment(),
+                        },
                     },
 
                     /**
@@ -196,11 +196,11 @@ define(
                      *
                      * @param {Object} checkout
                      */
-                    onReady: function (checkout) {
+                    onReady: function(checkout) {
                         braintree.checkout = checkout;
                         this.additionalData['device_data'] = checkout.deviceData;
                         braintree.onReady();
-                    }
+                    },
                 };
 
                 if (this.getKountMerchantId()) {
@@ -216,7 +216,7 @@ define(
              * @param {String} field
              * @returns {String}
              */
-            getSelector: function (field) {
+            getSelector: function(field) {
                 return '#' + this.getCode() + '_' + field;
             },
 
@@ -225,8 +225,8 @@ define(
              *
              * @returns {Object}
              */
-            getCcAvailableTypes: function () {
-                var availableTypes = validator.getAvailableCardTypes(),
+            getCcAvailableTypes: function() {
+                let availableTypes = validator.getAvailableCardTypes(),
                     billingAddress = quote.billingAddress(),
                     billingCountryId;
 
@@ -239,7 +239,6 @@ define(
                 billingCountryId = billingAddress.countryId;
 
                 if (billingCountryId && validator.getCountrySpecificCardTypes(billingCountryId)) {
-
                     return validator.collectTypes(
                         availableTypes, validator.getCountrySpecificCardTypes(billingCountryId)
                     );
@@ -251,21 +250,21 @@ define(
             /**
              * @returns {Boolean}
              */
-            hasFraudProtection: function () {
+            hasFraudProtection: function() {
                 return window.checkoutConfig.payment[this.getCode()].hasFraudProtection;
             },
 
             /**
              * @returns {String}
              */
-            getEnvironment: function () {
+            getEnvironment: function() {
                 return window.checkoutConfig.payment[this.getCode()].environment;
             },
 
             /**
              * @returns {String}
              */
-            getKountMerchantId: function () {
+            getKountMerchantId: function() {
                 return window.checkoutConfig.payment[this.getCode()].kountMerchantId;
             },
 
@@ -274,12 +273,12 @@ define(
              *
              * @returns {Object}
              */
-            getData: function () {
-                var data = {
+            getData: function() {
+                let data = {
                     'method': this.getCode(),
                     'additional_data': {
-                        'payment_method_nonce': this.paymentMethodNonce
-                    }
+                        'payment_method_nonce': this.paymentMethodNonce,
+                    },
                 };
 
                 data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
@@ -291,7 +290,7 @@ define(
              * Set payment nonce
              * @param {String} paymentMethodNonce
              */
-            setPaymentMethodNonce: function (paymentMethodNonce) {
+            setPaymentMethodNonce: function(paymentMethodNonce) {
                 this.paymentMethodNonce = paymentMethodNonce;
             },
 
@@ -299,7 +298,7 @@ define(
              * Prepare data to place order
              * @param {Object} data
              */
-            beforePlaceOrder: function (data) {
+            beforePlaceOrder: function(data) {
                 this.setPaymentMethodNonce(data.nonce);
                 this.placeOrder();
             },
@@ -308,19 +307,19 @@ define(
              * Action to place order
              * @param {String} key
              */
-            placeOrder: function (key) {
-                var self = this;
+            placeOrder: function(key) {
+                let self = this;
 
                 if (key) {
                     return self._super();
                 }
                 // place order on success validation
-                self.validatorManager.validate(self, function () {
+                self.validatorManager.validate(self, function() {
                     return self.placeOrder('parent');
                 });
 
                 return false;
-            }
+            },
         });
     }
 );

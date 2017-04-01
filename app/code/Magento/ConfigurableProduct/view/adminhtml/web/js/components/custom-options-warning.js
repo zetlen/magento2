@@ -4,13 +4,13 @@
  */
 
 define([
-    'Magento_Ui/js/form/components/html'
-], function (Html) {
+    'Magento_Ui/js/form/components/html',
+], function(Html) {
     'use strict';
 
     return Html.extend({
         defaults: {
-            isConfigurable: false
+            isConfigurable: false,
         },
 
         /**
@@ -19,12 +19,12 @@ define([
          * @param {Boolean} variationsEmpty
          * @returns {Boolean}
          */
-        updateVisibility: function (variationsEmpty) {
-            var isVisible = this.isConfigurable || !variationsEmpty;
+        updateVisibility: function(variationsEmpty) {
+            let isVisible = this.isConfigurable || !variationsEmpty;
 
             this.visible(isVisible);
 
             return isVisible;
-        }
+        },
     });
 });

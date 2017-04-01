@@ -10,8 +10,8 @@ define([
     'uiClass',
     'jquery',
     'underscore',
-    'uiRegistry'
-], function (Class, $, _, registry) {
+    'uiRegistry',
+], function(Class, $, _, registry) {
     'use strict';
 
     return Class.extend({
@@ -23,7 +23,7 @@ define([
          * @param {Element} elem
          * @returns {Object}
          */
-        initialize: function (config, elem) {
+        initialize: function(config, elem) {
             return this._super()
                 .initActions()
                 .initAdapter(elem);
@@ -34,21 +34,21 @@ define([
          *
          * @returns {Object}
          */
-        initActions: function () {
-            var callbacks = [];
+        initActions: function() {
+            let callbacks = [];
 
-            _.each(this.actions, function (action) {
+            _.each(this.actions, function(action) {
                 callbacks.push({
                     action: registry.async(action.targetName),
-                    args: _.union([action.actionName], action.params)
+                    args: _.union([action.actionName], action.params),
                 });
             });
 
             /**
              * Callback function.
              */
-            this.callback = function () {
-                _.each(callbacks, function (callback) {
+            this.callback = function() {
+                _.each(callbacks, function(callback) {
                     callback.action.apply(callback.action, callback.args);
                 });
             };
@@ -61,10 +61,10 @@ define([
          *
          * @param {Element} elem
          */
-        initAdapter: function (elem) {
+        initAdapter: function(elem) {
             $(elem).on('click', this.callback);
 
             return this;
-        }
+        },
     });
 });

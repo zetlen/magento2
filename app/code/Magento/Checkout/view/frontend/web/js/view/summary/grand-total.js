@@ -5,27 +5,27 @@
 
 define([
     'Magento_Checkout/js/view/summary/abstract-total',
-    'Magento_Checkout/js/model/quote'
-], function (Component, quote) {
+    'Magento_Checkout/js/model/quote',
+], function(Component, quote) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/summary/grand-total'
+            template: 'Magento_Checkout/summary/grand-total',
         },
 
         /**
          * @return {*}
          */
-        isDisplayed: function () {
+        isDisplayed: function() {
             return this.isFullMode();
         },
 
         /**
          * Get pure value.
          */
-        getPureValue: function () {
-            var totals = quote.getTotals()();
+        getPureValue: function() {
+            let totals = quote.getTotals()();
 
             if (totals) {
                 return totals['grand_total'];
@@ -37,8 +37,8 @@ define([
         /**
          * @return {*|String}
          */
-        getValue: function () {
+        getValue: function() {
             return this.getFormattedPrice(this.getPureValue());
-        }
+        },
     });
 });

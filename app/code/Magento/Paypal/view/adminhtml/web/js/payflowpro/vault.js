@@ -2,26 +2,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define([
     'jquery',
-    'uiComponent'
-], function ($, Class) {
+    'uiComponent',
+], function($, Class) {
     'use strict';
 
     return Class.extend({
         defaults: {
             $selector: null,
-            selector: 'edit_form'
+            selector: 'edit_form',
         },
 
         /**
          * Set list of observable attributes
          * @returns {exports.initObservable}
          */
-        initObservable: function () {
-            var self = this;
+        initObservable: function() {
+            let self = this;
 
             self.$selector = $('#' + self.selector);
             this._super();
@@ -35,14 +35,14 @@ define([
          * Get payment code
          * @returns {String}
          */
-        getCode: function () {
+        getCode: function() {
             return 'payflowpro';
         },
 
         /**
          * Init event handlers
          */
-        initEventHandlers: function () {
+        initEventHandlers: function() {
             $('#' + this.container).find('[name="payment[token_switcher]"]')
                 .on('click', this.setPaymentDetails.bind(this));
         },
@@ -50,8 +50,8 @@ define([
         /**
          * Store payment details
          */
-        setPaymentDetails: function () {
+        setPaymentDetails: function() {
             this.$selector.find('[name="payment[public_hash]"]').val(this.publicHash);
-        }
+        },
     });
 });

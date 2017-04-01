@@ -12,8 +12,8 @@ define([
     'priceUtils',
     'jquery/ui',
     'jquery/jquery.parsequery',
-    'mage/validation/validation'
-], function ($, _, mageTemplate, keyboardHandler, $t, priceUtils) {
+    'mage/validation/validation',
+], function($, _, mageTemplate, keyboardHandler, $t, priceUtils) {
     'use strict';
 
     /**
@@ -26,8 +26,8 @@ define([
          * @param {jQuery.Event} event
          * @param {Object} validation
          */
-        listenFormValidateHandler: function (event, validation) {
-            var swatchWrapper, firstActive, swatches, swatch, successList, errorList, firstSwatch;
+        listenFormValidateHandler: function(event, validation) {
+            let swatchWrapper, firstActive, swatches, swatch, successList, errorList, firstSwatch;
 
             this._superApply(arguments);
 
@@ -46,18 +46,18 @@ define([
 
             keyboardHandler.focus(swatches);
 
-            $.each(successList, function (index, item) {
+            $.each(successList, function(index, item) {
                 $(item).parent(swatch).find(swatchWrapper).attr('aria-invalid', false);
             });
 
-            $.each(errorList, function (index, item) {
+            $.each(errorList, function(index, item) {
                 $(item.element).parent(swatch).find(swatchWrapper).attr('aria-invalid', true);
             });
 
             if (firstSwatch.length) {
                 $(firstSwatch).focus();
             }
-        }
+        },
     });
 
     /**
@@ -70,15 +70,15 @@ define([
      */
     $.widget('mage.SwatchRendererTooltip', {
         options: {
-            delay: 200,                             //how much ms before tooltip to show
-            tooltipClass: 'swatch-option-tooltip'  //configurable, but remember about css
+            delay: 200,                             // how much ms before tooltip to show
+            tooltipClass: 'swatch-option-tooltip',  // configurable, but remember about css
         },
 
         /**
          * @private
          */
-        _init: function () {
-            var $widget = this,
+        _init: function() {
+            let $widget = this,
                 $this = this.element,
                 $element = $('.' + $widget.options.tooltipClass),
                 timer,
@@ -102,11 +102,11 @@ define([
             $title = $element.find('.title');
             $corner = $element.find('.corner');
 
-            $this.hover(function () {
+            $this.hover(function() {
                 if (!$this.hasClass('disabled')) {
                     timer = setTimeout(
-                        function () {
-                            var leftOpt = null,
+                        function() {
+                            let leftOpt = null,
                                 leftCorner = 0,
                                 left,
                                 $window;
@@ -114,14 +114,14 @@ define([
                             if (type === 2) {
                                 // Image
                                 $image.css({
-                                    'background': 'url("' + thumb + '") no-repeat center', //Background case
-                                    'background-size': 'initial'
+                                    'background': 'url("' + thumb + '") no-repeat center', // Background case
+                                    'background-size': 'initial',
                                 });
                                 $image.show();
                             } else if (type === 1) {
                                 // Color
                                 $image.css({
-                                    background: value
+                                    background: value,
                                 });
                                 $image.show();
                             } else if (type === 0 || type === 3) {
@@ -152,30 +152,30 @@ define([
                             }
 
                             $corner.css({
-                                left: leftCorner
+                                left: leftCorner,
                             });
                             $element.css({
                                 left: left,
-                                top: $this.offset().top - $element.height() - $corner.height() - 18
+                                top: $this.offset().top - $element.height() - $corner.height() - 18,
                             }).show();
                         },
                         $widget.options.delay
                     );
                 }
-            }, function () {
+            }, function() {
                 $element.hide();
                 clearTimeout(timer);
             });
 
-            $(document).on('tap', function () {
+            $(document).on('tap', function() {
                 $element.hide();
                 clearTimeout(timer);
             });
 
-            $this.on('tap', function (event) {
+            $this.on('tap', function(event) {
                 event.stopPropagation();
             });
-        }
+        },
     });
 
     /**
@@ -202,7 +202,7 @@ define([
                 optionClass: 'swatch-option',
                 selectClass: 'swatch-select',
                 moreButton: 'swatch-more',
-                loader: 'swatch-option-loading'
+                loader: 'swatch-option-loading',
             },
             // option's json config
             jsonConfig: {},
@@ -216,7 +216,7 @@ define([
             // selector of price wrapper (need to know where set price)
             selectorProductPrice: '[data-role=priceBox]',
 
-            //selector of product images gallery wrapper
+            // selector of product images gallery wrapper
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
 
             // selector of category product tile wrapper
@@ -265,7 +265,7 @@ define([
             // tier prise selectors start
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
             // tier prise selectors end
         },
 
@@ -274,14 +274,14 @@ define([
          *
          * @returns array
          */
-        getProduct: function () {
+        getProduct: function() {
             return this._CalcProducts().shift();
         },
 
         /**
          * @private
          */
-        _init: function () {
+        _init: function() {
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
                 this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
@@ -297,8 +297,8 @@ define([
         /**
          * @private
          */
-        _sortAttributes: function () {
-            this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
+        _sortAttributes: function() {
+            this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function(attribute) {
                 return attribute.position;
             });
         },
@@ -306,8 +306,8 @@ define([
         /**
          * @private
          */
-        _create: function () {
-            var options = this.options,
+        _create: function() {
+            let options = this.options,
                 gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
                 productData = this._determineProductData(),
                 $main = productData.isInProductView ?
@@ -320,7 +320,7 @@ define([
                     gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
-                    'img': $main.find('.product-image-photo').attr('src')
+                    'img': $main.find('.product-image-photo').attr('src'),
                 }];
             }
 
@@ -334,9 +334,9 @@ define([
          * @returns {{productId: *, isInProductView: bool}}
          * @private
          */
-        _determineProductData: function () {
+        _determineProductData: function() {
             // Check if product is in a list of products.
-            var productId,
+            let productId,
                 product,
                 isInProductView = false;
 
@@ -352,7 +352,7 @@ define([
 
             return {
                 productId: productId,
-                isInProductView: isInProductView
+                isInProductView: isInProductView,
             };
         },
 
@@ -361,16 +361,16 @@ define([
          *
          * @private
          */
-        _RenderControls: function () {
-            var $widget = this,
+        _RenderControls: function() {
+            let $widget = this,
                 container = this.element,
                 classes = this.options.classes,
                 chooseText = this.options.jsonConfig.chooseText;
 
             $widget.optionsMap = {};
 
-            $.each(this.options.jsonConfig.attributes, function () {
-                var item = this,
+            $.each(this.options.jsonConfig.attributes, function() {
+                let item = this,
                     controlLabelId = 'option-label-' + item.code + '-' + item.id,
                     options = $widget._RenderSwatchOptions(item, controlLabelId),
                     select = $widget._RenderSwatchSelect(item, chooseText),
@@ -419,14 +419,14 @@ define([
                 $widget.optionsMap[item.id] = {};
 
                 // Aggregate options array to hash (key => value)
-                $.each(item.options, function () {
+                $.each(item.options, function() {
                     if (this.products.length > 0) {
                         $widget.optionsMap[item.id][this.id] = {
                             price: parseInt(
                                 $widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount,
                                 10
                             ),
-                            products: this.products
+                            products: this.products,
                         };
                     }
                 });
@@ -446,7 +446,7 @@ define([
             // Rewind options
             $widget._Rewind(container);
 
-            //Emulate click on all swatches from Request
+            // Emulate click on all swatches from Request
             $widget._EmulateSelected($.parseQuery());
             $widget._EmulateSelected($widget._getSelectedAttributes());
         },
@@ -459,8 +459,8 @@ define([
          * @returns {String}
          * @private
          */
-        _RenderSwatchOptions: function (config, controlId) {
-            var optionConfig = this.options.jsonSwatchConfig[config.id],
+        _RenderSwatchOptions: function(config, controlId) {
+            let optionConfig = this.options.jsonSwatchConfig[config.id],
                 optionClass = this.options.classes.optionClass,
                 moreLimit = parseInt(this.options.numberToShow, 10),
                 moreClass = this.options.classes.moreButton,
@@ -472,8 +472,8 @@ define([
                 return '';
             }
 
-            $.each(config.options, function () {
-                var id,
+            $.each(config.options, function() {
+                let id,
                     type,
                     value,
                     thumb,
@@ -546,8 +546,8 @@ define([
          * @returns {String}
          * @private
          */
-        _RenderSwatchSelect: function (config, chooseText) {
-            var html;
+        _RenderSwatchSelect: function(config, chooseText) {
+            let html;
 
             if (this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
                 return '';
@@ -557,8 +557,8 @@ define([
                 '<select class="' + this.options.classes.selectClass + ' ' + config.code + '">' +
                 '<option value="0" option-id="0">' + chooseText + '</option>';
 
-            $.each(config.options, function () {
-                var label = this.label,
+            $.each(config.options, function() {
+                let label = this.label,
                     attr = ' value="' + this.id + '" option-id="' + this.id + '"';
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
@@ -580,7 +580,7 @@ define([
          * @param {Object} config
          * @private
          */
-        _RenderFormInput: function (config) {
+        _RenderFormInput: function(config) {
             return '<input class="' + this.options.classes.attributeInput + ' super-attribute-select" ' +
                 'name="super_attribute[' + config.id + ']" ' +
                 'type="text" ' +
@@ -596,26 +596,26 @@ define([
          *
          * @private
          */
-        _EventListener: function () {
-            var $widget = this,
+        _EventListener: function() {
+            let $widget = this,
                 options = this.options.classes,
                 target;
 
-            $widget.element.on('click', '.' + options.optionClass, function () {
+            $widget.element.on('click', '.' + options.optionClass, function() {
                 return $widget._OnClick($(this), $widget);
             });
 
-            $widget.element.on('change', '.' + options.selectClass, function () {
+            $widget.element.on('change', '.' + options.selectClass, function() {
                 return $widget._OnChange($(this), $widget);
             });
 
-            $widget.element.on('click', '.' + options.moreButton, function (e) {
+            $widget.element.on('click', '.' + options.moreButton, function(e) {
                 e.preventDefault();
 
                 return $widget._OnMoreClick($(this));
             });
 
-            $widget.element.on('keydown', function (e) {
+            $widget.element.on('keydown', function(e) {
                 if (e.which === 13) {
                     target = $(e.target);
 
@@ -639,8 +639,8 @@ define([
          * @param {Object} $widget
          * @private
          */
-        _OnClick: function ($this, $widget) {
-            var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
+        _OnClick: function($this, $widget) {
+            let $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 $wrapper = $this.parents('.' + $widget.options.classes.attributeOptionsWrapper),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
@@ -689,8 +689,8 @@ define([
          * @returns {*}
          * @private
          */
-        _getAttributeCodeById: function (attributeId) {
-            var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+        _getAttributeCodeById: function(attributeId) {
+            let attribute = this.options.jsonConfig.mappedAttributes[attributeId];
 
             return attribute ? attribute.code : attributeId;
         },
@@ -702,7 +702,7 @@ define([
          * @param {Object} $wrapper
          * @private
          */
-        _toggleCheckedAttributes: function ($this, $wrapper) {
+        _toggleCheckedAttributes: function($this, $wrapper) {
             $wrapper.attr('aria-activedescendant', $this.attr('id'))
                     .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
             $this.attr('aria-checked', true);
@@ -715,8 +715,8 @@ define([
          * @param {Object} $widget
          * @private
          */
-        _OnChange: function ($this, $widget) {
-            var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
+        _OnChange: function($this, $widget) {
+            let $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 attributeId = $parent.attr('attribute-id'),
                 $input = $parent.find('.' + $widget.options.classes.attributeInput);
 
@@ -746,7 +746,7 @@ define([
          * @param {Object} $this
          * @private
          */
-        _OnMoreClick: function ($this) {
+        _OnMoreClick: function($this) {
             $this.nextAll().show();
             $this.blur().remove();
         },
@@ -756,7 +756,7 @@ define([
          *
          * @private
          */
-        _Rewind: function (controls) {
+        _Rewind: function(controls) {
             controls.find('div[option-id], option[option-id]').removeClass('disabled').removeAttr('disabled');
             controls.find('div[option-empty], option[option-empty]').attr('disabled', true).addClass('disabled');
         },
@@ -766,9 +766,8 @@ define([
          *
          * @private
          */
-        _Rebuild: function () {
-
-            var $widget = this,
+        _Rebuild: function() {
+            let $widget = this,
                 controls = $widget.element.find('.' + $widget.options.classes.attributeClass + '[attribute-id]'),
                 selected = controls.filter('[option-selected]');
 
@@ -781,8 +780,8 @@ define([
             }
 
             // Disable not available options
-            controls.each(function () {
-                var $this = $(this),
+            controls.each(function() {
+                let $this = $(this),
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
@@ -790,8 +789,8 @@ define([
                     return;
                 }
 
-                $this.find('[option-id]').each(function () {
-                    var $element = $(this),
+                $this.find('[option-id]').each(function() {
+                    let $element = $(this),
                         option = $element.attr('option-id');
 
                     if (!$widget.optionsMap.hasOwnProperty(id) || !$widget.optionsMap[id].hasOwnProperty(option) ||
@@ -813,13 +812,13 @@ define([
          * @returns {Array}
          * @private
          */
-        _CalcProducts: function ($skipAttributeId) {
-            var $widget = this,
+        _CalcProducts: function($skipAttributeId) {
+            let $widget = this,
                 products = [];
 
             // Generate intersection of products
-            $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var id = $(this).attr('attribute-id'),
+            $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function() {
+                let id = $(this).attr('attribute-id'),
                     option = $(this).attr('option-selected');
 
                 if ($skipAttributeId !== undefined && $skipAttributeId === id) {
@@ -845,16 +844,16 @@ define([
          *
          * @private
          */
-        _UpdatePrice: function () {
-            var $widget = this,
+        _UpdatePrice: function() {
+            let $widget = this,
                 $product = $widget.element.parents($widget.options.selectorProduct),
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
                 result,
                 tierPriceHtml;
 
-            $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var attributeId = $(this).attr('attribute-id');
+            $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function() {
+                let attributeId = $(this).attr('attribute-id');
 
                 options[attributeId] = $(this).attr('option-selected');
             });
@@ -864,7 +863,7 @@ define([
             $productPrice.trigger(
                 'updatePrice',
                 {
-                    'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
+                    'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices),
                 }
             );
 
@@ -882,7 +881,7 @@ define([
                             'tierPrices': result.tierPrices,
                             '$t': $t,
                             'currencyFormat': this.options.jsonConfig.currencyFormat,
-                            'priceUtils': priceUtils
+                            'priceUtils': priceUtils,
                         }
                     );
                     $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
@@ -900,14 +899,14 @@ define([
          * @returns {*}
          * @private
          */
-        _getPrices: function (newPrices, displayPrices) {
-            var $widget = this;
+        _getPrices: function(newPrices, displayPrices) {
+            let $widget = this;
 
             if (_.isEmpty(newPrices)) {
                 newPrices = $widget.options.jsonConfig.prices;
             }
 
-            _.each(displayPrices, function (price, code) {
+            _.each(displayPrices, function(price, code) {
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
@@ -921,8 +920,8 @@ define([
          *
          * @private
          */
-        _LoadProductMedia: function () {
-            var $widget = this,
+        _LoadProductMedia: function() {
+            let $widget = this,
                 $this = $widget.element,
                 attributes = {},
                 productData = this._determineProductData(),
@@ -935,7 +934,7 @@ define([
                  * @param {Object} data
                  * @returns void
                  */
-                mediaSuccessCallback = function (data) {
+                mediaSuccessCallback = function(data) {
                     if (!(mediaCacheKey in $widget.options.mediaCache)) {
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
@@ -947,8 +946,8 @@ define([
                 return;
             }
 
-            $this.find('[option-selected]').each(function () {
-                var $selected = $(this);
+            $this.find('[option-selected]').each(function() {
+                let $selected = $(this);
 
                 attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
             });
@@ -956,7 +955,7 @@ define([
             mediaCallData = {
                 'product_id': productData.productId,
                 'attributes': attributes,
-                'additional': $.parseQuery()
+                'additional': $.parseQuery(),
             };
             mediaCacheKey = JSON.stringify(mediaCallData);
 
@@ -971,7 +970,7 @@ define([
                     mediaCallData,
                     mediaSuccessCallback,
                     'json'
-                ).done(function () {
+                ).done(function() {
                     $widget._XhrKiller();
                 });
             }
@@ -983,14 +982,14 @@ define([
          * @param {Object} $this
          * @private
          */
-        _EnableProductMediaLoader: function ($this) {
-            var $widget = this;
+        _EnableProductMediaLoader: function($this) {
+            let $widget = this;
 
             if ($('body.catalog-product-view').size() > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .addClass($widget.options.classes.loader);
             } else {
-                //Category View
+                // Category View
                 $this.parents('.product-item-info').find('.product-image-photo')
                     .addClass($widget.options.classes.loader);
             }
@@ -1002,14 +1001,14 @@ define([
          * @param {Object} $this
          * @private
          */
-        _DisableProductMediaLoader: function ($this) {
-            var $widget = this;
+        _DisableProductMediaLoader: function($this) {
+            let $widget = this;
 
             if ($('body.catalog-product-view').size() > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .removeClass($widget.options.classes.loader);
             } else {
-                //Category View
+                // Category View
                 $this.parents('.product-item-info').find('.product-image-photo')
                     .removeClass($widget.options.classes.loader);
             }
@@ -1023,8 +1022,8 @@ define([
          * @param {Boolean} isInProductView
          * @private
          */
-        _ProductMediaCallback: function ($this, response, isInProductView) {
-            var $main = isInProductView ? $this.parents('.column.main') : $this.parents('.product-item-info'),
+        _ProductMediaCallback: function($this, response, isInProductView) {
+            let $main = isInProductView ? $this.parents('.column.main') : $this.parents('.product-item-info'),
                 $widget = this,
                 images = [],
 
@@ -1034,7 +1033,7 @@ define([
                  * @param {Object} e
                  * @returns {*|Boolean}
                  */
-                support = function (e) {
+                support = function(e) {
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
@@ -1048,18 +1047,18 @@ define([
                 full: response.large,
                 img: response.medium,
                 thumb: response.small,
-                isMain: true
+                isMain: true,
             });
 
             if (response.hasOwnProperty('gallery')) {
-                $.each(response.gallery, function () {
+                $.each(response.gallery, function() {
                     if (!support(this) || response.large === this.large) {
                         return;
                     }
                     images.push({
                         full: this.large,
                         img: this.medium,
-                        thumb: this.small
+                        thumb: this.small,
                     });
                 });
             }
@@ -1071,13 +1070,13 @@ define([
          * Check if images to update are initial and set their type
          * @param {Array} images
          */
-        _setImageType: function (images) {
-            var initial = this.options.mediaGalleryInitial[0].img;
+        _setImageType: function(images) {
+            let initial = this.options.mediaGalleryInitial[0].img;
 
             if (images[0].img === initial) {
                 images = $.extend(true, [], this.options.mediaGalleryInitial);
             } else {
-                images.map(function (img) {
+                images.map(function(img) {
                     img.type = 'image';
                 });
             }
@@ -1091,8 +1090,8 @@ define([
          * @param {jQuery} context
          * @param {Boolean} isInProductView
          */
-        updateBaseImage: function (images, context, isInProductView) {
-            var justAnImage = images[0],
+        updateBaseImage: function(images, context, isInProductView) {
+            let justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 imagesToUpdate,
@@ -1113,7 +1112,6 @@ define([
                 }
 
                 gallery.first();
-
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -1124,8 +1122,8 @@ define([
          *
          * @private
          */
-        _XhrKiller: function () {
-            var $widget = this;
+        _XhrKiller: function() {
+            let $widget = this;
 
             if ($widget.xhr !== undefined && $widget.xhr !== null) {
                 $widget.xhr.abort();
@@ -1138,8 +1136,8 @@ define([
          * @param {Object} [selectedAttributes]
          * @private
          */
-        _EmulateSelected: function (selectedAttributes) {
-            $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
+        _EmulateSelected: function(selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function(attributeCode, optionId) {
                 this.element.find('.' + this.options.classes.attributeClass +
                     '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
             }, this));
@@ -1150,9 +1148,9 @@ define([
          * @param {Object} [selectedAttributes]
          * @private
          */
-        _EmulateSelectedByAttributeId: function (selectedAttributes) {
-            $.each(selectedAttributes, $.proxy(function (attributeId, optionId) {
-                var elem = this.element.find('.' + this.options.classes.attributeClass +
+        _EmulateSelectedByAttributeId: function(selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function(attributeId, optionId) {
+                let elem = this.element.find('.' + this.options.classes.attributeClass +
                     '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]'),
                     parentInput = elem.parent();
 
@@ -1173,16 +1171,16 @@ define([
          * Get default options values settings with either URL query parameters
          * @private
          */
-        _getSelectedAttributes: function () {
-            var hashIndex = window.location.href.indexOf('#'),
+        _getSelectedAttributes: function() {
+            let hashIndex = window.location.href.indexOf('#'),
                 selectedAttributes = {},
                 params;
 
             if (hashIndex !== -1) {
                 params = $.parseQuery(window.location.href.substr(hashIndex + 1));
 
-                selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
-                    var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+                selectedAttributes = _.invert(_.mapObject(_.invert(params), function(attributeId) {
+                    let attribute = this.options.jsonConfig.mappedAttributes[attributeId];
 
                     return attribute ? attribute.code : attributeId;
                 }.bind(this)));
@@ -1196,11 +1194,11 @@ define([
          *
          * @param {HTMLElement} element - DOM element associated with a gallery.
          */
-        _onGalleryLoaded: function (element) {
-            var galleryObject = element.data('gallery');
+        _onGalleryLoaded: function(element) {
+            let galleryObject = element.data('gallery');
 
             this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-        }
+        },
     });
 
     return $.mage.SwatchRenderer;

@@ -4,21 +4,21 @@
  */
 define([
     'Magento_Ui/js/grid/paging/paging',
-    'underscore'
-], function (Paging, _) {
+    'underscore',
+], function(Paging, _) {
     'use strict';
 
     return Paging.extend({
         defaults: {
             totalTmpl: 'Magento_Catalog/attributes/grid/paging',
             modules: {
-                selectionColumn: '${ $.selectProvider }'
+                selectionColumn: '${ $.selectProvider }',
             },
             listens: {
-                '${ $.selectProvider }:selected': 'changeLabel'
+                '${ $.selectProvider }:selected': 'changeLabel',
             },
             label: '',
-            selectedAttrs: []
+            selectedAttrs: [],
         },
 
         /**
@@ -26,9 +26,9 @@ define([
          *
          * @param {Array} selected
          */
-        changeLabel: function (selected) {
+        changeLabel: function(selected) {
             this.selectedAttrs = [];
-            _.each(this.selectionColumn().rows(), function (row) {
+            _.each(this.selectionColumn().rows(), function(row) {
                 if (selected.indexOf(row['attribute_id']) !== -1) {
                     this.selectedAttrs.push(row['attribute_code']);
                 }
@@ -38,11 +38,11 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('label');
 
             return this;
-        }
+        },
     });
 });

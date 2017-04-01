@@ -7,18 +7,18 @@
 define([
     'Magento_Checkout/js/view/payment/default',
     'jquery',
-    'mage/validation'
-], function (Component, $) {
+    'mage/validation',
+], function(Component, $) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_OfflinePayments/payment/purchaseorder-form',
-            purchaseOrderNumber: ''
+            purchaseOrderNumber: '',
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('purchaseOrderNumber');
 
@@ -28,21 +28,21 @@ define([
         /**
          * @return {Object}
          */
-        getData: function () {
+        getData: function() {
             return {
-                method: this.item.method,
+                "method": this.item.method,
                 'po_number': this.purchaseOrderNumber(),
-                'additional_data': null
+                'additional_data': null,
             };
         },
 
         /**
          * @return {jQuery}
          */
-        validate: function () {
-            var form = 'form[data-role=purchaseorder-form]';
+        validate: function() {
+            let form = 'form[data-role=purchaseorder-form]';
 
             return $(form).validation() && $(form).validation('isValid');
-        }
+        },
     });
 });

@@ -6,8 +6,8 @@
 define([
     'jquery',
     'mage/translate',
-    'jquery/ui'
-], function ($, $t) {
+    'jquery/ui',
+], function($, $t) {
     'use strict';
 
     $.widget('mage.catalogAddToCart', {
@@ -22,11 +22,11 @@ define([
             addToCartButtonDisabledClass: 'disabled',
             addToCartButtonTextWhileAdding: '',
             addToCartButtonTextAdded: '',
-            addToCartButtonTextDefault: ''
+            addToCartButtonTextDefault: '',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             if (this.options.bindSubmit) {
                 this._bindSubmit();
             }
@@ -35,10 +35,10 @@ define([
         /**
          * @private
          */
-        _bindSubmit: function () {
-            var self = this;
+        _bindSubmit: function() {
+            let self = this;
 
-            this.element.on('submit', function (e) {
+            this.element.on('submit', function(e) {
                 e.preventDefault();
                 self.submitForm($(this));
             });
@@ -47,7 +47,7 @@ define([
         /**
          * @return {Boolean}
          */
-        isLoaderEnabled: function () {
+        isLoaderEnabled: function() {
             return this.options.processStart && this.options.processStop;
         },
 
@@ -56,8 +56,8 @@ define([
          *
          * @param {Object} form
          */
-        submitForm: function (form) {
-            var addToCartButton, self = this;
+        submitForm: function(form) {
+            let addToCartButton, self = this;
 
             if (form.has('input[type="file"]').length && form.find('input[type="file"]').val() !== '') {
                 self.element.off('submit');
@@ -74,8 +74,8 @@ define([
         /**
          * @param {String} form
          */
-        ajaxSubmit: function (form) {
-            var self = this;
+        ajaxSubmit: function(form) {
+            let self = this;
 
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
@@ -87,15 +87,15 @@ define([
                 dataType: 'json',
 
                 /** @inheritdoc */
-                beforeSend: function () {
+                beforeSend: function() {
                     if (self.isLoaderEnabled()) {
                         $('body').trigger(self.options.processStart);
                     }
                 },
 
                 /** @inheritdoc */
-                success: function (res) {
-                    var eventData, parameters;
+                success: function(res) {
+                    let eventData, parameters;
 
                     if (self.isLoaderEnabled()) {
                         $('body').trigger(self.options.processStop);
@@ -104,7 +104,7 @@ define([
                     if (res.backUrl) {
                         eventData = {
                             'form': form,
-                            'redirectParameters': []
+                            'redirectParameters': [],
                         };
                         // trigger global event, so other modules will be able add parameters to redirect url
                         $('body').trigger('catalogCategoryAddToCartRedirect', eventData);
@@ -136,15 +136,15 @@ define([
                             .html(res.product.statusText);
                     }
                     self.enableAddToCartButton(form);
-                }
+                },
             });
         },
 
         /**
          * @param {String} form
          */
-        disableAddToCartButton: function (form) {
-            var addToCartButtonTextWhileAdding = this.options.addToCartButtonTextWhileAdding || $t('Adding...'),
+        disableAddToCartButton: function(form) {
+            let addToCartButtonTextWhileAdding = this.options.addToCartButtonTextWhileAdding || $t('Adding...'),
                 addToCartButton = $(form).find(this.options.addToCartButtonSelector);
 
             addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
@@ -155,22 +155,22 @@ define([
         /**
          * @param {String} form
          */
-        enableAddToCartButton: function (form) {
-            var addToCartButtonTextAdded = this.options.addToCartButtonTextAdded || $t('Added'),
+        enableAddToCartButton: function(form) {
+            let addToCartButtonTextAdded = this.options.addToCartButtonTextAdded || $t('Added'),
                 self = this,
                 addToCartButton = $(form).find(this.options.addToCartButtonSelector);
 
             addToCartButton.find('span').text(addToCartButtonTextAdded);
             addToCartButton.attr('title', addToCartButtonTextAdded);
 
-            setTimeout(function () {
-                var addToCartButtonTextDefault = self.options.addToCartButtonTextDefault || $t('Add to Cart');
+            setTimeout(function() {
+                let addToCartButtonTextDefault = self.options.addToCartButtonTextDefault || $t('Add to Cart');
 
                 addToCartButton.removeClass(self.options.addToCartButtonDisabledClass);
                 addToCartButton.find('span').text(addToCartButtonTextDefault);
                 addToCartButton.attr('title', addToCartButtonTextDefault);
             }, 1000);
-        }
+        },
     });
 
     return $.mage.catalogAddToCart;

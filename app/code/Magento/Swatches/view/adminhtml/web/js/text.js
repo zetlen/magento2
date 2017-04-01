@@ -10,12 +10,12 @@ define([
     'mage/template',
     'uiRegistry',
     'jquery/ui',
-    'prototype'
-], function (jQuery, mageTemplate, rg) {
+    'prototype',
+], function(jQuery, mageTemplate, rg) {
     'use strict';
 
-    return function (config) {
-        var swatchOptionTextDefaultInputType = 'radio',
+    return function(config) {
+        let swatchOptionTextDefaultInputType = 'radio',
             swatchTextOption = {
                 table: $('swatch-text-options-table'),
                 itemCount: 0,
@@ -30,14 +30,14 @@ define([
                  * @param {Object} data
                  * @param {Object} render
                  */
-                add: function (data, render) {
-                    var isNewOption = false,
+                add: function(data, render) {
+                    let isNewOption = false,
                         element;
 
                     if (typeof data.id == 'undefined') {
                         data = {
                             'id': 'option_' + this.itemCount,
-                            'sort_order': this.itemCount + 1
+                            'sort_order': this.itemCount + 1,
                         };
                         isNewOption = true;
                     }
@@ -47,7 +47,7 @@ define([
                     }
 
                     element = this.template({
-                        data: data
+                        data: data,
                     });
 
                     if (isNewOption && !this.isReadOnly) {
@@ -67,12 +67,12 @@ define([
                  *
                  * @param {Object} event
                  */
-                remove: function (event) {
-                    var element = $(Event.findElement(event, 'tr')),
+                remove: function(event) {
+                    let element = $(Event.findElement(event, 'tr')),
                         elementFlags; // !!! Button already have table parent in safari
 
                     // Safari workaround
-                    element.ancestors().each(function (parentItem) {
+                    element.ancestors().each(function(parentItem) {
                         if (parentItem.hasClassName('option-row')) {
                             element = parentItem;
                             throw $break;
@@ -99,7 +99,7 @@ define([
                 /**
                  * Update items count field
                  */
-                updateItemsCountField: function () {
+                updateItemsCountField: function() {
                     $('swatch-text-option-count-check').value = this.totalItems > 0 ? '1' : '';
                 },
 
@@ -108,8 +108,8 @@ define([
                  *
                  * @param {String} id
                  */
-                enableNewOptionDeleteButton: function (id) {
-                    $$('#delete_button_swatch_container_' + id + ' button').each(function (button) {
+                enableNewOptionDeleteButton: function(id) {
+                    $$('#delete_button_swatch_container_' + id + ' button').each(function(button) {
                         button.enable();
                         button.removeClassName('disabled');
                     });
@@ -118,14 +118,14 @@ define([
                 /**
                  * Bind remove button
                  */
-                bindRemoveButtons: function () {
+                bindRemoveButtons: function() {
                     jQuery('#swatch-text-options-panel').on('click', '.delete-option', this.remove.bind(this));
                 },
 
                 /**
                  * Render action
                  */
-                render: function () {
+                render: function() {
                     Element.insert($$('[data-role=swatch-text-options-container]')[0], this.elements);
                     this.elements = '';
                 },
@@ -139,8 +139,8 @@ define([
                  * @param {Number} delay
                  * @returns {Boolean}
                  */
-                renderWithDelay: function (data, from, step, delay) {
-                    var arrayLength = data.length,
+                renderWithDelay: function(data, from, step, delay) {
+                    let arrayLength = data.length,
                         len;
 
                     for (len = from + step; from < len && from < arrayLength; from++) {
@@ -161,13 +161,13 @@ define([
                 /**
                  * Ignore validate action
                  */
-                ignoreValidate: function () {
-                    var ignore = '.ignore-validate input, ' +
+                ignoreValidate: function() {
+                    let ignore = '.ignore-validate input, ' +
                         '.ignore-validate select, ' +
                         '.ignore-validate textarea';
 
                     jQuery('#edit_form').data('validator').settings.forceIgnore = ignore;
-                }
+                },
             };
 
         if ($('add_new_swatch_text_option_button')) {
@@ -177,7 +177,7 @@ define([
                 swatchTextOption.add.bind(swatchTextOption, true)
             );
         }
-        jQuery('#swatch-text-options-panel').on('render', function () {
+        jQuery('#swatch-text-options-panel').on('render', function() {
             swatchTextOption.ignoreValidate();
 
             if (swatchTextOption.rendered) {
@@ -189,7 +189,7 @@ define([
         });
 
         if (config.isSortable) {
-            jQuery(function ($) {
+            jQuery(function($) {
                 $('[data-role=swatch-text-options-container]').sortable({
                     distance: 8,
                     tolerance: 'pointer',
@@ -199,18 +199,18 @@ define([
                     /**
                      * Update components
                      */
-                    update: function () {
+                    update: function() {
                         $('[data-role=swatch-text-options-container] [data-role=order]').each(
-                            function (index, element) {
+                            function(index, element) {
                                 $(element).val(index + 1);
                             }
                         );
-                    }
+                    },
                 });
             });
         }
 
-        jQuery(document).ready(function () {
+        jQuery(document).ready(function() {
             if (jQuery('#frontend_input').val() !== 'swatch_text') {
                 jQuery('.swatch-text-field-0').removeClass('required-option');
             }

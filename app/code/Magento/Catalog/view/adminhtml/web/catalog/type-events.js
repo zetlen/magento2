@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
     return {
@@ -13,10 +13,10 @@ define([
         /**
          * Init
          */
-        init: function () {
+        init: function() {
             this.type = {
                 init: this.$type.val(),
-                current: this.$type.val()
+                current: this.$type.val(),
             };
 
             this.bindAll();
@@ -25,13 +25,13 @@ define([
         /**
          * Bind all
          */
-        bindAll: function () {
-            $(document).on('setTypeProduct', function (event, type) {
+        bindAll: function() {
+            $(document).on('setTypeProduct', function(event, type) {
                 this.setType(type);
             }.bind(this));
 
-            //direct change type input
-            this.$type.on('change', function () {
+            // direct change type input
+            this.$type.on('change', function() {
                 this.type.current = this.$type.val();
                 this._notifyType();
             }.bind(this));
@@ -42,7 +42,7 @@ define([
          * @param {String} type - type product (downloadable, simple, virtual ...)
          * @returns {*}
          */
-        setType: function (type) {
+        setType: function(type) {
             return this.$type.val(type || this.type.init).trigger('change');
         },
 
@@ -50,8 +50,8 @@ define([
          * Notify type
          * @private
          */
-        _notifyType: function () {
+        _notifyType: function() {
             $(document).trigger('changeTypeProduct', this.type);
-        }
+        },
     };
 });

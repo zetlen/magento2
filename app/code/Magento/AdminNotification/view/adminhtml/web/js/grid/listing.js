@@ -6,33 +6,33 @@
 define([
     'Magento_Ui/js/grid/listing',
     'Magento_Ui/js/lib/spinner',
-    'jquery'
-], function (Listing, loader, $) {
+    'jquery',
+], function(Listing, loader, $) {
     'use strict';
 
     return Listing.extend({
         defaults: {
             imports: {
-                totalRecords: '${ $.provider }:data.totalRecords'
+                totalRecords: '${ $.provider }:data.totalRecords',
             },
             selectors: {
                 collapsible: '.message-system-collapsible',
-                messages: '.message-system'
-            }
+                messages: '.message-system',
+            },
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track({
-                    totalRecords: 0
+                    totalRecords: 0,
                 });
 
             return this;
         },
 
         /** @inheritdoc */
-        showLoader: function () {
+        showLoader: function() {
             if (!this.source.firstLoad) {
                 this.fixLoaderHeight();
                 this._super();
@@ -44,8 +44,8 @@ define([
          *
          * @param {Boolean} [closed]
          */
-        fixLoaderHeight: function (closed) {
-            var $messagesBlock = $(this.selectors.messages),
+        fixLoaderHeight: function(closed) {
+            let $messagesBlock = $(this.selectors.messages),
                 $collapsibleBlock = $(this.selectors.collapsible),
                 resultHeight = 0;
 
@@ -58,6 +58,6 @@ define([
             }
 
             loader.get(this.name).height(resultHeight);
-        }
+        },
     });
 });

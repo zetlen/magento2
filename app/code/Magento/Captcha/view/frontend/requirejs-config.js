@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            captcha: 'Magento_Captcha/captcha'
-        }
-    }
+            captcha: 'Magento_Captcha/captcha',
+        },
+    },
 };

@@ -8,11 +8,11 @@ define([
     'ko',
     'module',
     '../template/renderer',
-    'mage/translate'
-], function ($, ko, module, renderer) {
+    'mage/translate',
+], function($, ko, module, renderer) {
     'use strict';
 
-    var locations = {
+    let locations = {
             'legend': 'Caption for the fieldset element',
             'label': 'Label for an input element.',
             'button': 'Push button',
@@ -48,7 +48,7 @@ define([
             'center': 'Centered text',
             'select': 'List options',
             'img': 'Image',
-            'input': 'Form element'
+            'input': 'Form element',
         },
 
         /**
@@ -56,12 +56,12 @@ define([
          * @param {Object} translationData
          * @param {String} location
          */
-        composeTranslateAttr = function (translationData, location) {
-            var obj = [{
+        composeTranslateAttr = function(translationData, location) {
+            let obj = [{
                 'shown': translationData.shown,
                 'translated': translationData.translated,
                 'original': translationData.original,
-                'location': locations[location] || 'Text'
+                'location': locations[location] || 'Text',
             }];
 
             return JSON.stringify(obj);
@@ -72,7 +72,7 @@ define([
          * @param {Object} el
          * @param {String} text
          */
-        setText = function (el, text) {
+        setText = function(el, text) {
             $(el).text(text);
         },
 
@@ -81,13 +81,13 @@ define([
          * @param {Object} el - The element which is binded
          * @param {String} original - The original value of the element
          */
-        setTranslateProp = function (el, original) {
-            var location = $(el).prop('tagName').toLowerCase(),
+        setTranslateProp = function(el, original) {
+            let location = $(el).prop('tagName').toLowerCase(),
                 translated = $.mage.__(original),
                 translationData = {
                     shown: translated,
                     translated: translated,
-                    original: original
+                    original: original,
                 },
                 translateAttr = composeTranslateAttr(translationData, location);
 
@@ -102,7 +102,7 @@ define([
          * @param {HTMLElement} node
          * @returns {Boolean}
          */
-        isVirtualElement = function (node) {
+        isVirtualElement = function(node) {
             return node.nodeType === 8;
         },
 
@@ -113,7 +113,7 @@ define([
         * @param {bool} isUpdate
         * @return {Object} el
         */
-        getRealElement = function (el, isUpdate) {
+        getRealElement = function(el, isUpdate) {
             if (isVirtualElement(el)) {
                 if (isUpdate) {
                     return $(el).next('span');
@@ -131,8 +131,8 @@ define([
          * @param {Function} valueAccessor
          * @param {bool} isUpdate
          */
-        execute = function (element, valueAccessor, isUpdate) {
-            var original = ko.unwrap(valueAccessor() || ''),
+        execute = function(element, valueAccessor, isUpdate) {
+            let original = ko.unwrap(valueAccessor() || ''),
                 el = getRealElement(element, isUpdate),
                 inlineTranslation = (module.config() || {}).inlineTranslation;
 
@@ -155,7 +155,7 @@ define([
          * @param {Object} element
          * @param {Function} valueAccessor
          */
-        init: function (element, valueAccessor) {
+        init: function(element, valueAccessor) {
             execute(element, valueAccessor);
         },
 
@@ -164,18 +164,18 @@ define([
          * @param {Object} element
          * @param {Function} valueAccessor
          */
-        update: function (element, valueAccessor) {
+        update: function(element, valueAccessor) {
             execute(element, valueAccessor, true);
-        }
+        },
     };
 
     ko.virtualElements.allowedBindings.i18n = true;
 
     renderer
         .addNode('translate', {
-            binding: 'i18n'
+            binding: 'i18n',
         })
         .addAttribute('translate', {
-            binding: 'i18n'
+            binding: 'i18n',
         });
 });

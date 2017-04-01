@@ -7,8 +7,8 @@ define([
     'underscore',
     'jquery/ui',
     'mage/dropdown',
-    'mage/template'
-], function ($) {
+    'mage/template',
+], function($) {
     'use strict';
 
     $.widget('mage.addToCart', {
@@ -19,7 +19,7 @@ define([
             singleOpenDropDown: true,
             dialog: {}, // Options for mage/dropdown
             dialogDelay: 500, // Delay in ms after resize dropdown shown again
-            origin: '', //Required, type of popup: 'msrp', 'tier' or 'info' popup
+            origin: '', // Required, type of popup: 'msrp', 'tier' or 'info' popup
 
             // Selectors
             cartForm: '.form.map.checkout',
@@ -37,26 +37,26 @@ define([
 
             // Text options
             productName: '',
-            addToCartUrl: ''
+            addToCartUrl: '',
         },
 
         openDropDown: null,
         triggerClass: 'dropdown-active',
 
         popUpOptions: {
-            appendTo: 'body',
-            dialogContentClass: 'active',
-            closeOnMouseLeave: false,
-            autoPosition: true,
-            closeOnClickOutside: false,
+            "appendTo": 'body',
+            "dialogContentClass": 'active',
+            "closeOnMouseLeave": false,
+            "autoPosition": true,
+            "closeOnClickOutside": false,
             'dialogClass': 'popup map-popup-wrapper',
-            position: {
+            "position": {
                 my: 'left top',
                 collision: 'fit none',
                 at: 'left bottom',
-                within: 'body'
+                within: 'body',
             },
-            shadowHinter: 'popup popup-pointer'
+            "shadowHinter": 'popup popup-pointer',
         },
         popupOpened: false,
 
@@ -64,7 +64,7 @@ define([
          * Creates widget instance
          * @private
          */
-        _create: function () {
+        _create: function() {
             if (this.options.origin === 'msrp') {
                 this.initMsrpPopup();
             } else if (this.options.origin === 'info') {
@@ -79,8 +79,8 @@ define([
          * Init msrp popup
          * @private
          */
-        initMsrpPopup: function () {
-            var popupDOM = $(this.options.popUpAttr)[0],
+        initMsrpPopup: function() {
+            let popupDOM = $(this.options.popUpAttr)[0],
                 $msrpPopup = $(popupDOM.innerHTML.trim());
 
             $msrpPopup.find(this.options.productIdInput).val(this.options.productId);
@@ -106,13 +106,13 @@ define([
          * Init info popup
          * @private
          */
-        initInfoPopup: function () {
-            var infoPopupDOM = $('[data-role=msrp-info-template]')[0],
+        initInfoPopup: function() {
+            let infoPopupDOM = $('[data-role=msrp-info-template]')[0],
                 $infoPopup = $(infoPopupDOM.innerHTML.trim());
 
             $('body').append($infoPopup);
 
-            $(this.options.helpLinkId).on('click', function (e) {
+            $(this.options.helpLinkId).on('click', function(e) {
                 this.popUpOptions.position.of = $(e.target);
                 $infoPopup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
                 this._toggle($infoPopup);
@@ -125,8 +125,8 @@ define([
          * Init tier price popup
          * @private
          */
-        initTierPopup: function () {
-            var popupDOM = $(this.options.popUpAttr)[0],
+        initTierPopup: function() {
+            let popupDOM = $(this.options.popUpAttr)[0],
                 $tierPopup = $(popupDOM.innerHTML.trim());
 
             $('body').append($tierPopup);
@@ -141,7 +141,7 @@ define([
             $tierPopup.find(this.options.paypalCheckoutButons).on('click',
                 this.handleTierPaypalCheckout.bind(this));
 
-            $(this.options.attr).on('click', function (e) {
+            $(this.options.attr).on('click', function(e) {
                 this.$popup = $tierPopup;
                 this.tierOptions = $(e.target).data('tier-price');
                 this.openPopup(e);
@@ -154,7 +154,7 @@ define([
          *
          * @private
          */
-        handleMsrpAddToCart: function (ev) {
+        handleMsrpAddToCart: function(ev) {
             ev.preventDefault();
 
             if (this.options.addToCartButton) {
@@ -168,7 +168,7 @@ define([
          *
          * @private
          */
-        handleMsrpPaypalCheckout: function () {
+        handleMsrpPaypalCheckout: function() {
             this.closePopup(this.$popup);
         },
 
@@ -178,7 +178,7 @@ define([
          * @param {Object} ev
          * @private
          */
-        handleTierAddToCart: function (ev) {
+        handleTierAddToCart: function(ev) {
             ev.preventDefault();
 
             if (this.options.addToCartButton &&
@@ -195,7 +195,7 @@ define([
          *
          * @private
          */
-        handleTierPaypalCheckout: function () {
+        handleTierPaypalCheckout: function() {
             if (this.options.inputQty && !isNaN(this.tierOptions.qty)
             ) {
                 $(this.options.inputQty).val(this.tierOptions.qty);
@@ -208,8 +208,8 @@ define([
          *
          * @param {Object} event
          */
-        openPopup: function (event) {
-            var options = this.tierOptions || this.options;
+        openPopup: function(event) {
+            let options = this.tierOptions || this.options;
 
             this.popUpOptions.position.of = $(event.target);
             this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
@@ -227,13 +227,13 @@ define([
          * @param {HTMLElement} $elem
          * @private
          */
-        _toggle: function ($elem) {
-            $(document).on('mouseup.msrp touchend.msrp', function (e) {
+        _toggle: function($elem) {
+            $(document).on('mouseup.msrp touchend.msrp', function(e) {
                 if (!$elem.is(e.target) && $elem.has(e.target).length === 0) {
                     this.closePopup($elem);
                 }
             }.bind(this));
-            $(window).on('resize', function () {
+            $(window).on('resize', function() {
                 this.closePopup($elem);
             }.bind(this));
         },
@@ -242,7 +242,7 @@ define([
          *
          * @param {HTMLElement} $elem
          */
-        closePopup: function ($elem) {
+        closePopup: function($elem) {
             $elem.dropdownDialog('close');
             $(document).off('mouseup.msrp touchend.msrp');
         },
@@ -250,7 +250,7 @@ define([
         /**
          * Handler for addToCart action
          */
-        _addToCartSubmit: function () {
+        _addToCartSubmit: function() {
             this.element.trigger('addToCart', this.element);
 
             if (this.element.data('stop-processing')) {
@@ -267,8 +267,7 @@ define([
                 $('.mage-dropdown-dialog > .ui-dialog-content').dropdownDialog('close');
             }
             $(this.options.cartForm).submit();
-
-        }
+        },
     });
 
     return $.mage.addToCart;

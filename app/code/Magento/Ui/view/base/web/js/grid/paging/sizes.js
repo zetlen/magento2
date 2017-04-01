@@ -10,8 +10,8 @@ define([
     'ko',
     'underscore',
     'mageUtils',
-    'uiElement'
-], function (ko, _, utils, Element) {
+    'uiElement',
+], function(ko, _, utils, Element) {
     'use strict';
 
     return Element.extend({
@@ -23,33 +23,33 @@ define([
             options: {
                 '20': {
                     value: 20,
-                    label: 20
+                    label: 20,
                 },
                 '30': {
                     value: 30,
-                    label: 30
+                    label: 30,
                 },
                 '50': {
                     value: 50,
-                    label: 50
+                    label: 50,
                 },
                 '100': {
                     value: 100,
-                    label: 100
+                    label: 100,
                 },
                 '200': {
                     value: 200,
-                    label: 200
-                }
+                    label: 200,
+                },
             },
             statefull: {
                 options: true,
-                value: true
+                value: true,
             },
             listens: {
                 value: 'onValueChange',
-                options: 'onSizesChange'
-            }
+                options: 'onSizesChange',
+            },
         },
 
         /**
@@ -57,7 +57,7 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .updateArray();
 
@@ -69,16 +69,16 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track([
                     'value',
                     'editing',
                     'customVisible',
-                    'customValue'
+                    'customValue',
                 ])
                 .track({
-                    optionsArray: []
+                    optionsArray: [],
                 });
 
             this._value = ko.pureComputed({
@@ -87,14 +87,14 @@ define([
                 /**
                  * Validates input field prior to updating 'value' property.
                  */
-                write: function (value) {
+                write: function(value) {
                     value = this.normalize(value);
 
                     this.value = value;
                     this._value.notifySubscribers(value);
                 },
 
-                owner: this
+                owner: this,
             });
 
             return this;
@@ -106,7 +106,7 @@ define([
          * @param {Number} value - Value of the size.
          * @returns {Sizes} Chainable.
          */
-        edit: function (value) {
+        edit: function(value) {
             this.editing = value;
 
             return this;
@@ -117,8 +117,8 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        discardEditing: function () {
-            var value = this.editing;
+        discardEditing: function() {
+            let value = this.editing;
 
             if (value) {
                 this.updateSize(value, value);
@@ -132,7 +132,7 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        discardAll: function () {
+        discardAll: function() {
             this.discardEditing()
                 .discardCustom();
 
@@ -144,7 +144,7 @@ define([
          *
          * @returns {Number}
          */
-        getFirst: function () {
+        getFirst: function() {
             return this.optionsArray[0].value;
         },
 
@@ -154,7 +154,7 @@ define([
          * @param {Number} value - Value of the item.
          * @returns {Object|Undefined}
          */
-        getSize: function (value) {
+        getSize: function(value) {
             return this.options[value];
         },
 
@@ -164,7 +164,7 @@ define([
          * @param {Number} value - Value of the size.
          * @returns {Sizes} Chainable.
          */
-        setSize: function (value) {
+        setSize: function(value) {
             this.value = value;
 
             return this;
@@ -176,8 +176,8 @@ define([
          * @param {Number} value - Value to be added.
          * @returns {Sizes} Chainable.
          */
-        addSize: function (value) {
-            var size;
+        addSize: function(value) {
+            let size;
 
             if (!this.hasSize(value)) {
                 size = this.createSize(value);
@@ -194,7 +194,7 @@ define([
          * @param {Number} value - Value to be removed.
          * @returns {Sizes} Chainable.
          */
-        removeSize: function (value) {
+        removeSize: function(value) {
             if (!this.hasSize(value)) {
                 return this;
             }
@@ -216,8 +216,8 @@ define([
          * @param {(Number|String)} [newValue=size._value] - New size value.
          * @returns {Sizes} Chainable.
          */
-        updateSize: function (value, newValue) {
-            var size = this.getSize(value);
+        updateSize: function(value, newValue) {
+            let size = this.getSize(value);
 
             if (!size) {
                 return this;
@@ -249,12 +249,12 @@ define([
          * @param {Number} value - Value of the size.
          * @returns {Object}
          */
-        createSize: function (value) {
+        createSize: function(value) {
             return {
                 value: value,
                 label: value,
                 _value: value,
-                editable: true
+                editable: true,
             };
         },
 
@@ -264,7 +264,7 @@ define([
          * @param {Number} value - Value to be checked.
          * @returns {Boolean}
          */
-        hasSize: function (value) {
+        hasSize: function(value) {
             return !!this.getSize(value);
         },
 
@@ -273,7 +273,7 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        discardCustom: function () {
+        discardCustom: function() {
             this.hideCustom()
                 .clearCustom();
 
@@ -285,7 +285,7 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        showCustom: function () {
+        showCustom: function() {
             this.customVisible = true;
 
             return this;
@@ -296,7 +296,7 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        hideCustom: function () {
+        hideCustom: function() {
             this.customVisible = false;
 
             return this;
@@ -307,7 +307,7 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        clearCustom: function () {
+        clearCustom: function() {
             this.customValue = '';
 
             return this;
@@ -318,8 +318,8 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        applyCustom: function () {
-            var value = this.customValue;
+        applyCustom: function() {
+            let value = this.customValue;
 
             value = this.normalize(value);
 
@@ -335,7 +335,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isCustomVisible: function () {
+        isCustomVisible: function() {
             return this.customVisible;
         },
 
@@ -346,7 +346,7 @@ define([
          * @param {(Number|String)} value - Value to be normalized.
          * @returns {Number}
          */
-        normalize: function (value) {
+        normalize: function(value) {
             value = +value;
 
             if (isNaN(value)) {
@@ -361,8 +361,8 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        updateArray: function () {
-            var array = _.values(this.options);
+        updateArray: function() {
+            let array = _.values(this.options);
 
             this.optionsArray = _.sortBy(array, 'value');
 
@@ -375,7 +375,7 @@ define([
          * @param {Number} value - Value to be checked.
          * @returns {Boolean}
          */
-        isEditing: function (value) {
+        isEditing: function(value) {
             return this.editing === value;
         },
 
@@ -385,14 +385,14 @@ define([
          * @param {Number} value - Value to be checked.
          * @returns {Boolean}
          */
-        isSelected: function (value) {
+        isSelected: function(value) {
             return this.value === value;
         },
 
         /**
          * Listener of the 'value' property changes.
          */
-        onValueChange: function () {
+        onValueChange: function() {
             this.discardAll()
                 .trigger('close');
         },
@@ -400,10 +400,10 @@ define([
         /**
          * Listener of the 'options' object changes.
          */
-        onSizesChange: function () {
+        onSizesChange: function() {
             this.editing = false;
 
             this.updateArray();
-        }
+        },
     });
 });

@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            creditCardType: 'Magento_Payment/cc-type'
-        }
-    }
+            creditCardType: 'Magento_Payment/cc-type',
+        },
+    },
 };

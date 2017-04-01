@@ -10,11 +10,11 @@ define([
     'ko',
     'underscore',
     'sidebar',
-    'mage/translate'
-], function (Component, customerData, $, ko, _) {
+    'mage/translate',
+], function(Component, customerData, $, ko, _) {
     'use strict';
 
-    var sidebarInitialized = false,
+    let sidebarInitialized = false,
         addToCartCalls = 0,
         miniCart;
 
@@ -44,34 +44,34 @@ define([
                 'update': window.checkout.updateItemQtyUrl,
                 'remove': window.checkout.removeItemUrl,
                 'loginUrl': window.checkout.customerLoginUrl,
-                'isRedirectRequired': window.checkout.isRedirectRequired
+                'isRedirectRequired': window.checkout.isRedirectRequired,
             },
             'button': {
                 'checkout': '#top-cart-btn-checkout',
                 'remove': '#mini-cart a.action.delete',
-                'close': '#btn-minicart-close'
+                'close': '#btn-minicart-close',
             },
             'showcart': {
                 'parent': 'span.counter',
                 'qty': 'span.counter-number',
-                'label': 'span.counter-label'
+                'label': 'span.counter-label',
             },
             'minicart': {
                 'list': '#mini-cart',
                 'content': '#minicart-content-wrapper',
                 'qty': 'div.items-total',
                 'subtotal': 'div.subtotal span.price',
-                'maxItemsVisible': window.checkout.minicartMaxItemsVisible
+                'maxItemsVisible': window.checkout.minicartMaxItemsVisible,
             },
             'item': {
                 'qty': ':input.cart-item-qty',
-                'button': ':button.update-cart-item'
+                'button': ':button.update-cart-item',
             },
-            'confirmMessage': $.mage.__('Are you sure you would like to remove this item from the shopping cart?')
+            'confirmMessage': $.mage.__('Are you sure you would like to remove this item from the shopping cart?'),
         });
     }
 
-    miniCart.on('dropdowndialogopen', function () {
+    miniCart.on('dropdowndialogopen', function() {
         initSidebar();
     });
 
@@ -83,19 +83,19 @@ define([
         /**
          * @override
          */
-        initialize: function () {
-            var self = this,
+        initialize: function() {
+            let self = this,
                 cartData = customerData.get('cart');
 
             this.update(cartData());
-            cartData.subscribe(function (updatedCart) {
+            cartData.subscribe(function(updatedCart) {
                 addToCartCalls--;
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
                 this.update(updatedCart);
                 initSidebar();
             }, this);
-            $('[data-block="minicart"]').on('contentLoading', function () {
+            $('[data-block="minicart"]').on('contentLoading', function() {
                 addToCartCalls++;
                 self.isLoading(true);
             });
@@ -112,17 +112,17 @@ define([
         /**
          * Close mini shopping cart.
          */
-        closeMinicart: function () {
+        closeMinicart: function() {
             $('[data-block="minicart"]').find('[data-role="dropdownDialog"]').dropdownDialog('close');
         },
 
         /**
          * @return {Boolean}
          */
-        closeSidebar: function () {
-            var minicart = $('[data-block="minicart"]');
+        closeSidebar: function() {
+            let minicart = $('[data-block="minicart"]');
 
-            minicart.on('click', '[data-action="close"]', function (event) {
+            minicart.on('click', '[data-action="close"]', function(event) {
                 event.stopPropagation();
                 minicart.find('[data-role="dropdownDialog"]').dropdownDialog('close');
             });
@@ -134,7 +134,7 @@ define([
          * @param {String} productType
          * @return {*|String}
          */
-        getItemRenderer: function (productType) {
+        getItemRenderer: function(productType) {
             return this.itemRenderer[productType] || 'defaultRenderer';
         },
 
@@ -144,8 +144,8 @@ define([
          * @param {Object} updatedCart
          * @returns void
          */
-        update: function (updatedCart) {
-            _.each(updatedCart, function (value, key) {
+        update: function(updatedCart) {
+            _.each(updatedCart, function(value, key) {
                 if (!this.cart.hasOwnProperty(key)) {
                     this.cart[key] = ko.observable();
                 }
@@ -158,7 +158,7 @@ define([
          * @param {String} name
          * @returns {*}
          */
-        getCartParam: function (name) {
+        getCartParam: function(name) {
             if (!_.isUndefined(name)) {
                 if (!this.cart.hasOwnProperty(name)) {
                     this.cart[name] = ko.observable();
@@ -172,8 +172,8 @@ define([
          * Returns array of cart items, limited by 'maxItemsToDisplay' setting
          * @returns []
          */
-        getCartItems: function () {
-            var items = this.getCartParam('items') || [];
+        getCartItems: function() {
+            let items = this.getCartParam('items') || [];
 
             items = items.slice(parseInt(-this.maxItemsToDisplay, 10));
 
@@ -184,10 +184,10 @@ define([
          * Returns count of cart line items
          * @returns {Number}
          */
-        getCartLineItemsCount: function () {
-            var items = this.getCartParam('items') || [];
+        getCartLineItemsCount: function() {
+            let items = this.getCartParam('items') || [];
 
             return parseInt(items.length, 10);
-        }
+        },
     });
 });

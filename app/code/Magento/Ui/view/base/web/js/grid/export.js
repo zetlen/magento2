@@ -9,8 +9,8 @@
 define([
     'jquery',
     'underscore',
-    'uiElement'
-], function ($, _, Element) {
+    'uiElement',
+], function($, _, Element) {
     'use strict';
 
     return Element.extend({
@@ -20,21 +20,21 @@ define([
             checked: '',
             additionalParams: [],
             modules: {
-                selections: '${ $.selectProvider }'
-            }
+                selections: '${ $.selectProvider }',
+            },
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initChecked();
         },
 
         /** @inheritdoc */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
-            _.each(this.additionalParams, function (value, key) {
+            _.each(this.additionalParams, function(value, key) {
                 key = 'additionalParams.' + key;
                 this.imports[key] = value;
             }, this);
@@ -43,7 +43,7 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('checked');
 
@@ -55,7 +55,7 @@ define([
          *
          * @returns {Object}
          */
-        initChecked: function () {
+        initChecked: function() {
             if (!this.checked()) {
                 this.checked(
                     this.options[0].value
@@ -70,8 +70,8 @@ define([
          *
          * @returns {Object}
          */
-        getParams: function () {
-            var selections = this.selections(),
+        getParams: function() {
+            let selections = this.selections(),
                 data = selections ? selections.getSelections() : null,
                 itemsType,
                 result = {};
@@ -82,7 +82,7 @@ define([
                 result.search = data.params.search;
                 result.namespace = data.params.namespace;
                 result[itemsType] = data[itemsType];
-                _.each(this.additionalParams, function (param, key) {
+                _.each(this.additionalParams, function(param, key) {
                     result[key] = param;
                 });
 
@@ -99,9 +99,9 @@ define([
          *
          * @returns {Object}
          */
-        getActiveOption: function () {
+        getActiveOption: function() {
             return _.findWhere(this.options, {
-                value: this.checked()
+                value: this.checked(),
             });
         },
 
@@ -111,26 +111,25 @@ define([
          * @param {Object} option
          * @returns {String}
          */
-        buildOptionUrl: function (option) {
-            var params = this.getParams();
+        buildOptionUrl: function(option) {
+            let params = this.getParams();
 
             if (!params) {
                 return 'javascript:void(0);';
             }
 
             return option.url + '?' + $.param(params);
-            //TODO: MAGETWO-40250
+            // TODO: MAGETWO-40250
         },
 
         /**
          * Redirect to built option url.
          */
-        applyOption: function () {
-            var option = this.getActiveOption(),
+        applyOption: function() {
+            let option = this.getActiveOption(),
                 url = this.buildOptionUrl(option);
 
             location.href = url;
-
-        }
+        },
     });
 });

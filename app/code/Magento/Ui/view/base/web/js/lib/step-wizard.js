@@ -10,15 +10,15 @@ define([
     'underscore',
     'ko',
     'mage/backend/notification',
-    'mage/translate'
-], function (uiRegistry, Component, $, _, ko) {
+    'mage/translate',
+], function(uiRegistry, Component, $, _, ko) {
     'use strict';
 
-    var Wizard;
+    let Wizard;
 
     ko.utils.domNodeDisposal.cleanExternalData = _.wrap(
         ko.utils.domNodeDisposal.cleanExternalData,
-        function (func, node) {
+        function(func, node) {
             if (!$(node).closest('[data-type=skipKO]').length) {
                 func(node);
             }
@@ -32,7 +32,7 @@ define([
      * @param {String} modalClass
      * @constructor
      */
-    Wizard = function (steps, modalClass) {
+    Wizard = function(steps, modalClass) {
         this.steps = steps;
         this.index = 0;
         this.data = {};
@@ -50,7 +50,7 @@ define([
          * @param {Number} newIndex
          * @return {String}
          */
-        this.move = function (newIndex) {
+        this.move = function(newIndex) {
             if (!this.preventSwitch(newIndex)) {
                 if (newIndex > this.index) {
                     this._next(newIndex);
@@ -69,7 +69,7 @@ define([
          *
          * @return {String}
          */
-        this.next = function () {
+        this.next = function() {
             this.move(this.index + 1);
 
             return this.getStep().name;
@@ -80,7 +80,7 @@ define([
          *
          * @return {String}
          */
-        this.prev = function () {
+        this.prev = function() {
             this.move(this.index - 1);
 
             return this.getStep().name;
@@ -89,8 +89,8 @@ define([
         /**
          * @return {*}
          */
-        this.preventSwitch = function (newIndex) {
-            return newIndex < 0 || (newIndex - this.index) > 1;//eslint-disable-line no-extra-parens
+        this.preventSwitch = function(newIndex) {
+            return newIndex < 0 || (newIndex - this.index) > 1;// eslint-disable-line no-extra-parens
         };
 
         /**
@@ -98,7 +98,7 @@ define([
          * @return {Boolean}
          * @private
          */
-        this._next = function (newIndex) {
+        this._next = function(newIndex) {
             newIndex = _.isNumber(newIndex) ? newIndex : this.index + 1;
 
             try {
@@ -122,7 +122,7 @@ define([
          * @param {Number} newIndex
          * @private
          */
-        this._prev = function (newIndex) {
+        this._prev = function(newIndex) {
             newIndex = _.isNumber(newIndex) ? newIndex : this.index - 1;
             this.getStep().back(this);
             this.index = newIndex;
@@ -132,7 +132,7 @@ define([
          * @param {Number} stepIndex
          * @return {Object}
          */
-        this.getStep = function (stepIndex) {
+        this.getStep = function(stepIndex) {
             return this.steps[stepIndex || this.index] || {};
         };
 
@@ -140,17 +140,17 @@ define([
          * @param {String} message
          * @param {String} error
          */
-        this.notifyMessage = function (message, error) {
+        this.notifyMessage = function(message, error) {
             $(this.element).notification('clear').notification('add', {
                 error: error,
-                message: message
+                message: message,
             });
         };
 
         /**
          * @param {Object} step
          */
-        this.updateLabels = function (step) {
+        this.updateLabels = function(step) {
             this.element.find(this.nextLabel).find('button').text(step.nextLabelText || this.nextLabelText);
             this.element.find(this.prevLabel).find('button').text(step.prevLabelText || this.prevLabelText);
         };
@@ -158,7 +158,7 @@ define([
         /**
          * Show notification message.
          */
-        this.showNotificationMessage = function () {
+        this.showNotificationMessage = function() {
             if (!_.isEmpty(this.getStep())) {
                 this.hideNotificationMessage();
 
@@ -174,7 +174,7 @@ define([
         /**
          * Remove notification message.
          */
-        this.cleanNotificationMessage = function () {
+        this.cleanNotificationMessage = function() {
             this.getStep().notificationMessage.text = null;
             this.hideNotificationMessage();
         };
@@ -182,7 +182,7 @@ define([
         /**
          * Remove error message.
          */
-        this.cleanErrorNotificationMessage = function () {
+        this.cleanErrorNotificationMessage = function() {
             if (this.getStep().notificationMessage.error === true) {
                 this.cleanNotificationMessage();
             }
@@ -192,7 +192,7 @@ define([
          * @param {String} text
          * @param {String} error
          */
-        this.setNotificationMessage = function (text, error) {
+        this.setNotificationMessage = function(text, error) {
             error = error !== undefined;
 
             if (!_.isEmpty(this.getStep())) {
@@ -205,14 +205,14 @@ define([
         /**
          * Hide notification message.
          */
-        this.hideNotificationMessage = function () {
+        this.hideNotificationMessage = function() {
             $(this.element).notification('clear');
         };
 
         /**
          * Render step.
          */
-        this.render = function () {
+        this.render = function() {
             this.hideNotificationMessage();
             this.getStep().render(this);
         };
@@ -220,7 +220,7 @@ define([
         /**
          * Initialize step.
          */
-        this.init = function () {
+        this.init = function() {
             this.updateLabels(this.getStep());
             this.render();
         };
@@ -234,35 +234,35 @@ define([
             stepsNames: [],
             selectedStep: '',
             steps: [],
-            disabled: true
+            disabled: true,
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.selectedStep.subscribe(this.wrapDisabledBackButton.bind(this));
         },
 
         /** @inheritdoc */
-        initElement: function (step) {
+        initElement: function(step) {
             step.initData = this.initData;
             step.mode = _.all(this.initData, _.isEmpty) ? 'create' : 'edit';
             this.steps[this.getStepIndexByName(step.name)] = step;
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super().observe([
                 'selectedStep',
-                'disabled'
+                'disabled',
             ]);
 
             return this;
         },
 
         /** @inheritdoc */
-        destroy: function () {
-            _.each(this.steps, function (step) {
+        destroy: function() {
+            _.each(this.steps, function(step) {
                 step.destroy();
             });
 
@@ -274,7 +274,7 @@ define([
          *
          * @param {String} stepName
          */
-        wrapDisabledBackButton: function (stepName) {
+        wrapDisabledBackButton: function(stepName) {
             if (_.first(this.stepsNames) === stepName) {
                 this.disabled(true);
             } else {
@@ -287,28 +287,28 @@ define([
          *
          * @param {String} stepName
          */
-        getStepIndexByName: function (stepName) {
+        getStepIndexByName: function(stepName) {
             return _.indexOf(this.stepsNames, stepName);
         },
-        //controls, todo to another object
+        // controls, todo to another object
         /**
          * Select next step.
          */
-        next: function () {
+        next: function() {
             this.selectedStep(this.wizard.next());
         },
 
         /**
          * Select previous step.
          */
-        back: function () {
+        back: function() {
             this.selectedStep(this.wizard.prev());
         },
 
         /**
          * Open wizard.
          */
-        open: function () {
+        open: function() {
             this.selectedStep(this.stepsNames.first());
             this.wizard = new Wizard(this.steps, this.modalClass);
         },
@@ -316,8 +316,8 @@ define([
         /**
          * Close wizard.
          */
-        close: function () {
-            var modal =  uiRegistry.get(this.initData.configurableModal);
+        close: function() {
+            let modal = uiRegistry.get(this.initData.configurableModal);
 
             if (!_.isUndefined(modal)) {
                 modal.closeModal();
@@ -328,11 +328,11 @@ define([
          * @param {Object} data
          * @param {Object} event
          */
-        showSpecificStep: function (data, event) {
-            var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
+        showSpecificStep: function(data, event) {
+            let index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
                 stepName = this.wizard.move(index);
 
             this.selectedStep(stepName);
-        }
+        },
     });
 });

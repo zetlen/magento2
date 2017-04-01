@@ -6,8 +6,8 @@
 define([
     'jquery',
     'jquery/ui',
-    'jquery/jstree/jquery.jstree'
-], function ($) {
+    'jquery/jstree/jquery.jstree',
+], function($) {
     'use strict';
 
     $.widget('mage.folderTree', {
@@ -21,14 +21,14 @@ define([
                 'themes': {
                     'theme': 'default',
                     'dots': false,
-                    'icons': true
-                }
-            }
+                    'icons': true,
+                },
+            },
         },
 
         /** @inheritdoc */
-        _create: function () {
-            var options = this.options,
+        _create: function() {
+            let options = this.options,
                 treeOptions = $.extend(
                     true,
                     {},
@@ -41,13 +41,13 @@ define([
                                 metadata: {
                                     node: {
                                         id: options.root,
-                                        text: options.rootName
-                                    }
+                                        text: options.rootName,
+                                    },
                                 },
                                 attr: {
                                     'data-id': options.root,
-                                    id: options.root
-                                }
+                                    "id": options.root,
+                                },
                             },
                             ajax: {
                                 url: options.url,
@@ -56,15 +56,15 @@ define([
                                  * @param {Object} node
                                  * @return {Object}
                                  */
-                                data: function (node) {
+                                data: function(node) {
                                     return {
-                                        node: node.data('id'),
-                                        'form_key': window.FORM_KEY
+                                        "node": node.data('id'),
+                                        'form_key': window.FORM_KEY,
                                     };
                                 },
-                                success: this._convertData
-                            }
-                        }
+                                success: this._convertData,
+                            },
+                        },
                     }
                 );
 
@@ -74,20 +74,20 @@ define([
         /**
          * Tree loaded.
          */
-        treeLoaded: function () {
+        treeLoaded: function() {
             var path = this.options.currentPath,
                 tree = this.element,
 
                 /**
                  * Recursive open.
                  */
-                recursiveOpen = function () {
-                    var el = $('[data-id="' + path.pop() + '"]');
+                recursiveOpen = function() {
+                    let el = $('[data-id="' + path.pop() + '"]');
 
                     if (path.length > 1) {
                         tree.jstree('open_node', el, recursiveOpen);
                     } else {
-                        tree.jstree('open_node', el, function () {
+                        tree.jstree('open_node', el, function() {
                             tree.jstree('select_node', el);
                         });
                     }
@@ -101,23 +101,23 @@ define([
          * @return {*}
          * @private
          */
-        _convertData: function (data) {
-            return $.map(data, function (node) {
-                var codeCopy = $.extend({}, node);
+        _convertData: function(data) {
+            return $.map(data, function(node) {
+                let codeCopy = $.extend({}, node);
 
                 return {
                     data: node.text,
                     attr: {
                         'data-id': node.id,
-                        id: node.id
+                        "id": node.id,
                     },
                     metadata: {
-                        node: codeCopy
+                        node: codeCopy,
                     },
-                    state: 'closed'
+                    state: 'closed',
                 };
             });
-        }
+        },
     });
 
     return $.mage.folderTree;

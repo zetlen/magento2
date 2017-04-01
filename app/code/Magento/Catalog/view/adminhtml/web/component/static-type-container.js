@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/form/components/group'
-], function ($, Group) {
+    'Magento_Ui/js/form/components/group',
+], function($, Group) {
     'use strict';
 
     return Group.extend({
@@ -17,7 +17,7 @@ define([
          * @param {String} value
          * @returns {Boolean}
          */
-        isRelevant: function (value) {
+        isRelevant: function(value) {
             if ($.inArray(value, ['field', 'area', 'file', 'date', 'date_time', 'time']) !== -1) {
                 this.visible(true);
 
@@ -27,6 +27,6 @@ define([
             this.visible(false);
 
             return false;
-        }
+        },
     });
 });

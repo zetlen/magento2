@@ -7,17 +7,17 @@ define([
     'ko',
     'jquery',
     'uiComponent',
-    'Magento_CheckoutAgreements/js/model/agreements-modal'
-], function (ko, $, Component, agreementsModal) {
+    'Magento_CheckoutAgreements/js/model/agreements-modal',
+], function(ko, $, Component, agreementsModal) {
     'use strict';
 
-    var checkoutConfig = window.checkoutConfig,
+    let checkoutConfig = window.checkoutConfig,
         agreementManualMode = 1,
         agreementsConfig = checkoutConfig ? checkoutConfig.checkoutAgreements : {};
 
     return Component.extend({
         defaults: {
-            template: 'Magento_CheckoutAgreements/checkout/checkout-agreements'
+            template: 'Magento_CheckoutAgreements/checkout/checkout-agreements',
         },
         isVisible: agreementsConfig.isEnabled,
         agreements: agreementsConfig.agreements,
@@ -30,8 +30,8 @@ define([
          *
          * @param {Object} element
          */
-        isAgreementRequired: function (element) {
-            return element.mode == agreementManualMode; //eslint-disable-line eqeqeq
+        isAgreementRequired: function(element) {
+            return element.mode == agreementManualMode; // eslint-disable-line eqeqeq
         },
 
         /**
@@ -39,7 +39,7 @@ define([
          *
          * @param {Object} element
          */
-        showContent: function (element) {
+        showContent: function(element) {
             this.modalTitle(element.checkboxText);
             this.modalContent(element.content);
             agreementsModal.showModal();
@@ -50,8 +50,8 @@ define([
          *
          * @param {Object} element
          */
-        initModal: function (element) {
+        initModal: function(element) {
             agreementsModal.createModal(element);
-        }
+        },
     });
 });

@@ -11,8 +11,8 @@ define([
     'mageUtils',
     'uiLayout',
     'mage/translate',
-    'uiCollection'
-], function (_, utils, layout, $t, Collection) {
+    'uiCollection',
+], function(_, utils, layout, $t, Collection) {
     'use strict';
 
     return Collection.extend({
@@ -38,40 +38,40 @@ define([
                     columnsProvider: '${ $.$data.editor.columnsProvider }',
                     editorProvider: '${ $.$data.editor.name }',
                     preserveFields: {
-                        '${ $.$data.editor.indexField }': true
-                    }
-                }
+                        '${ $.$data.editor.indexField }': true,
+                    },
+                },
             },
             bulkConfig: {
                 component: 'Magento_Ui/js/grid/editing/bulk',
                 name: '${ $.name }_bulk',
                 editorProvider: '${ $.name }',
-                columnsProvider: '${ $.columnsProvider }'
+                columnsProvider: '${ $.columnsProvider }',
             },
             clientConfig: {
                 component: 'Magento_Ui/js/grid/editing/client',
-                name: '${ $.name }_client'
+                name: '${ $.name }_client',
             },
             viewConfig: {
                 component: 'Magento_Ui/js/grid/editing/editor-view',
                 name: '${ $.name }_view',
                 model: '${ $.name }',
-                columnsProvider: '${ $.columnsProvider }'
+                columnsProvider: '${ $.columnsProvider }',
             },
             imports: {
-                rowsData: '${ $.dataProvider }:data.items'
+                rowsData: '${ $.dataProvider }:data.items',
             },
             listens: {
                 '${ $.dataProvider }:reloaded': 'cancel',
-                '${ $.selectProvider }:selected': 'onSelectionsChange'
+                '${ $.selectProvider }:selected': 'onSelectionsChange',
             },
             modules: {
                 source: '${ $.dataProvider }',
                 client: '${ $.clientConfig.name }',
                 columns: '${ $.columnsProvider }',
                 bulk: '${ $.bulkConfig.name }',
-                selections: '${ $.selectProvider }'
-            }
+                selections: '${ $.selectProvider }',
+            },
         },
 
         /**
@@ -79,7 +79,7 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'updateState', 'countErrors', 'onDataSaved', 'onSaveError');
 
             this._super()
@@ -95,19 +95,19 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track([
                     'errorsCount',
                     'isMultiEditing',
                     'isSingleEditing',
                     'isSingleColumnEditing',
-                    'changed'
+                    'changed',
                 ])
                 .observe({
                     canSave: true,
                     activeRecords: [],
-                    messages: []
+                    messages: [],
                 });
 
             return this;
@@ -118,7 +118,7 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        initBulk: function () {
+        initBulk: function() {
             if (this.bulkEnabled) {
                 layout([this.bulkConfig]);
             }
@@ -131,7 +131,7 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        initView: function () {
+        initView: function() {
             layout([this.viewConfig]);
 
             return this;
@@ -142,7 +142,7 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        initClient: function () {
+        initClient: function() {
             layout([this.clientConfig]);
 
             return this;
@@ -155,8 +155,8 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        initRecord: function (id, isIndex) {
-            var record = this.buildRecord(id, isIndex);
+        initRecord: function(id, isIndex) {
+            let record = this.buildRecord(id, isIndex);
 
             layout([record]);
 
@@ -169,10 +169,10 @@ define([
          * @param {Record} record
          * @returns {Editor} Chainable.
          */
-        initElement: function (record) {
+        initElement: function(record) {
             record.on({
                 'active': this.updateState,
-                'errorsCount': this.countErrors
+                'errorsCount': this.countErrors,
             });
 
             this.updateState();
@@ -187,8 +187,8 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Object} Record configuration.
          */
-        buildRecord: function (id, isIndex) {
-            var recordId = this.getId(id, isIndex),
+        buildRecord: function(id, isIndex) {
+            let recordId = this.getId(id, isIndex),
                 recordTmpl = this.templates.record,
                 record;
 
@@ -198,11 +198,11 @@ define([
 
             record = utils.template(recordTmpl, {
                 editor: this,
-                recordId: id
+                recordId: id,
             });
 
             record.recordId = id;
-            record.data     = this.getRowData(id);
+            record.data = this.getRowData(id);
 
             return record;
         },
@@ -215,9 +215,9 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        edit: function (id, isIndex) {
-            var recordId = this.getId(id, isIndex),
-                record   = this.getRecord(recordId);
+        edit: function(id, isIndex) {
+            let recordId = this.getId(id, isIndex),
+                record = this.getRecord(recordId);
 
             record ?
                 record.active(true) :
@@ -233,8 +233,8 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        startEdit: function (id, isIndex) {
-            var recordId = this.getId(id, isIndex);
+        startEdit: function(id, isIndex) {
+            let recordId = this.getId(id, isIndex);
 
             this.selections()
                 .deselectAll()
@@ -248,7 +248,7 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        cancel: function () {
+        cancel: function() {
             this.reset()
                 .hide()
                 .clearMessages()
@@ -262,7 +262,7 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        hide: function () {
+        hide: function() {
             this.activeRecords.each('active', false);
 
             return this;
@@ -273,8 +273,8 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        reset: function () {
-            this.elems.each(function (record) {
+        reset: function() {
+            this.elems.each(function(record) {
                 this.resetRecord(record.recordId);
             }, this);
 
@@ -286,15 +286,15 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        save: function () {
-            var data;
+        save: function() {
+            let data;
 
             if (!this.isValid()) {
                 return this;
             }
 
             data = {
-                items: this.getData()
+                items: this.getData(),
             };
 
             this.clearMessages()
@@ -313,11 +313,11 @@ define([
          *
          * @returns {Array} An array of records and theirs validation results.
          */
-        validate: function () {
-            return this.activeRecords.map(function (record) {
+        validate: function() {
+            return this.activeRecords.map(function(record) {
                 return {
                     target: record,
-                    valid: record.isValid()
+                    valid: record.isValid(),
                 };
             });
         },
@@ -327,7 +327,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isValid: function () {
+        isValid: function() {
             return _.every(this.validate(), 'valid');
         },
 
@@ -336,8 +336,8 @@ define([
          *
          * @returns {Object} Collection of records data.
          */
-        getData: function () {
-            var data = this.activeRecords.map('getData');
+        getData: function() {
+            let data = this.activeRecords.map('getData');
 
             return _.indexBy(data, this.indexField);
         },
@@ -349,7 +349,7 @@ define([
          * @param {Boolean} partial - See 'setData' method of a 'Record'.
          * @returns {Editor} Chainable.
          */
-        setData: function (data, partial) {
+        setData: function(data, partial) {
             this.activeRecords.each('setData', data, partial);
 
             return this;
@@ -363,9 +363,9 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Editor} Chainable.
          */
-        resetRecord: function (id, isIndex) {
-            var record  = this.getRecord(id, isIndex),
-                data    = this.getRowData(id, isIndex);
+        resetRecord: function(id, isIndex) {
+            let record = this.getRecord(id, isIndex),
+                data = this.getRowData(id, isIndex);
 
             if (record && data) {
                 record.setData(data);
@@ -381,9 +381,9 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Record}
          */
-        getRecord: function (id, isIndex) {
+        getRecord: function(id, isIndex) {
             return this.elems.findWhere({
-                recordId: this.getId(id, isIndex)
+                recordId: this.getId(id, isIndex),
             });
         },
 
@@ -394,7 +394,7 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {String}
          */
-        formRecordName: function (id, isIndex) {
+        formRecordName: function(id, isIndex) {
             id = this.getId(id, isIndex);
 
             return this.name + '.' + id;
@@ -406,12 +406,12 @@ define([
          * @param {Array} fields - An array of fields indeces to be disabled.
          * @returns {Editor} Chainable.
          */
-        disableFields: function (fields) {
-            var columns = this.columns().elems(),
-                data    = utils.copy(this.fields);
+        disableFields: function(fields) {
+            let columns = this.columns().elems(),
+                data = utils.copy(this.fields);
 
-            columns.forEach(function (column) {
-                var index = column.index,
+            columns.forEach(function(column) {
+                let index = column.index,
                     field = data[index] = data[index] || {};
 
                 field.disabled = _.contains(fields, index);
@@ -430,13 +430,13 @@ define([
          *      parameter is an index or identifier.
          * @returns {String} Records' id.
          */
-        getId: function (id, isIndex) {
-            var rowsData = this.rowsData,
+        getId: function(id, isIndex) {
+            let rowsData = this.rowsData,
                 record;
 
             if (isIndex === true) {
-                record  = rowsData[id];
-                id      = record ? record[this.indexField] : false;
+                record = rowsData[id];
+                id = record ? record[this.indexField] : false;
             }
 
             return id;
@@ -449,10 +449,10 @@ define([
          * @param {Boolean} [isIndex=false] - See 'getId' method.
          * @returns {Object}
          */
-        getRowData: function (id, isIndex) {
+        getRowData: function(id, isIndex) {
             id = this.getId(id, isIndex);
 
-            return _.find(this.rowsData, function (row) {
+            return _.find(this.rowsData, function(row) {
                 return row[this.indexField] === id;
             }, this);
         },
@@ -464,8 +464,8 @@ define([
          * @param {Boolean} [isIndex=false] - See'getId' method.
          * @returns {Boolean}
          */
-        isActive: function (id, isIndex) {
-            var record = this.getRecord(id, isIndex);
+        isActive: function(id, isIndex) {
+            let record = this.getRecord(id, isIndex);
 
             return _.contains(this.activeRecords(), record);
         },
@@ -475,7 +475,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasActive: function () {
+        hasActive: function() {
             return !!this.activeRecords().length || this.permanentlyActive;
         },
 
@@ -484,7 +484,7 @@ define([
          *
          * @returns {Number}
          */
-        countActive: function () {
+        countActive: function() {
             return this.activeRecords().length;
         },
 
@@ -493,10 +493,10 @@ define([
          *
          * @returns {Number}
          */
-        countErrors: function () {
-            var errorsCount = 0;
+        countErrors: function() {
+            let errorsCount = 0;
 
-            this.activeRecords.each(function (record) {
+            this.activeRecords.each(function(record) {
                 errorsCount += record.errorsCount;
             });
 
@@ -510,7 +510,7 @@ define([
          *
          * @returns {String}
          */
-        countErrorsMessage: function () {
+        countErrorsMessage: function() {
             return $t('There are {placeholder} messages requires your attention.')
                 .replace('{placeholder}', this.countErrors());
         },
@@ -520,7 +520,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasErrors: function () {
+        hasErrors: function() {
             return !!this.countErrors();
         },
 
@@ -529,10 +529,10 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        updateState: function () {
-            var active      = this.elems.filter('active'),
+        updateState: function() {
+            let active = this.elems.filter('active'),
                 activeCount = active.length,
-                columns     = this.columns().elems;
+                columns = this.columns().elems;
 
             columns.each('disableAction', !!activeCount);
 
@@ -549,7 +549,7 @@ define([
          *
          * @returns {Array}
          */
-        getSelections: function () {
+        getSelections: function() {
             return this.selections().getPageSelections();
         },
 
@@ -559,16 +559,16 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        editSelected: function () {
-            var selections = this.getSelections();
+        editSelected: function() {
+            let selections = this.getSelections();
 
-            this.elems.each(function (record) {
+            this.elems.each(function(record) {
                 if (!_.contains(selections, record.recordId)) {
                     record.active(false);
                 }
             });
 
-            selections.forEach(function (id) {
+            selections.forEach(function(id) {
                 this.edit(id);
             }, this);
 
@@ -580,7 +580,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasMessages: function () {
+        hasMessages: function() {
             return this.messages().length;
         },
 
@@ -590,11 +590,11 @@ define([
          * @param {(Object|Array)} message - Messages to be added.
          * @returns {Editor} Chainable.
          */
-        addMessage: function (message) {
-            var messages = this.messages();
+        addMessage: function(message) {
+            let messages = this.messages();
 
             Array.isArray(message) ?
-                messages.push.apply(messages, message) :
+                messages.push(...message) :
                 messages.push(message);
 
             this.messages(messages);
@@ -607,7 +607,7 @@ define([
          *
          * @returns {Editor} Chainable.
          */
-        clearMessages: function () {
+        clearMessages: function() {
             this.messages.removeAll();
 
             return this;
@@ -616,7 +616,7 @@ define([
         /**
          * Listener of the selections data changes.
          */
-        onSelectionsChange: function () {
+        onSelectionsChange: function() {
             if (this.hasActive()) {
                 this.editSelected();
             }
@@ -625,15 +625,15 @@ define([
         /**
          * Handles successful save request.
          */
-        onDataSaved: function () {
-            var msg = {
+        onDataSaved: function() {
+            let msg = {
                 type: 'success',
-                message: this.successMsg
+                message: this.successMsg,
             };
 
             this.addMessage(msg)
                 .source('reload', {
-                    refresh: true
+                    refresh: true,
                 });
         },
 
@@ -642,9 +642,9 @@ define([
          *
          * @param {(Array|Object)} errors - List of errors or a single error object.
          */
-        onSaveError: function (errors) {
+        onSaveError: function(errors) {
             this.addMessage(errors)
                 .columns('hideLoader');
-        }
+        },
     });
 });

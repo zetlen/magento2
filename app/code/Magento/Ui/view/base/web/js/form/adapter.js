@@ -8,14 +8,14 @@
  */
 define([
     'jquery',
-    'underscore'
-], function ($, _) {
+    'underscore',
+], function($, _) {
     'use strict';
 
-    var buttons = {
-            'reset':            '#reset',
-            'save':             '#save',
-            'saveAndContinue':  '#save_and_continue'
+    let buttons = {
+            'reset': '#reset',
+            'save': '#save',
+            'saveAndContinue': '#save_and_continue',
         },
         selectorPrefix = '',
         eventPrefix;
@@ -27,8 +27,8 @@ define([
      * @param {String} action
      */
     function initListener(callback, action) {
-        var selector    = selectorPrefix ? selectorPrefix + ' ' + buttons[action] : buttons[action],
-            elem        = $(selector)[0];
+        let selector = selectorPrefix ? selectorPrefix + ' ' + buttons[action] : buttons[action],
+            elem = $(selector)[0];
 
         if (!elem) {
             return;
@@ -47,8 +47,8 @@ define([
      * @param {String} action
      */
     function destroyListener(action) {
-        var selector    = selectorPrefix ? selectorPrefix + ' ' + buttons[action] : buttons[action],
-            elem        = $(selector)[0];
+        let selector = selectorPrefix ? selectorPrefix + ' ' + buttons[action] : buttons[action],
+            elem = $(selector)[0];
 
         if (!elem) {
             return;
@@ -70,7 +70,7 @@ define([
          * @param {String} selectorPref
          * @param {String} eventPref
          */
-        on: function (handlers, selectorPref, eventPref) {
+        on: function(handlers, selectorPref, eventPref) {
             selectorPrefix = selectorPrefix || selectorPref;
             eventPrefix = eventPref;
             _.each(handlers, initListener);
@@ -83,9 +83,9 @@ define([
          * @param {Object} handlers
          * @param {String} eventPref
          */
-        off: function (handlers, eventPref) {
+        off: function(handlers, eventPref) {
             eventPrefix = eventPref;
             _.each(handlers, destroyListener);
-        }
+        },
     };
 });

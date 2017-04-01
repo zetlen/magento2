@@ -4,8 +4,8 @@
  */
 define([
     'Magento_Ui/js/form/element/file-uploader',
-    'underscore'
-], function (Element, _) {
+    'underscore',
+], function(Element, _) {
     'use strict';
 
     return Element.extend({
@@ -15,7 +15,7 @@ define([
         thumbnail: null,
         smallImage: null,
         defaults: {
-            fileInputName: ''
+            fileInputName: '',
         },
 
         /**
@@ -23,15 +23,15 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super().observe(['processedFile', 'actionsListOpened', 'thumbnailUrl', 'thumbnail', 'smallImage']);
 
             return this;
         },
 
         /** @inheritdoc */
-        setInitialValue: function () {
-            var value = this.getInitialValue();
+        setInitialValue: function() {
+            let value = this.getInitialValue();
 
             if (!_.isString(value)) {
                 this._super();
@@ -46,7 +46,7 @@ define([
          * @param {Object} file
          * @returns {Object} Chainable.
          */
-        addFile: function (file) {
+        addFile: function(file) {
             this.processedFile(this.processFile(file));
 
             this.value(this.processedFile().file);
@@ -59,7 +59,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        toggleActionsList: function () {
+        toggleActionsList: function() {
             if (this.actionsListOpened()) {
                 this.actionsListOpened(false);
             } else {
@@ -74,7 +74,7 @@ define([
          *
          * @returns {Object} Chainable
          */
-        closeList: function () {
+        closeList: function() {
             if (this.actionsListOpened()) {
                 this.actionsListOpened(false);
             }
@@ -87,7 +87,7 @@ define([
          *
          * @returns {Object} Chainable
          */
-        deleteImage: function () {
+        deleteImage: function() {
             this.processedFile({});
             this.value(null);
             this.thumbnail(null);
@@ -95,6 +95,6 @@ define([
             this.smallImage(null);
 
             return this;
-        }
+        },
     });
 });

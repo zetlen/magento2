@@ -8,8 +8,8 @@ define([
     'uiRegistry',
     'Magento_Ui/js/lib/validation/validator',
     'mage/translate',
-    'underscore'
-], function (Group, uiRegistry, validation, $t, _) {
+    'underscore',
+], function(Group, uiRegistry, validation, $t, _) {
     'use strict';
 
     return Group.extend({
@@ -22,14 +22,13 @@ define([
             fieldTemplate: 'ui/form/field',
             breakLine: true,
             validateWholeGroup: false,
-            additionalClasses: {}
+            additionalClasses: {},
         },
 
         /** @inheritdoc */
-        initialize: function () {
-            validation.addRule('validate-fpt-group', function (value) {
+        initialize: function() {
+            validation.addRule('validate-fpt-group', function(value) {
                 if (value.indexOf('?') !== -1) {
-
                     return false;
                 }
 
@@ -43,14 +42,14 @@ define([
          *
          * @private
          */
-        _handleOptionsAvailability: function () {
-            var parent,
+        _handleOptionsAvailability: function() {
+            let parent,
                 dup;
 
             dup = {};
             parent = uiRegistry.get(uiRegistry.get(this.parentName).parentName);
-            _.each(parent.elems(), function (elem) {
-                var country,
+            _.each(parent.elems(), function(elem) {
+                let country,
                     state,
                     val,
                     key;
@@ -73,16 +72,16 @@ define([
         },
 
         /** @inheritdoc */
-        initElement: function (elem) {
-            var obj;
+        initElement: function(elem) {
+            let obj;
 
             obj = this;
             this._super();
-            elem.on('value', function () {
+            elem.on('value', function() {
                 obj._handleOptionsAvailability();
             });
 
             return this;
-        }
+        },
     });
 });

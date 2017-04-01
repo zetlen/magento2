@@ -5,11 +5,11 @@
 
 define([
     'ko',
-    'mageUtils'
-    ], function (ko, utils) {
+    'mageUtils',
+    ], function(ko, utils) {
     'use strict';
 
-    var captionPlaceholder = {},
+    let captionPlaceholder = {},
         optgroupTmpl = '<optgroup label="${ $.label }"></optgroup>',
         nbspRe = /&nbsp;/g,
         optionsText,
@@ -21,7 +21,7 @@ define([
          * @param {*} element
          * @returns {Object}
          */
-        init: function (element) {
+        init: function(element) {
             if (ko.utils.tagNameLower(element) !== 'select') {
                 throw new Error('options binding applies only to SELECT elements');
             }
@@ -33,7 +33,7 @@ define([
 
             // Ensures that the binding processor doesn't try to bind the options
             return {
-                'controlsDescendantBindings': true
+                'controlsDescendantBindings': true,
             };
         },
 
@@ -42,8 +42,8 @@ define([
          * @param {*} valueAccessor
          * @param {*} allBindings
          */
-        update: function (element, valueAccessor, allBindings) {
-            var selectWasPreviouslyEmpty = element.length === 0,
+        update: function(element, valueAccessor, allBindings) {
+            let selectWasPreviouslyEmpty = element.length === 0,
                 previousScrollTop = !selectWasPreviouslyEmpty && element.multiple ? element.scrollTop : null,
                 includeDestroyed = allBindings.get('optionsIncludeDestroyed'),
                 arrayToDomNodeChildrenOptions = {},
@@ -52,7 +52,7 @@ define([
                 filteredArray,
                 previousSelectedValues,
                 itemUpdate = false,
-                callback = setSelectionCallback,//eslint-disable-line no-use-before-define
+                callback = setSelectionCallback, // eslint-disable-line no-use-before-define
                 nestedOptionsLevel = -1;
 
             optionsText = ko.utils.unwrapObservable(allBindings.get('optionsText')) || 'text';
@@ -61,7 +61,7 @@ define([
 
             if (element.multiple) {
                 previousSelectedValues = ko.utils.arrayMap(
-                    selectedOptions(),//eslint-disable-line no-use-before-define
+                    selectedOptions(), // eslint-disable-line no-use-before-define
                     ko.selectExtensions.readValue
                 );
             } else {
@@ -76,7 +76,7 @@ define([
                 }
 
                 // Filter out any entries marked as destroyed
-                filteredArray = ko.utils.arrayFilter(unwrappedArray, function (item) {
+                filteredArray = ko.utils.arrayFilter(unwrappedArray, function(item) {
                     if (item && !item.label) {
                         return false;
                     }
@@ -86,24 +86,23 @@ define([
                         item === null ||
                         !ko.utils.unwrapObservable(item._destroy);
                 });
-                filteredArray.map(recursivePathBuilder, null);//eslint-disable-line no-use-before-define
+                filteredArray.map(recursivePathBuilder, null);// eslint-disable-line no-use-before-define
             }
 
             /**
              * @param {*} option
              */
-            arrayToDomNodeChildrenOptions.beforeRemove = function (option) {
+            arrayToDomNodeChildrenOptions.beforeRemove = function(option) {
                 element.removeChild(option);
             };
 
             if (allBindings.has('optionsAfterRender')) {
-
                 /**
                  * @param {*} arrayEntry
                  * @param {*} newOptions
                  */
-                callback = function (arrayEntry, newOptions) {
-                    setSelectionCallback(arrayEntry, newOptions);//eslint-disable-line no-use-before-define
+                callback = function(arrayEntry, newOptions) {
+                    setSelectionCallback(arrayEntry, newOptions);// eslint-disable-line no-use-before-define
                     ko.dependencyDetection.ignore(
                         allBindings.get('optionsAfterRender'),
                         null,
@@ -113,17 +112,17 @@ define([
                 };
             }
 
-            filteredArray = formatOptions(filteredArray);//eslint-disable-line no-use-before-define
+            filteredArray = formatOptions(filteredArray);// eslint-disable-line no-use-before-define
             ko.utils.setDomNodeChildrenFromArrayMapping(
                 element,
                 filteredArray,
-                optionNodeFromArray,//eslint-disable-line no-use-before-define
+                optionNodeFromArray, // eslint-disable-line no-use-before-define
                 arrayToDomNodeChildrenOptions,
                 callback
             );
 
-            ko.dependencyDetection.ignore(function () {
-                var selectionChanged;
+            ko.dependencyDetection.ignore(function() {
+                let selectionChanged;
 
                 if (allBindings.get('valueAllowUnset') && allBindings.has('value')) {
                     // The model value is authoritative, so make sure its value is the one selected
@@ -138,7 +137,7 @@ define([
                         // For a multiple-select box, compare the new selection count to the previous one
                         // But if nothing was selected before, the selection can't have changed
                         selectionChanged = previousSelectedValues.length &&
-                            selectedOptions().length < //eslint-disable-line no-use-before-define
+                            selectedOptions().length < // eslint-disable-line no-use-before-define
                             previousSelectedValues.length;
                     } else {
                         // For a single-select box, compare the current value to the previous value
@@ -158,7 +157,7 @@ define([
                 }
             });
 
-            /*eslint-enable max-len, no-use-before-define*/
+            /* eslint-enable max-len, no-use-before-define*/
 
             if (previousScrollTop && Math.abs(previousScrollTop - element.scrollTop) > 20) {
                 element.scrollTop = previousScrollTop;
@@ -168,7 +167,7 @@ define([
              * @returns {*}
              */
             function selectedOptions() {
-                return ko.utils.arrayFilter(element.options, function (node) {
+                return ko.utils.arrayFilter(element.options, function(node) {
                     return node.selected;
                 });
             }
@@ -180,7 +179,7 @@ define([
              * @returns {*}
              */
             function applyToObject(object, predicate, defaultValue) {
-                var predicateType = typeof predicate;
+                let predicateType = typeof predicate;
 
                 if (predicateType === 'function') {   // run it against the data value
                     return predicate(object);
@@ -195,7 +194,6 @@ define([
              * @param {*} obj
              */
             function recursivePathBuilder(obj) {
-
                 obj[optionTitle] = (this && this[optionTitle] ? this[optionTitle] + '/' : '') + obj[optionsText].trim();
 
                 if (Array.isArray(obj[optionsValue])) {
@@ -209,7 +207,7 @@ define([
              * @returns {*[]}
              */
             function optionNodeFromArray(arrayEntry, oldOptions) {
-                var option;
+                let option;
 
                 if (oldOptions.length) {
                     previousSelectedValues = oldOptions[0].selected ?
@@ -224,10 +222,9 @@ define([
                 } else if (typeof arrayEntry[optionsValue] === 'undefined') { // empty value === optgroup
                     option = utils.template(optgroupTmpl, {
                         label: arrayEntry[optionsText],
-                        title: arrayEntry[optionsText + 'title']
+                        title: arrayEntry[optionsText + 'title'],
                     });
                     option = ko.utils.parseHtmlFragment(option)[0];
-
                 } else {
                     option = element.ownerDocument.createElement('option');
                     option.setAttribute('data-title', arrayEntry[optionsText + 'title']);
@@ -242,7 +239,7 @@ define([
              * @param {*} newOptions
              */
             function setSelectionCallback(newOptions) {
-                var isSelected;
+                let isSelected;
 
                 // IE6 doesn't like us to assign selection to OPTION nodes before they're added to the document.
                 // That's why we first added them without selection. Now it's time to set the selection.
@@ -275,7 +272,7 @@ define([
              * @returns {Array}
              */
             function formatOptions(options) {
-                var res = [];
+                let res = [];
 
                 nestedOptionsLevel++;
 
@@ -284,7 +281,7 @@ define([
                     if (allBindings.has('optionsCaption')) {
                         captionValue = ko.utils.unwrapObservable(allBindings.get('optionsCaption'));
                         // If caption value is null or undefined, don't show a caption
-                        if (//eslint-disable-line max-depth
+                        if (// eslint-disable-line max-depth
                             captionValue !== null &&
                             captionValue !== undefined &&
                             captionValue !== false
@@ -294,8 +291,8 @@ define([
                     }
                 }
 
-                ko.utils.arrayForEach(options, function (option) {
-                    var value = applyToObject(option, optionsValue, option),
+                ko.utils.arrayForEach(options, function(option) {
+                    let value = applyToObject(option, optionsValue, option),
                         label = applyToObject(option, optionsText, value) || '',
                         obj = {},
                         space = '\u2007\u2007\u2007';
@@ -318,7 +315,7 @@ define([
 
                 return res;
             }
-        }
+        },
     };
     ko.bindingHandlers.selectedOptions.after.push('optgroup');
 });

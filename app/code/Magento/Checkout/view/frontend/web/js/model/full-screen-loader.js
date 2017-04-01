@@ -5,18 +5,18 @@
 
 define([
     'jquery',
-    'rjsResolver'
-], function ($, resolver) {
+    'rjsResolver',
+], function($, resolver) {
     'use strict';
 
-    var containerId = '#checkout';
+    let containerId = '#checkout';
 
     return {
 
         /**
          * Start full page loader action
          */
-        startLoader: function () {
+        startLoader: function() {
             $(containerId).trigger('processStart');
         },
 
@@ -25,11 +25,11 @@ define([
          *
          * @param {Boolean} [forceStop]
          */
-        stopLoader: function (forceStop) {
-            var $elem = $(containerId),
+        stopLoader: function(forceStop) {
+            let $elem = $(containerId),
                 stop = $elem.trigger.bind($elem, 'processStop');
 
             forceStop ? stop() : resolver(stop);
-        }
+        },
     };
 });

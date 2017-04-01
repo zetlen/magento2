@@ -6,8 +6,8 @@
 define([
     'jquery',
     'jquery/ui',
-    'mage/translate'
-], function ($) {
+    'mage/translate',
+], function($) {
     'use strict';
 
     $.widget('mage.relatedProducts', {
@@ -18,14 +18,14 @@ define([
             selectAllMessage: $.mage.__('select all'),
             unselectAllMessage: $.mage.__('unselect all'),
             selectAllLink: '[role="select-all"]',
-            elementsSelector: '.item.product'
+            elementsSelector: '.item.product',
         },
 
         /**
          * Bind events to the appropriate handlers.
          * @private
          */
-        _create: function () {
+        _create: function() {
             $(this.options.selectAllLink).on('click', $.proxy(this._selectAllRelated, this));
             $(this.options.relatedCheckbox).on('click', $.proxy(this._addRelatedToProduct, this));
             this._showRelatedProducts(
@@ -42,8 +42,8 @@ define([
          * @param {jQuery.Event} e - Click event on either the "select all" link or the "unselect all" link.
          * @return {Boolean} - Prevent default event action and event propagation.
          */
-        _selectAllRelated: function (e) {
-            var innerHTML = this.options.relatedProductsCheckFlag ?
+        _selectAllRelated: function(e) {
+            let innerHTML = this.options.relatedProductsCheckFlag ?
                 this.options.selectAllMessage : this.options.unselectAllMessage;
 
             $(e.target).html(innerHTML);
@@ -61,9 +61,9 @@ define([
          * whose checkbox has been checked. The selected related products are stored in a hidden input field.
          * @private
          */
-        _addRelatedToProduct: function () {
+        _addRelatedToProduct: function() {
             $(this.options.relatedProductsField).val(
-                $(this.options.relatedCheckbox + ':checked').map(function () {
+                $(this.options.relatedCheckbox + ':checked').map(function() {
                     return this.value;
                 }).get().join(',')
             );
@@ -76,8 +76,8 @@ define([
          * @param {*} shuffle
          * @private
          */
-        _showRelatedProducts: function (elements, limit, shuffle) {
-            var index;
+        _showRelatedProducts: function(elements, limit, shuffle) {
+            let index;
 
             if (shuffle) {
                 this._shuffle(elements);

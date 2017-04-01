@@ -6,8 +6,8 @@
 define([
     'ko',
     'underscore',
-    'mage/apply/main'
-], function (ko, _, mage) {
+    'mage/apply/main',
+], function(ko, _, mage) {
     'use strict';
 
     ko.bindingHandlers.mageInit = {
@@ -17,12 +17,12 @@ define([
          * @param {HTMLElement} el
          * @param {Function} valueAccessor
          */
-        init: function (el, valueAccessor) {
-            var data = valueAccessor();
+        init: function(el, valueAccessor) {
+            let data = valueAccessor();
 
-            _.each(data, function (config, component) {
+            _.each(data, function(config, component) {
                 mage.applyFor(el, config, component);
             });
-        }
+        },
     };
 });

@@ -5,28 +5,28 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/element/abstract'
-], function (_, registry, Abstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function(_, registry, Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             listens: {
-                isConfigurable: 'handlePriceValue'
+                isConfigurable: 'handlePriceValue',
             },
             imports: {
-                isConfigurable: '!ns = ${ $.ns }, index = configurable-matrix:isEmpty'
+                isConfigurable: '!ns = ${ $.ns }, index = configurable-matrix:isEmpty',
             },
             modules: {
-                createConfigurableButton: '${$.createConfigurableButton}'
-            }
+                createConfigurableButton: '${$.createConfigurableButton}',
+            },
         },
 
         /**
          * Invokes initialize method of parent class,
          * contains initialization logic
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             return this;
@@ -37,7 +37,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe(['content']);
 
@@ -49,11 +49,11 @@ define([
          *
          * @param {String} isConfigurable
          */
-        handlePriceValue: function (isConfigurable) {
+        handlePriceValue: function(isConfigurable) {
             if (isConfigurable) {
                 this.disable();
                 this.clear();
             }
-        }
+        },
     });
 });

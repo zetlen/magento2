@@ -11,8 +11,8 @@ define([
     'Magento_Checkout/js/model/totals',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Checkout/js/model/cart/cache',
-    'Magento_Customer/js/customer-data'
-], function (_, resourceUrlManager, quote, storage, totalsService, errorProcessor, cartCache, customerData) {
+    'Magento_Customer/js/customer-data',
+], function(_, resourceUrlManager, quote, storage, totalsService, errorProcessor, cartCache, customerData) {
     'use strict';
 
     /**
@@ -20,8 +20,8 @@ define([
      *
      * @param {Object} address
      */
-    var loadFromServer = function (address) {
-        var serviceUrl,
+    let loadFromServer = function(address) {
+        let serviceUrl,
             payload;
 
         // Start loader for totals block
@@ -29,8 +29,8 @@ define([
         serviceUrl = resourceUrlManager.getUrlForTotalsEstimationForNewAddress(quote);
         payload = {
             addressInformation: {
-                address: _.pick(address, cartCache.requiredFields)
-            }
+                address: _.pick(address, cartCache.requiredFields),
+            },
         };
 
         if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
@@ -40,20 +40,20 @@ define([
 
         storage.post(
             serviceUrl, JSON.stringify(payload), false
-        ).done(function (result) {
-            var data = {
+        ).done(function(result) {
+            let data = {
                 totals: result,
                 address: address,
                 cartVersion: customerData.get('cart')()['data_id'],
                 shippingMethodCode: quote.shippingMethod()['method_code'],
-                shippingCarrierCode: quote.shippingMethod()['carrier_code']
+                shippingCarrierCode: quote.shippingMethod()['carrier_code'],
             };
 
             quote.setTotals(result);
             cartCache.set('cart-data', data);
-        }).fail(function (response) {
+        }).fail(function(response) {
             errorProcessor.process(response);
-        }).always(function () {
+        }).always(function() {
             // Stop loader for totals block
             totalsService.isLoading(false);
         });
@@ -71,7 +71,7 @@ define([
          * Get shipping rates for specified address.
          * @param {Object} address
          */
-        estimateTotals: function (address) {
+        estimateTotals: function(address) {
             if (!cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
                 !cartCache.isChanged('shippingMethodCode', quote.shippingMethod()['method_code']) &&
                 !cartCache.isChanged('shippingCarrierCode', quote.shippingMethod()['carrier_code']) &&
@@ -82,6 +82,6 @@ define([
             } else {
                 loadFromServer(address);
             }
-        }
+        },
     };
 });

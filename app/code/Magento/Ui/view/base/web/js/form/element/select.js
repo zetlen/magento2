@@ -11,11 +11,11 @@ define([
     'mageUtils',
     'uiRegistry',
     './abstract',
-    'uiLayout'
-], function (_, utils, registry, Abstract, layout) {
+    'uiLayout',
+], function(_, utils, registry, Abstract, layout) {
     'use strict';
 
-    var inputNode = {
+    let inputNode = {
         parent: '${ $.$data.parentName }',
         component: 'Magento_Ui/js/form/element/abstract',
         template: '${ $.$data.template }',
@@ -24,10 +24,10 @@ define([
         dataScope: '${ $.$data.customEntry }',
         customScope: '${ $.$data.customScope }',
         sortOrder: {
-            after: '${ $.$data.name }'
+            after: '${ $.$data.name }',
         },
         displayArea: 'body',
-        label: '${ $.$data.label }'
+        label: '${ $.$data.label }',
     };
 
     /**
@@ -38,10 +38,10 @@ define([
      * @return {Object}
      */
     function parseOptions(nodes, captionValue) {
-        var caption,
+        let caption,
             value;
 
-        nodes = _.map(nodes, function (node) {
+        nodes = _.map(nodes, function(node) {
             value = node.value;
 
             if (value === null || value === captionValue) {
@@ -55,7 +55,7 @@ define([
 
         return {
             options: _.compact(nodes),
-            caption: _.isString(caption) ? caption : false
+            caption: _.isString(caption) ? caption : false,
         };
     }
 
@@ -66,9 +66,9 @@ define([
      * @return {*} - first non-undefined value in array
      */
     function findFirst(data) {
-        var value;
+        let value;
 
-        data.some(function (node) {
+        data.some(function(node) {
             value = node.value;
 
             if (Array.isArray(value)) {
@@ -89,11 +89,11 @@ define([
      * @returns {Object}
      */
     function indexOptions(data, result) {
-        var value;
+        let value;
 
         result = result || {};
 
-        data.forEach(function (item) {
+        data.forEach(function(item) {
             value = item.value;
 
             if (Array.isArray(value)) {
@@ -111,7 +111,7 @@ define([
             customName: '${ $.parentName }.${ $.index }_input',
             elementTmpl: 'ui/form/element/select',
             caption: '',
-            options: []
+            options: [],
         },
 
         /**
@@ -119,7 +119,7 @@ define([
          *     and options, and invokes initialize method of AbstractElement class.
          *     If instance's 'customEntry' property is set to true, calls 'initInput'
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             if (this.customEntry) {
@@ -139,7 +139,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super();
 
             this.initialOptions = this.options;
@@ -155,12 +155,12 @@ define([
          *
          * @returns {Object} Chainable
          */
-        initFilter: function () {
-            var filter = this.filterBy;
+        initFilter: function() {
+            let filter = this.filterBy;
 
             this.filter(this.default, filter.field);
             this.setLinks({
-                filter: filter.target
+                filter: filter.target,
             }, 'imports');
 
             return this;
@@ -171,7 +171,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initInput: function () {
+        initInput: function() {
             layout([utils.template(inputNode, this)]);
 
             return this;
@@ -183,8 +183,8 @@ define([
          *
          * @returns {*}
          */
-        normalizeData: function () {
-            var value = this._super(),
+        normalizeData: function() {
+            let value = this._super(),
                 option;
 
             if (value !== '') {
@@ -205,13 +205,13 @@ define([
          * @param {*} value
          * @param {String} field
          */
-        filter: function (value, field) {
-            var source = this.initialOptions,
+        filter: function(value, field) {
+            let source = this.initialOptions,
                 result;
 
             field = field || this.filterBy.field;
 
-            result = _.filter(source, function (item) {
+            result = _.filter(source, function(item) {
                 return item[field] === value || item.value === '';
             });
 
@@ -223,8 +223,8 @@ define([
          *
          * @param {Boolean} isVisible
          */
-        toggleInput: function (isVisible) {
-            registry.get(this.customName, function (input) {
+        toggleInput: function(isVisible) {
+            registry.get(this.customName, function(input) {
                 input.setVisible(isVisible);
             });
         },
@@ -237,8 +237,8 @@ define([
          * @param {Array} data
          * @returns {Object} Chainable
          */
-        setOptions: function (data) {
-            var captionValue = this.captionValue || '',
+        setOptions: function(data) {
+            let captionValue = this.captionValue || '',
                 result = parseOptions(data, captionValue),
                 isVisible;
 
@@ -266,8 +266,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        getPreview: function () {
-            var value = this.value(),
+        getPreview: function() {
+            let value = this.value(),
                 option = this.indexedOptions[value],
                 preview = option ? option.label : '';
 
@@ -282,7 +282,7 @@ define([
          * @param {Number} value
          * @returns {Object} Chainable
          */
-        getOption: function (value) {
+        getOption: function(value) {
             return this.indexedOptions[value];
         },
 
@@ -291,8 +291,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        clear: function () {
-            var value = this.caption() ? '' : findFirst(this.options);
+        clear: function() {
+            let value = this.caption() ? '' : findFirst(this.options);
 
             this.value(value);
 
@@ -304,12 +304,12 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             if (_.isUndefined(this.value()) && !this.default) {
                 this.clear();
             }
 
             return this._super();
-        }
+        },
     });
 });

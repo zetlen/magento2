@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            recentlyViewedProducts: 'Magento_Reports/js/recently-viewed'
-        }
-    }
+            recentlyViewedProducts: 'Magento_Reports/js/recently-viewed',
+        },
+    },
 };

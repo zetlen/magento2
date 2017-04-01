@@ -8,11 +8,11 @@ define([
     'underscore',
     'mage/utils/wrapper',
     'uiEvents',
-    'es6-collections'
-], function (ko, _, wrapper, Events) {
+    'es6-collections',
+], function(ko, _, wrapper, Events) {
     'use strict';
 
-    var nodesMap = new WeakMap();
+    let nodesMap = new WeakMap();
 
     /**
      * Returns a array of nodes associated with a specified model.
@@ -33,7 +33,7 @@ define([
      * @param {HTMLElement} node
      */
     function addBounded(model, node) {
-        var nodes = getBounded(model),
+        let nodes = getBounded(model),
             isRoot;
 
         if (!nodes) {
@@ -44,7 +44,7 @@ define([
             return;
         }
 
-        isRoot = nodes.every(function (bounded) {
+        isRoot = nodes.every(function(bounded) {
             return !bounded.contains(node);
         });
 
@@ -63,7 +63,7 @@ define([
      * @param {HTMLElement} node
      */
     function removeBounded(model, node) {
-        var nodes = getBounded(model),
+        let nodes = getBounded(model),
             index;
 
         if (!nodes) {
@@ -90,7 +90,7 @@ define([
      * @returns {HTMLElement}
      */
     function getElement(node, data) {
-        var elem;
+        let elem;
 
         while (node.nextElementSibling) {
             node = node.nextElementSibling;
@@ -112,8 +112,8 @@ define([
          *
          * @param {Function} orig - Original 'applyBindings' method.
          */
-        applyBindings: function (orig, ctx, node) {
-            var result = orig(),
+        applyBindings: function(orig, ctx, node) {
+            let result = orig(),
                 data = ctx && (ctx.$data || ctx);
 
             if (node && node.nodeType === 8) {
@@ -137,8 +137,8 @@ define([
          *
          * @param {Function} orig - Original 'cleanNode' method.
          */
-        cleanNode: function (orig, node) {
-            var result = orig(),
+        cleanNode: function(orig, node) {
+            let result = orig(),
                 data;
 
             if (node.nodeType !== 1) {
@@ -152,7 +152,7 @@ define([
             }
 
             return result;
-        }
+        },
     });
 
     return {
@@ -166,14 +166,14 @@ define([
          * @param {Function} [callback]
          * @returns {Array|Undefined}
          */
-        get: function (model, callback) {
-            var nodes = getBounded(model) || [];
+        get: function(model, callback) {
+            let nodes = getBounded(model) || [];
 
             if (!_.isFunction(callback)) {
                 return nodes;
             }
 
-            nodes.forEach(function (node) {
+            nodes.forEach(function(node) {
                 callback(node);
             });
 
@@ -185,8 +185,8 @@ define([
          *
          * @param {Object} model
          */
-        add: function (model) {
-            var args = _.toArray(arguments).slice(1);
+        add: function(model) {
+            let args = _.toArray(arguments).slice(1);
 
             args.unshift('addNode');
 
@@ -198,8 +198,8 @@ define([
          *
          * @param {Object} model
          */
-        remove: function (model) {
-            var args = _.toArray(arguments).slice(1);
+        remove: function(model) {
+            let args = _.toArray(arguments).slice(1);
 
             args.unshift('removeNode');
 
@@ -211,10 +211,10 @@ define([
          *
          * @param {Object} model
          */
-        off: function (model) {
-            var args = _.toArray(arguments).slice(1);
+        off: function(model) {
+            let args = _.toArray(arguments).slice(1);
 
             Events.off.apply(model, args);
-        }
+        },
     };
 });

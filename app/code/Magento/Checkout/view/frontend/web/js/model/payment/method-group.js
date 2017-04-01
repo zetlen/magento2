@@ -5,18 +5,18 @@
 
 define([
         'uiElement',
-        'mage/translate'
-], function (Element, $t) {
+        'mage/translate',
+], function(Element, $t) {
     'use strict';
 
-    var DEFAULT_GROUP_ALIAS = 'default';
+    let DEFAULT_GROUP_ALIAS = 'default';
 
     return Element.extend({
         defaults: {
             alias: DEFAULT_GROUP_ALIAS,
             title: $t('Payment Method'),
             sortOrder: 100,
-            displayArea: 'payment-methods-items-${ $.alias }'
+            displayArea: 'payment-methods-items-${ $.alias }',
         },
 
         /**
@@ -24,8 +24,8 @@ define([
          *
          * @returns {Boolean}
          */
-        isDefault: function () {
+        isDefault: function() {
             return this.alias === DEFAULT_GROUP_ALIAS;
-        }
+        },
     });
 });

@@ -13,8 +13,8 @@ define([
     'Magento_Ui/js/lib/collapsible',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
-    'mage/translate'
-], function (_, registry, utils, Collapsible, confirm, alert, $t) {
+    'mage/translate',
+], function(_, registry, utils, Collapsible, confirm, alert, $t) {
     'use strict';
 
     return Collapsible.extend({
@@ -25,8 +25,8 @@ define([
             actions: [],
             noItemsMsg: $t('You haven\'t selected any items!'),
             modules: {
-                selections: '${ $.selectProvider }'
-            }
+                selections: '${ $.selectProvider }',
+            },
         },
 
         /**
@@ -34,7 +34,7 @@ define([
          *
          * @returns {Massactions} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('actions');
 
@@ -47,20 +47,20 @@ define([
          * @param {String} actionIndex - Actions' identifier.
          * @returns {Massactions} Chainable.
          */
-        applyAction: function (actionIndex) {
-            var data = this.getSelections(),
+        applyAction: function(actionIndex) {
+            let data = this.getSelections(),
                 action,
                 callback;
 
             if (!data.total) {
                 alert({
-                    content: this.noItemsMsg
+                    content: this.noItemsMsg,
                 });
 
                 return this;
             }
 
-            action   = this.getAction(actionIndex);
+            action = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
@@ -75,8 +75,8 @@ define([
          *
          * @returns {Object|Undefined}
          */
-        getSelections: function () {
-            var provider = this.selections(),
+        getSelections: function() {
+            let provider = this.selections(),
                 selections = provider && provider.getSelections();
 
             return selections;
@@ -88,9 +88,9 @@ define([
          * @param {String} actionIndex - Actions' identifier.
          * @returns {Object} Action object.
          */
-        getAction: function (actionIndex) {
+        getAction: function(actionIndex) {
             return _.findWhere(this.actions(), {
-                type: actionIndex
+                type: actionIndex,
             });
         },
 
@@ -101,10 +101,10 @@ define([
          * @param {Object} action - Action object.
          * @returns {Massactions} Chainable.
          */
-        addAction: function (action) {
-            var actions = this.actions(),
+        addAction: function(action) {
+            let actions = this.actions(),
                 index = _.findIndex(actions, {
-                    type: action.type
+                    type: action.type,
                 });
 
             ~index ?
@@ -125,9 +125,9 @@ define([
          * @param {Object} selections - Selections data.
          * @returns {Function} Callback function.
          */
-        _getCallback: function (action, selections) {
-            var callback = action.callback,
-                args     = [action, selections];
+        _getCallback: function(action, selections) {
+            let callback = action.callback,
+                args = [action, selections];
 
             if (utils.isObject(callback)) {
                 args.unshift(callback.target);
@@ -137,8 +137,8 @@ define([
                 callback = this.defaultCallback.bind(this);
             }
 
-            return function () {
-                callback.apply(null, args);
+            return function() {
+                callback(...args);
             };
         },
 
@@ -149,8 +149,8 @@ define([
          * @param {Object} action - Action data.
          * @param {Object} data - Selections data.
          */
-        defaultCallback: function (action, data) {
-            var itemsType = data.excludeMode ? 'excluded' : 'selected',
+        defaultCallback: function(action, data) {
+            let itemsType = data.excludeMode ? 'excluded' : 'selected',
                 selections = {};
 
             selections[itemsType] = data[itemsType];
@@ -163,7 +163,7 @@ define([
 
             utils.submit({
                 url: action.url,
-                data: selections
+                data: selections,
             });
         },
 
@@ -174,16 +174,16 @@ define([
          * @param {Function} callback - Callback that will be
          *      invoked if action is confirmed.
          */
-        _confirm: function (action, callback) {
-            var confirmData = action.confirm;
+        _confirm: function(action, callback) {
+            let confirmData = action.confirm;
 
             confirm({
                 title: confirmData.title,
                 content: confirmData.message,
                 actions: {
-                    confirm: callback
-                }
+                    confirm: callback,
+                },
             });
-        }
+        },
     });
 });

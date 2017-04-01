@@ -4,7 +4,7 @@
  */
 
 /* @api */
-define([], function () {
+define([], function() {
     'use strict';
 
     return {
@@ -12,6 +12,6 @@ define([], function () {
         creditCardNumber: null,
         expirationMonth: null,
         expirationYear: null,
-        cvvCode: null
+        cvvCode: null,
     };
 });

@@ -10,8 +10,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiCollection'
-], function (_, utils, layout, Collection) {
+    'uiCollection',
+], function(_, utils, layout, Collection) {
     'use strict';
 
     return Collection.extend({
@@ -30,37 +30,37 @@ define([
                         provider: '${ $.$data.record.name }',
                         dataScope: 'data.${ $.$data.column.index }',
                         imports: {
-                            disabled: '${ $.$data.record.parentName }:fields.${ $.$data.column.index }.disabled'
+                            disabled: '${ $.$data.record.parentName }:fields.${ $.$data.column.index }.disabled',
                         },
-                        isEditor: true
+                        isEditor: true,
                     },
                     text: {
                         component: 'Magento_Ui/js/form/element/abstract',
-                        template: 'ui/form/element/input'
+                        template: 'ui/form/element/input',
                     },
                     date: {
                         component: 'Magento_Ui/js/form/element/date',
                         template: 'ui/form/element/date',
-                        dateFormat: 'MMM d, y h:mm:ss a'
+                        dateFormat: 'MMM d, y h:mm:ss a',
                     },
                     select: {
                         component: 'Magento_Ui/js/form/element/select',
                         template: 'ui/form/element/select',
-                        options: '${ JSON.stringify($.$data.column.options) }'
-                    }
-                }
+                        options: '${ JSON.stringify($.$data.column.options) }',
+                    },
+                },
             },
             listens: {
                 elems: 'updateFields',
-                data: 'updateState'
+                data: 'updateState',
             },
             imports: {
-                onColumnsUpdate: '${ $.columnsProvider }:elems'
+                onColumnsUpdate: '${ $.columnsProvider }:elems',
             },
             modules: {
                 columns: '${ $.columnsProvider }',
-                editor: '${ $.editorProvider }'
-            }
+                editor: '${ $.editorProvider }',
+            },
         },
 
         /**
@@ -68,7 +68,7 @@ define([
          *
          * @returns {Record} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'countErrors');
             utils.limit(this, 'updateState', 10);
 
@@ -80,7 +80,7 @@ define([
          *
          * @returns {Record} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track('errorsCount hasChanges')
                 .observe('active fields');
@@ -93,7 +93,7 @@ define([
          *
          * @returns {Record} Chainable.
          */
-        initElement: function (field) {
+        initElement: function(field) {
             field.on('error', this.countErrors);
 
             return this._super();
@@ -105,8 +105,8 @@ define([
          * @param {Column} column - Column instance which contains field definition.
          * @returns {Record} Chainable.
          */
-        initField: function (column) {
-            var field = this.buildField(column);
+        initField: function(column) {
+            let field = this.buildField(column);
 
             layout([field]);
 
@@ -119,9 +119,9 @@ define([
          * @param {Column} column - Column instance which contains field definition.
          * @returns {Object} Complete fields' configuration.
          */
-        buildField: function (column) {
-            var fields = this.templates.fields,
-                field  = column.editor;
+        buildField: function(column) {
+            let fields = this.templates.fields,
+                field = column.editor;
 
             if (_.isObject(field) && field.editorType) {
                 field = utils.extend({}, fields[field.editorType], field);
@@ -133,7 +133,7 @@ define([
 
             return utils.template(field, {
                 record: this,
-                column: column
+                column: column,
             }, true, true);
         },
 
@@ -143,8 +143,8 @@ define([
          * @param {Array} columns - An array of column instances.
          * @returns {Record} Chainable.
          */
-        createFields: function (columns) {
-            columns.forEach(function (column) {
+        createFields: function(columns) {
+            columns.forEach(function(column) {
                 if (column.editor && !this.hasChild(column.index)) {
                     this.initField(column);
                 }
@@ -159,7 +159,7 @@ define([
          * @param {String} index - Index of a column (e.g. 'title').
          * @returns {Column}
          */
-        getColumn: function (index) {
+        getColumn: function(index) {
             return this.columns().getChild(index);
         },
 
@@ -168,7 +168,7 @@ define([
          *
          * @returns {Object}
          */
-        getData: function () {
+        getData: function() {
             return this.filterData(this.data);
         },
 
@@ -178,9 +178,9 @@ define([
          *
          * @returns {Object} Saved records' data.
          */
-        getSavedData: function () {
-            var editor      = this.editor(),
-                savedData   = editor.getRowData(this.index);
+        getSavedData: function() {
+            let editor = this.editor(),
+                savedData = editor.getRowData(this.index);
 
             savedData = this.filterData(savedData);
 
@@ -195,8 +195,8 @@ define([
          *      to completely replace current data or to extend it.
          * @returns {Record} Chainable.
          */
-        setData: function (data, partial) {
-            var currentData = partial ? this.data : {};
+        setData: function(data, partial) {
+            let currentData = partial ? this.data : {};
 
             data = this.normalizeData(data);
             data = utils.extend({}, currentData, data);
@@ -214,10 +214,10 @@ define([
          * @param {Object} data - Object to be processed.
          * @returns {Object}
          */
-        filterData: function (data) {
-            var fields = _.pluck(this.elems(), 'index');
+        filterData: function(data) {
+            let fields = _.pluck(this.elems(), 'index');
 
-            _.each(this.preserveFields, function (enabled, field) {
+            _.each(this.preserveFields, function(enabled, field) {
                 if (enabled && !_.contains(fields, field)) {
                     fields.push(field);
                 }
@@ -233,10 +233,10 @@ define([
          * @param {Object} data - Data to be processed.
          * @returns {Object}
          */
-        normalizeData: function (data) {
-            var index;
+        normalizeData: function(data) {
+            let index;
 
-            this.elems.each(function (elem) {
+            this.elems.each(function(elem) {
                 index = elem.index;
 
                 if (data.hasOwnProperty(index)) {
@@ -252,7 +252,7 @@ define([
          *
          * @returns {Record} Chainable.
          */
-        clear: function () {
+        clear: function() {
             this.elems.each('clear');
 
             return this;
@@ -263,7 +263,7 @@ define([
          *
          * @returns {Array} An array with validatation results.
          */
-        validate: function () {
+        validate: function() {
             return this.elems.map('validate');
         },
 
@@ -272,7 +272,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isValid: function () {
+        isValid: function() {
             return _.every(this.validate(), 'valid');
         },
 
@@ -281,8 +281,8 @@ define([
          *
          * @returns {Number}
          */
-        countErrors: function () {
-            var errorsCount = this.elems.filter('error').length;
+        countErrors: function() {
+            let errorsCount = this.elems.filter('error').length;
 
             this.errorsCount = errorsCount;
 
@@ -295,9 +295,9 @@ define([
          *
          * @returns {Object} Object with changes descriptions.
          */
-        checkChanges: function () {
-            var savedData   = this.getSavedData(),
-                data        = this.normalizeData(this.getData());
+        checkChanges: function() {
+            let savedData = this.getSavedData(),
+                data = this.normalizeData(this.getData());
 
             return utils.compare(savedData, data);
         },
@@ -308,10 +308,10 @@ define([
          *
          * @returns {Record} Chainable.
          */
-        updateFields: function () {
-            var fields;
+        updateFields: function() {
+            let fields;
 
-            fields = this.columns().elems.map(function (column) {
+            fields = this.columns().elems.map(function(column) {
                 return this.getChild(column.index) || column;
             }, this);
 
@@ -325,8 +325,8 @@ define([
          *
          * @returns {Record} Chainable.
          */
-        updateState: function () {
-            var diff = this.checkChanges(),
+        updateState: function() {
+            let diff = this.checkChanges(),
                 changed = {};
 
             this.hasChanges = !diff.equal;
@@ -342,7 +342,7 @@ define([
          * @param {Column} column - Column to be checked.
          * @returns {Boolean}
          */
-        isActionsColumn: function (column) {
+        isActionsColumn: function(column) {
             return column.dataType === 'actions';
         },
 
@@ -351,9 +351,9 @@ define([
          *
          * @param {Array} columns - Modified child elements array.
          */
-        onColumnsUpdate: function (columns) {
+        onColumnsUpdate: function(columns) {
             this.createFields(columns)
                 .updateFields();
-        }
+        },
     });
 });

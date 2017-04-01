@@ -11,8 +11,8 @@ define([
     'underscore',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
-    'mage/translate'
-], function ($, _) {
+    'mage/translate',
+], function($, _) {
     'use strict';
 
     $.widget('mage.confirm', $.mage.modal, {
@@ -25,17 +25,17 @@ define([
                 /**
                  * Callback always - called on all actions.
                  */
-                always: function () {},
+                always: function() {},
 
                 /**
                  * Callback confirm.
                  */
-                confirm: function () {},
+                confirm: function() {},
 
                 /**
                  * Callback cancel.
                  */
-                cancel: function () {}
+                cancel: function() {},
             },
             buttons: [{
                 text: $.mage.__('Cancel'),
@@ -44,9 +44,9 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function (event) {
+                click: function(event) {
                     this.closeModal(event);
-                }
+                },
             }, {
                 text: $.mage.__('OK'),
                 class: 'action-primary action-accept',
@@ -54,16 +54,16 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function (event) {
+                click: function(event) {
                     this.closeModal(event, true);
-                }
-            }]
+                },
+            }],
         },
 
         /**
          * Create widget.
          */
-        _create: function () {
+        _create: function() {
             this._super();
             this.modal.find(this.options.modalCloseBtn).off().on('click', _.bind(this.closeModal, this));
             this.openModal();
@@ -72,21 +72,21 @@ define([
         /**
          * Remove modal window.
          */
-        _remove: function () {
+        _remove: function() {
             this.modal.remove();
         },
 
         /**
          * Open modal window.
          */
-        openModal: function () {
+        openModal: function() {
             return this._super();
         },
 
         /**
          * Close modal window.
          */
-        closeModal: function (event, result) {
+        closeModal: function(event, result) {
             result = result || false;
 
             if (result) {
@@ -98,10 +98,10 @@ define([
             this.element.bind('confirmclosed', _.bind(this._remove, this));
 
             return this._super();
-        }
+        },
     });
 
-    return function (config) {
+    return function(config) {
         return $('<div></div>').html(config.content).confirm(config);
     };
 });

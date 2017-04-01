@@ -4,8 +4,8 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function(Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -15,7 +15,7 @@ define([
          *
          * @returns {Abstract}
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             this._super();
             this.value(+this.value());
 
@@ -27,11 +27,11 @@ define([
          *
          * @returns {Boolean}
          */
-        onUpdate: function () {
+        onUpdate: function() {
             this._super();
             this.value(+this.value());
 
             return this._super();
-        }
+        },
     });
 });

@@ -3,15 +3,15 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
     /**
      * @param {Object} addressData
      * Returns new address object
      */
-    return function (addressData) {
-        var identifier = Date.now(),
+    return function(addressData) {
+        let identifier = Date.now(),
             regionId;
 
         if (addressData.region && addressData.region['region_id']) {
@@ -45,51 +45,51 @@ define([], function () {
             /**
              * @return {*}
              */
-            isDefaultShipping: function () {
+            isDefaultShipping: function() {
                 return addressData['default_shipping'];
             },
 
             /**
              * @return {*}
              */
-            isDefaultBilling: function () {
+            isDefaultBilling: function() {
                 return addressData['default_billing'];
             },
 
             /**
              * @return {String}
              */
-            getType: function () {
+            getType: function() {
                 return 'new-customer-address';
             },
 
             /**
              * @return {String}
              */
-            getKey: function () {
+            getKey: function() {
                 return this.getType();
             },
 
             /**
              * @return {String}
              */
-            getCacheKey: function () {
+            getCacheKey: function() {
                 return this.getType() + identifier;
             },
 
             /**
              * @return {Boolean}
              */
-            isEditable: function () {
+            isEditable: function() {
                 return true;
             },
 
             /**
              * @return {Boolean}
              */
-            canUseForBilling: function () {
+            canUseForBilling: function() {
                 return true;
-            }
+            },
         };
     };
 });

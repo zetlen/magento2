@@ -5,11 +5,11 @@
 
 define([
     'ko',
-    'Magento_Checkout/js/model/checkout-data-resolver'
-], function (ko, checkoutDataResolver) {
+    'Magento_Checkout/js/model/checkout-data-resolver',
+], function(ko, checkoutDataResolver) {
     'use strict';
 
-    var shippingRates = ko.observableArray([]);
+    let shippingRates = ko.observableArray([]);
 
     return {
         isLoading: ko.observable(false),
@@ -19,7 +19,7 @@ define([
          *
          * @param {*} ratesData
          */
-        setShippingRates: function (ratesData) {
+        setShippingRates: function(ratesData) {
             shippingRates(ratesData);
             shippingRates.valueHasMutated();
             checkoutDataResolver.resolveShippingRates(ratesData);
@@ -30,8 +30,8 @@ define([
          *
          * @returns {*}
          */
-        getShippingRates: function () {
+        getShippingRates: function() {
             return shippingRates;
-        }
+        },
     };
 });

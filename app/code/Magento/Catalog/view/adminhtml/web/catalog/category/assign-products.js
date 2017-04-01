@@ -6,12 +6,12 @@
 /* global $, $H */
 
 define([
-    'mage/adminhtml/grid'
-], function () {
+    'mage/adminhtml/grid',
+], function() {
     'use strict';
 
-    return function (config) {
-        var selectedProducts = config.selectedProducts,
+    return function(config) {
+        let selectedProducts = config.selectedProducts,
             categoryProducts = $H(selectedProducts),
             gridJsObject = window[config.gridJsObjectName],
             tabIndex = 1000;
@@ -39,7 +39,7 @@ define([
             }
             $('in_category_products').value = Object.toJSON(categoryProducts);
             grid.reloadParams = {
-                'selected_products[]': categoryProducts.keys()
+                'selected_products[]': categoryProducts.keys(),
             };
         }
 
@@ -50,7 +50,7 @@ define([
          * @param {String} event
          */
         function categoryProductRowClick(grid, event) {
-            var trElement = Event.findElement(event, 'tr'),
+            let trElement = Event.findElement(event, 'tr'),
                 isInput = Event.element(event).tagName === 'INPUT',
                 checked = false,
                 checkbox = null;
@@ -71,7 +71,7 @@ define([
          * @param {String} event
          */
         function positionChange(event) {
-            var element = Event.element(event);
+            let element = Event.element(event);
 
             if (element && element.checkboxElement && element.checkboxElement.checked) {
                 categoryProducts.set(element.checkboxElement.value, element.value);
@@ -86,7 +86,7 @@ define([
          * @param {String} row
          */
         function categoryProductRowInit(grid, row) {
-            var checkbox = $(row).getElementsByClassName('checkbox')[0],
+            let checkbox = $(row).getElementsByClassName('checkbox')[0],
                 position = $(row).getElementsByClassName('input-text')[0];
 
             if (checkbox && position) {
@@ -103,7 +103,7 @@ define([
         gridJsObject.checkboxCheckCallback = registerCategoryProduct;
 
         if (gridJsObject.rows) {
-            gridJsObject.rows.each(function (row) {
+            gridJsObject.rows.each(function(row) {
                 categoryProductRowInit(gridJsObject, row);
             });
         }

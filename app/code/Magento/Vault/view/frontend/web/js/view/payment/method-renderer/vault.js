@@ -2,26 +2,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define(
     [
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/action/select-payment-method',
-        'Magento_Checkout/js/checkout-data'
+        'Magento_Checkout/js/checkout-data',
     ],
-    function (Component, selectPaymentMethod, checkoutData) {
+    function(Component, selectPaymentMethod, checkoutData) {
         'use strict';
 
         return Component.extend({
             defaults: {
-                template: 'Magento_Vault/payment/form'
+                template: 'Magento_Vault/payment/form',
             },
 
             /**
              * @returns {exports.initObservable}
              */
-            initObservable: function () {
+            initObservable: function() {
                 this._super()
                     .observe([]);
 
@@ -31,10 +31,10 @@ define(
             /**
              * @returns
              */
-            selectPaymentMethod: function () {
+            selectPaymentMethod: function() {
                 selectPaymentMethod(
                     {
-                        method: this.getId()
+                        method: this.getId(),
                     }
                 );
                 checkoutData.setSelectedPaymentMethod(this.getId());
@@ -45,28 +45,28 @@ define(
             /**
              * @returns {String}
              */
-            getTitle: function () {
+            getTitle: function() {
                 return '';
             },
 
             /**
              * @returns {String}
              */
-            getToken: function () {
+            getToken: function() {
                 return '';
             },
 
             /**
              * @returns {String}
              */
-            getId: function () {
+            getId: function() {
                 return this.index;
             },
 
             /**
              * @returns {String}
              */
-            getCode: function () {
+            getCode: function() {
                 return this.code;
             },
 
@@ -74,7 +74,7 @@ define(
              * Get last 4 digits of card
              * @returns {String}
              */
-            getMaskedCard: function () {
+            getMaskedCard: function() {
                 return '';
             },
 
@@ -82,7 +82,7 @@ define(
              * Get expiration date
              * @returns {String}
              */
-            getExpirationDate: function () {
+            getExpirationDate: function() {
                 return '';
             },
 
@@ -90,7 +90,7 @@ define(
              * Get card type
              * @returns {String}
              */
-            getCardType: function () {
+            getCardType: function() {
                 return '';
             },
 
@@ -98,7 +98,7 @@ define(
              * @param {String} type
              * @returns {Boolean}
              */
-            getIcons: function (type) {
+            getIcons: function(type) {
                 return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type) ?
                     window.checkoutConfig.payment.ccform.icons[type]
                     : false;
@@ -107,16 +107,16 @@ define(
             /**
              * @returns {*}
              */
-            getData: function () {
-                var data = {
-                    method: this.getCode()
+            getData: function() {
+                let data = {
+                    method: this.getCode(),
                 };
 
                 data['additional_data'] = {};
                 data['additional_data']['public_hash'] = this.getToken();
 
                 return data;
-            }
+            },
         });
     }
 );

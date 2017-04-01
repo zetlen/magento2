@@ -3,18 +3,18 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
-    return function (value) {
-        var month, len;
+    return function(value) {
+        let month, len;
 
         if (value.match('/')) {
             value = value.split(/\s*\/\s*/g);
 
             return {
                 month: value[0],
-                year: value.slice(1).join()
+                year: value.slice(1).join(),
             };
         }
 
@@ -23,7 +23,7 @@ define([], function () {
 
         return {
             month: month,
-            year: value.substr(month.length, 4)
+            year: value.substr(month.length, 4),
         };
     };
 });

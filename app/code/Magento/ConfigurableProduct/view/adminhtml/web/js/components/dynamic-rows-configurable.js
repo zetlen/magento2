@@ -6,57 +6,57 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, registry, dynamicRows) {
+    'Magento_Ui/js/dynamic-rows/dynamic-rows',
+], function(_, registry, dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
         defaults: {
-            actionsListOpened: false,
-            canEditField: 'canEdit',
-            newProductField: 'newProduct',
-            dataScopeAssociatedProduct: 'data.associated_product_ids',
-            dataProviderFromGrid: '',
-            dataProviderChangeFromGrid: '',
-            insertDataFromGrid: [],
-            changeDataFromGrid: [],
-            dataProviderFromWizard: '',
-            insertDataFromWizard: [],
-            map: null,
-            isEmpty: true,
-            isShowAddProductButton: false,
-            cacheGridData: [],
-            unionInsertData: [],
-            deleteProperty: false,
-            dataLength: 0,
-            identificationProperty: 'id',
+            "actionsListOpened": false,
+            "canEditField": 'canEdit',
+            "newProductField": 'newProduct',
+            "dataScopeAssociatedProduct": 'data.associated_product_ids',
+            "dataProviderFromGrid": '',
+            "dataProviderChangeFromGrid": '',
+            "insertDataFromGrid": [],
+            "changeDataFromGrid": [],
+            "dataProviderFromWizard": '',
+            "insertDataFromWizard": [],
+            "map": null,
+            "isEmpty": true,
+            "isShowAddProductButton": false,
+            "cacheGridData": [],
+            "unionInsertData": [],
+            "deleteProperty": false,
+            "dataLength": 0,
+            "identificationProperty": 'id',
             'attribute_set_id': '',
-            attributesTmp: [],
-            changedFlag: 'was_changed',
-            listens: {
+            "attributesTmp": [],
+            "changedFlag": 'was_changed',
+            "listens": {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
                 'unionInsertData': 'processingUnionInsertData',
                 'changeDataFromGrid': 'processingChangeDataFromGrid',
-                'isEmpty': 'changeVisibility'
+                'isEmpty': 'changeVisibility',
             },
-            imports: {
-                'attribute_set_id': '${$.provider}:data.product.attribute_set_id'
+            "imports": {
+                'attribute_set_id': '${$.provider}:data.product.attribute_set_id',
             },
             'exports': {
-                'attribute_set_id': '${$.provider}:data.new-variations-attribute-set-id'
+                'attribute_set_id': '${$.provider}:data.new-variations-attribute-set-id',
             },
-            modules: {
+            "modules": {
                 modalWithGrid: '${ $.modalWithGrid }',
-                gridWithProducts: '${ $.gridWithProducts}'
-            }
+                gridWithProducts: '${ $.gridWithProducts}',
+            },
         },
 
         /**
          * Invokes initialize method of parent class,
          * contains initialization logic
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .changeVisibility(this.isEmpty());
 
@@ -70,7 +70,7 @@ define([
          *
          * @param {Boolean} isEmpty
          */
-        changeVisibility: function (isEmpty) {
+        changeVisibility: function(isEmpty) {
             this.visible(!isEmpty);
         },
 
@@ -79,11 +79,11 @@ define([
          *
          * @param {String} rowIndex
          */
-        openModalWithGrid: function (rowIndex) {
-            var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex),
+        openModalWithGrid: function(rowIndex) {
+            let productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex),
                 product = {
                     'id': productSource.id,
-                    'attributes': productSource['configurable_attribute']
+                    'attributes': productSource['configurable_attribute'],
                 };
 
             this.modalWithGrid().openModal();
@@ -95,10 +95,10 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initChildren: function () {
-            var tmpArray = [];
+        initChildren: function() {
+            let tmpArray = [];
 
-            this.recordData.each(function (recordData) {
+            this.recordData.each(function(recordData) {
                 tmpArray.push(recordData);
             }, this);
 
@@ -112,8 +112,8 @@ define([
          *
          * @param {Number} index - row index
          */
-        deleteRecord: function (index) {
-            var tmpArray,
+        deleteRecord: function(index) {
+            let tmpArray,
                 lastRecord;
 
             this.reRender = false;
@@ -129,10 +129,10 @@ define([
             if (parseInt(this.currentPage(), 10) === this.pages()) {
                 lastRecord =
                     _.findWhere(this.elems(), {
-                        index: this.startIndex + this.getChildItems().length - 1
+                        index: this.startIndex + this.getChildItems().length - 1,
                     }) ||
                     _.findWhere(this.elems(), {
-                        index: (this.startIndex + this.getChildItems().length - 1).toString()
+                        index: (this.startIndex + this.getChildItems().length - 1).toString(),
                     });
 
                 lastRecord.destroy();
@@ -151,10 +151,10 @@ define([
         /**
          * Generate associated products
          */
-        generateAssociatedProducts: function () {
-            var productsIds = [];
+        generateAssociatedProducts: function() {
+            let productsIds = [];
 
-            this.getUnionInsertData().forEach(function (data) {
+            this.getUnionInsertData().forEach(function(data) {
                 if (data.id !== null) {
                     productsIds.push(data.id);
                 }
@@ -168,10 +168,10 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe([
-                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'isShowAddProductButton', 'actionsListOpened'
+                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'isShowAddProductButton', 'actionsListOpened',
                 ]);
 
             return this;
@@ -182,11 +182,11 @@ define([
          *
          * @returns {Array}
          */
-        getUnionInsertData: function () {
-            var source = this.source.get(this.dataScope + '.' + this.index),
+        getUnionInsertData: function() {
+            let source = this.source.get(this.dataScope + '.' + this.index),
                 result = [];
 
-            _.each(source, function (data) {
+            _.each(source, function(data) {
                 result.push(data);
             });
 
@@ -198,8 +198,8 @@ define([
          *
          * @param {Array} data
          */
-        processingUnionInsertData: function (data) {
-            var dataCount,
+        processingUnionInsertData: function(data) {
+            let dataCount,
                 elemsCount,
                 tmpData,
                 path,
@@ -215,7 +215,7 @@ define([
 
             this.source.set(this.dataScope + '.' + this.index, []);
 
-            _.each(tmpData, function (row, index) {
+            _.each(tmpData, function(row, index) {
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
                 this.source.set(path, row);
             }, this);
@@ -228,7 +228,7 @@ define([
             elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
-                this.getChildItems().each(function (elemData, index) {
+                this.getChildItems().each(function(elemData, index) {
                     this.addChild(elemData, this.startIndex + index);
                 }, this);
             } else {
@@ -246,8 +246,8 @@ define([
          * @param {Array} data - array with data
          * about selected records
          */
-        processingInsertDataFromGrid: function (data) {
-            var changes,
+        processingInsertDataFromGrid: function(data) {
+            let changes,
                 tmpArray;
 
             if (!data.length) {
@@ -259,8 +259,8 @@ define([
             changes = this._checkGridData(data);
             this.cacheGridData = data;
 
-            changes.each(function (changedObject) {
-                var mappedData = this.mappingValue(changedObject);
+            changes.each(function(changedObject) {
+                let mappedData = this.mappingValue(changedObject);
 
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
@@ -281,8 +281,8 @@ define([
          *
          * @param {Object} data
          */
-        processingChangeDataFromGrid: function (data) {
-            var tmpArray = this.getUnionInsertData(),
+        processingChangeDataFromGrid: function(data) {
+            let tmpArray = this.getUnionInsertData(),
                 mappedData = this.mappingValue(data.product);
 
             mappedData[this.canEditField] = 0;
@@ -301,11 +301,11 @@ define([
          * @returns {String}
          * @private
          */
-        _getVariationKey: function (data) {
-            var attrCodes = this.source.get('data.attribute_codes'),
+        _getVariationKey: function(data) {
+            let attrCodes = this.source.get('data.attribute_codes'),
                 key = [];
 
-            attrCodes.each(function (code) {
+            attrCodes.each(function(code) {
                 key.push(data[code]);
             });
 
@@ -319,11 +319,11 @@ define([
          * @returns {String}
          * @private
          */
-        _getConfigurableAttribute: function (data) {
-            var attrCodes = this.source.get('data.attribute_codes'),
+        _getConfigurableAttribute: function(data) {
+            let attrCodes = this.source.get('data.attribute_codes'),
                 confAttrs = {};
 
-            attrCodes.each(function (code) {
+            attrCodes.each(function(code) {
                 confAttrs[code] = data[code];
             });
 
@@ -335,8 +335,8 @@ define([
          *
          * @param {Object} data
          */
-        processingInsertDataFromWizard: function (data) {
-            var tmpArray = this.getUnionInsertData(),
+        processingInsertDataFromWizard: function(data) {
+            let tmpArray = this.getUnionInsertData(),
                 productIdsToDelete = this.source.get(this.dataScopeAssociatedProduct),
                 index,
                 product = {};
@@ -344,12 +344,12 @@ define([
             tmpArray = this.unsetArrayItem(
                 tmpArray,
                 {
-                    id: null
+                    id: null,
                 }
             );
 
-            _.each(data, function (row) {
-                var attributesText;
+            _.each(data, function(row) {
+                let attributesText;
 
                 if (row.productId) {
                     index = _.indexOf(productIdsToDelete, row.productId);
@@ -359,14 +359,14 @@ define([
                         tmpArray = this.unsetArrayItem(
                             tmpArray,
                             {
-                                id: row.productId
+                                id: row.productId,
                             }
                         );
                     }
                 }
 
                 attributesText = '';
-                _.each(row.options, function (attribute) {
+                _.each(row.options, function(attribute) {
                     if (attributesText) {
                         attributesText += ', ';
                     }
@@ -390,9 +390,9 @@ define([
                     'media_gallery': row['media_gallery'],
                     'swatch_image': row['swatch_image'],
                     'small_image': row['small_image'],
-                    image: row.image,
+                    "image": row.image,
                     'thumbnail': row.thumbnail,
-                    'attributes': attributesText
+                    'attributes': attributesText,
                 };
                 product[this.changedFlag] = true;
                 product[this.canEditField] = row.editable;
@@ -400,11 +400,11 @@ define([
                 tmpArray.push(product);
             }, this);
 
-            _.each(productIdsToDelete, function (id) {
+            _.each(productIdsToDelete, function(id) {
                 tmpArray = this.unsetArrayItem(
                     tmpArray,
                     {
-                        id: id
+                        id: id,
                     }
                 );
             }, this);
@@ -419,11 +419,11 @@ define([
          * @param {Object} condition
          * @returns {Array}
          */
-        unsetArrayItem: function (data, condition) {
-            var objs = _.where(data, condition);
+        unsetArrayItem: function(data, condition) {
+            let objs = _.where(data, condition);
 
-            _.each(objs, function (obj) {
-                var index = _.indexOf(data, obj);
+            _.each(objs, function(obj) {
+                let index = _.indexOf(data, obj);
 
                 if (index > -1) {
                     data.splice(index, 1);
@@ -439,14 +439,14 @@ define([
          * @param {Array} data - array with records data
          * @returns {Array} Changed records
          */
-        _checkGridData: function (data) {
-            var cacheLength = this.cacheGridData.length,
+        _checkGridData: function(data) {
+            let cacheLength = this.cacheGridData.length,
                 curData = data.length,
                 max = cacheLength > curData ? this.cacheGridData : data,
                 changes = [],
                 obj = {};
 
-            max.each(function (record, index) {
+            max.each(function(record, index) {
                 obj[this.map.id] = record[this.map.id];
 
                 if (!_.where(this.cacheGridData, obj).length) {
@@ -460,10 +460,10 @@ define([
         /**
          * Mapped value
          */
-        mappingValue: function (data) {
-            var result = {};
+        mappingValue: function(data) {
+            let result = {};
 
-            _.each(this.map, function (prop, index) {
+            _.each(this.map, function(prop, index) {
                 result[index] = data[prop];
             });
 
@@ -476,8 +476,8 @@ define([
          * @param {Number} rowIndex
          * @returns {Object} Chainable.
          */
-        toggleActionsList: function (rowIndex) {
-            var state = false;
+        toggleActionsList: function(rowIndex) {
+            let state = false;
 
             if (rowIndex !== this.actionsListOpened()) {
                 state = rowIndex;
@@ -493,7 +493,7 @@ define([
          * @param {Number} rowIndex
          * @returns {Object} Chainable
          */
-        closeList: function (rowIndex) {
+        closeList: function(rowIndex) {
             if (this.actionsListOpened() === rowIndex) {
                 this.actionsListOpened(false);
             }
@@ -506,8 +506,8 @@ define([
          *
          * @param {Number} rowIndex
          */
-        toggleStatusProduct: function (rowIndex) {
-            var tmpArray = this.getUnionInsertData(),
+        toggleStatusProduct: function(rowIndex) {
+            let tmpArray = this.getUnionInsertData(),
                 status = parseInt(tmpArray[rowIndex].status, 10);
 
             if (status === 1) {
@@ -518,6 +518,6 @@ define([
 
             tmpArray[rowIndex][this.changedFlag] = true;
             this.unionInsertData(tmpArray);
-        }
+        },
     });
 });

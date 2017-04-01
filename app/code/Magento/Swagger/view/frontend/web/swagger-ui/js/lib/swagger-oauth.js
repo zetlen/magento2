@@ -1,33 +1,37 @@
-var appName;
-var popupMask;
-var popupDialog;
-var clientId;
-var realm;
-var oauth2KeyName;
-var redirect_uri;
-var clientSecret;
-var scopeSeparator;
+let appName;
+let popupMask;
+let popupDialog;
+let clientId;
+let realm;
+let oauth2KeyName;
+let redirect_uri;
+let clientSecret;
+let scopeSeparator;
 
 function handleLogin() {
-  var scopes = [];
+  let scopes = [];
 
-  var auths = window.swaggerUi.api.authSchemes || window.swaggerUi.api.securityDefinitions;
+  let auths = window.swaggerUi.api.authSchemes || window.swaggerUi.api.securityDefinitions;
+
   if(auths) {
-    var key;
-    var defs = auths;
+    let key;
+    let defs = auths;
+
     for(key in defs) {
-      var auth = defs[key];
+      let auth = defs[key];
+
       if(auth.type === 'oauth2' && auth.scopes) {
         oauth2KeyName = key;
         var scope;
+
         if(Array.isArray(auth.scopes)) {
           // 1.2 support
           var i;
+
           for(i = 0; i < auth.scopes.length; i++) {
             scopes.push(auth.scopes[i]);
           }
-        }
-        else {
+        }        else {
           // 2.0 support
           for(scope in auth.scopes) {
             scopes.push({scope: scope, description: auth.scopes[scope]});
@@ -42,7 +46,7 @@ function handleLogin() {
     appName = window.swaggerUi.api.info.title;
   }
 
-  $('.api-popup-dialog').remove(); 
+  $('.api-popup-dialog').remove();
   popupDialog = $(
     [
       '<div class="api-popup-dialog">',
@@ -71,7 +75,7 @@ function handleLogin() {
     popup.append(str);
   }
 
-  var $win = $(window),
+  let $win = $(window),
     dw = $win.width(),
     dh = $win.height(),
     st = $win.scrollTop(),
@@ -82,7 +86,7 @@ function handleLogin() {
 
   popupDialog.css({
     top: (top < 0? 0 : top) + 'px',
-    left: (left < 0? 0 : left) + 'px'
+    left: (left < 0? 0 : left) + 'px',
   });
 
   popupDialog.find('button.api-popup-cancel').click(function() {
@@ -97,36 +101,38 @@ function handleLogin() {
     popupMask.hide();
     popupDialog.hide();
 
-    var authSchemes = window.swaggerUi.api.authSchemes;
-    var host = window.location;
-    var pathname = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
-    var defaultRedirectUrl = host.protocol + '//' + host.host + pathname + '/o2c.html';
-    var redirectUrl = window.oAuthRedirectUrl || defaultRedirectUrl;
-    var url = null;
+    let authSchemes = window.swaggerUi.api.authSchemes;
+    let host = window.location;
+    let pathname = location.pathname.substring(0, location.pathname.lastIndexOf('/'));
+    let defaultRedirectUrl = host.protocol + '//' + host.host + pathname + '/o2c.html';
+    let redirectUrl = window.oAuthRedirectUrl || defaultRedirectUrl;
+    let url = null;
 
-    for (var key in authSchemes) {
+    for (let key in authSchemes) {
       if (authSchemes.hasOwnProperty(key)) {
-        var flow = authSchemes[key].flow;
+        let flow = authSchemes[key].flow;
 
         if(authSchemes[key].type === 'oauth2' && flow && (flow === 'implicit' || flow === 'accessCode')) {
           var dets = authSchemes[key];
+
           url = dets.authorizationUrl + '?response_type=' + (flow === 'implicit' ? 'token' : 'code');
           window.swaggerUi.tokenName = dets.tokenName || 'access_token';
-          window.swaggerUi.tokenUrl = (flow === 'accessCode' ? dets.tokenUrl : null);
-        }
-        else if(authSchemes[key].grantTypes) {
+          window.swaggerUi.tokenUrl = flow === 'accessCode' ? dets.tokenUrl : null;
+        }        else if(authSchemes[key].grantTypes) {
           // 1.2 support
           var o = authSchemes[key].grantTypes;
-          for(var t in o) {
+
+          for(let t in o) {
             if(o.hasOwnProperty(t) && t === 'implicit') {
               var dets = o[t];
               var ep = dets.loginEndpoint.url;
+
               url = dets.loginEndpoint.url + '?response_type=token';
               window.swaggerUi.tokenName = dets.tokenName;
-            }
-            else if (o.hasOwnProperty(t) && t === 'accessCode') {
+            }            else if (o.hasOwnProperty(t) && t === 'accessCode') {
               var dets = o[t];
               var ep = dets.tokenRequestEndpoint.url;
+
               url = dets.tokenRequestEndpoint.url + '?response_type=code';
               window.swaggerUi.tokenName = dets.tokenName;
             }
@@ -134,18 +140,18 @@ function handleLogin() {
         }
       }
     }
-    var scopes = []
+    let scopes = [];
     var o = $('.api-popup-scopes').find('input:checked');
 
     for(k =0; k < o.length; k++) {
-      var scope = $(o[k]).attr('scope');
+      let scope = $(o[k]).attr('scope');
 
       if (scopes.indexOf(scope) === -1)
         scopes.push(scope);
     }
 
     // Implicit auth recommends a state parameter.
-    var state = Math.random ();
+    let state = Math.random();
 
     window.enabledScopes=scopes;
 
@@ -167,8 +173,8 @@ function handleLogin() {
 
 
 function handleLogout() {
-  for(key in window.authorizations.authz){
-    window.authorizations.remove(key)
+  for(key in window.authorizations.authz) {
+    window.authorizations.remove(key);
   }
   window.enabledScopes = null;
   $('.api-ic.ic-on').addClass('ic-off');
@@ -180,23 +186,25 @@ function handleLogout() {
 }
 
 function initOAuth(opts) {
-  var o = (opts||{});
-  var errors = [];
+  let o = opts||{};
+  let errors = [];
 
-  appName = (o.appName||errors.push('missing appName'));
-  popupMask = (o.popupMask||$('#api-common-mask'));
-  popupDialog = (o.popupDialog||$('.api-popup-dialog'));
-  clientId = (o.clientId||errors.push('missing client id'));
-  clientSecret = (o.clientSecret||errors.push('missing client secret'));
-  realm = (o.realm||errors.push('missing realm'));
-  scopeSeparator = (o.scopeSeparator||' ');
+  appName = o.appName||errors.push('missing appName');
+  popupMask = o.popupMask||$('#api-common-mask');
+  popupDialog = o.popupDialog||$('.api-popup-dialog');
+  clientId = o.clientId||errors.push('missing client id');
+  clientSecret = o.clientSecret||errors.push('missing client secret');
+  realm = o.realm||errors.push('missing realm');
+  scopeSeparator = o.scopeSeparator||' ';
 
-  if(errors.length > 0){
+  if(errors.length > 0) {
     log('auth unable initialize oauth: ' + errors);
     return;
   }
 
-  $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+  $('pre code').each(function(i, e) {
+hljs.highlightBlock(e);
+});
   $('.api-ic').unbind();
   $('.api-ic').click(function(s) {
     if($(s.target).hasClass('ic-off'))
@@ -209,60 +217,66 @@ function initOAuth(opts) {
 }
 
 window.processOAuthCode = function processOAuthCode(data) {
-  var params = {
+  let params = {
     'client_id': clientId,
     'client_secret': clientSecret,
     'code': data.code,
     'grant_type': 'authorization_code',
-    'redirect_uri': redirect_uri
-  }
+    'redirect_uri': redirect_uri,
+  };
+
   $.ajax(
   {
-    url : window.swaggerUi.tokenUrl,
-    type: "POST",
+    url: window.swaggerUi.tokenUrl,
+    type: 'POST',
     data: params,
-    success:function(data, textStatus, jqXHR)
-    {
+    success: function(data, textStatus, jqXHR)    {
       onOAuthComplete(data);
     },
-    error: function(jqXHR, textStatus, errorThrown)
-    {
-      onOAuthComplete("");
-    }
+    error: function(jqXHR, textStatus, errorThrown)    {
+      onOAuthComplete('');
+    },
   });
-}
+};
 
 window.onOAuthComplete = function onOAuthComplete(token) {
   if(token) {
     if(token.error) {
-      var checkbox = $('input[type=checkbox],.secured')
-      checkbox.each(function(pos){
+      let checkbox = $('input[type=checkbox],.secured');
+
+      checkbox.each(function(pos) {
         checkbox[pos].checked = false;
       });
       alert(token.error);
-    }
-    else {
-      var b = token[window.swaggerUi.tokenName];
-      if(b){
+    }    else {
+      let b = token[window.swaggerUi.tokenName];
+
+      if(b) {
         // if all roles are satisfied
-        var o = null;
+        let o = null;
+
         $.each($('.auth .api-ic .api_information_panel'), function(k, v) {
-          var children = v;
+          let children = v;
+
           if(children && children.childNodes) {
-            var requiredScopes = [];
-            $.each((children.childNodes), function (k1, v1){
-              var inner = v1.innerHTML;
+            let requiredScopes = [];
+
+            $.each(children.childNodes, function(k1, v1) {
+              let inner = v1.innerHTML;
+
               if(inner)
                 requiredScopes.push(inner);
             });
-            var diff = [];
-            for(var i=0; i < requiredScopes.length; i++) {
-              var s = requiredScopes[i];
+            let diff = [];
+
+            for(let i=0; i < requiredScopes.length; i++) {
+              let s = requiredScopes[i];
+
               if(window.enabledScopes && window.enabledScopes.indexOf(s) == -1) {
                 diff.push(s);
               }
             }
-            if(diff.length > 0){
+            if(diff.length > 0) {
               o = v.parentNode.parentNode;
               $(o.parentNode).find('.api-ic.ic-on').addClass('ic-off');
               $(o.parentNode).find('.api-ic.ic-on').removeClass('ic-on');
@@ -270,8 +284,7 @@ window.onOAuthComplete = function onOAuthComplete(token) {
               // sorry, not all scopes are satisfied
               $(o).find('.api-ic').addClass('ic-warning');
               $(o).find('.api-ic').removeClass('ic-error');
-            }
-            else {
+            }            else {
               o = v.parentNode.parentNode;
               $(o.parentNode).find('.api-ic.ic-off').addClass('ic-on');
               $(o.parentNode).find('.api-ic.ic-off').removeClass('ic-off');
@@ -287,4 +300,4 @@ window.onOAuthComplete = function onOAuthComplete(token) {
       }
     }
   }
-}
+};

@@ -7,8 +7,8 @@ define([
     'uiComponent',
     'Magento_GiftMessage/js/model/gift-message',
     'Magento_GiftMessage/js/model/gift-options',
-    'Magento_GiftMessage/js/action/gift-options'
-], function (Component, GiftMessage, giftOptions, giftOptionsService) {
+    'Magento_GiftMessage/js/action/gift-options',
+], function(Component, GiftMessage, giftOptions, giftOptionsService) {
     'use strict';
 
     return Component.extend({
@@ -19,14 +19,14 @@ define([
         /**
          * Component init
          */
-        initialize: function () {
-            var self = this,
+        initialize: function() {
+            let self = this,
                 model;
 
             this._super()
                 .observe('formBlockVisibility')
                 .observe({
-                    'resultBlockVisibility': false
+                    'resultBlockVisibility': false,
                 });
 
             this.itemId = this.itemId || 'orderLevel';
@@ -34,8 +34,8 @@ define([
             giftOptions.addOption(model);
             this.model = model;
 
-            this.model.getObservable('isClear').subscribe(function (value) {
-                if (value == true) { //eslint-disable-line eqeqeq
+            this.model.getObservable('isClear').subscribe(function(value) {
+                if (value == true) { // eslint-disable-line eqeqeq
                     self.formBlockVisibility(false);
                     self.model.getObservable('alreadyAdded')(true);
                 }
@@ -47,14 +47,14 @@ define([
         /**
          * Is reslt block visible
          */
-        isResultBlockVisible: function () {
-            var self = this;
+        isResultBlockVisible: function() {
+            let self = this;
 
             if (this.model.getObservable('alreadyAdded')()) {
                 this.resultBlockVisibility(true);
             }
-            this.model.getObservable('additionalOptionsApplied').subscribe(function (value) {
-                if (value == true) { //eslint-disable-line eqeqeq
+            this.model.getObservable('additionalOptionsApplied').subscribe(function(value) {
+                if (value == true) { // eslint-disable-line eqeqeq
                     self.resultBlockVisibility(true);
                 }
             });
@@ -64,14 +64,14 @@ define([
          * @param {String} key
          * @return {*}
          */
-        getObservable: function (key) {
+        getObservable: function(key) {
             return this.model.getObservable(key);
         },
 
         /**
          * Hide\Show form block
          */
-        toggleFormBlockVisibility: function () {
+        toggleFormBlockVisibility: function() {
             if (!this.model.getObservable('alreadyAdded')()) {
                 this.formBlockVisibility(!this.formBlockVisibility());
             } else {
@@ -82,7 +82,7 @@ define([
         /**
          * Edit options
          */
-        editOptions: function () {
+        editOptions: function() {
             this.resultBlockVisibility(false);
             this.formBlockVisibility(true);
         },
@@ -90,14 +90,14 @@ define([
         /**
          * Delete options
          */
-        deleteOptions: function () {
+        deleteOptions: function() {
             giftOptionsService(this.model, true);
         },
 
         /**
          * Hide form block
          */
-        hideFormBlock: function () {
+        hideFormBlock: function() {
             this.formBlockVisibility(false);
 
             if (this.model.getObservable('alreadyAdded')()) {
@@ -108,8 +108,8 @@ define([
         /**
          * @return {Boolean}
          */
-        hasActiveOptions: function () {
-            var regionData = this.getRegion('additionalOptions'),
+        hasActiveOptions: function() {
+            let regionData = this.getRegion('additionalOptions'),
                 options = regionData(),
                 i;
 
@@ -125,15 +125,15 @@ define([
         /**
          * @return {Boolean}
          */
-        isActive: function () {
+        isActive: function() {
             return this.model.isGiftMessageAvailable();
         },
 
         /**
          * Submit options
          */
-        submitOptions: function () {
+        submitOptions: function() {
             giftOptionsService(this.model);
-        }
+        },
     });
 });

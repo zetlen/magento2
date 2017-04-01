@@ -13,8 +13,8 @@ define([
     'mageUtils',
     'uiRegistry',
     'Magento_Ui/js/lib/knockout/extender/bound-nodes',
-    'uiElement'
-], function ($, ko, _, utils, registry, boundedNodes, Element) {
+    'uiElement',
+], function($, ko, _, utils, registry, boundedNodes, Element) {
     'use strict';
 
     return Element.extend({
@@ -26,7 +26,7 @@ define([
             fieldSelector: '${ $.tableSelector } tbody tr td',
 
             imports: {
-                storageColumnsData: '${ $.storageConfig.path }.storageColumnsData'
+                storageColumnsData: '${ $.storageConfig.path }.storageColumnsData',
             },
             storageColumnsData: {},
             columnsElements: {},
@@ -47,8 +47,8 @@ define([
                 maxRowsHeight: [],
                 curResizeElem: {},
                 depResizeElem: {},
-                previousWidth: null
-            }
+                previousWidth: null,
+            },
         },
 
         /**
@@ -58,7 +58,7 @@ define([
          *
          * @returns {Object} Chainable
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(
                 this,
                 'initTable',
@@ -88,15 +88,15 @@ define([
          *
          * @returns {Object} Chainable
          */
-        initTable: function (table) {
+        initTable: function(table) {
             if ($(table).is(this.mainTableSelector)) {
                 this.table = table;
                 this.tableWidth = $(table).outerWidth();
                 $(window).resize(this.checkAfterResize);
             }
 
-            //TODO - Must be deleted when Firefox fixed problem with table-layout: fixed
-            //ticket to Firefox: https://bugs.webkit.org/show_bug.cgi?id=90068
+            // TODO - Must be deleted when Firefox fixed problem with table-layout: fixed
+            // ticket to Firefox: https://bugs.webkit.org/show_bug.cgi?id=90068
             if (navigator.userAgent.search(/Firefox/) > -1) {
                 this._layoutFixedPolyfill();
             }
@@ -112,11 +112,11 @@ define([
          * set new width to variable
          * after window resize start preprocessingWidth method
          */
-        checkAfterResize: function () {
-            var tableWidth,
+        checkAfterResize: function() {
+            let tableWidth,
                 self = this;
 
-            setTimeout(function () {
+            setTimeout(function() {
                 tableWidth = $(self.table).outerWidth();
 
                 if (self.tableWidth !== tableWidth) {
@@ -130,15 +130,15 @@ define([
         /**
          * Check conditions to set minimal width
          */
-        checkSumColumnsWidth: function () {
-            var table = $(this.table),
+        checkSumColumnsWidth: function() {
+            let table = $(this.table),
                 elems = table.find('th:not([style*="width: auto"]):visible'),
                 elemsWidthMin = table.find('th[style*="width: ' + (this.minColumnWidth - 1) + 'px"]:visible'),
                 elemsWidthAuto = table.find('th[style*="width: auto"]:visible'),
                 model;
 
             this.sumColumnsWidth = 0;
-            _.each(elems, function (elem) {
+            _.each(elems, function(elem) {
                 model = ko.dataFor(elem);
                 model.width && model.width !== 'auto' ? this.sumColumnsWidth += model.width : false;
             }, this);
@@ -157,10 +157,10 @@ define([
         /**
          * Set minimal width to element with "auto" width
          */
-        setWidthToColumnsWidthAuto: function () {
-            var elemsWidthAuto = $(this.table).find('th[style*="width: auto"]:visible');
+        setWidthToColumnsWidthAuto: function() {
+            let elemsWidthAuto = $(this.table).find('th[style*="width: auto"]:visible');
 
-            _.each(elemsWidthAuto, function (elem) {
+            _.each(elemsWidthAuto, function(elem) {
                 $(elem).outerWidth(this.minColumnWidth - 1);
             }, this);
         },
@@ -168,8 +168,8 @@ define([
         /**
          * Check conditions to set auto width
          */
-        hasMinimal: function () {
-            var table = $(this.table),
+        hasMinimal: function() {
+            let table = $(this.table),
                 elemsWidthMin = table.find('th[style*="width: ' + (this.minColumnWidth - 1) + 'px"]:visible'),
                 elemsWidthAuto = table.find('th[style*="width: auto"]:visible');
 
@@ -186,10 +186,10 @@ define([
         /**
          * Set "auto" width to element with minimal width
          */
-        setAuto: function () {
-            var elemsWidthAuto = $(this.table).find('th[style*="width: ' + (this.minColumnWidth - 1) + 'px"]:visible');
+        setAuto: function() {
+            let elemsWidthAuto = $(this.table).find('th[style*="width: ' + (this.minColumnWidth - 1) + 'px"]:visible');
 
-            _.each(elemsWidthAuto, function (elem) {
+            _.each(elemsWidthAuto, function(elem) {
                 $(elem).outerWidth('auto');
             }, this);
         },
@@ -197,7 +197,7 @@ define([
         /**
          * Check columns width and preprocessing
          */
-        preprocessingWidth: function () {
+        preprocessingWidth: function() {
             if (this.checkSumColumnsWidth()) {
                 this.setWidthToColumnsWidthAuto();
             } else if (this.hasMinimal()) {
@@ -215,8 +215,8 @@ define([
          *
          * @param {Object} column - columns header element (th)
          */
-        initColumn: function (column) {
-            var model = ko.dataFor(column),
+        initColumn: function(column) {
+            let model = ko.dataFor(column),
                 ctxIndex = this.getCtxIndex(ko.contextFor(column));
 
             model.width = this.getDefaultWidth(column);
@@ -239,10 +239,10 @@ define([
         /**
          * Hack for mozilla firefox
          */
-        _layoutFixedPolyfill: function () {
-            var self = this;
+        _layoutFixedPolyfill: function() {
+            let self = this;
 
-            setTimeout(function () {
+            setTimeout(function() {
                 if (self.layoutFixedPolyfillIterator < 20) {
                     $(window).resize();
                     self.layoutFixedPolyfillIterator++;
@@ -260,8 +260,8 @@ define([
          * @param {Object} column - columns header element (th)
          * @returns {Boolean}
          */
-        initResizableElement: function (column) {
-            var model = ko.dataFor(column),
+        initResizableElement: function(column) {
+            let model = ko.dataFor(column),
                 templateDragElement = '<div class="' + this.resizableElementClass + '"></div>';
 
             if (_.isUndefined(model.resizeEnabled) || model.resizeEnabled) {
@@ -279,8 +279,8 @@ define([
          * @param {Object} column - columns header element (th)
          * @returns {Boolean}
          */
-        setStopPropagationHandler: function (column) {
-            var events,
+        setStopPropagationHandler: function(column) {
+            let events,
                 click,
                 mousedown;
 
@@ -302,9 +302,8 @@ define([
          *
          * @param {Object} event
          */
-        _eventProxy: function (event) {
+        _eventProxy: function(event) {
             if ($(event.target).is('.' + this.resizableElementClass)) {
-
                 if (event.type === 'click') {
                     event.stopImmediatePropagation();
                 } else if (event.type === 'mousedown') {
@@ -318,8 +317,8 @@ define([
          *
          * @param {Object} column - columns header element (th)
          */
-        refreshLastColumn: function (column) {
-            var i = 0,
+        refreshLastColumn: function(column) {
+            let i = 0,
                 columns = $(column).parent().children().not(':hidden'),
                 length = columns.length;
 
@@ -328,12 +327,10 @@ define([
             $(column).parent().children().not(':hidden').last().addClass(this.visibleClass);
 
             for (i; i < length; i++) {
-
                 if (!columns.eq(i).find('.' + this.resizableElementClass).length && i) {
                     columns.eq(i - 1).addClass(this.visibleClass);
                 }
             }
-
         },
 
         /**
@@ -341,8 +338,8 @@ define([
          *
          * @param {Object} elem - (td)
          */
-        refreshMaxRowHeight: function (elem) {
-            var rowsH = this.maxRowsHeight(),
+        refreshMaxRowHeight: function(elem) {
+            let rowsH = this.maxRowsHeight(),
                 curEL = $(elem).find('div'),
                 height,
                 obj = this.hasRow($(elem).parent()[0], true);
@@ -360,7 +357,7 @@ define([
             } else {
                 rowsH.push({
                     elem: $(elem).parent()[0],
-                    maxHeight: height
+                    maxHeight: height,
                 });
             }
 
@@ -371,8 +368,8 @@ define([
         /**
          * Set resize class to elements when resizable
          */
-        _setResizeClass: function () {
-            var rowElements = $(this.table).find('tr');
+        _setResizeClass: function() {
+            let rowElements = $(this.table).find('tr');
 
             rowElements
                 .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
@@ -385,8 +382,8 @@ define([
         /**
          * Remove resize class to elements when resizable
          */
-        _removeResizeClass: function () {
-            var rowElements = $(this.table).find('tr');
+        _removeResizeClass: function() {
+            let rowElements = $(this.table).find('tr');
 
             rowElements
                 .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
@@ -401,7 +398,7 @@ define([
          *
          * @returns {Boolean}
          */
-        _canResize: function (column) {
+        _canResize: function(column) {
             if (
                 $(column).hasClass(this.visibleClass) ||
                 !$(this.resizeConfig.depResizeElem.elems[0]).find('.' + this.resizableElementClass).length
@@ -418,8 +415,8 @@ define([
          *
          * @param {Object} event
          */
-        mousedownHandler: function (event) {
-            var target = event.target,
+        mousedownHandler: function(event) {
+            let target = event.target,
                 column = $(target).parent()[0],
                 cfg = this.resizeConfig,
                 body = $('body');
@@ -454,8 +451,8 @@ define([
          *
          * @param {Object} event
          */
-        mousemoveHandler: function (event) {
-            var cfg = this.resizeConfig,
+        mousemoveHandler: function(event) {
+            let cfg = this.resizeConfig,
                 width = event.pageX - cfg.curResizeElem.position,
                 self = this;
 
@@ -471,33 +468,30 @@ define([
                 cfg.curResizeElem.model.width += width;
                 cfg.depResizeElem.model.width -= width;
 
-                cfg.curResizeElem.elems.forEach(function (el) {
+                cfg.curResizeElem.elems.forEach(function(el) {
                     $(el).outerWidth(cfg.curResizeElem.model.width);
                 });
-                cfg.depResizeElem.elems.forEach(function (el) {
+                cfg.depResizeElem.elems.forEach(function(el) {
                     $(el).outerWidth(cfg.depResizeElem.model.width);
                 });
 
                 cfg.previousWidth = width;
                 cfg.curResizeElem.position = event.pageX;
             } else if (width <= -(cfg.curResizeElem.model.width - this.minColumnWidth)) {
-
-                cfg.curResizeElem.elems.forEach(function (el) {
+                cfg.curResizeElem.elems.forEach(function(el) {
                     $(el).outerWidth(self.minColumnWidth);
                 });
-                cfg.depResizeElem.elems.forEach(function (el) {
+                cfg.depResizeElem.elems.forEach(function(el) {
                     $(el).outerWidth(
                     cfg.depResizeElem.model.width +
                     cfg.curResizeElem.model.width -
                     self.minColumnWidth);
                 });
-
             } else if (width >= cfg.depResizeElem.model.width - this.minColumnWidth) {
-
-                cfg.depResizeElem.elems.forEach(function (el) {
+                cfg.depResizeElem.elems.forEach(function(el) {
                     $(el).outerWidth(self.minColumnWidth);
                 });
-                cfg.curResizeElem.elems.forEach(function (el) {
+                cfg.curResizeElem.elems.forEach(function(el) {
                     $(el).outerWidth(
                         cfg.curResizeElem.model.width +
                         cfg.depResizeElem.model.width -
@@ -513,8 +507,8 @@ define([
          *
          * @param {Object} event
          */
-        mouseupHandler: function (event) {
-            var cfg = this.resizeConfig,
+        mouseupHandler: function(event) {
+            let cfg = this.resizeConfig,
                 body = $('body');
 
             event.stopPropagation();
@@ -538,8 +532,8 @@ define([
          * @param {Object} element - current element
          * @returns {Object} next element data
          */
-        getNextElements: function (element) {
-            var nextElem = $(element).next()[0],
+        getNextElements: function(element) {
+            let nextElem = $(element).next()[0],
                 nextElemModel = ko.dataFor(nextElem),
                 nextElemData = this.hasColumn(nextElemModel, false, true);
 
@@ -558,8 +552,8 @@ define([
          * @param {Object} column - (th) element
          * @return {String} width for current column
          */
-        getDefaultWidth: function (column) {
-            var model = ko.dataFor(column);
+        getDefaultWidth: function(column) {
+            let model = ko.dataFor(column);
 
             if (this.storageColumnsData[model.index]) {
                 return this.storageColumnsData[model.index];
@@ -580,12 +574,11 @@ define([
          * @param {Boolean} returned - need return column object or not
          * @return {Boolean} if returned param is false, returned boolean value, else return current object data
          */
-        hasColumn: function (model, ctxIndex, returned) {
-            var colElem = this.columnsElements[model.index] || {},
+        hasColumn: function(model, ctxIndex, returned) {
+            let colElem = this.columnsElements[model.index] || {},
                 getFromAllCtx = ctxIndex === false;
 
             if (colElem && (getFromAllCtx || colElem.hasOwnProperty(ctxIndex))) {
-
                 if (returned) {
                     return getFromAllCtx ?
                         _.values(colElem) :
@@ -605,14 +598,14 @@ define([
          * @param {Boolean} returned - need return column object or not
          * @return {Boolean|Object} if returned param is false, returned boolean value, else return current object data
          */
-        hasRow: function (elem, returned) {
-            var i = 0,
+        hasRow: function(elem, returned) {
+            let i = 0,
                 el = this.maxRowsHeight(),
                 length = el.length;
 
             for (i; i < length; i++) {
                 if (this.maxRowsHeight()[i].elem === elem) {
-                    if (returned) {//eslint-disable-line max-depth
+                    if (returned) {// eslint-disable-line max-depth
                         return this.maxRowsHeight()[i];
                     }
 
@@ -629,10 +622,10 @@ define([
          * @param {Object} ctx
          * @return {String}
          */
-        getCtxIndex: function (ctx) {
-            return ctx ? ctx.$parents.reduce(function (pv, cv) {
+        getCtxIndex: function(ctx) {
+            return ctx ? ctx.$parents.reduce(function(pv, cv) {
                 return (pv.index || pv) + (cv || {}).index;
             }) : ctx;
-        }
+        },
     });
 });

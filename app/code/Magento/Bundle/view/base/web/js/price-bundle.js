@@ -8,11 +8,11 @@ define([
     'underscore',
     'mage/template',
     'priceUtils',
-    'priceBox'
-], function ($, _, mageTemplate, utils) {
+    'priceBox',
+], function($, _, mageTemplate, utils) {
     'use strict';
 
-    var globalOptions = {
+    let globalOptions = {
         optionConfig: null,
         productBundleSelector: 'input.bundle.option, select.bundle.option, textarea.bundle.option',
         qtyFieldSelector: 'input.qty',
@@ -24,7 +24,7 @@ define([
         '<% } %>',
         controlContainer: 'dd', // should be eliminated
         priceFormat: {},
-        isFixedPrice: false
+        isFixedPrice: false,
     };
 
     $.widget('mage.priceBundle', {
@@ -34,7 +34,7 @@ define([
          * @private
          */
         _init: function initPriceBundle() {
-            var form = this.element,
+            let form = this.element,
                 options = $(this.options.productBundleSelector, form);
 
             options.trigger('change');
@@ -44,7 +44,7 @@ define([
          * @private
          */
         _create: function createPriceBundle() {
-            var form = this.element,
+            let form = this.element,
                 options = $(this.options.productBundleSelector, form),
                 priceBox = $(this.options.priceBoxSelector, form),
                 qty = $(this.options.qtyFieldSelector, form);
@@ -71,7 +71,7 @@ define([
          * @private
          */
         _onBundleOptionChanged: function onBundleOptionChanged(event) {
-            var changes,
+            let changes,
                 bundleOption = $(event.target),
                 priceBox = $(this.options.priceBoxSelector, this.element),
                 handler = this.options.optionHandlers[bundleOption.data('role')];
@@ -97,7 +97,7 @@ define([
          * @private
          */
         _onQtyFieldChanged: function onQtyFieldChanged(event) {
-            var field = $(event.target),
+            let field = $(event.target),
                 optionInstance,
                 optionConfig;
 
@@ -120,13 +120,13 @@ define([
          * @private
          */
         _applyQtyFix: function applyQtyFix() {
-            var config = this.options.optionConfig;
+            let config = this.options.optionConfig;
 
             if (config.isFixedPrice) {
-                _.each(config.options, function (option) {
-                    _.each(option.selections, function (item) {
+                _.each(config.options, function(option) {
+                    _.each(option.selections, function(item) {
                         if (item.qty && item.qty !== 1) {
-                            _.each(item.prices, function (price) {
+                            _.each(item.prices, function(price) {
                                 price.amount /= item.qty;
                             });
                         }
@@ -143,19 +143,19 @@ define([
          * @private
          */
         _applyOptionNodeFix: function applyOptionNodeFix(options) {
-            var config = this.options,
+            let config = this.options,
                 format = config.priceFormat,
                 template = config.optionTemplate;
 
             template = mageTemplate(template);
-            options.filter('select').each(function (index, element) {
-                var $element = $(element),
+            options.filter('select').each(function(index, element) {
+                let $element = $(element),
                     optionId = utils.findOptionId($element),
                     optionConfig = config.optionConfig && config.optionConfig.options[optionId].selections,
                     value;
 
-                $element.find('option').each(function (idx, option) {
-                    var $option,
+                $element.find('option').each(function(idx, option) {
+                    let $option,
                         optionValue,
                         toTemplate,
                         prices;
@@ -169,19 +169,19 @@ define([
 
                     toTemplate = {
                         data: {
-                            label: optionConfig[optionValue] && optionConfig[optionValue].name
-                        }
+                            label: optionConfig[optionValue] && optionConfig[optionValue].name,
+                        },
                     };
                     prices = optionConfig[optionValue].prices;
 
-                    _.each(prices, function (price, type) {
+                    _.each(prices, function(price, type) {
                         value = +price.amount;
                         value += _.reduce(price.adjustments, function (sum, x) {//eslint-disable-line
                             return sum + x;
                         }, 0);
                         toTemplate.data[type] = {
                             value: value,
-                            formatted: utils.formatPrice(value, format)
+                            formatted: utils.formatPrice(value, format),
                         };
                     });
 
@@ -209,9 +209,9 @@ define([
          */
         updateProductSummary: function updateProductSummary() {
             this.element.trigger('updateProductSummary', {
-                config: this.options.optionConfig
+                config: this.options.optionConfig,
             });
-        }
+        },
     });
 
     return $.mage.priceBundle;
@@ -224,7 +224,7 @@ define([
      * @returns {Object|null} - priceBox object with additional prices
      */
     function defaultGetOptionValue(element, config) {
-        var changes = {},
+        let changes = {},
             optionHash,
             tempChanges,
             qtyField,
@@ -272,7 +272,7 @@ define([
             case 'select-multiple':
                 optionValue = _.compact(optionValue);
 
-                _.each(optionConfig, function (row, optionValueCode) {
+                _.each(optionConfig, function(row, optionValueCode) {
                     optionHash = 'bundle-option-' + optionName + '##' + optionValueCode;
                     optionQty = row.qty || 0;
                     tempChanges = utils.deepClone(row.prices);
@@ -351,9 +351,9 @@ define([
      * @returns {Object}
      */
     function applyQty(prices, qty) {
-        _.each(prices, function (everyPrice) {
+        _.each(prices, function(everyPrice) {
             everyPrice.amount *= qty;
-            _.each(everyPrice.adjustments, function (el, index) {
+            _.each(everyPrice.adjustments, function(el, index) {
                 everyPrice.adjustments[index] *= qty;
             });
         });
@@ -370,11 +370,11 @@ define([
      * @returns {Object}
      */
     function applyTierPrice(oneItemPrice, qty, optionConfig) {
-        var tiers = optionConfig.tierPrice,
+        let tiers = optionConfig.tierPrice,
             magicKey = _.keys(oneItemPrice)[0],
             lowest = false;
 
-        _.each(tiers, function (tier, index) {
+        _.each(tiers, function(tier, index) {
             if (tier['price_qty'] > qty) {
                 return;
             }

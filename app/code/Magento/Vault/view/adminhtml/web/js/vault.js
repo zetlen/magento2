@@ -2,13 +2,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 /* @api */
 define([
     'jquery',
-    'uiComponent'
-], function ($, Class) {
+    'uiComponent',
+], function($, Class) {
     'use strict';
 
     return Class.extend({
@@ -18,16 +18,16 @@ define([
             fieldset: '',
             active: false,
             imports: {
-                onActiveChange: 'active'
-            }
+                onActiveChange: 'active',
+            },
         },
 
         /**
          * Set list of observable attributes
          * @returns {exports.initObservable}
          */
-        initObservable: function () {
-            var self = this;
+        initObservable: function() {
+            let self = this;
 
             self.$selector = $('#' + self.selector);
             this._super()
@@ -50,7 +50,7 @@ define([
          * @param {String} method
          * @returns {exports.changePaymentMethod}
          */
-        changePaymentMethod: function (event, method) {
+        changePaymentMethod: function(event, method) {
             this.active(method === this.getCode());
 
             return this;
@@ -60,7 +60,7 @@ define([
          * Triggered when payment changed
          * @param {Boolean} isActive
          */
-        onActiveChange: function (isActive) {
+        onActiveChange: function(isActive) {
             if (!isActive) {
                 this.$selector.trigger('setVaultNotActive.' + this.getCode());
 
@@ -75,8 +75,8 @@ define([
          * Get payment method code
          * @returns {String}
          */
-        getCode: function () {
+        getCode: function() {
             return this.code;
-        }
+        },
     });
 });

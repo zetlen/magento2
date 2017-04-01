@@ -4,11 +4,11 @@
  */
 define([
     'ko',
-    'underscore'
-], function (ko, _) {
+    'underscore',
+], function(ko, _) {
     'use strict';
 
-    var billingAddress = ko.observable(null),
+    let billingAddress = ko.observable(null),
         shippingAddress = ko.observable(null),
         shippingMethod = ko.observable(null),
         paymentMethod = ko.observable(null),
@@ -31,35 +31,35 @@ define([
         /**
          * @return {*}
          */
-        getQuoteId: function () {
+        getQuoteId: function() {
             return quoteData['entity_id'];
         },
 
         /**
          * @return {Boolean}
          */
-        isVirtual: function () {
+        isVirtual: function() {
             return !!Number(quoteData['is_virtual']);
         },
 
         /**
          * @return {*}
          */
-        getPriceFormat: function () {
+        getPriceFormat: function() {
             return priceFormat;
         },
 
         /**
          * @return {*}
          */
-        getBasePriceFormat: function () {
+        getBasePriceFormat: function() {
             return basePriceFormat;
         },
 
         /**
          * @return {*}
          */
-        getItems: function () {
+        getItems: function() {
             return window.checkoutConfig.quoteItemData;
         },
 
@@ -67,16 +67,16 @@ define([
          *
          * @return {*}
          */
-        getTotals: function () {
+        getTotals: function() {
             return totals;
         },
 
         /**
          * @param {Object} data
          */
-        setTotals: function (data) {
+        setTotals: function(data) {
             if (_.isObject(data) && _.isObject(data['extension_attributes'])) {
-                _.each(data['extension_attributes'], function (element, index) {
+                _.each(data['extension_attributes'], function(element, index) {
                     data[index] = element;
                 });
             }
@@ -87,21 +87,21 @@ define([
         /**
          * @param {*} paymentMethodCode
          */
-        setPaymentMethod: function (paymentMethodCode) {
+        setPaymentMethod: function(paymentMethodCode) {
             paymentMethod(paymentMethodCode);
         },
 
         /**
          * @return {*}
          */
-        getPaymentMethod: function () {
+        getPaymentMethod: function() {
             return paymentMethod;
         },
 
         /**
          * @return {*}
          */
-        getStoreCode: function () {
+        getStoreCode: function() {
             return storeCode;
         },
 
@@ -109,8 +109,8 @@ define([
          * @param {String} code
          * @param {*} value
          */
-        setCollectedTotals: function (code, value) {
-            var colTotals = collectedTotals();
+        setCollectedTotals: function(code, value) {
+            let colTotals = collectedTotals();
 
             colTotals[code] = value;
             collectedTotals(colTotals);
@@ -119,14 +119,14 @@ define([
         /**
          * @return {Number}
          */
-        getCalculatedTotal: function () {
-            var total = 0.; //eslint-disable-line no-floating-decimal
+        getCalculatedTotal: function() {
+            let total = 0.; // eslint-disable-line no-floating-decimal
 
-            _.each(collectedTotals(), function (value) {
+            _.each(collectedTotals(), function(value) {
                 total += value;
             });
 
             return total;
-        }
+        },
     };
 });

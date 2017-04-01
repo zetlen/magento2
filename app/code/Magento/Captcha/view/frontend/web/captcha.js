@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.captcha', {
@@ -14,22 +14,22 @@ define([
             refreshClass: 'refreshing',
             reloadSelector: '.captcha-reload',
             imageSelector: '.captcha-img',
-            imageLoader: ''
+            imageLoader: '',
         },
 
         /**
          * Method binds click event to reload image
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.element.on('click', this.options.reloadSelector, $.proxy(this.refresh, this));
         },
 
         /**
          * Method triggeres an AJAX request to refresh the CAPTCHA image
          */
-        refresh: function () {
-            var imageLoader = this.options.imageLoader;
+        refresh: function() {
+            let imageLoader = this.options.imageLoader;
 
             if (imageLoader) {
                 this.element.find(this.options.imageSelector).attr('src', imageLoader);
@@ -43,24 +43,24 @@ define([
                 dataType: 'json',
                 context: this,
                 data: {
-                    'formId': this.options.type
+                    'formId': this.options.type,
                 },
 
                 /**
                  * @param {Object} response
                  */
-                success: function (response) {
+                success: function(response) {
                     if (response.imgSrc) {
                         this.element.find(this.options.imageSelector).attr('src', response.imgSrc);
                     }
                 },
 
                 /** Complete callback. */
-                complete: function () {
+                complete: function() {
                     this.element.removeClass(this.options.refreshClass);
-                }
+                },
             });
-        }
+        },
     });
 
     return $.mage.captcha;

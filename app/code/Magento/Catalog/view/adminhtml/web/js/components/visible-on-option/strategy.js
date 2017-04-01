@@ -2,7 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(function () {
+define(function() {
     'use strict';
 
     return {
@@ -10,10 +10,10 @@ define(function () {
             valuesForOptions: [],
             imports: {
                 toggleVisibility:
-                    'product_attribute_add_form.product_attribute_add_form.base_fieldset.frontend_input:value'
+                    'product_attribute_add_form.product_attribute_add_form.base_fieldset.frontend_input:value',
             },
             isShown: false,
-            inverseVisibility: false
+            inverseVisibility: false,
         },
 
         /**
@@ -21,9 +21,9 @@ define(function () {
          *
          * @param {Number} selected
          */
-        toggleVisibility: function (selected) {
+        toggleVisibility: function(selected) {
             this.isShown = selected in this.valuesForOptions;
             this.visible(this.inverseVisibility ? !this.isShown : this.isShown);
-        }
+        },
     };
 });

@@ -13,8 +13,8 @@ define([
     'text!ui/template/modal/modal-prompt-content.html',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
-    'mage/translate'
-], function ($, _, template, promptContentTmpl) {
+    'mage/translate',
+], function($, _, template, promptContentTmpl) {
     'use strict';
 
     $.widget('mage.prompt', $.mage.modal, {
@@ -32,17 +32,17 @@ define([
                 /**
                  * Callback always - called on all actions.
                  */
-                always: function () {},
+                always: function() {},
 
                 /**
                  * Callback confirm.
                  */
-                confirm: function () {},
+                confirm: function() {},
 
                 /**
                  * Callback cancel.
                  */
-                cancel: function () {}
+                cancel: function() {},
             },
             buttons: [{
                 text: $.mage.__('Cancel'),
@@ -51,9 +51,9 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
+                click: function() {
                     this.closeModal();
-                }
+                },
             }, {
                 text: $.mage.__('OK'),
                 class: 'action-primary action-accept',
@@ -61,21 +61,21 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
+                click: function() {
                     this.closeModal(true);
-                }
-            }]
+                },
+            }],
         },
 
         /**
          * Create widget.
          */
-        _create: function () {
+        _create: function() {
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
             this.modal.find(this.options.modalContent).append(this.getFormTemplate());
-            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
+            this.modal.find(this.options.modalCloseBtn).off().on('click', _.bind(this.closeModal, this, false));
 
             if (this.options.validation) {
                 this.setValidationClasses();
@@ -89,8 +89,8 @@ define([
          *
          * @returns {Object} Form template.
          */
-        getFormTemplate: function () {
-            var formTemplate,
+        getFormTemplate: function() {
+            let formTemplate,
                 formAttr = '',
                 inputAttr = '',
                 attributeName;
@@ -112,7 +112,7 @@ define([
             formTemplate = $(template(this.options.promptContentTmpl, {
                 data: this.options,
                 formAttr: formAttr,
-                inputAttr: inputAttr
+                inputAttr: inputAttr,
             }));
 
             return formTemplate;
@@ -121,22 +121,22 @@ define([
         /**
          * Remove widget
          */
-        _remove: function () {
+        _remove: function() {
             this.modal.remove();
         },
 
         /**
          * Validate prompt field
          */
-        validate: function () {
+        validate: function() {
             return $.validator.validateSingleElement(this.options.promptField);
         },
 
         /**
          * Add validation classes to prompt field
          */
-        setValidationClasses: function () {
-            this.modal.find(this.options.promptField).attr('class', $.proxy(function (i, val) {
+        setValidationClasses: function() {
+            this.modal.find(this.options.promptField).attr('class', $.proxy(function(i, val) {
                 return val + ' ' + this.options.validationRules.join(' ');
             }, this));
         },
@@ -144,7 +144,7 @@ define([
         /**
          * Open modal window
          */
-        openModal: function () {
+        openModal: function() {
             this._super();
             this.modal.find(this.options.promptField).val(this.options.value);
         },
@@ -152,8 +152,8 @@ define([
         /**
          * Close modal window
          */
-        closeModal: function (result) {
-            var value;
+        closeModal: function(result) {
+            let value;
 
             if (result) {
                 if (this.options.validation && !this.validate()) {
@@ -170,10 +170,10 @@ define([
             this.element.bind('promptclosed', _.bind(this._remove, this));
 
             return this._super();
-        }
+        },
     });
 
-    return function (config) {
+    return function(config) {
         return $('<div class="prompt-message"></div>').html(config.content).prompt(config);
     };
 });

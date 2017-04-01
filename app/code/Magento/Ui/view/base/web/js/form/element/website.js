@@ -9,21 +9,21 @@
 define([
     'underscore',
     'uiRegistry',
-    './select'
-], function (_, registry, Select) {
+    './select',
+], function(_, registry, Select) {
     'use strict';
 
     return Select.extend({
         defaults: {
             customerId: null,
-            isGlobalScope: 0
+            isGlobalScope: 0,
         },
 
         /**
          * Website component constructor.
          * @returns {exports}
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             if (this.customerId || this.isGlobalScope) {
@@ -31,6 +31,6 @@ define([
             }
 
             return this;
-        }
+        },
     });
 });

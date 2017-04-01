@@ -8,15 +8,15 @@
  */
 define([
     'Magento_Ui/js/form/components/button',
-    'uiRegistry'
-], function (Button, registry) {
+    'uiRegistry',
+], function(Button, registry) {
     'use strict';
 
     return Button.extend({
         defaults: {
             customInstructionField: '${ $.parentName }.custom_instructions',
             label: '',
-            buttonTpl: 'Magento_Theme/form/element/button'
+            buttonTpl: 'Magento_Theme/form/element/button',
         },
 
         /**
@@ -24,19 +24,19 @@ define([
          * @param {String} json
          * @return {String}
          */
-        _parseJson: function (json) {
+        _parseJson: function(json) {
             return JSON.parse(json);
         },
 
         /**
          * @param {String} defaultRobotsTxt
          */
-        reset: function (defaultRobotsTxt) {
-            var customInstructions = registry.get(this.customInstructionField);
+        reset: function(defaultRobotsTxt) {
+            let customInstructions = registry.get(this.customInstructionField);
 
             if (customInstructions) {
                 customInstructions.set('value', this._parseJson(defaultRobotsTxt));
             }
-        }
+        },
     });
 });

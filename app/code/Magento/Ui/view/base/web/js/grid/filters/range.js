@@ -11,8 +11,8 @@ define([
     'uiLayout',
     'mageUtils',
     'Magento_Ui/js/form/components/group',
-    'mage/translate'
-], function (_, layout, utils, Group, $t) {
+    'mage/translate',
+], function(_, layout, utils, Group, $t) {
     'use strict';
 
     return Group.extend({
@@ -23,26 +23,26 @@ define([
                 base: {
                     parent: '${ $.$data.group.name }',
                     provider: '${ $.$data.group.provider }',
-                    template: 'ui/grid/filters/field'
+                    template: 'ui/grid/filters/field',
                 },
                 date: {
                     component: 'Magento_Ui/js/form/element/date',
-                    dateFormat: 'MM/dd/YYYY'
+                    dateFormat: 'MM/dd/YYYY',
                 },
                 text: {
-                    component: 'Magento_Ui/js/form/element/abstract'
+                    component: 'Magento_Ui/js/form/element/abstract',
                 },
                 ranges: {
                     from: {
                         label: $t('from'),
-                        dataScope: 'from'
+                        dataScope: 'from',
                     },
                     to: {
                         label: $t('to'),
-                        dataScope: 'to'
-                    }
-                }
-            }
+                        dataScope: 'to',
+                    },
+                },
+            },
         },
 
         /**
@@ -50,7 +50,7 @@ define([
          *
          * @returns {Range} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initChildren();
 
@@ -62,8 +62,8 @@ define([
          *
          * @returns {Range} Chainable.
          */
-        initChildren: function () {
-            var children = this.buildChildren();
+        initChildren: function() {
+            let children = this.buildChildren();
 
             layout(children);
 
@@ -75,18 +75,18 @@ define([
          *
          * @returns {Object}
          */
-        buildChildren: function () {
-            var templates   = this.templates,
-                typeTmpl    = templates[this.rangeType],
-                tmpl        = utils.extend({}, templates.base, typeTmpl),
-                children    = {};
+        buildChildren: function() {
+            let templates = this.templates,
+                typeTmpl = templates[this.rangeType],
+                tmpl = utils.extend({}, templates.base, typeTmpl),
+                children = {};
 
-            _.each(templates.ranges, function (range, key) {
+            _.each(templates.ranges, function(range, key) {
                 children[key] = utils.extend({}, tmpl, range);
             });
 
             return utils.template(children, {
-                group: this
+                group: this,
             }, true, true);
         },
 
@@ -95,7 +95,7 @@ define([
          *
          * @returns {Range} Chainable.
          */
-        clear: function () {
+        clear: function() {
             this.elems.each('clear');
 
             return this;
@@ -106,8 +106,8 @@ define([
          *
          * @returns {Boolean}
          */
-        hasData: function () {
+        hasData: function() {
             return this.elems.some('hasData');
-        }
+        },
     });
 });

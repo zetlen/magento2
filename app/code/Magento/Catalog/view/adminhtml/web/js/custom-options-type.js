@@ -7,8 +7,8 @@ define([
     'jquery',
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/element/ui-select'
-], function ($, _, registry, UiSelect) {
+    'Magento_Ui/js/form/element/ui-select',
+], function($, _, registry, UiSelect) {
     'use strict';
 
     return UiSelect.extend({
@@ -17,14 +17,14 @@ define([
             groupsConfig: {},
             valuesMap: {},
             indexesMap: {},
-            filterPlaceholder: 'ns = ${ $.ns }, parentScope = ${ $.parentScope }'
+            filterPlaceholder: 'ns = ${ $.ns }, parentScope = ${ $.parentScope }',
         },
 
         /**
          * Initialize component.
          * @returns {Element}
          */
-        initialize: function () {
+        initialize: function() {
             return this
                 ._super()
                 .initMapping()
@@ -36,13 +36,13 @@ define([
          *
          * @returns {Element}
          */
-        initMapping: function () {
-            _.each(this.groupsConfig, function (groupData, group) {
-                _.each(groupData.values, function (value) {
+        initMapping: function() {
+            _.each(this.groupsConfig, function(groupData, group) {
+                _.each(groupData.values, function(value) {
                     this.valuesMap[value] = group;
                 }, this);
 
-                _.each(groupData.indexes, function (index) {
+                _.each(groupData.indexes, function(index) {
                     if (!this.indexesMap[index]) {
                         this.indexesMap[index] = [];
                     }
@@ -60,7 +60,7 @@ define([
          * @param {String} currentValue
          * @returns {*}
          */
-        onUpdate: function (currentValue) {
+        onUpdate: function(currentValue) {
             this.updateComponents(currentValue);
 
             return this._super();
@@ -73,12 +73,12 @@ define([
          * @param {Boolean} isInitialization
          * @returns {Element}
          */
-        updateComponents: function (currentValue, isInitialization) {
-            var currentGroup = this.valuesMap[currentValue];
+        updateComponents: function(currentValue, isInitialization) {
+            let currentGroup = this.valuesMap[currentValue];
 
             if (currentGroup !== this.previousGroup) {
-                _.each(this.indexesMap, function (groups, index) {
-                    var template = this.filterPlaceholder + ', index = ' + index,
+                _.each(this.indexesMap, function(groups, index) {
+                    let template = this.filterPlaceholder + ', index = ' + index,
                         visible = groups.indexOf(currentGroup) !== -1,
                         component;
 
@@ -91,10 +91,10 @@ define([
                             break;
                     }
 
-                    /*eslint-disable max-depth */
+                    /* eslint-disable max-depth */
                     if (isInitialization) {
                         registry.async(template)(
-                            function (currentComponent) {
+                            function(currentComponent) {
                                 currentComponent.visible(visible);
                             }
                         );
@@ -104,7 +104,7 @@ define([
                         if (component) {
                             component.visible(visible);
 
-                            /*eslint-disable max-depth */
+                            /* eslint-disable max-depth */
                             if (_.isFunction(component.clear)) {
                                 component.clear();
                             }
@@ -116,6 +116,6 @@ define([
             }
 
             return this;
-        }
+        },
     });
 });

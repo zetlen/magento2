@@ -6,32 +6,32 @@
 define([
     'jquery',
     'jquery/ui',
-    'Magento_Catalog/js/price-box'
-], function ($) {
+    'Magento_Catalog/js/price-box',
+], function($) {
     'use strict';
 
     $.widget('mage.downloadable', {
         options: {
-            priceHolderSelector: '.price-box'
+            priceHolderSelector: '.price-box',
         },
 
         /** @inheritdoc */
-        _create: function () {
-            var self = this;
+        _create: function() {
+            let self = this;
 
-            this.element.find(this.options.linkElement).on('change', $.proxy(function () {
+            this.element.find(this.options.linkElement).on('change', $.proxy(function() {
                 this._reloadPrice();
             }, this));
 
-            this.element.find(this.options.allElements).on('change', function () {
+            this.element.find(this.options.allElements).on('change', function() {
                 if (this.checked) {
                     $('label[for="' + this.id + '"] > span').text($(this).attr('data-checked'));
-                    self.element.find(self.options.linkElement + ':not(:checked)').each(function () {
+                    self.element.find(self.options.linkElement + ':not(:checked)').each(function() {
                         $(this).trigger('click');
                     });
                 } else {
                     $('[for="' + this.id + '"] > span').text($(this).attr('data-notchecked'));
-                    self.element.find(self.options.linkElement + ':checked').each(function () {
+                    self.element.find(self.options.linkElement + ':checked').each(function() {
                         $(this).trigger('click');
                     });
                 }
@@ -42,11 +42,11 @@ define([
          * Reload product price with selected link price included
          * @private
          */
-        _reloadPrice: function () {
-            var finalPrice = 0,
+        _reloadPrice: function() {
+            let finalPrice = 0,
                 basePrice = 0;
 
-            this.element.find(this.options.linkElement + ':checked').each($.proxy(function (index, element) {
+            this.element.find(this.options.linkElement + ':checked').each($.proxy(function(index, element) {
                 finalPrice += this.options.config.links[$(element).val()].finalPrice;
                 basePrice += this.options.config.links[$(element).val()].basePrice;
             }, this));
@@ -54,14 +54,14 @@ define([
             $(this.options.priceHolderSelector).trigger('updatePrice', {
                 'prices': {
                     'finalPrice': {
-                        'amount': finalPrice
+                        'amount': finalPrice,
                     },
                     'basePrice': {
-                        'amount': basePrice
-                    }
-                }
+                        'amount': basePrice,
+                    },
+                },
             });
-        }
+        },
     });
 
     return $.mage.downloadable;

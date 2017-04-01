@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            addToCart: 'Magento_Msrp/js/msrp'
-        }
-    }
+            addToCart: 'Magento_Msrp/js/msrp',
+        },
+    },
 };

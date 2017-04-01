@@ -7,8 +7,8 @@ define([
     'ko',
     'uiRegistry',
     'mage/translate',
-    '../template/renderer'
-], function (ko, registry, $t, renderer) {
+    '../template/renderer',
+], function(ko, registry, $t, renderer) {
     'use strict';
 
     /**
@@ -22,7 +22,7 @@ define([
         component = bindingContext.createChildContext(component);
 
         ko.utils.extend(component, {
-            $t: $t
+            $t: $t,
         });
 
         ko.utils.arrayForEach(el.childNodes, ko.cleanNode);
@@ -36,9 +36,9 @@ define([
          * Scope binding's init method.
          * @returns {Object} - Knockout declaration for it to let binding control descendants.
          */
-        init: function () {
+        init: function() {
             return {
-                controlsDescendantBindings: true
+                controlsDescendantBindings: true,
             };
         },
 
@@ -51,8 +51,8 @@ define([
          * @param {Object} viewModel - Object, which represents view model binded to el.
          * @param {ko.bindingContext} bindingContext - Instance of ko.bindingContext, passed to binding initially.
          */
-        update: function (el, valueAccessor, allBindings, viewModel, bindingContext) {
-            var component = valueAccessor(),
+        update: function(el, valueAccessor, allBindings, viewModel, bindingContext) {
+            let component = valueAccessor(),
                 apply = applyComponents.bind(this, el, bindingContext);
 
             if (typeof component === 'string') {
@@ -60,7 +60,7 @@ define([
             } else if (typeof component === 'function') {
                 component(apply);
             }
-        }
+        },
     };
 
     ko.virtualElements.allowedBindings.scope = true;
@@ -68,6 +68,6 @@ define([
     renderer
         .addNode('scope')
         .addAttribute('scope', {
-            name: 'ko-scope'
+            name: 'ko-scope',
         });
 });

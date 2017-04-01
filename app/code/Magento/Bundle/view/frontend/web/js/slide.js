@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.slide', {
@@ -17,12 +17,12 @@ define([
             bundleProductSelector: '#bundleProduct',
             bundleOptionsContainer: '#options-container',
             productViewContainer: '#productView',
-            slidedown: true
+            slidedown: true,
 
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             if (this.options.slidedown === true) {
                 $(this.options.slideSelector).on('click', $.proxy(this._show, this));
                 $(this.options.slideBackSelector).on('click', $.proxy(this._hide, this));
@@ -38,16 +38,16 @@ define([
          * slide bundleOptionsContainer over to the main view area
          * @private
          */
-        _slide: function () {
+        _slide: function() {
             $(this.options.bundleProductSelector).css('top', '0px');
             $(this.options.bundleOptionsContainer).show();
             this.element.css('height', $(this.options.productViewContainer).height() + 'px');
             $(this.options.bundleProductSelector).css('left', '0px').animate(
                 {
-                    'left': '-' + this.element.width() + 'px'
+                    'left': '-' + this.element.width() + 'px',
                 },
                 this.options.slideSpeed,
-                $.proxy(function () {
+                $.proxy(function() {
                     this.element.css('height', 'auto');
                     $(this.options.productViewContainer).hide();
                 }, this)
@@ -58,16 +58,16 @@ define([
          * slideback productViewContainer to main view area
          * @private
          */
-        _slideBack: function () {
+        _slideBack: function() {
             $(this.options.bundleProductSelector).css('top', '0px');
             $(this.options.productViewContainer).show();
             this.element.css('height', $(this.options.bundleOptionsContainer).height() + 'px');
             $(this.options.bundleProductSelector).animate(
                 {
-                    'left': '0px'
+                    'left': '0px',
                 },
                 this.options.slideSpeed,
-                $.proxy(function () {
+                $.proxy(function() {
                     $(this.options.bundleOptionsContainer).hide();
                     this.element.css('height', 'auto');
                 }, this)
@@ -77,10 +77,10 @@ define([
         /**
          * @private
          */
-        _show: function () {
+        _show: function() {
             $(this.options.bundleOptionsContainer).slideDown(800);
             $('html, body').animate({
-                scrollTop: $(this.options.bundleOptionsContainer).offset().top
+                scrollTop: $(this.options.bundleOptionsContainer).offset().top,
             }, 600);
             $('#product-options-wrapper > fieldset').focus();
         },
@@ -88,12 +88,12 @@ define([
         /**
          * @private
          */
-        _hide: function () {
+        _hide: function() {
             $('html, body').animate({
-                scrollTop: 0
+                scrollTop: 0,
             }, 600);
             $(this.options.bundleOptionsContainer).slideUp(800);
-        }
+        },
     });
 
     return $.mage.slide;

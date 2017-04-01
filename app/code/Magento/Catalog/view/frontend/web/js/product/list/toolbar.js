@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     /**
@@ -27,11 +27,11 @@ define([
             directionDefault: 'asc',
             orderDefault: 'position',
             limitDefault: '9',
-            url: ''
+            url: '',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._bind($(this.options.modeControl), this.options.mode, this.options.modeDefault);
             this._bind($(this.options.directionControl), this.options.direction, this.options.directionDefault);
             this._bind($(this.options.orderControl), this.options.order, this.options.orderDefault);
@@ -39,16 +39,16 @@ define([
         },
 
         /** @inheritdoc */
-        _bind: function (element, paramName, defaultValue) {
+        _bind: function(element, paramName, defaultValue) {
             if (element.is('select')) {
                 element.on('change', {
-                    paramName: paramName,
-                    'default': defaultValue
+                    "paramName": paramName,
+                    'default': defaultValue,
                 }, $.proxy(this._processSelect, this));
             } else {
                 element.on('click', {
-                    paramName: paramName,
-                    'default': defaultValue
+                    "paramName": paramName,
+                    'default': defaultValue,
                 }, $.proxy(this._processLink, this));
             }
         },
@@ -57,7 +57,7 @@ define([
          * @param {jQuery.Event} event
          * @private
          */
-        _processLink: function (event) {
+        _processLink: function(event) {
             event.preventDefault();
             this.changeUrl(
                 event.data.paramName,
@@ -70,7 +70,7 @@ define([
          * @param {jQuery.Event} event
          * @private
          */
-        _processSelect: function (event) {
+        _processSelect: function(event) {
             this.changeUrl(
                 event.data.paramName,
                 event.currentTarget.options[event.currentTarget.selectedIndex].value,
@@ -83,8 +83,8 @@ define([
          * @param {*} paramValue
          * @param {*} defaultValue
          */
-        changeUrl: function (paramName, paramValue, defaultValue) {
-            var decode = window.decodeURIComponent,
+        changeUrl: function(paramName, paramValue, defaultValue) {
+            let decode = window.decodeURIComponent,
                 urlPaths = this.options.url.split('?'),
                 baseUrl = urlPaths[0],
                 urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
@@ -99,13 +99,13 @@ define([
             }
             paramData[paramName] = paramValue;
 
-            if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
+            if (paramValue == defaultValue) { // eslint-disable-line eqeqeq
                 delete paramData[paramName];
             }
             paramData = $.param(paramData);
 
             location.href = baseUrl + (paramData.length ? '?' + paramData : '');
-        }
+        },
     });
 
     return $.mage.productListToolbarForm;

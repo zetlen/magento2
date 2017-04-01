@@ -4,11 +4,11 @@
  */
 
 define([
-    'prototype'
-], function () {
+    'prototype',
+], function() {
     'use strict';
 
-    var GiftOptionsTooltip = Class.create();
+    let GiftOptionsTooltip = Class.create();
 
     GiftOptionsTooltip.prototype = {
         _tooltipLines: [],
@@ -23,11 +23,11 @@ define([
         /**
          * Initialize tooltip object
          */
-        initialize: function () {
-            var options = Object.extend({
+        initialize: function() {
+            let options = Object.extend({
                 'delta_x': 30,
                 'delta_y': 0,
-                zindex: 1000
+                "zindex": 1000,
             });
 
             this._styleOptions = options;
@@ -43,14 +43,14 @@ define([
          *
          * @return boolean success
          */
-        setTooltipWindow: function (windowId, contentId) {
+        setTooltipWindow: function(windowId, contentId) {
             if (!$(windowId) || !$(contentId)) {
                 return false;
             }
             this._tooltipWindow = $(windowId);
             this._tooltipWindowContent = $(contentId);
             $(document.body).insert({
-                bottom: this._tooltipWindow
+                bottom: this._tooltipWindow,
             });
             this.hideTooltip();
 
@@ -65,7 +65,7 @@ define([
          *
          * @return boolean success
          */
-        addTargetLink: function (linkId, itemId) {
+        addTargetLink: function(linkId, itemId) {
             if ($(linkId)) {
                 this._targetLinks[linkId] = [];
                 this._targetLinks[linkId].object = $(linkId);
@@ -81,10 +81,10 @@ define([
         /**
          * Detach event listeners from target links when tooltip is destroyed
          */
-        destroy: function () {
-            var linkId;
+        destroy: function() {
+            let linkId;
 
-            for (linkId in this._targetLinks) { //eslint-disable-line guard-for-in
+            for (linkId in this._targetLinks) { // eslint-disable-line guard-for-in
                 Event.stopObserving(this._targetLinks[linkId].object, 'mouseover', this._eventMouseOver);
                 Event.stopObserving(this._targetLinks[linkId].object, 'mouseout', this._eventMouseOut);
             }
@@ -95,7 +95,7 @@ define([
          *
          *  @param {HTMLElement} element
          */
-        _registerEvents: function (element) {
+        _registerEvents: function(element) {
             Event.observe(element, 'mouseover', this._eventMouseOver);
             Event.observe(element, 'mouseout', this._eventMouseOut);
         },
@@ -105,8 +105,8 @@ define([
          *
          * @param {Prototype.Event} event
          */
-        _moveTooltip: function (event) {
-            var mouseX, mouseY;
+        _moveTooltip: function(event) {
+            let mouseX, mouseY;
 
             Event.stop(event);
             mouseX = Event.pointerX(event);
@@ -122,8 +122,8 @@ define([
          *
          * @return boolean success
          */
-        showTooltip: function (event) {
-            var link, itemId, tooltipContent;
+        showTooltip: function(event) {
+            let link, itemId, tooltipContent;
 
             Event.stop(event);
 
@@ -136,7 +136,7 @@ define([
                     tooltipContent = this._tooltipContentLoaderFunction(itemId);
                 }
 
-                if (tooltipContent != '') { //eslint-disable-line eqeqeq
+                if (tooltipContent != '') { // eslint-disable-line eqeqeq
                     this._updateTooltipWindowContent(tooltipContent);
                     this._moveTooltip(event);
                     new Element.show(this._tooltipWindow);
@@ -154,19 +154,19 @@ define([
          * @param {Number} x
          * @param {Number} y
          */
-        setStyles: function (x, y) {
+        setStyles: function(x, y) {
             Element.setStyle(this._tooltipWindow, {
                 position: 'absolute',
                 top: y + this._styleOptions['delta_y'] + 'px',
                 left: x + this._styleOptions['delta_x'] + 'px',
-                zindex: this._styleOptions.zindex
+                zindex: this._styleOptions.zindex,
             });
         },
 
         /**
          * Hide tooltip
          */
-        hideTooltip: function () {
+        hideTooltip: function() {
             if (this._tooltipWindow) {
                 new Element.hide(this._tooltipWindow);
             }
@@ -178,7 +178,7 @@ define([
          *
          * @param {Function} loaderFunction - loader function
          */
-        setTooltipContentLoaderFunction: function (loaderFunction) {
+        setTooltipContentLoaderFunction: function(loaderFunction) {
             this._tooltipContentLoaderFunction = loaderFunction;
         },
 
@@ -187,9 +187,9 @@ define([
          *
          * @param {String} content
          */
-        _updateTooltipWindowContent: function (content) {
+        _updateTooltipWindowContent: function(content) {
             this._tooltipWindowContent.update(content);
-        }
+        },
     };
 
     window.giftOptionsTooltip = new GiftOptionsTooltip();

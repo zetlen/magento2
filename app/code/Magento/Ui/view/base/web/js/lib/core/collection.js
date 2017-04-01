@@ -10,8 +10,8 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    'uiElement'
-], function (_, utils, registry, Element) {
+    'uiElement',
+], function(_, utils, registry, Element) {
     'use strict';
 
     /**
@@ -29,8 +29,8 @@ define([
             template: 'ui/collection',
             _elems: [],
             ignoreTmpls: {
-                childDefaults: true
-            }
+                childDefaults: true,
+            },
         },
 
         /**
@@ -38,10 +38,10 @@ define([
          *
          * @returns {Model} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe({
-                    elems: []
+                    elems: [],
                 });
 
             return this;
@@ -53,7 +53,7 @@ define([
          * @param {Object} elem - Instance of an element that was added.
          * @returns {Collection} Chainable.
          */
-        initElement: function (elem) {
+        initElement: function(elem) {
             elem.initContainer(this);
 
             return this;
@@ -65,9 +65,9 @@ define([
          * @param {String} index - Index of a child.
          * @returns {Object}
          */
-        getChild: function (index) {
+        getChild: function(index) {
             return _.findWhere(this.elems(), {
-                index: index
+                index: index,
             });
         },
 
@@ -79,20 +79,20 @@ define([
          * @param {Number} [position=-1] - Position at which to insert elements.
          * @returns {Collection} Chainable.
          */
-        insertChild: function (elems, position) {
-            var container   = this._elems,
-                insert      = this._insert.bind(this),
+        insertChild: function(elems, position) {
+            let container = this._elems,
+                insert = this._insert.bind(this),
                 update;
 
             if (!Array.isArray(elems)) {
                 elems = [elems];
             }
 
-            elems.map(function (item) {
+            elems.map(function(item) {
                 return item.elem ?
                     utils.insert(item.elem, container, item.position) :
                     utils.insert(item, container, position);
-            }).forEach(function (item) {
+            }).forEach(function(item) {
                 if (item === true) {
                     update = true;
                 } else if (_.isString(item)) {
@@ -117,7 +117,7 @@ define([
          *
          * @returns {Collection} Chainable.
          */
-        removeChild: function (elem, skipUpdate) {
+        removeChild: function(elem, skipUpdate) {
             if (_.isString(elem)) {
                 elem = this.getChild(elem);
             }
@@ -136,8 +136,8 @@ define([
         /**
          * Destroys collection children with its' elements.
          */
-        destroyChildren: function () {
-            this.elems.each(function (elem) {
+        destroyChildren: function() {
+            this.elems.each(function(elem) {
                 elem.destroy(true);
             });
 
@@ -150,10 +150,10 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        clear: function () {
-            var elems = this.elems();
+        clear: function() {
+            let elems = this.elems();
 
-            _.each(elems, function (elem) {
+            _.each(elems, function(elem) {
                 if (_.isFunction(elem.clear)) {
                     elem.clear();
                 }
@@ -168,7 +168,7 @@ define([
          * @param {String} index - Index of a child.
          * @returns {Boolean}
          */
-        hasChild: function (index) {
+        hasChild: function(index) {
             return !!this.getChild(index);
         },
 
@@ -180,8 +180,8 @@ define([
          * @param {String} index - Index of a child.
          * @returns {Function} Async module wrapper.
          */
-        requestChild: function (index) {
-            var name = this.formChildName(index);
+        requestChild: function(index) {
+            let name = this.formChildName(index);
 
             return this.requestModule(name);
         },
@@ -192,7 +192,7 @@ define([
          * @param {String} index - Index of a child.
          * @returns {String}
          */
-        formChildName: function (index) {
+        formChildName: function(index) {
             return this.name + '.' + index;
         },
 
@@ -202,8 +202,8 @@ define([
          *
          * @returns {ObservableArray}
          */
-        getRegion: function (name) {
-            var regions = this.regions = this.regions || {};
+        getRegion: function(name) {
+            let regions = this.regions = this.regions || {};
 
             if (!regions[name]) {
                 regions[name] = [];
@@ -222,7 +222,7 @@ define([
          * @param {String} name - Name of the region.
          * @returns {Collection} Chainable.
          */
-        updateRegion: function (items, name) {
+        updateRegion: function(items, name) {
             this.getRegion(name)(items);
 
             return this;
@@ -231,7 +231,7 @@ define([
         /**
          * Destroys collection along with its' elements.
          */
-        destroy: function () {
+        destroy: function() {
             this._super();
 
             this.elems.each('destroy');
@@ -243,8 +243,8 @@ define([
          *
          * @param {Object} elem - Element to insert.
          */
-        _insert: function (elem) {
-            var index = this._elems.indexOf(elem.name);
+        _insert: function(elem) {
+            let index = this._elems.indexOf(elem.name);
 
             if (~index) {
                 this._elems[index] = elem;
@@ -261,19 +261,19 @@ define([
          *
          * @returns {Collection} Chainable.
          */
-        _updateCollection: function () {
-            var _elems = compact(this._elems),
+        _updateCollection: function() {
+            let _elems = compact(this._elems),
                 grouped;
 
-            grouped = _elems.filter(function (elem) {
+            grouped = _elems.filter(function(elem) {
                 return elem.displayArea && _.isString(elem.displayArea);
             });
             grouped = _.groupBy(grouped, 'displayArea');
 
             _.each(grouped, this.updateRegion, this);
 
-            _.each(this.regions, function (items) {
-                var hasObsoleteComponents = items().length && !_.intersection(_elems, items()).length;
+            _.each(this.regions, function(items) {
+                let hasObsoleteComponents = items().length && !_.intersection(_elems, items()).length;
 
                 if (hasObsoleteComponents) {
                     items.removeAll();
@@ -293,8 +293,8 @@ define([
          * @param {...*} parameters - Arguments that will be passed to method.
          * @returns {*} Result of the method calls.
          */
-        delegate: function (target) {
-            var args = _.toArray(arguments);
+        delegate: function(target) {
+            let args = _.toArray(arguments);
 
             target = this[target];
 
@@ -312,11 +312,11 @@ define([
          * @param {Array} args - An array of arguments to pass to the next delegation call.
          * @returns {Array} An array of delegation resutls.
          */
-        _delegate: function (args) {
-            var result;
+        _delegate: function(args) {
+            let result;
 
-            result = this.elems.map(function (elem) {
-                var target;
+            result = this.elems.map(function(elem) {
+                let target;
 
                 if (!_.isFunction(elem.delegate)) {
                     target = elem[args[0]];
@@ -325,11 +325,11 @@ define([
                         return target.apply(elem, args.slice(1));
                     }
                 } else {
-                    return elem.delegate.apply(elem, args);
+                    return elem.delegate(...args);
                 }
             });
 
             return _.flatten(result);
-        }
+        },
     });
 });

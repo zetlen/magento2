@@ -10,8 +10,8 @@
  */
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     /**
@@ -19,12 +19,12 @@ define([
      */
     $.widget('mage.sortable', $.ui.sortable, {
         options: {
-            moveUpEvent:   'moveUp',
-            moveDownEvent: 'moveDown'
+            moveUpEvent: 'moveUp',
+            moveDownEvent: 'moveDown',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._super();
             this.initButtons();
             this.bind();
@@ -33,15 +33,15 @@ define([
         /**
          * Init buttons.
          */
-        initButtons: function () {
-            this.element.find('input.up').on('click', $.proxy(function (event) {
+        initButtons: function() {
+            this.element.find('input.up').on('click', $.proxy(function(event) {
                 $('body').trigger(this.options.moveUpEvent, {
-                    item: $(event.target).parent('li')
+                    item: $(event.target).parent('li'),
                 });
             }, this));
-            this.element.find('input.down').on('click', $.proxy(function (event) {
+            this.element.find('input.down').on('click', $.proxy(function(event) {
                 $('body').trigger(this.options.moveDownEvent, {
-                    item: $(event.target).parent('li')
+                    item: $(event.target).parent('li'),
                 });
             }, this));
         },
@@ -49,8 +49,8 @@ define([
         /**
          * Bind.
          */
-        bind: function () {
-            var $body = $('body');
+        bind: function() {
+            let $body = $('body');
 
             $body.on(this.options.moveUpEvent, $.proxy(this._onMoveUp, this));
             $body.on(this.options.moveDownEvent, $.proxy(this._onMoveDown, this));
@@ -61,7 +61,7 @@ define([
          * @param {Object} data
          * @private
          */
-        _onMoveUp: function (event, data) {
+        _onMoveUp: function(event, data) {
             data.item.insertBefore(data.item.prev());
         },
 
@@ -70,9 +70,9 @@ define([
          * @param {Object} data
          * @private
          */
-        _onMoveDown: function (event, data) {
+        _onMoveDown: function(event, data) {
             data.item.insertAfter(data.item.next());
-        }
+        },
     });
 
     return $.mage.sortable;

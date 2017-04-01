@@ -9,8 +9,8 @@ define([
     'mage/template',
     'Magento_Ui/js/modal/alert',
     'jquery/ui',
-    'Magento_Payment/js/model/credit-card-validation/validator'
-], function ($, mageTemplate, alert) {
+    'Magento_Payment/js/model/credit-card-validation/validator',
+], function($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.transparent', {
@@ -34,14 +34,14 @@ define([
             gateway: null,
             dateDelim: null,
             cardFieldsMap: null,
-            expireYearLength: 2
+            expireYearLength: 2,
         },
 
         /**
          * {Function}
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
 
             if (this.options.context) {
@@ -54,7 +54,7 @@ define([
             }
 
             this.element.validation();
-            $('[data-container="' + this.options.gateway + '-cc-number"]').on('focusout', function () {
+            $('[data-container="' + this.options.gateway + '-cc-number"]').on('focusout', function() {
                 $(this).valid();
             });
         },
@@ -64,7 +64,7 @@ define([
          * @return {Boolean}
          * @private
          */
-        _validateHandler: function () {
+        _validateHandler: function() {
             return this.element.validation && this.element.validation('isValid');
         },
 
@@ -73,7 +73,7 @@ define([
          * @return {Boolean}
          * @private
          */
-        _placeOrderHandler: function () {
+        _placeOrderHandler: function() {
             if (this._validateHandler()) {
                 this._orderSave();
             }
@@ -85,8 +85,8 @@ define([
          * Save order and generate post data for gateway call
          * @private
          */
-        _orderSave: function () {
-            var postData = $(this.options.paymentFormSelector).serialize();
+        _orderSave: function() {
+            let postData = $(this.options.paymentFormSelector).serialize();
 
             if ($(this.options.reviewAgreementForm).length) {
                 postData += '&' + $(this.options.reviewAgreementForm).serialize();
@@ -106,21 +106,21 @@ define([
                 /**
                  * {Function}
                  */
-                beforeSend: function () {
+                beforeSend: function() {
                     this.element.trigger('showAjaxLoader');
                 }.bind(this),
 
                 /**
                  * {Function}
                  */
-                success: function (response) {
-                    var preparedData,
+                success: function(response) {
+                    let preparedData,
                         msg,
 
                         /**
                          * {Function}
                          */
-                        alertActionHandler = function () {
+                        alertActionHandler = function() {
                             // default action
                         };
 
@@ -151,13 +151,13 @@ define([
                                         /**
                                          * {Function}
                                          */
-                                        always: alertActionHandler
-                                    }
+                                        always: alertActionHandler,
+                                    },
                                 }
                             );
                         }
                     }
-                }.bind(this)
+                }.bind(this),
             });
         },
 
@@ -166,16 +166,16 @@ define([
          * @param {Object} data
          * @private
          */
-        _postPaymentToGateway: function (data) {
-            var tmpl,
+        _postPaymentToGateway: function(data) {
+            let tmpl,
                 iframeSelector = '[data-container="' + this.options.gateway + '-transparent-iframe"]';
 
             tmpl = this.hiddenFormTmpl({
                 data: {
                     target: $(iframeSelector).attr('name'),
                     action: this.options.cgiUrl,
-                    inputs: data
-                }
+                    inputs: data,
+                },
             });
             $(tmpl).appendTo($(iframeSelector)).submit();
         },
@@ -186,8 +186,8 @@ define([
          * @param {Object} ccfields
          * @private
          */
-        _preparePaymentData: function (data, ccfields) {
-            var preparedata;
+        _preparePaymentData: function(data, ccfields) {
+            let preparedata;
 
             if (this.element.find('[data-container="' + this.options.gateway + '-cc-cvv"]').length) {
                 data[ccfields.cccvv] = this.element.find(
@@ -208,8 +208,8 @@ define([
          * @returns {Object}
          * @private
          */
-        _prepareExpDate: function () {
-            var year = this.element.find('[data-container="' + this.options.gateway + '-cc-year"]').val(),
+        _prepareExpDate: function() {
+            let year = this.element.find('[data-container="' + this.options.gateway + '-cc-year"]').val(),
                 month = parseInt(
                     this.element.find('[data-container="' + this.options.gateway + '-cc-month"]').val(),
                     10
@@ -224,9 +224,9 @@ define([
             }
 
             return {
-                month: month, year: year
+                month: month, year: year,
             };
-        }
+        },
     });
 
     return $.mage.transparent;

@@ -9,8 +9,8 @@
 define([
     'underscore',
     'mage/translate',
-    './column'
-], function (_, $t, Column) {
+    './column',
+], function(_, $t, Column) {
     'use strict';
 
     return Column.extend({
@@ -29,36 +29,36 @@ define([
             selected: [],
             excluded: [],
             fieldClass: {
-                'data-grid-checkbox-cell': true
+                'data-grid-checkbox-cell': true,
             },
             actions: [{
                 value: 'selectAll',
-                label: $t('Select All')
+                label: $t('Select All'),
             }, {
                 value: 'deselectAll',
-                label: $t('Deselect All')
+                label: $t('Deselect All'),
             }, {
                 value: 'selectPage',
-                label: $t('Select All on This Page')
+                label: $t('Select All on This Page'),
             }, {
                 value: 'deselectPage',
-                label: $t('Deselect All on This Page')
+                label: $t('Deselect All on This Page'),
             }],
 
             imports: {
                 totalRecords: '${ $.provider }:data.totalRecords',
-                rows: '${ $.provider }:data.items'
+                rows: '${ $.provider }:data.items',
             },
 
             listens: {
                 '${ $.provider }:params.filters': 'onFilter',
-                selected: 'onSelectedChange',
-                rows: 'onRowsChange'
+                "selected": 'onSelectedChange',
+                "rows": 'onRowsChange',
             },
 
             modules: {
-                source: '${ $.provider }'
-            }
+                source: '${ $.provider }',
+            },
         },
 
         /**
@@ -66,7 +66,7 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe([
                     'disabled',
@@ -77,7 +77,7 @@ define([
                     'allSelected',
                     'indetermine',
                     'totalRecords',
-                    'rows'
+                    'rows',
                 ]);
 
             return this;
@@ -90,7 +90,7 @@ define([
          * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
          * @returns {Multiselect} Chainable.
          */
-        select: function (id, isIndex) {
+        select: function(id, isIndex) {
             this._setSelection(id, isIndex, true);
 
             return this;
@@ -103,7 +103,7 @@ define([
          * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
          * @returns {Multiselect} Chainable.
          */
-        deselect: function (id, isIndex) {
+        deselect: function(id, isIndex) {
             this._setSelection(id, isIndex, false);
 
             return this;
@@ -116,7 +116,7 @@ define([
          * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
          * @returns {Multiselect} Chainable.
          */
-        toggleSelect: function (id, isIndex) {
+        toggleSelect: function(id, isIndex) {
             this._setSelection(id, isIndex, !this.isSelected(id, isIndex));
 
             return this;
@@ -129,7 +129,7 @@ define([
          * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
          * @returns {Boolean}
          */
-        isSelected: function (id, isIndex) {
+        isSelected: function(id, isIndex) {
             id = this.getId(id, isIndex);
 
             return this.selected.contains(id);
@@ -143,8 +143,8 @@ define([
          * @param {Boolean} select - Whether to select/deselect record.
          * @returns {Multiselect} Chainable.
          */
-        _setSelection: function (id, isIndex, select) {
-            var selected = this.selected;
+        _setSelection: function(id, isIndex, select) {
+            let selected = this.selected;
 
             id = this.getId(id, isIndex);
 
@@ -163,7 +163,7 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        selectAll: function () {
+        selectAll: function() {
             this.excludeMode(true);
 
             this.clearExcluded()
@@ -177,7 +177,7 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        deselectAll: function () {
+        deselectAll: function() {
             this.excludeMode(false);
 
             this.clearExcluded();
@@ -191,7 +191,7 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        toggleSelectAll: function () {
+        toggleSelectAll: function() {
             this.allSelected() ?
                 this.deselectAll() :
                 this.selectAll();
@@ -204,8 +204,8 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        selectPage: function () {
-            var selected = _.union(this.selected(), this.getIds());
+        selectPage: function() {
+            let selected = _.union(this.selected(), this.getIds());
 
             selected = _.difference(selected, this.disabled());
 
@@ -219,10 +219,10 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        deselectPage: function () {
-            var pageIds = this.getIds();
+        deselectPage: function() {
+            let pageIds = this.getIds();
 
-            this.selected.remove(function (value) {
+            this.selected.remove(function(value) {
                 return !!~pageIds.indexOf(value);
             });
 
@@ -234,7 +234,7 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        clearExcluded: function () {
+        clearExcluded: function() {
             this.excluded.removeAll();
 
             return this;
@@ -246,8 +246,8 @@ define([
          * @param {Boolean} [exclude] - Whether to exclude not selected ids' from result.
          * @returns {Array} An array of ids'.
          */
-        getIds: function (exclude) {
-            var items = this.rows(),
+        getIds: function(exclude) {
+            let items = this.rows(),
                 ids = _.pluck(items, this.indexField);
 
             return exclude ?
@@ -263,8 +263,8 @@ define([
          *      kind of identifier we are dealing with.
          * @returns {*}
          */
-        getId: function (id, isIndex) {
-            var record = this.rows()[id];
+        getId: function(id, isIndex) {
+            let record = this.rows()[id];
 
             if (isIndex && record) {
                 id = record[this.indexField];
@@ -280,8 +280,8 @@ define([
          * @param {Array} selected - List of the currently selected records.
          * @returns {Multiselect} Chainable.
          */
-        updateExcluded: function (selected) {
-            var excluded = this.excluded(),
+        updateExcluded: function(selected) {
+            let excluded = this.excluded(),
                 fromPage = _.difference(this.getIds(), selected);
 
             excluded = _.union(excluded, fromPage);
@@ -298,8 +298,8 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        countSelected: function () {
-            var total = this.totalRecords(),
+        countSelected: function() {
+            let total = this.totalRecords(),
                 excluded = this.excluded().length,
                 selected = this.selected().length;
 
@@ -317,10 +317,10 @@ define([
          *
          * @returns {Array}
          */
-        getPageSelections: function () {
-            var ids = this.getIds();
+        getPageSelections: function() {
+            let ids = this.getIds();
 
-            return this.selected.filter(function (id) {
+            return this.selected.filter(function(id) {
                 return _.contains(ids, id);
             });
         },
@@ -330,13 +330,13 @@ define([
          *
          * @returns {Object}
          */
-        getSelections: function () {
+        getSelections: function() {
             return {
                 excluded: this.excluded(),
                 selected: this.selected(),
                 total: this.totalSelected(),
                 excludeMode: this.excludeMode(),
-                params: this.getFiltering()
+                params: this.getFiltering(),
             };
         },
 
@@ -345,8 +345,8 @@ define([
          *
          * @returns {Object} Current filters state.
          */
-        getFiltering: function () {
-            var source = this.source(),
+        getFiltering: function() {
+            let source = this.source(),
                 keys = ['filters', 'search', 'namespace'];
 
             if (!source) {
@@ -364,10 +364,10 @@ define([
          * @param {String} actionId - Id of the action to be checked.
          * @returns {Boolean}
          */
-        isActionRelevant: function (actionId) {
-            var pageIds         = this.getIds().length,
-                multiplePages   = pageIds < this.totalRecords(),
-                relevant        = true;
+        isActionRelevant: function(actionId) {
+            let pageIds = this.getIds().length,
+                multiplePages = pageIds < this.totalRecords(),
+                relevant = true;
 
             switch (actionId) {
                 case 'selectPage':
@@ -375,7 +375,7 @@ define([
                     break;
 
                 case 'deselectPage':
-                    relevant =  multiplePages && this.isPageSelected();
+                    relevant = multiplePages && this.isPageSelected();
                     break;
 
                 case 'selectAll':
@@ -397,8 +397,8 @@ define([
          *      page has some selected records.
          * @returns {Boolean}
          */
-        isPageSelected: function (all) {
-            var pageIds = this.getIds(),
+        isPageSelected: function(all) {
+            let pageIds = this.getIds(),
                 selected = this.selected(),
                 excluded = this.excluded(),
                 iterator = all ? 'every' : 'some';
@@ -408,12 +408,12 @@ define([
             }
 
             if (this.excludeMode()) {
-                return pageIds[iterator](function (id) {
+                return pageIds[iterator](function(id) {
                     return !~excluded.indexOf(id);
                 });
             }
 
-            return pageIds[iterator](function (id) {
+            return pageIds[iterator](function(id) {
                 return !!~selected.indexOf(id);
             });
         },
@@ -424,12 +424,12 @@ define([
          *
          * @returns {Multiselect} Chainable.
          */
-        updateState: function () {
-            var selected        = this.selected().length,
-                excluded        = this.excluded().length,
-                totalSelected   = this.totalSelected(),
-                totalRecords    = this.totalRecords(),
-                allSelected     = totalRecords && totalSelected === totalRecords;
+        updateState: function() {
+            let selected = this.selected().length,
+                excluded = this.excluded().length,
+                totalSelected = this.totalSelected(),
+                totalRecords = this.totalRecords(),
+                allSelected = totalRecords && totalSelected === totalRecords;
 
             if (this.excludeMode()) {
                 if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {
@@ -451,7 +451,7 @@ define([
          *
          * @returns {Boolean} False.
          */
-        hasFieldAction: function () {
+        hasFieldAction: function() {
             return false;
         },
 
@@ -460,7 +460,7 @@ define([
          *
          * @param {Array} selected - An array of currently selected items.
          */
-        onSelectedChange: function (selected) {
+        onSelectedChange: function(selected) {
             this.updateExcluded(selected)
                 .countSelected()
                 .updateState();
@@ -470,8 +470,8 @@ define([
          * Is invoked when rows has changed. Recalculates selected items
          * based on "selectMode" property.
          */
-        onRowsChange: function () {
-            var newSelections;
+        onRowsChange: function() {
+            let newSelections;
 
             if (this.excludeMode()) {
                 newSelections = _.union(this.getIds(true), this.selected());
@@ -483,10 +483,10 @@ define([
         /**
          * Is invoked when filtration is applied or removed
          */
-        onFilter: function () {
+        onFilter: function() {
             if (!this.preserveSelectionsOnFilter) {
                 this.deselectAll();
             }
-        }
+        },
     });
 });

@@ -7,15 +7,15 @@ define([
     'uiComponent',
     'jquery',
     'underscore',
-    'mage/translate'
-], function (Component, $, _) {
+    'mage/translate',
+], function(Component, $, _) {
     'use strict';
 
     /**
      * @param {Function} provider
      */
-    var initNewAttributeListener = function (provider) {
-        $('[data-role=product-variations-matrix]').on('add', function () {
+    let initNewAttributeListener = function(provider) {
+        $('[data-role=product-variations-matrix]').on('add', function() {
             provider().reload();
         });
     };
@@ -26,21 +26,21 @@ define([
         defaults: {
             modules: {
                 multiselect: '${ $.multiselectName }',
-                attributeProvider: '${ $.providerName }'
+                attributeProvider: '${ $.providerName }',
             },
             listens: {
                 '${ $.multiselectName }:selected': 'doSelectedAttributesLabels',
-                '${ $.multiselectName }:rows': 'doSelectSavedAttributes'
+                '${ $.multiselectName }:rows': 'doSelectSavedAttributes',
             },
             notificationMessage: {
                 text: null,
-                error: null
+                error: null,
             },
-            selectedAttributes: []
+            selectedAttributes: [],
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.selected = [];
 
@@ -48,7 +48,7 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super().observe(['selectedAttributes']);
 
             return this;
@@ -57,7 +57,7 @@ define([
         /**
          * @param {Object} wizard
          */
-        render: function (wizard) {
+        render: function(wizard) {
             this.wizard = wizard;
             this.setNotificationMessage();
         },
@@ -65,11 +65,11 @@ define([
         /**
          * Set notification message.
          */
-        setNotificationMessage: function () {
-            /*eslint-disable max-len*/
-            var msg = $.mage.__('When you remove or add an attribute, we automatically update all configurations and you will need to recreate current configurations manually.');
+        setNotificationMessage: function() {
+            /* eslint-disable max-len*/
+            let msg = $.mage.__('When you remove or add an attribute, we automatically update all configurations and you will need to recreate current configurations manually.');
 
-            /*eslint-enable max-len*/
+            /* eslint-enable max-len*/
 
             if (this.mode === 'edit') {
                 this.wizard.setNotificationMessage(msg);
@@ -79,11 +79,11 @@ define([
         /**
          * Do select saved attributes.
          */
-        doSelectSavedAttributes: function () {
+        doSelectSavedAttributes: function() {
             if (this.stepInitialized === false) {
                 this.stepInitialized = true;
-                //cache attributes labels, which can be present on the 2nd page
-                _.each(this.initData.attributes, function (attribute) {
+                // cache attributes labels, which can be present on the 2nd page
+                _.each(this.initData.attributes, function(attribute) {
                     this.attributesLabels[attribute.id] = attribute.label;
                 }.bind(this));
                 this.multiselect().selected(_.pluck(this.initData.attributes, 'id'));
@@ -93,16 +93,16 @@ define([
         /**
          * @param {*} selected
          */
-        doSelectedAttributesLabels: function (selected) {
-            var labels = [];
+        doSelectedAttributesLabels: function(selected) {
+            let labels = [];
 
             this.selected = selected;
-            _.each(selected, function (attributeId) {
-                var attribute;
+            _.each(selected, function(attributeId) {
+                let attribute;
 
                 if (!this.attributesLabels[attributeId]) {
                     attribute = _.findWhere(this.multiselect().rows(), {
-                        'attribute_id': attributeId
+                        'attribute_id': attributeId,
                     });
 
                     if (attribute) {
@@ -117,7 +117,7 @@ define([
         /**
          * @param {Object} wizard
          */
-        force: function (wizard) {
+        force: function(wizard) {
             wizard.data.attributesIds = this.multiselect().selected;
 
             if (!wizard.data.attributesIds() || wizard.data.attributesIds().length === 0) {
@@ -129,7 +129,7 @@ define([
         /**
          * Back.
          */
-        back: function () {
-        }
+        back: function() {
+        },
     });
 });

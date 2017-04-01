@@ -8,8 +8,8 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Catalog/js/price-utils',
     'Magento_Checkout/js/model/totals',
-    'Magento_Checkout/js/model/sidebar'
-], function (Component, quote, priceUtils, totals, sidebarModel) {
+    'Magento_Checkout/js/model/sidebar',
+], function(Component, quote, priceUtils, totals, sidebarModel) {
     'use strict';
 
     return Component.extend({
@@ -18,7 +18,7 @@ define([
         /**
          * @return {Number}
          */
-        getQuantity: function () {
+        getQuantity: function() {
             if (totals.totals()) {
                 return parseFloat(totals.totals()['items_qty']);
             }
@@ -29,7 +29,7 @@ define([
         /**
          * @return {Number}
          */
-        getPureValue: function () {
+        getPureValue: function() {
             if (totals.totals()) {
                 return parseFloat(totals.getSegment('grand_total').value);
             }
@@ -40,7 +40,7 @@ define([
         /**
          * Show sidebar.
          */
-        showSidebar: function () {
+        showSidebar: function() {
             sidebarModel.show();
         },
 
@@ -48,15 +48,15 @@ define([
          * @param {*} price
          * @return {*|String}
          */
-        getFormattedPrice: function (price) {
+        getFormattedPrice: function(price) {
             return priceUtils.formatPrice(price, quote.getPriceFormat());
         },
 
         /**
          * @return {*|String}
          */
-        getValue: function () {
+        getValue: function() {
             return this.getFormattedPrice(this.getPureValue());
-        }
+        },
     });
 });

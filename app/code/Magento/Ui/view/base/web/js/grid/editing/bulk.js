@@ -9,8 +9,8 @@
 define([
     'underscore',
     'mageUtils',
-    './record'
-], function (_, utils, Record) {
+    './record',
+], function(_, utils, Record) {
     'use strict';
 
     /**
@@ -33,17 +33,17 @@ define([
             templates: {
                 fields: {
                     select: {
-                        caption: ' '
-                    }
-                }
+                        caption: ' ',
+                    },
+                },
             },
             imports: {
-                active: '${ $.editorProvider }:isMultiEditing'
+                active: '${ $.editorProvider }:isMultiEditing',
             },
             listens: {
                 data: 'updateState',
-                active: 'updateState'
-            }
+                active: 'updateState',
+            },
         },
 
         /**
@@ -51,10 +51,10 @@ define([
          *
          * @returns {Bulk} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track({
-                    hasData: false
+                    hasData: false,
                 });
 
             return this;
@@ -66,8 +66,8 @@ define([
          *
          * @returns {Object} Columns' field definition.
          */
-        buildField: function () {
-            var field = this._super(),
+        buildField: function() {
+            let field = this._super(),
                 rules = field.validation;
 
             if (rules) {
@@ -82,7 +82,7 @@ define([
          *
          * @returns {Bulk} Chainable.
          */
-        apply: function () {
+        apply: function() {
             if (this.isValid()) {
                 this.applyData()
                     .clear();
@@ -97,7 +97,7 @@ define([
          * @param {Object} [data] -  If not specified, then current fields data will be used.
          * @returns {Bulk} Chainable.
          */
-        applyData: function (data) {
+        applyData: function(data) {
             data = data || this.getData();
 
             this.editor('setData', data, true);
@@ -110,7 +110,7 @@ define([
          *
          * @returns {Object} Fields data without empty values.
          */
-        getData: function () {
+        getData: function() {
             return removeEmpty(this._super());
         },
 
@@ -120,8 +120,8 @@ define([
          *
          * @returns {Bulk} Chainable.
          */
-        updateState: function () {
-            var fields  = _.keys(this.getData()),
+        updateState: function() {
+            let fields = _.keys(this.getData()),
                 hasData = !!fields.length;
 
             this.hasData = hasData;
@@ -134,6 +134,6 @@ define([
             this.editor('canSave', !fields.length);
 
             return this;
-        }
+        },
     });
 });

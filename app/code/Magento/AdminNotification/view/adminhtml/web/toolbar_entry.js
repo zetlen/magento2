@@ -6,8 +6,8 @@
 define([
     'jquery',
     'jquery/ui',
-    'domReady!'
-], function ($) {
+    'domReady!',
+], function($) {
     'use strict';
 
     /**
@@ -15,17 +15,17 @@ define([
      *
      * @param {String} notificationId
      */
-    var markNotificationAsRead = function (notificationId) {
-            var requestUrl = $('.notifications-wrapper .admin__action-dropdown-menu').attr('data-mark-as-read-url');
+    let markNotificationAsRead = function(notificationId) {
+            let requestUrl = $('.notifications-wrapper .admin__action-dropdown-menu').attr('data-mark-as-read-url');
 
             $.ajax({
                 url: requestUrl,
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    id: notificationId
+                    id: notificationId,
                 },
-                showLoader: false
+                showLoader: false,
             });
         },
         notificationCount = $('.notifications-wrapper').attr('data-notification-count'),
@@ -35,8 +35,8 @@ define([
          *
          * @param {jQuery} notificationEntry
          */
-        removeNotificationFromList = function (notificationEntry) {
-            var notificationIcon, actionElement;
+        removeNotificationFromList = function(notificationEntry) {
+            let notificationIcon, actionElement;
 
             notificationEntry.remove();
             notificationCount--;
@@ -66,8 +66,8 @@ define([
          *
          * @param {jQuery} notificationEntry
          */
-        showNotificationDetails = function (notificationEntry) {
-            var notificationDescription = notificationEntry.find('.notifications-entry-description'),
+        showNotificationDetails = function(notificationEntry) {
+            let notificationDescription = notificationEntry.find('.notifications-entry-description'),
                 notificationDescriptionEnd = notificationEntry.find('.notifications-entry-description-end');
 
             if (notificationDescriptionEnd.length > 0) {
@@ -82,7 +82,7 @@ define([
     // Show notification description when corresponding item is clicked
     $('.notifications-wrapper .admin__action-dropdown-menu .notifications-entry').on(
         'click.showNotification',
-        function (event) {
+        function(event) {
             // hide notification dropdown
             $('.notifications-wrapper .notifications-icon').trigger('click.dropdown');
 
@@ -92,8 +92,8 @@ define([
     );
 
     // Remove corresponding notification from the list and mark it as read
-    $('.notifications-close').on('click.removeNotification', function (event) {
-        var notificationEntry = $(this).closest('.notifications-entry'),
+    $('.notifications-close').on('click.removeNotification', function(event) {
+        let notificationEntry = $(this).closest('.notifications-entry'),
             notificationId = notificationEntry.attr('data-notification-id');
 
         markNotificationAsRead(notificationId);

@@ -2,30 +2,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define([
     'jquery',
     'Magento_Vault/js/view/payment/method-renderer/vault',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Ui/js/model/messageList',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function ($, VaultComponent, Braintree, globalMessageList, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+], function($, VaultComponent, Braintree, globalMessageList, fullScreenLoader) {
     'use strict';
 
     return VaultComponent.extend({
         defaults: {
             template: 'Magento_Vault/payment/form',
             modules: {
-                hostedFields: '${ $.parentName }.braintree'
-            }
+                hostedFields: '${ $.parentName }.braintree',
+            },
         },
 
         /**
          * Get last 4 digits of card
          * @returns {String}
          */
-        getMaskedCard: function () {
+        getMaskedCard: function() {
             return this.details.maskedCC;
         },
 
@@ -33,7 +33,7 @@ define([
          * Get expiration date
          * @returns {String}
          */
-        getExpirationDate: function () {
+        getExpirationDate: function() {
             return this.details.expirationDate;
         },
 
@@ -41,23 +41,23 @@ define([
          * Get card type
          * @returns {String}
          */
-        getCardType: function () {
+        getCardType: function() {
             return this.details.type;
         },
 
         /**
          * Place order
          */
-        placeOrder: function () {
-            var self = this;
+        placeOrder: function() {
+            let self = this;
 
             /**
              * Define already callback
              */
-            Braintree.onReady = function () {
+            Braintree.onReady = function() {
                 self.getPaymentMethodNonce();
             };
-            self.hostedFields(function (formComponent) {
+            self.hostedFields(function(formComponent) {
                 formComponent.initBraintree();
             });
         },
@@ -65,30 +65,30 @@ define([
         /**
          * Send request to get payment method nonce
          */
-        getPaymentMethodNonce: function () {
-            var self = this;
+        getPaymentMethodNonce: function() {
+            let self = this;
 
             fullScreenLoader.startLoader();
             $.get(self.nonceUrl, {
-                'public_hash': self.publicHash
+                'public_hash': self.publicHash,
             })
-                .done(function (response) {
+                .done(function(response) {
                     fullScreenLoader.stopLoader();
-                    self.hostedFields(function (formComponent) {
+                    self.hostedFields(function(formComponent) {
                         formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
                         formComponent.additionalData['public_hash'] = self.publicHash;
                         formComponent.code = self.code;
                         formComponent.placeOrder();
                     });
                 })
-                .fail(function (response) {
-                    var error = JSON.parse(response.responseText);
+                .fail(function(response) {
+                    let error = JSON.parse(response.responseText);
 
                     fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
-                        message: error.message
+                        message: error.message,
                     });
                 });
-        }
+        },
     });
 });

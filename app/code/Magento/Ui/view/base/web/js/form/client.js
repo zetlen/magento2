@@ -7,8 +7,8 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiClass'
-], function ($, _, utils, Class) {
+    'uiClass',
+], function($, _, utils, Class) {
     'use strict';
 
     /**
@@ -21,7 +21,7 @@ define([
      * @returns {*}
      */
     function beforeSave(data, url, selectorPrefix, messagesClass) {
-        var save = $.Deferred();
+        let save = $.Deferred();
 
         data = utils.serialize(utils.filterFormData(data));
         data['form_key'] = window.FORM_KEY;
@@ -41,7 +41,7 @@ define([
              * @param {Object} resp
              * @returns {Boolean}
              */
-            success: function (resp) {
+            success: function(resp) {
                 if (!resp.error) {
                     save.resolve();
 
@@ -49,7 +49,7 @@ define([
                 }
 
                 $('body').notification('clear');
-                $.each(resp.messages || [resp.message] || [], function (key, message) {
+                $.each(resp.messages || [resp.message] || [], function(key, message) {
                     $('body').notification('add', {
                         error: resp.error,
                         message: message,
@@ -59,11 +59,11 @@ define([
                          *
                          * @param {String} msg
                          */
-                        insertMethod: function (msg) {
-                            var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
+                        insertMethod: function(msg) {
+                            let $wrapper = $('<div/>').addClass(messagesClass).html(msg);
 
                             $('.page-main-actions', selectorPrefix).after($wrapper);
-                        }
+                        },
                     });
                 });
             },
@@ -71,9 +71,9 @@ define([
             /**
              * Complete callback.
              */
-            complete: function () {
+            complete: function() {
                 $('body').trigger('processStop');
-            }
+            },
         });
 
         return save.promise();
@@ -84,8 +84,8 @@ define([
         /**
          * Assembles data and submits it using 'utils.submit' method
          */
-        save: function (data, options) {
-            var url = this.urls.beforeSave,
+        save: function(data, options) {
+            let url = this.urls.beforeSave,
                 save = this._save.bind(this, data, options);
 
             beforeSave(data, url, this.selectorPrefix, this.messagesClass).then(save);
@@ -101,8 +101,8 @@ define([
          * @returns {Object}
          * @private
          */
-        _save: function (data, options) {
-            var url = this.urls.save;
+        _save: function(data, options) {
+            let url = this.urls.save;
 
             $('body').trigger('processStart');
             options = options || {};
@@ -114,7 +114,7 @@ define([
             if (options.ajaxSave) {
                 utils.ajaxSubmit({
                     url: url,
-                    data: data
+                    data: data,
                 }, options);
 
                 $('body').trigger('processStop');
@@ -124,10 +124,10 @@ define([
 
             utils.submit({
                 url: url,
-                data: data
+                data: data,
             }, options.attributes);
 
             return this;
-        }
+        },
     });
 });

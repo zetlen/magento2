@@ -6,11 +6,11 @@ define([
     'underscore',
     'uiRegistry',
     'mageUtils',
-    'uiEvents'
-], function (_, registry, utils, EventsBus) {
+    'uiEvents',
+], function(_, registry, utils, EventsBus) {
     'use strict';
 
-    var root = 'appData',
+    let root = 'appData',
         localStorage = window.localStorage,
         hasSupport,
         storage;
@@ -18,8 +18,8 @@ define([
     /**
      * Flag which indicates whether localStorage is supported.
      */
-    hasSupport = (function () {
-        var key = '_storageSupported';
+    hasSupport = (function() {
+        let key = '_storageSupported';
 
         try {
             localStorage.setItem(key, 'true');
@@ -46,7 +46,7 @@ define([
              * @param {String} key - Key of the property.
              * @param {*} value - Properties' value.
              */
-            setItem: function (key, value) {
+            setItem: function(key, value) {
                 this._data[key] = value + '';
             },
 
@@ -55,7 +55,7 @@ define([
              *
              * @param {String} key - Key of the property to be retrieved.
              */
-            getItem: function (key) {
+            getItem: function(key) {
                 return this._data[key];
             },
 
@@ -64,16 +64,16 @@ define([
              *
              * @param {String} key - Key of the property to be removed.
              */
-            removeItem: function (key) {
+            removeItem: function(key) {
                 delete this._data[key];
             },
 
             /**
              * Removes all items.
              */
-            clear: function () {
+            clear: function() {
                 this._data = {};
-            }
+            },
         };
     }
 
@@ -84,7 +84,7 @@ define([
      * @returns {Object}
      */
     function getRoot() {
-        var data = localStorage.getItem(root);
+        let data = localStorage.getItem(root);
 
         return !_.isNull(data) ? JSON.parse(data) : {};
     }
@@ -120,8 +120,8 @@ define([
          *      storage.get('one')
          *      => {"two": "three"}
          */
-        get: function (path) {
-            var data = getRoot();
+        get: function(path) {
+            let data = getRoot();
 
             return utils.nested(data, path);
         },
@@ -139,8 +139,8 @@ define([
          *              "one": {"two": "four"}
          *          '
          */
-        set: function (path, value) {
-            var data = getRoot();
+        set: function(path, value) {
+            let data = getRoot();
 
             utils.nested(data, path, value);
 
@@ -159,13 +159,13 @@ define([
          *              "one": {}
          *          '
          */
-        remove: function (path) {
-            var data = getRoot();
+        remove: function(path) {
+            let data = getRoot();
 
             utils.nestedRemove(data, path);
 
             setRoot(data);
-        }
+        },
     }, EventsBus);
 
     registry.set('localStorage', storage);

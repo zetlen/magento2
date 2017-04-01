@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Element) {
+    'Magento_Ui/js/form/element/abstract',
+], function(Element) {
     'use strict';
 
     return Element.extend({
@@ -13,15 +13,15 @@ define([
             useDefaultPrice: false,
             listens: {
                 linksPurchasedSeparately: 'changeDisabledStatus',
-                useDefaultPrice: 'changeDisabledStatus'
-            }
+                useDefaultPrice: 'changeDisabledStatus',
+            },
         },
 
         /**
          * Invokes initialize method of parent class,
          * contains initialization logic
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.changeDisabledStatus();
 
@@ -31,7 +31,7 @@ define([
         /**
          * Disable/enable price field
          */
-        changeDisabledStatus: function () {
+        changeDisabledStatus: function() {
             if (this.linksPurchasedSeparately === '1') {
                 if (this.useDefaultPrice) {
                     this.disabled(true);
@@ -41,6 +41,6 @@ define([
             } else {
                 this.disabled(true);
             }
-        }
+        },
     });
 });

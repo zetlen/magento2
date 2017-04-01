@@ -5,8 +5,8 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/form/element/select'
-], function (_, Select) {
+    'Magento_Ui/js/form/element/select',
+], function(_, Select) {
     'use strict';
 
     return Select.extend({
@@ -15,7 +15,7 @@ define([
             isFiltered: null,
             defaultOptions: null,
             filteredOptions: null,
-            bannedOptions: []
+            bannedOptions: [],
         },
 
         /**
@@ -24,8 +24,8 @@ define([
          * @param {Boolean} variationsEmpty
          * @returns {Boolean}
          */
-        updateOptions: function (variationsEmpty) {
-            var isFiltered = this.isConfigurable || !variationsEmpty,
+        updateOptions: function(variationsEmpty) {
+            let isFiltered = this.isConfigurable || !variationsEmpty,
                 value;
 
             if (this.isFiltered !== isFiltered) {
@@ -43,7 +43,7 @@ define([
          *
          * @returns {Array}
          */
-        getDefaultOptions: function () {
+        getDefaultOptions: function() {
             if (this.defaultOptions === null) {
                 this.defaultOptions = this.options();
             }
@@ -56,14 +56,14 @@ define([
          *
          * @returns {Array}
          */
-        getFilteredOptions: function () {
-            var defaultOptions;
+        getFilteredOptions: function() {
+            let defaultOptions;
 
             if (this.filteredOptions === null) {
                 defaultOptions = this.getDefaultOptions();
                 this.filteredOptions = [];
 
-                _.each(defaultOptions, function (option) {
+                _.each(defaultOptions, function(option) {
                     if (this.bannedOptions.indexOf(option.value) === -1) {
                         this.filteredOptions.push(option);
                     }
@@ -71,6 +71,6 @@ define([
             }
 
             return this.filteredOptions;
-        }
+        },
     });
 });

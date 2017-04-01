@@ -6,8 +6,8 @@
 define([
     'jquery',
     'jquery/ui',
-    'mage/translate'
-], function ($) {
+    'mage/translate',
+], function($) {
     'use strict';
 
     $.widget('mage.orderOverview', {
@@ -15,14 +15,14 @@ define([
             opacity: 0.5, // CSS opacity for the 'Place Order' button when it's clicked and then disabled.
             pleaseWaitLoader: 'span.please-wait', // 'Submitting order information...' Ajax loader.
             placeOrderSubmit: 'button[type="submit"]', // The 'Place Order' button.
-            agreements: '#checkout-agreements' // Container for all of the checkout agreements and terms/conditions
+            agreements: '#checkout-agreements', // Container for all of the checkout agreements and terms/conditions
         },
 
         /**
          * Bind a submit handler to the form.
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.element.on('submit', $.proxy(this._showLoader, this));
         },
 
@@ -32,7 +32,7 @@ define([
          * @return {Boolean}
          * @private
          */
-        _showLoader: function () {
+        _showLoader: function() {
             if ($(this.options.agreements).find('input[type="checkbox"]:not(:checked)').length > 0) {
                 return false;
             }
@@ -40,7 +40,7 @@ define([
                 .find(this.options.placeOrderSubmit).prop('disabled', true).css('opacity', this.options.opacity);
 
             return true;
-        }
+        },
     });
 
     return $.mage.orderOverview;

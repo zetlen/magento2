@@ -10,8 +10,8 @@ define([
     'jquery',
     './insert',
     'mageUtils',
-    'underscore'
-], function ($, Insert, utils, _) {
+    'underscore',
+], function($, Insert, utils, _) {
     'use strict';
 
     return Insert.extend({
@@ -20,44 +20,44 @@ define([
             behaviourType: 'simple',
             externalFilterMode: false,
             requestConfig: {
-                method: 'POST'
+                method: 'POST',
             },
             externalCondition: 'nin',
             settings: {
                 edit: {
                     imports: {
-                        'onChangeRecord': '${ $.editorProvider }:changed'
-                    }
+                        'onChangeRecord': '${ $.editorProvider }:changed',
+                    },
                 },
                 filter: {
                     exports: {
-                        'requestConfig': '${ $.externalProvider }:requestConfig'
-                    }
-                }
+                        'requestConfig': '${ $.externalProvider }:requestConfig',
+                    },
+                },
             },
             imports: {
-                onSelectedChange: '${ $.selectionsProvider }:selected',
+                "onSelectedChange": '${ $.selectionsProvider }:selected',
                 'update_url': '${ $.externalProvider }:update_url',
-                'indexField': '${ $.selectionsProvider }:indexField'
+                'indexField': '${ $.selectionsProvider }:indexField',
             },
             exports: {
-                externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
+                externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier',
             },
             listens: {
                 externalValue: 'updateExternalFiltersModifier updateSelections',
-                indexField: 'initialUpdateListing'
+                indexField: 'initialUpdateListing',
             },
             modules: {
                 selections: '${ $.selectionsProvider }',
-                externalListing: '${ $.externalListingName }'
-            }
+                externalListing: '${ $.externalListingName }',
+            },
         },
 
         /**
          * Invokes initialize method of parent class,
          * contains initialization logic
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             _.bindAll(this, 'updateValue', 'updateExternalValueByEditableData');
 
@@ -65,18 +65,18 @@ define([
         },
 
         /** @inheritdoc */
-        initConfig: function (config) {
-            var defaults = this.constructor.defaults;
+        initConfig: function(config) {
+            let defaults = this.constructor.defaults;
 
             if (config.behaviourType === 'edit') {
                 defaults.editableData = {};
-                _.map(defaults.settings.edit.imports, function (value, key) {
+                _.map(defaults.settings.edit.imports, function(value, key) {
                     this.imports[key] = value;
                 }, defaults);
             }
 
             if (config.externalFilterMode === true) {
-                _.map(defaults.settings.filter.exports, function (value, key) {
+                _.map(defaults.settings.filter.exports, function(value, key) {
                     this.exports[key] = value;
                 }, defaults);
             }
@@ -85,15 +85,15 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             return this._super()
                 .observe([
-                    'externalValue'
+                    'externalValue',
                 ]);
         },
 
         /** @inheritdoc */
-        destroyInserted: function () {
+        destroyInserted: function() {
             if (this.isRendered && this.externalListing()) {
                 this.externalListing().source.storage().clearRequests();
                 this.externalListing().delegate('destroy');
@@ -107,7 +107,7 @@ define([
          *
          * @param {Object} record
          */
-        onChangeRecord: function (record) {
+        onChangeRecord: function(record) {
             this.updateEditableData(record);
 
             if (!this.dataLinks.imports) {
@@ -123,7 +123,7 @@ define([
          * Also suppress dataLinks so import/export of selections will not activate each other in circle
          *
          */
-        onSelectedChange: function () {
+        onSelectedChange: function() {
             if (!this.dataLinks.imports ||
                 this.suppressDataLinks ||
                 _.isBoolean(this.initialExportDone) && !this.initialExportDone
@@ -142,8 +142,8 @@ define([
          * @param {Object} record
          *
          */
-        updateEditableData: function (record) {
-            var id = _.keys(record[0])[0];
+        updateEditableData: function(record) {
+            let id = _.keys(record[0])[0];
 
             this.editableData[id] = record[0][id];
         },
@@ -152,15 +152,15 @@ define([
          * Updates externalValue by data from editor (already stored in editableData)
          *
          */
-        updateExternalValueByEditableData: function () {
-            var updatedExtValue;
+        updateExternalValueByEditableData: function() {
+            let updatedExtValue;
 
             if (!this.behaviourType === 'edit' || _.isEmpty(this.editableData) || _.isEmpty(this.externalValue())) {
                 return;
             }
 
             updatedExtValue = this.externalValue();
-            updatedExtValue.map(function (item) {
+            updatedExtValue.map(function(item) {
                 _.extend(item, this.editableData[item[this.indexField]]);
             }, this);
             this.setExternalValue(updatedExtValue);
@@ -172,8 +172,8 @@ define([
          *
          * @returns {Object} result - deferred that will be resolved when value is updated
          */
-        updateExternalValue: function () {
-            var result = $.Deferred(),
+        updateExternalValue: function() {
+            let result = $.Deferred(),
                 provider = this.selections(),
                 selections,
                 totalSelected,
@@ -194,7 +194,7 @@ define([
                 this.updateExternalValueByEditableData();
                 result.resolve();
             } else {
-                this.updateFromServerData(selections, itemsType).done(function () {
+                this.updateFromServerData(selections, itemsType).done(function() {
                     this.updateExternalValueByEditableData();
                     result.resolve();
                 }.bind(this));
@@ -212,8 +212,8 @@ define([
          * @param {Array} selected - ids of selected rows
          * @param {Object} rows
          */
-        canUpdateFromClientData: function (totalSelected, selected, rows) {
-            var alreadySavedSelectionsIds = _.pluck(this.externalValue(), this.indexField),
+        canUpdateFromClientData: function(totalSelected, selected, rows) {
+            let alreadySavedSelectionsIds = _.pluck(this.externalValue(), this.indexField),
                 rowsOnCurrentPageIds = _.pluck(rows, this.indexField);
 
             return totalSelected === selected.length &&
@@ -230,8 +230,8 @@ define([
          * @param {Array} selected - ids of selected rows
          * @param {Object} rows
          */
-        updateFromClientData: function (selected, rows) {
-            var value,
+        updateFromClientData: function(selected, rows) {
+            let value,
                 rowIds,
                 valueIds;
 
@@ -245,13 +245,13 @@ define([
             rowIds = _.pluck(rows, this.indexField);
             valueIds = _.pluck(value, this.indexField);
 
-            value = _.map(selected, function (item) {
+            value = _.map(selected, function(item) {
                 if (_.contains(rowIds, item)) {
-                    return _.find(rows, function (row) {
+                    return _.find(rows, function(row) {
                         return row[this.indexField] === item;
                     }, this);
                 } else if (_.contains(valueIds, item)) {
-                    return _.find(value, function (row) {
+                    return _.find(value, function(row) {
                         return row[this.indexField] === item;
                     }, this);
                 }
@@ -268,8 +268,8 @@ define([
          *
          * @returns {Object} request - deferred that will be resolved when ajax is done
          */
-        updateFromServerData: function (selections, itemsType) {
-            var filterType = selections && selections.excludeMode ? 'nin' : 'in',
+        updateFromServerData: function(selections, itemsType) {
+            let filterType = selections && selections.excludeMode ? 'nin' : 'in',
                 selectionsData = {},
                 request;
 
@@ -280,19 +280,19 @@ define([
                 selectionsData['filters_modifier'] = {};
                 selectionsData['filters_modifier'][this.indexField] = {
                     'condition_type': filterType,
-                    value: selections[itemsType]
+                    "value": selections[itemsType],
                 };
             }
 
             selectionsData.paging = {
-                notLimits: 1
+                notLimits: 1,
             };
 
             request = this.requestData(selectionsData, {
-                method: this.requestConfig.method
+                method: this.requestConfig.method,
             });
             request
-                .done(function (data) {
+                .done(function(data) {
                     this.setExternalValue(data.items || data);
                     this.loading(false);
                 }.bind(this))
@@ -309,13 +309,13 @@ define([
          * @param {Object} newValue - rows data
          *
          */
-        setExternalValue: function (newValue) {
-            var keys = this.externalData,
+        setExternalValue: function(newValue) {
+            let keys = this.externalData,
                 value = this.externalValue(),
                 selectedIds = _.pluck(newValue, this.indexField);
 
             if (_.isArray(keys) && !_.isEmpty(keys)) {
-                newValue = _.map(newValue, function (item) {
+                newValue = _.map(newValue, function(item) {
                     return _.pick(item, keys);
                 }, this);
             } else if (keys && _.isString(keys) && !_.isEmpty(newValue)) {
@@ -324,7 +324,7 @@ define([
 
             if (this.externalFilterMode) {
                 newValue = _.union(newValue, _.filter(value,
-                    function (item) {
+                    function(item) {
                         return !_.contains(selectedIds, item[this.indexField]);
                     }, this));
             }
@@ -339,8 +339,8 @@ define([
          *
          * @param {Object} items
          */
-        updateExternalFiltersModifier: function (items) {
-            var provider,
+        updateExternalFiltersModifier: function(items) {
+            let provider,
                 filter = {};
 
             if (!this.externalFilterMode) {
@@ -357,7 +357,7 @@ define([
 
             filter[this.indexField] = {
                 'condition_type': this.externalCondition,
-                value: _.pluck(items, this.indexField)
+                "value": _.pluck(items, this.indexField),
             };
             this.set('externalFiltersModifier', filter);
         },
@@ -370,8 +370,8 @@ define([
          *
          * @param {Object} items
          */
-        updateSelections: function (items) {
-            var provider,
+        updateSelections: function(items) {
+            let provider,
                 ids;
 
             if (!this.dataLinks.exports || this.suppressDataLinks) {
@@ -396,7 +396,7 @@ define([
                 provider.selected([items] || []);
             } else {
                 ids = _.pluck(items || [], this.indexField)
-                    .map(function (item) {
+                    .map(function(item) {
                         return item.toString();
                     });
 
@@ -410,8 +410,8 @@ define([
          * with rows that must be checked/filtered
          * by the indexes
          */
-        initialUpdateListing: function () {
-            var items = this.externalValue();
+        initialUpdateListing: function() {
+            let items = this.externalValue();
 
             if (this.needInitialListingUpdate && items) {
                 this.updateExternalFiltersModifier(items);
@@ -423,7 +423,7 @@ define([
         /**
          * Reload source
          */
-        reload: function () {
+        reload: function() {
             this.externalSource().set('params.t', new Date().getTime());
         },
 
@@ -431,7 +431,7 @@ define([
          * Updates value from external value
          *
          */
-        updateValue: function () {
+        updateValue: function() {
             this.set('value', this.externalValue());
         },
 
@@ -439,14 +439,14 @@ define([
          * Updates external value, then updates value from external value
          *
          */
-        save: function () {
+        save: function() {
             this.updateExternalValue().done(
-                function () {
+                function() {
                     if (!this.realTimeLink) {
                         this.updateValue();
                     }
                 }.bind(this)
             );
-        }
+        },
     });
 });

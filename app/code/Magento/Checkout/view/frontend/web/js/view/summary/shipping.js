@@ -6,13 +6,13 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/summary/abstract-total',
-    'Magento_Checkout/js/model/quote'
-], function ($, Component, quote) {
+    'Magento_Checkout/js/model/quote',
+], function($, Component, quote) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/summary/shipping'
+            template: 'Magento_Checkout/summary/shipping',
         },
         quoteIsVirtual: quote.isVirtual(),
         totals: quote.getTotals(),
@@ -20,8 +20,8 @@ define([
         /**
          * @return {*}
          */
-        getShippingMethodTitle: function () {
-            var shippingMethod;
+        getShippingMethodTitle: function() {
+            let shippingMethod;
 
             if (!this.isCalculated()) {
                 return '';
@@ -34,22 +34,22 @@ define([
         /**
          * @return {*|Boolean}
          */
-        isCalculated: function () {
-            return this.totals() && this.isFullMode() && quote.shippingMethod() != null; //eslint-disable-line eqeqeq
+        isCalculated: function() {
+            return this.totals() && this.isFullMode() && quote.shippingMethod() != null; // eslint-disable-line eqeqeq
         },
 
         /**
          * @return {*}
          */
-        getValue: function () {
-            var price;
+        getValue: function() {
+            let price;
 
             if (!this.isCalculated()) {
                 return this.notCalculatedMessage;
             }
-            price =  this.totals()['shipping_amount'];
+            price = this.totals()['shipping_amount'];
 
             return this.getFormattedPrice(price);
-        }
+        },
     });
 });

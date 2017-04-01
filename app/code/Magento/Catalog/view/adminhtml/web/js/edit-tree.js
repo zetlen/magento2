@@ -12,8 +12,8 @@ require([
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
     'loadingPopup',
-    'mage/backend/floating-header'
-], function (jQuery, tinyMCE, confirm) {
+    'mage/backend/floating-header',
+], function(jQuery, tinyMCE, confirm) {
     'use strict';
 
     /**
@@ -25,10 +25,10 @@ require([
         confirm({
             content: 'Are you sure you want to delete this category?',
             actions: {
-                confirm: function () {
+                confirm: function() {
                     location.href = url;
-                }
-            }
+                },
+            },
         });
     }
 

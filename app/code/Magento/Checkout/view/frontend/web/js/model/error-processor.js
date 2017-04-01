@@ -5,8 +5,8 @@
 
 define([
     'mage/url',
-    'Magento_Ui/js/model/messageList'
-], function (url, globalMessageList) {
+    'Magento_Ui/js/model/messageList',
+], function(url, globalMessageList) {
     'use strict';
 
     return {
@@ -14,17 +14,17 @@ define([
          * @param {Object} response
          * @param {Object} messageContainer
          */
-        process: function (response, messageContainer) {
-            var error;
+        process: function(response, messageContainer) {
+            let error;
 
             messageContainer = messageContainer || globalMessageList;
 
-            if (response.status == 401) { //eslint-disable-line eqeqeq
+            if (response.status == 401) { // eslint-disable-line eqeqeq
                 window.location.replace(url.build('customer/account/login/'));
             } else {
                 error = JSON.parse(response.responseText);
                 messageContainer.addErrorMessage(error);
             }
-        }
+        },
     };
 });

@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.multiShipping', {
@@ -14,14 +14,14 @@ define([
             addNewAddressBtn: 'button[data-role="add-new-address"]', // Add a new multishipping address.
             addNewAddressFlag: '#add_new_address_flag', // Hidden input field with value 0 or 1.
             canContinueBtn: 'button[data-role="can-continue"]', // Continue (update quantity or go to shipping).
-            canContinueFlag: '#can_continue_flag' // Hidden input field with value 0 or 1.
+            canContinueFlag: '#can_continue_flag', // Hidden input field with value 0 or 1.
         },
 
         /**
          * Bind event handlers to click events for corresponding buttons.
          * @private
          */
-        _create: function () {
+        _create: function() {
             $(this.options.addNewAddressBtn).on('click', $.proxy(this._addNewAddress, this));
             $(this.options.canContinueBtn).on('click', $.proxy(this._canContinue, this));
         },
@@ -30,7 +30,7 @@ define([
          * Add a new address. Set the hidden input field and submit the form. Then enter a new shipping address.
          * @private
          */
-        _addNewAddress: function () {
+        _addNewAddress: function() {
             $(this.options.addNewAddressFlag).val(1);
             this.element.submit();
         },
@@ -40,9 +40,9 @@ define([
          * @private
          * @param {Event} event - Click event on the corresponding button.
          */
-        _canContinue: function (event) {
+        _canContinue: function(event) {
             $(this.options.canContinueFlag).val(parseInt($(event.currentTarget).data('flag'), 10));
-        }
+        },
     });
 
     return $.mage.multiShipping;

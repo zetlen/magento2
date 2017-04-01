@@ -10,8 +10,8 @@ define([
     'moment',
     'mageUtils',
     './abstract',
-    'moment-timezone-with-data'
-], function (moment, utils, Abstract) {
+    'moment-timezone-with-data',
+], function(moment, utils, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -21,7 +21,7 @@ define([
             storeTimeZone: 'UTC',
 
             validationParams: {
-                dateFormat: '${ $.outputDateFormat }'
+                dateFormat: '${ $.outputDateFormat }',
             },
 
             /**
@@ -66,7 +66,7 @@ define([
 
             listens: {
                 'value': 'onValueChange',
-                'shiftedValue': 'onShiftedValueChange'
+                'shiftedValue': 'onShiftedValueChange',
             },
 
             /**
@@ -76,7 +76,7 @@ define([
              *
              * @type {String}
              */
-            shiftedValue: ''
+            shiftedValue: '',
         },
 
         /**
@@ -84,7 +84,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
             if (!this.options.dateFormat) {
@@ -103,7 +103,7 @@ define([
         /**
          * @inheritdoc
          */
-        initObservable: function () {
+        initObservable: function() {
             return this._super().observe(['shiftedValue']);
         },
 
@@ -113,8 +113,8 @@ define([
          *
          * @param {String} value
          */
-        onValueChange: function (value) {
-            var dateFormat,
+        onValueChange: function(value) {
+            let dateFormat,
                 shiftedValue;
 
             if (value) {
@@ -142,8 +142,8 @@ define([
          *
          * @param {String} shiftedValue
          */
-        onShiftedValueChange: function (shiftedValue) {
-            var value,
+        onShiftedValueChange: function(shiftedValue) {
+            let value,
                 formattedValue,
                 momentValue;
 
@@ -169,7 +169,7 @@ define([
          * Prepares and converts all date/time formats to be compatible
          * with moment.js library.
          */
-        prepareDateTimeFormats: function () {
+        prepareDateTimeFormats: function() {
             this.pickerDateTimeFormat = this.options.dateFormat;
 
             if (this.options.showsTime) {
@@ -186,6 +186,6 @@ define([
             this.outputDateFormat = utils.convertToMomentFormat(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
-        }
+        },
     });
 });

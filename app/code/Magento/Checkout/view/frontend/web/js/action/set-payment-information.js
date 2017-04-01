@@ -10,12 +10,12 @@ define([
     'Magento_Checkout/js/model/error-processor',
     'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/action/get-totals',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+], function(quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader) {
     'use strict';
 
-    return function (messageContainer, paymentData) {
-        var serviceUrl,
+    return function(messageContainer, paymentData) {
+        let serviceUrl,
             payload;
 
         /**
@@ -23,20 +23,20 @@ define([
          */
         if (!customer.isLoggedIn()) {
             serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/set-payment-information', {
-                cartId: quote.getQuoteId()
+                cartId: quote.getQuoteId(),
             });
             payload = {
                 cartId: quote.getQuoteId(),
                 email: quote.guestEmail,
                 paymentMethod: paymentData,
-                billingAddress: quote.billingAddress()
+                billingAddress: quote.billingAddress(),
             };
         } else {
             serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
             payload = {
                 cartId: quote.getQuoteId(),
                 paymentMethod: paymentData,
-                billingAddress: quote.billingAddress()
+                billingAddress: quote.billingAddress(),
             };
         }
 
@@ -45,11 +45,11 @@ define([
         return storage.post(
             serviceUrl, JSON.stringify(payload)
         ).fail(
-            function (response) {
+            function(response) {
                 errorProcessor.process(response, messageContainer);
             }
         ).always(
-            function () {
+            function() {
                 fullScreenLoader.stopLoader();
             }
         );

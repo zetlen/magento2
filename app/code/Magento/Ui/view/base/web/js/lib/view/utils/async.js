@@ -13,8 +13,8 @@ define([
     'uiRegistry',
     './dom-observer',
     'Magento_Ui/js/lib/knockout/extender/bound-nodes',
-    './bindings'
-], function (ko, $, _, registry, domObserver, boundedNodes) {
+    './bindings',
+], function(ko, $, _, registry, domObserver, boundedNodes) {
     'use strict';
 
     /**
@@ -43,8 +43,8 @@ define([
      *          inside of a previously specified context.
      */
     function parseSelector(str) {
-        var data    = str.trim().split('->'),
-            result  = {},
+        let data = str.trim().split('->'),
+            result = {},
             componentData;
 
         if (data.length === 1) {
@@ -54,7 +54,7 @@ define([
                 componentData = data[0];
             }
         } else {
-            componentData   = data[0];
+            componentData = data[0];
             result.selector = data[1];
         }
 
@@ -65,7 +65,7 @@ define([
             result.ctx = componentData[1];
         }
 
-        _.each(result, function (value, key) {
+        _.each(result, function(value, key) {
             result[key] = value.trim();
         });
 
@@ -81,7 +81,7 @@ define([
      * @returns {Object}
      */
     function parseData(selector, ctx) {
-        var data = {};
+        let data = {};
 
         if (arguments.length === 2) {
             data.selector = selector;
@@ -109,10 +109,10 @@ define([
      * @returns {jQueryPromise}
      */
     function waitComponent(name) {
-        var deffer = $.Deferred();
+        let deffer = $.Deferred();
 
         if (_.isString(name)) {
-            registry.get(name, function (component) {
+            registry.get(name, function(component) {
                 deffer.resolve(component);
             });
         } else {
@@ -129,7 +129,7 @@ define([
      * @param {Object} component - Associated with nodes component.
      */
     function setRootListener(data, component) {
-        boundedNodes.get(component, function (root) {
+        boundedNodes.get(component, function(root) {
             if (!$(root).is(data.ctx || '*')) {
                 return;
             }
@@ -140,7 +140,7 @@ define([
         });
     }
 
-    /*eslint-disable no-unused-vars*/
+    /* eslint-disable no-unused-vars*/
     /**
      * Sets listener for the appearance of elements which
      * matches specified selector data.
@@ -172,9 +172,9 @@ define([
      * @example Listens for appearance of 'span' nodes inside of specific context.
      *      $.async('span', document.getElementById('test'), function (node) {});
      */
-    $.async = function (selector, ctx, fn) {
-        var args = _.toArray(arguments),
-            data = parseData.apply(null, _.initial(args));
+    $.async = function(selector, ctx, fn) {
+        let args = _.toArray(arguments),
+            data = parseData(..._.initial(args));
 
         data.fn = _.last(args);
 
@@ -186,11 +186,11 @@ define([
         }
     };
 
-    /*eslint-enable no-unused-vars*/
+    /* eslint-enable no-unused-vars*/
 
     _.extend($.async, {
 
-        /*eslint-disable no-unused-vars*/
+        /* eslint-disable no-unused-vars*/
         /**
          * Returns collection of elements found by provided selector data.
          *
@@ -198,9 +198,9 @@ define([
          * @param {(HTMLElement|Object|String)} [ctx] - See 'async' definition.
          * @returns {Array} An array of DOM elements.
          */
-        get: function (selector, ctx) {
-            var data        = parseData.apply(null, arguments),
-                component   = data.component,
+        get: function(selector, ctx) {
+            let data = parseData(...arguments),
+                component = data.component,
                 nodes;
 
             if (!component) {
@@ -221,7 +221,7 @@ define([
                 nodes;
         },
 
-        /*eslint-enable no-unused-vars*/
+        /* eslint-enable no-unused-vars*/
 
         /**
          * Sets removal listener of the specified nodes.
@@ -229,11 +229,11 @@ define([
          * @param {(HTMLElement|Array|ArrayLike)} nodes - Nodes whose removal to track.
          * @param {Function} fn - Callback that will be invoked when node is removed.
          */
-        remove: function (nodes, fn) {
+        remove: function(nodes, fn) {
             domObserver.remove(nodes, fn);
         },
 
-        parseSelector: parseSelector
+        parseSelector: parseSelector,
     });
 
     return $;

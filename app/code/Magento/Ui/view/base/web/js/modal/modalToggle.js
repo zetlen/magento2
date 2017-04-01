@@ -8,12 +8,12 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/modal'
-], function ($) {
+    'Magento_Ui/js/modal/modal',
+], function($) {
     'use strict';
 
-    return function (config, el) {
-        var widget,
+    return function(config, el) {
+        let widget,
             content;
 
         if (config.contentSelector) {
@@ -26,8 +26,8 @@ define([
 
         widget = content.modal(config);
 
-        $(el).on(config.toggleEvent, function () {
-            var state = widget.data('mage-modal').options.isOpen;
+        $(el).on(config.toggleEvent, function() {
+            let state = widget.data('mage-modal').options.isOpen;
 
             if (state) {
                 widget.modal('closeModal');

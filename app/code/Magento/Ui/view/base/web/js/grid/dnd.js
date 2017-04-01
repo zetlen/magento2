@@ -11,11 +11,11 @@ define([
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'uiRegistry',
-    'uiClass'
-], function (ko, $, _, registry, Class) {
+    'uiClass',
+], function(ko, $, _, registry, Class) {
     'use strict';
 
-    var isTouchDevice = typeof document.ontouchstart !== 'undefined',
+    let isTouchDevice = typeof document.ontouchstart !== 'undefined',
         transformProp;
 
     /**
@@ -23,8 +23,8 @@ define([
      *
      * @returns {String|Undefined}
      */
-    transformProp = (function () {
-        var style = document.body.style,
+    transformProp = (function() {
+        let style = document.body.style,
             base = 'Transform',
             vendors = ['webkit', 'moz', 'ms', 'o'],
             vi = vendors.length,
@@ -61,12 +61,12 @@ define([
      * @param {Number} y - Y coordinate.
      */
     function locate(elem, x, y) {
-        var value = 'translate(' + x + 'px,' + y + 'px)';
+        let value = 'translate(' + x + 'px,' + y + 'px)';
 
         elem.style[transformProp] = value;
     }
 
-    /*eslint-disable no-extra-parens*/
+    /* eslint-disable no-extra-parens*/
     /**
      * Checks if specified coordinate is inside of the provided area.
      *
@@ -83,7 +83,7 @@ define([
         );
     }
 
-    /*eslint-enable no-extra-parens*/
+    /* eslint-enable no-extra-parens*/
 
     /**
      * Calculates distance between two points.
@@ -95,7 +95,7 @@ define([
      * @returns {Number} Distance between points.
      */
     function distance(x1, y1, x2, y2) {
-        var dx = x2 - x1,
+        let dx = x2 - x1,
             dy = y2 - y1;
 
         dx *= dx;
@@ -136,7 +136,7 @@ define([
             fixedX: false,
             fixedY: true,
             minDistance: 2,
-            columns: []
+            columns: [],
         },
 
         /**
@@ -144,7 +144,7 @@ define([
          *
          * @returns {Dnd} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(
                 this,
                 'initTable',
@@ -171,17 +171,17 @@ define([
          *
          * @returns {Dnd} Chainbale.
          */
-        initListeners: function () {
+        initListeners: function() {
             if (isTouchDevice) {
                 $(document).on({
                     touchmove: this.onMouseMove,
                     touchend: this.onMouseUp,
-                    touchleave: this.onMouseUp
+                    touchleave: this.onMouseUp,
                 });
             } else {
                 $(document).on({
                     mousemove: this.onMouseMove,
-                    mouseup: this.onMouseUp
+                    mouseup: this.onMouseUp,
                 });
             }
 
@@ -194,8 +194,8 @@ define([
          * @param {HTMLTableElement} table
          * @returns {Dnd} Chainable.
          */
-        initTable: function (table) {
-            this.table =  $(table).is(this.mainTableSelector) ?  table : this.table;
+        initTable: function(table) {
+            this.table = $(table).is(this.mainTableSelector) ? table : this.table;
 
             $(table).addClass('data-grid-draggable');
 
@@ -208,8 +208,8 @@ define([
          * @param {HTMLTableHeaderCellElement} column - Columns header element.
          * @returns {Dnd} Chainable.
          */
-        initColumn: function (column) {
-            var model = getModel(column),
+        initColumn: function(column) {
+            let model = getModel(column),
                 eventName;
 
             if (!model || !model.draggable) {
@@ -224,13 +224,13 @@ define([
 
             $(column).bindings({
                 css: {
-                    '_dragover-left': ko.computed(function () {
+                    '_dragover-left': ko.computed(function() {
                         return model.dragover === 'right';
                     }),
-                    '_dragover-right': ko.computed(function () {
+                    '_dragover-right': ko.computed(function() {
                         return model.dragover === 'left';
-                    })
-                }
+                    }),
+                },
             });
 
             eventName = isTouchDevice ?
@@ -249,8 +249,8 @@ define([
          * @param {HTMLTableHeaderCellElement} column - Columns header element.
          * @returns {Dnd} Chainable.
          */
-        removeColumn: function (column) {
-            var columns = this.columns,
+        removeColumn: function(column) {
+            let columns = this.columns,
                 index = columns.indexOf(column);
 
             if (~index) {
@@ -266,7 +266,7 @@ define([
          * @param {HTMLTableHeaderCellElement} elem
          * @returns {Number}
          */
-        _getColumnIndex: function (elem) {
+        _getColumnIndex: function(elem) {
             return _.toArray(elem.parentNode.cells).indexOf(elem);
         },
 
@@ -275,17 +275,17 @@ define([
          *
          * @returns {Dnd} Chainbale.
          */
-        _cacheCoords: function () {
-            var container   = this.table.getBoundingClientRect(),
-                bodyRect    = document.body.getBoundingClientRect(),
-                grabbed     = this.grabbed,
-                dragElem    = grabbed.elem,
-                cells       = _.toArray(dragElem.parentNode.cells),
+        _cacheCoords: function() {
+            let container = this.table.getBoundingClientRect(),
+                bodyRect = document.body.getBoundingClientRect(),
+                grabbed = this.grabbed,
+                dragElem = grabbed.elem,
+                cells = _.toArray(dragElem.parentNode.cells),
                 rect;
 
-            this.coords = this.columns.map(function (column) {
-                var data,
-                    colIndex = _.findIndex(cells, function (cell) {
+            this.coords = this.columns.map(function(column) {
+                let data,
+                    colIndex = _.findIndex(cells, function(cell) {
                         return compareCols(cell, column);
                     });
 
@@ -298,7 +298,7 @@ define([
                     left: rect.left - bodyRect.left,
                     right: rect.right - bodyRect.left,
                     top: rect.top - bodyRect.top,
-                    bottom: container.bottom - bodyRect.top
+                    bottom: container.bottom - bodyRect.top,
                 };
 
                 if (column === dragElem) {
@@ -320,18 +320,18 @@ define([
          * @param {HTMLTableHeaderCellElement} elem - Dragging column.
          * @returns {Dnd} Chainbale.
          */
-        _cloneTable: function (elem) {
-            var clone       = this.table.cloneNode(true),
+        _cloneTable: function(elem) {
+            let clone = this.table.cloneNode(true),
                 columnIndex = this._getColumnIndex(elem),
-                headRow     = clone.tHead.firstElementChild,
-                headCells   = _.toArray(headRow.cells),
-                tableBody   = clone.tBodies[0],
-                bodyRows    = _.toArray(tableBody.children),
-                origTrs     = this.table.tBodies[0].children;
+                headRow = clone.tHead.firstElementChild,
+                headCells = _.toArray(headRow.cells),
+                tableBody = clone.tBodies[0],
+                bodyRows = _.toArray(tableBody.children),
+                origTrs = this.table.tBodies[0].children;
 
             clone.style.width = elem.offsetWidth + 'px';
 
-            headCells.forEach(function (th, index) {
+            headCells.forEach(function(th, index) {
                 if (index !== columnIndex) {
                     headRow.removeChild(th);
                 }
@@ -339,8 +339,8 @@ define([
 
             headRow.cells[0].style.height = elem.offsetHeight + 'px';
 
-            bodyRows.forEach(function (row, rowIndex) {
-                var cells = row.cells,
+            bodyRows.forEach(function(row, rowIndex) {
+                let cells = row.cells,
                     cell;
 
                 if (cells.length !== headCells.length) {
@@ -376,8 +376,8 @@ define([
          * @param {Number} y - Y coordinate of a mouse pointer.
          * @returns {Object|Undefined} Matched area.
          */
-        _getDropArea: function (x, y) {
-            return _.find(this.coords, function (area) {
+        _getDropArea: function(x, y) {
+            return _.find(this.coords, function(area) {
                 return isInside(x, y, area);
             });
         },
@@ -388,8 +388,8 @@ define([
          * @param {Number} x - X coordinate of a mouse pointer.
          * @param {Number} y - Y coordinate of a mouse pointer.
          */
-        _updateAreas: function (x, y) {
-            var leavedArea = this.dropArea,
+        _updateAreas: function(x, y) {
+            let leavedArea = this.dropArea,
                 area = this.dropArea = this._getDropArea(x, y);
 
             if (leavedArea) {
@@ -408,13 +408,13 @@ define([
          * @param {Number} y - Y coordinate of a grabbed point.
          * @param {HTMLElement} elem - Grabbed elemenet.
          */
-        grab: function (x, y, elem) {
+        grab: function(x, y, elem) {
             this.initDrag = true;
 
             this.grabbed = {
                 x: x,
                 y: y,
-                elem: elem
+                elem: elem,
             };
 
             this.$body.addClass(this.noSelectClass);
@@ -425,7 +425,7 @@ define([
          *
          * @param {HTMLTableHeaderCellElement} elem - Element which is dragging.
          */
-        dragstart: function (elem) {
+        dragstart: function(elem) {
             this.initDrag = false;
             this.dropArea = false;
             this.dragging = true;
@@ -443,19 +443,19 @@ define([
          * @param {Number} x - X coordinate.
          * @param {Number} y - Y coordinate.
          */
-        drag: function (x, y) {
-            var grabbed  = this.grabbed,
+        drag: function(x, y) {
+            let grabbed = this.grabbed,
                 dragArea = this.dragArea,
-                posX     = x + grabbed.shiftX,
-                posY     = y + grabbed.shiftY;
+                posX = x + grabbed.shiftX,
+                posY = y + grabbed.shiftY;
 
             if (this.fixedX) {
-                x    = dragArea.left;
+                x = dragArea.left;
                 posX = dragArea.orig.left;
             }
 
             if (this.fixedY) {
-                y    = dragArea.top;
+                y = dragArea.top;
                 posY = dragArea.orig.top;
             }
 
@@ -471,8 +471,8 @@ define([
          *
          * @param {Object} dropArea
          */
-        dragenter: function (dropArea) {
-            var direction = this.dragArea.index < dropArea.index ?
+        dragenter: function(dropArea) {
+            let direction = this.dragArea.index < dropArea.index ?
                 'left' :
                 'right';
 
@@ -484,7 +484,7 @@ define([
          *
          * @param {Object} dropArea
          */
-        dragleave: function (dropArea) {
+        dragleave: function(dropArea) {
             getModel(dropArea.target).dragover = false;
         },
 
@@ -493,8 +493,8 @@ define([
          *
          * @param {Object} dragArea
          */
-        dragend: function (dragArea) {
-            var dropArea = this.dropArea,
+        dragend: function(dragArea) {
+            let dropArea = this.dropArea,
                 dragElem = dragArea.target;
 
             this.dragging = false;
@@ -514,8 +514,8 @@ define([
          * @param {Object} dropArea
          * @param {Object} dragArea
          */
-        drop: function (dropArea, dragArea) {
-            var dropModel = getModel(dropArea.target),
+        drop: function(dropArea, dragArea) {
+            let dropModel = getModel(dropArea.target),
                 dragModel = getModel(dragArea.target);
 
             getModel(this.table).insertChild(dragModel, dropModel);
@@ -527,11 +527,11 @@ define([
          *
          * @param {(MouseEvent|TouchEvent)} e - Event object.
          */
-        onMouseMove: function (e) {
-            var grab    = this.grabbed,
-                touch   = getTouch(e),
-                x       = touch.pageX,
-                y       = touch.pageY;
+        onMouseMove: function(e) {
+            let grab = this.grabbed,
+                touch = getTouch(e),
+                x = touch.pageX,
+                y = touch.pageY;
 
             if (this.initDrag || this.dragging) {
                 e.preventDefault();
@@ -549,7 +549,7 @@ define([
         /**
          * Documents' 'mouseup' event handler.
          */
-        onMouseUp: function () {
+        onMouseUp: function() {
             if (this.initDrag || this.dragging) {
                 this.initDrag = false;
                 this.$body.removeClass(this.noSelectClass);
@@ -565,10 +565,10 @@ define([
          *
          * @param {(MouseEvent|TouchEvent)} e - Event object.
          */
-        onMouseDown: function (e) {
-            var touch = getTouch(e);
+        onMouseDown: function(e) {
+            let touch = getTouch(e);
 
             this.grab(touch.pageX, touch.pageY, e.currentTarget);
-        }
+        },
     });
 });

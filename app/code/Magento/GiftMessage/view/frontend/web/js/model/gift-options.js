@@ -5,8 +5,8 @@
 
 define([
     'underscore',
-    'ko'
-], function (_, ko) {
+    'ko',
+], function(_, ko) {
     'use strict';
 
     return {
@@ -15,10 +15,10 @@ define([
         /**
          * @param {Object} option
          */
-        addOption: function (option) {
+        addOption: function(option) {
             if (!this.options().hasOwnProperty(option.itemId)) {
                 this.options.push({
-                        id: option.itemId, value: option
+                        id: option.itemId, value: option,
                     }
                 );
             }
@@ -28,10 +28,10 @@ define([
          * @param {*} itemId
          * @return {*}
          */
-        getOptionByItemId: function (itemId) {
-            var option = null;
+        getOptionByItemId: function(itemId) {
+            let option = null;
 
-            _.each(this.options(), function (data) {
+            _.each(this.options(), function(data) {
                 if (data.id === itemId) {
                     option = data.value;
 
@@ -40,6 +40,6 @@ define([
             });
 
             return option;
-        }
+        },
     };
 });

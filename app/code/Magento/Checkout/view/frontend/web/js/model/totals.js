@@ -5,13 +5,13 @@
 
 define([
     'ko',
-    'Magento_Checkout/js/model/quote'
-], function (ko, quote) {
+    'Magento_Checkout/js/model/quote',
+], function(ko, quote) {
     'use strict';
 
-    var quoteItems = ko.observable(quote.totals().items);
+    let quoteItems = ko.observable(quote.totals().items);
 
-    quote.totals.subscribe(function (newValue) {
+    quote.totals.subscribe(function(newValue) {
         quoteItems(newValue.items);
     });
 
@@ -22,7 +22,7 @@ define([
         /**
          * @return {Function}
          */
-        getItems: function () {
+        getItems: function() {
             return quoteItems;
         },
 
@@ -30,22 +30,22 @@ define([
          * @param {*} code
          * @return {*}
          */
-        getSegment: function (code) {
-            var i, total;
+        getSegment: function(code) {
+            let i, total;
 
             if (!this.totals()) {
                 return null;
             }
 
-            for (i in this.totals()['total_segments']) { //eslint-disable-line guard-for-in
+            for (i in this.totals()['total_segments']) { // eslint-disable-line guard-for-in
                 total = this.totals()['total_segments'][i];
 
-                if (total.code == code) { //eslint-disable-line eqeqeq
+                if (total.code == code) { // eslint-disable-line eqeqeq
                     return total;
                 }
             }
 
             return null;
-        }
+        },
     };
 });

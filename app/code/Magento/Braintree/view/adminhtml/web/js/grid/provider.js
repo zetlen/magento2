@@ -5,8 +5,8 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/grid/provider'
-], function (_, Provider) {
+    'Magento_Ui/js/grid/provider',
+], function(_, Provider) {
     'use strict';
 
     return Provider.extend({
@@ -15,7 +15,7 @@ define([
          * Reload grid
          * @returns {exports}
          */
-        reload: function () {
+        reload: function() {
             if (this.hasFilters()) {
                 this._super();
 
@@ -26,7 +26,7 @@ define([
 
             this.onReload({
                 items: [],
-                totalRecords: 0
+                totalRecords: 0,
             });
 
             return this;
@@ -36,11 +36,11 @@ define([
          * Has filters checker
          * @returns {Boolean}
          */
-        hasFilters: function () {
-            var params = this.params,
+        hasFilters: function() {
+            let params = this.params,
                 filters = params.filters || {};
 
             return _.keys(filters).length > 1;
-        }
+        },
     });
 });

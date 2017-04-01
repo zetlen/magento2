@@ -9,15 +9,15 @@ define([
     'Magento_Checkout/js/model/cart/totals-processor/default',
     'Magento_Checkout/js/model/shipping-service',
     'Magento_Checkout/js/model/cart/cache',
-    'Magento_Customer/js/customer-data'
-], function (quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData) {
+    'Magento_Customer/js/customer-data',
+], function(quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData) {
     'use strict';
 
-    var rateProcessors = [],
+    let rateProcessors = [],
         totalsProcessors = [];
 
-    quote.shippingAddress.subscribe(function () {
-        var type = quote.shippingAddress().getType();
+    quote.shippingAddress.subscribe(function() {
+        let type = quote.shippingAddress().getType();
 
         if (quote.isVirtual()) {
             // update totals block when estimated address was set
@@ -43,16 +43,16 @@ define([
                 rateProcessors['default'].getRates(quote.shippingAddress());
 
             // save rates to cache after load
-            shippingService.getShippingRates().subscribe(function (rates) {
+            shippingService.getShippingRates().subscribe(function(rates) {
                 cartCache.set('rates', rates);
             });
         }
     });
-    quote.shippingMethod.subscribe(function () {
+    quote.shippingMethod.subscribe(function() {
         totalsDefaultProvider.estimateTotals(quote.shippingAddress());
     });
-    quote.billingAddress.subscribe(function () {
-        var type = quote.billingAddress().getType();
+    quote.billingAddress.subscribe(function() {
+        let type = quote.billingAddress().getType();
 
         if (quote.isVirtual()) {
             // update totals block when estimated address was set

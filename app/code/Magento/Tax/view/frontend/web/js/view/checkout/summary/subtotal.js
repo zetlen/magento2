@@ -5,24 +5,24 @@
 
 define([
     'Magento_Checkout/js/view/summary/abstract-total',
-    'Magento_Checkout/js/model/quote'
-], function (Component, quote) {
+    'Magento_Checkout/js/model/quote',
+], function(Component, quote) {
     'use strict';
 
-    var displaySubtotalMode = window.checkoutConfig.reviewTotalsDisplayMode;
+    let displaySubtotalMode = window.checkoutConfig.reviewTotalsDisplayMode;
 
     return Component.extend({
         defaults: {
             displaySubtotalMode: displaySubtotalMode,
-            template: 'Magento_Tax/checkout/summary/subtotal'
+            template: 'Magento_Tax/checkout/summary/subtotal',
         },
         totals: quote.getTotals(),
 
         /**
          * @return {*|String}
          */
-        getValue: function () {
-            var price = 0;
+        getValue: function() {
+            let price = 0;
 
             if (this.totals()) {
                 price = this.totals().subtotal;
@@ -34,28 +34,28 @@ define([
         /**
          * @return {Boolean}
          */
-        isBothPricesDisplayed: function () {
-            return this.displaySubtotalMode == 'both'; //eslint-disable-line eqeqeq
+        isBothPricesDisplayed: function() {
+            return this.displaySubtotalMode == 'both'; // eslint-disable-line eqeqeq
         },
 
         /**
          * @return {Boolean}
          */
-        isIncludingTaxDisplayed: function () {
-            return this.displaySubtotalMode == 'including'; //eslint-disable-line eqeqeq
+        isIncludingTaxDisplayed: function() {
+            return this.displaySubtotalMode == 'including'; // eslint-disable-line eqeqeq
         },
 
         /**
          * @return {*|String}
          */
-        getValueInclTax: function () {
-            var price = 0;
+        getValueInclTax: function() {
+            let price = 0;
 
             if (this.totals()) {
                 price = this.totals()['subtotal_incl_tax'];
             }
 
             return this.getFormattedPrice(price);
-        }
+        },
     });
 });

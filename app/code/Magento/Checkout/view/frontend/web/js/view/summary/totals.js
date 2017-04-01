@@ -4,16 +4,16 @@
  */
 
 define([
-    'Magento_Checkout/js/view/summary/abstract-total'
-], function (Component) {
+    'Magento_Checkout/js/view/summary/abstract-total',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         /**
          * @return {*}
          */
-        isDisplayed: function () {
+        isDisplayed: function() {
             return this.isFullMode();
-        }
+        },
     });
 });

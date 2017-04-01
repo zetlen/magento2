@@ -14,11 +14,11 @@ define([
     'uiEvents',
     'uiClass',
     './links',
-    '../storage/local'
-], function (ko, _, utils, registry, Events, Class, links) {
+    '../storage/local',
+], function(ko, _, utils, registry, Events, Class, links) {
     'use strict';
 
-    var Element;
+    let Element;
 
     /**
      * Creates observable property using knockouts'
@@ -30,7 +30,7 @@ define([
      * @param {*} value - Initial value.
      */
     function observable(obj, key, value) {
-        var method = Array.isArray(value) ? 'observableArray' : 'observable';
+        let method = Array.isArray(value) ? 'observableArray' : 'observable';
 
         if (_.isFunction(obj[key]) && !ko.isObservable(obj[key])) {
             return;
@@ -83,15 +83,15 @@ define([
             storageConfig: {
                 provider: 'localStorage',
                 namespace: '${ $.name }',
-                path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
+                path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }',
             },
             maps: {
                 imports: {},
-                exports: {}
+                exports: {},
             },
             modules: {
-                storage: '${ $.storageConfig.provider }'
-            }
+                storage: '${ $.storageConfig.provider }',
+            },
         },
 
         /**
@@ -99,7 +99,7 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initObservable()
                 .initModules()
@@ -115,8 +115,8 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        initObservable: function () {
-            _.each(this.tracks, function (enabled, key) {
+        initObservable: function() {
+            _.each(this.tracks, function(enabled, key) {
                 if (enabled) {
                     this.track(key);
                 }
@@ -131,8 +131,8 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        initModules: function () {
-            _.each(this.modules, function (name, property) {
+        initModules: function() {
+            _.each(this.modules, function(name, property) {
                 if (name) {
                     this[property] = this.requestModule(name);
                 }
@@ -151,7 +151,7 @@ define([
          * @param {Object} parent - Instance of a 'parent' component.
          * @returns {Collection} Chainable.
          */
-        initContainer: function (parent) {
+        initContainer: function(parent) {
             this.containers.push(parent);
 
             return this;
@@ -163,8 +163,8 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        initStatefull: function () {
-            _.each(this.statefull, function (path, key) {
+        initStatefull: function() {
+            _.each(this.statefull, function(path, key) {
                 if (path) {
                     this.setStatefull(key, path);
                 }
@@ -178,7 +178,7 @@ define([
          *
          * @returns {Element} Chainbale.
          */
-        initLinks: function () {
+        initLinks: function() {
             return this.setListeners(this.listens)
                        .setLinks(this.links, 'imports')
                        .setLinks(this.links, 'exports')
@@ -191,8 +191,8 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        initUnique: function () {
-            var update = this.onUniqueUpdate.bind(this),
+        initUnique: function() {
+            let update = this.onUniqueUpdate.bind(this),
                 uniqueNs = this.uniqueNs;
 
             this.hasUnique = this.uniqueProp && uniqueNs;
@@ -212,11 +212,11 @@ define([
          * @param {String} [path=key] - Path to the property in storage.
          * @returns {Element} Chainable.
          */
-        setStatefull: function (key, path) {
-            var link = {};
+        setStatefull: function(key, path) {
+            let link = {};
 
-            path        = !_.isString(path) || !path ? key : path;
-            link[key]   = this.storageConfig.path + '.' + path;
+            path = !_.isString(path) || !path ? key : path;
+            link[key] = this.storageConfig.path + '.' + path;
 
             this.setLinks(link, 'imports')
                 .setLinks(link, 'exports');
@@ -230,8 +230,8 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        setUnique: function () {
-            var property = this.uniqueProp;
+        setUnique: function() {
+            let property = this.uniqueProp;
 
             if (this[property]()) {
                 this.source.set(this.uniqueNs, this.name);
@@ -248,8 +248,8 @@ define([
          * @param {String} name - Name of requested component.
          * @returns {Function} Async module wrapper.
          */
-        requestModule: function (name) {
-            var requested = this._requesetd;
+        requestModule: function(name) {
+            let requested = this._requesetd;
 
             if (!requested[name]) {
                 requested[name] = registry.async(name);
@@ -263,7 +263,7 @@ define([
          *
          * @returns {String}
          */
-        getTemplate: function () {
+        getTemplate: function() {
             return this.template;
         },
 
@@ -272,7 +272,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasTemplate: function () {
+        hasTemplate: function() {
             return !!this.template;
         },
 
@@ -282,7 +282,7 @@ define([
          * @param {String} path - Path to the property.
          * @returns {*} Value of the property.
          */
-        get: function (path) {
+        get: function(path) {
             return utils.nested(this, path);
         },
 
@@ -294,8 +294,8 @@ define([
          * @param {*} value - New value of the property.
          * @returns {Element} Chainable.
          */
-        set: function (path, value) {
-            var data = this.get(path),
+        set: function(path, value) {
+            let data = this.get(path),
                 diffs;
 
             diffs = !_.isFunction(data) && !this.isTracked(path) ?
@@ -317,8 +317,8 @@ define([
          * @param {String} path - Path to the property.
          * @returns {Element} Chainable.
          */
-        remove: function (path) {
-            var data = utils.nested(this, path),
+        remove: function(path) {
+            let data = utils.nested(this, path),
                 diffs;
 
             if (_.isUndefined(data) || _.isFunction(data)) {
@@ -362,12 +362,12 @@ define([
          *          array: ['value']
          *      });
          */
-        observe: function (useAccessors, properties) {
-            var model = this,
+        observe: function(useAccessors, properties) {
+            let model = this,
                 trackMethod;
 
             if (typeof useAccessors !== 'boolean') {
-                properties   = useAccessors;
+                properties = useAccessors;
                 useAccessors = false;
             }
 
@@ -378,11 +378,11 @@ define([
             }
 
             if (Array.isArray(properties)) {
-                properties.forEach(function (key) {
+                properties.forEach(function(key) {
                     trackMethod(model, key, model[key]);
                 });
             } else if (typeof properties === 'object') {
-                _.each(properties, function (value, key) {
+                _.each(properties, function(value, key) {
                     trackMethod(model, key, value);
                 });
             }
@@ -397,7 +397,7 @@ define([
          * @param {(String|Array|Object)} properties - List of observable properties.
          * @returns {Element} Chainable.
          */
-        track: function (properties) {
+        track: function(properties) {
             this.observe(true, properties);
 
             return this;
@@ -409,7 +409,7 @@ define([
          * @param {String} property - Property to be checked.
          * @returns {Boolean}
          */
-        isTracked: function (property) {
+        isTracked: function(property) {
             return ko.es5.isTracked(this, property);
         },
 
@@ -419,13 +419,13 @@ define([
          * @param {Object} diffs - Object with changes descriptions.
          * @returns {Element} Chainable.
          */
-        _notifyChanges: function (diffs) {
-            diffs.changes.forEach(function (change) {
+        _notifyChanges: function(diffs) {
+            diffs.changes.forEach(function(change) {
                 this.trigger(change.path, change.value, change);
             }, this);
 
-            _.each(diffs.containers, function (changes, name) {
-                var value = utils.nested(this, name);
+            _.each(diffs.containers, function(changes, name) {
+                let value = utils.nested(this, name);
 
                 this.trigger(name, value, changes);
             }, this);
@@ -438,8 +438,8 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        restore: function () {
-            var ns = this.storageConfig.namespace,
+        restore: function() {
+            let ns = this.storageConfig.namespace,
                 storage = this.storage();
 
             if (storage) {
@@ -456,8 +456,8 @@ define([
          * @param {*} [data=this[property]]
          * @returns {Element} Chainable.
          */
-        store: function (property, data) {
-            var ns = this.storageConfig.namespace,
+        store: function(property, data) {
+            let ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);
 
             if (arguments.length < 2) {
@@ -477,8 +477,8 @@ define([
          *      stored will be returned.
          * @returns {*}
          */
-        getStored: function (property) {
-            var ns = this.storageConfig.namespace,
+        getStored: function(property) {
+            let ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property),
                 storage = this.storage(),
                 data;
@@ -496,8 +496,8 @@ define([
          * @param {String} property - Property to be removed from storage.
          * @returns {Element} Chainable.
          */
-        removeStored: function (property) {
-            var ns = this.storageConfig.namespace,
+        removeStored: function(property) {
+            let ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);
 
             this.storage('remove', path);
@@ -509,7 +509,7 @@ define([
          * Destroys current instance along with all of its' children.
          * @param {Boolean} skipUpdate - skip collection update when element to be destroyed.
          */
-        destroy: function (skipUpdate) {
+        destroy: function(skipUpdate) {
             this._dropHandlers()
                 ._clearRefs(skipUpdate);
         },
@@ -520,7 +520,7 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        _dropHandlers: function () {
+        _dropHandlers: function() {
             this.off();
 
             if (_.isFunction(this.source)) {
@@ -540,10 +540,10 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        _clearRefs: function (skipUpdate) {
+        _clearRefs: function(skipUpdate) {
             registry.remove(this.name);
 
-            this.containers.forEach(function (parent) {
+            this.containers.forEach(function(parent) {
                 parent.removeChild(this, skipUpdate);
             }, this);
 
@@ -556,8 +556,8 @@ define([
          * @param {...*} arguments - Any number of arguments that should be passed to the events' handler.
          * @returns {Boolean} False if event bubbling was canceled.
          */
-        bubble: function () {
-            var args = _.toArray(arguments),
+        bubble: function() {
+            let args = _.toArray(arguments),
                 bubble = this.trigger.apply(this, args),
                 result;
 
@@ -565,8 +565,8 @@ define([
                 return false;
             }
 
-            this.containers.forEach(function (parent) {
-                result = parent.bubble.apply(parent, args);
+            this.containers.forEach(function(parent) {
+                result = parent.bubble(...args);
 
                 if (result === false) {
                     bubble = false;
@@ -579,8 +579,8 @@ define([
         /**
          * Callback which fires when property under uniqueNs has changed.
          */
-        onUniqueUpdate: function (name) {
-            var active = name === this.name,
+        onUniqueUpdate: function(name) {
+            let active = name === this.name,
                 property = this.uniqueProp;
 
             this[property](active);
@@ -591,10 +591,10 @@ define([
          *
          * @returns {Element}
          */
-        cleanData: function () {
+        cleanData: function() {
             if (this.source && this.source.componentType === 'dataSource') {
                 if (this.elems) {
-                    _.each(this.elems(), function (val) {
+                    _.each(this.elems(), function(val) {
                         val.cleanData();
                     });
                 } else {
@@ -608,7 +608,7 @@ define([
         /**
          * Fallback data.
          */
-        cacheData: function () {
+        cacheData: function() {
             this.cachedComponent = utils.copy(this);
         },
 
@@ -620,15 +620,15 @@ define([
          * @param {String} path - path to value.
          * @returns {Element}
          */
-        updateConfig: function (oldValue, newValue, path) {
-            var names = path.split('.'),
+        updateConfig: function(oldValue, newValue, path) {
+            let names = path.split('.'),
                 index = _.lastIndexOf(names, 'config') + 1;
 
             names = names.splice(index, names.length - index).join('.');
             this.set(names, newValue);
 
             return this;
-        }
+        },
     }, Events, links);
 
     return Class.extend(Element);

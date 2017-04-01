@@ -9,8 +9,8 @@ define([
     'mage/translate',
     'Magento_Ui/js/modal/modal',
     'jquery/ui',
-    'prototype'
-], function (jQuery, $t) {
+    'prototype',
+], function(jQuery, $t) {
     'use strict';
 
     window.Variables = {
@@ -26,7 +26,7 @@ define([
          * @param {*} textareaElementId
          * @param {Function} insertFunction
          */
-        init: function (textareaElementId, insertFunction) {
+        init: function(textareaElementId, insertFunction) {
             if ($(textareaElementId)) {
                 this.textareaElementId = textareaElementId;
             }
@@ -39,7 +39,7 @@ define([
         /**
          * reset data.
          */
-        resetData: function () {
+        resetData: function() {
             this.variablesContent = null;
             this.dialogWindow = null;
         },
@@ -47,13 +47,13 @@ define([
         /**
          * @param {Object} variables
          */
-        openVariableChooser: function (variables) {
+        openVariableChooser: function(variables) {
             if (this.variablesContent == null && variables) {
                 this.variablesContent = '<ul class="insert-variable">';
-                variables.each(function (variableGroup) {
+                variables.each(function(variableGroup) {
                     if (variableGroup.label && variableGroup.value) {
                         this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
-                        variableGroup.value.each(function (variable) {
+                        variableGroup.value.each(function(variable) {
                             if (variable.value && variable.label) {
                                 this.variablesContent += '<li>' +
                                     this.prepareVariableRow(variable.value, variable.label) + '</li>';
@@ -72,8 +72,8 @@ define([
         /**
          * @param {*} variablesContent
          */
-        openDialogWindow: function (variablesContent) {
-            var windowId = this.dialogWindowId;
+        openDialogWindow: function(variablesContent) {
+            let windowId = this.dialogWindowId;
 
             jQuery('<div id="' + windowId + '">' + Variables.variablesContent + '</div>').modal({
                 title: $t('Insert Variable...'),
@@ -81,9 +81,9 @@ define([
                 buttons: [],
 
                 /** @inheritdoc */
-                closed: function (e, modal) {
+                closed: function(e, modal) {
                     modal.modal.remove();
-                }
+                },
             });
 
             jQuery('#' + windowId).modal('openModal');
@@ -94,7 +94,7 @@ define([
         /**
          * Close dialog window.
          */
-        closeDialogWindow: function () {
+        closeDialogWindow: function() {
             jQuery('#' + this.dialogWindowId).modal('closeModal');
         },
 
@@ -103,8 +103,8 @@ define([
          * @param {*} varLabel
          * @return {String}
          */
-        prepareVariableRow: function (varValue, varLabel) {
-            var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;'),
+        prepareVariableRow: function(varValue, varLabel) {
+            let value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;'),
                 content = '<a href="#" onclick="' +
                     this.insertFunction +
                     '(\'' +
@@ -119,8 +119,8 @@ define([
         /**
          * @param {*} value
          */
-        insertVariable: function (value) {
-            var windowId = this.dialogWindowId,
+        insertVariable: function(value) {
+            let windowId = this.dialogWindowId,
                 textareaElm, scrollPos;
 
             jQuery('#' + windowId).modal('closeModal');
@@ -136,7 +136,7 @@ define([
             }
 
             return;
-        }
+        },
     };
 
     window.MagentovariablePlugin = {
@@ -147,7 +147,7 @@ define([
         /**
          * @param {*} editor
          */
-        setEditor: function (editor) {
+        setEditor: function(editor) {
             this.editor = editor;
         },
 
@@ -155,19 +155,19 @@ define([
          * @param {String} url
          * @param {*} textareaId
          */
-        loadChooser: function (url, textareaId) {
+        loadChooser: function(url, textareaId) {
             this.textareaId = textareaId;
 
             if (this.variables == null) {
                 new Ajax.Request(url, {
                     parameters: {},
-                    onComplete: function (transport) {
+                    onComplete: function(transport) {
                         if (transport.responseText.isJSON()) {
                             Variables.init(null, 'MagentovariablePlugin.insertVariable');
                             this.variables = transport.responseText.evalJSON();
                             this.openChooser(this.variables);
                         }
-                    }.bind(this)
+                    }.bind(this),
                 });
             } else {
                 this.openChooser(this.variables);
@@ -179,14 +179,14 @@ define([
         /**
          * @param {*} variables
          */
-        openChooser: function (variables) {
+        openChooser: function(variables) {
             Variables.openVariableChooser(variables);
         },
 
         /**
          * @param {*} value
          */
-        insertVariable: function (value) {
+        insertVariable: function(value) {
             if (this.textareaId) {
                 Variables.init(this.textareaId);
                 Variables.insertVariable(value);
@@ -196,6 +196,6 @@ define([
             }
 
             return;
-        }
+        },
     };
 });

@@ -1,12 +1,12 @@
 require([
     'jquery',
-    'Magento_ConfigurableProduct/js/options-updater'
-], function ($, Updater) {
+    'Magento_ConfigurableProduct/js/options-updater',
+], function($, Updater) {
     'use strict';
 
-    var selectors = {
+    let selectors = {
             formSelector: '#product_addtocart_form',
-            swatchSelector: '.swatch-opt'
+            swatchSelector: '.swatch-opt',
         },
         swatchWidgetName = 'mageSwatchRenderer',
         widgetInitEvent = 'swatch.initialized',
@@ -14,8 +14,8 @@ require([
     /**
     * Sets all configurable swatch attribute's selected values
     */
-    updateSwatchOptions = function () {
-        var swatchWidget = $(selectors.swatchSelector).data(swatchWidgetName);
+    updateSwatchOptions = function() {
+        let swatchWidget = $(selectors.swatchSelector).data(swatchWidgetName);
 
         if (!swatchWidget || !swatchWidget._EmulateSelectedByAttributeId) {
             return;

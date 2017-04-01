@@ -11,11 +11,11 @@ define([
     'jquery',
     'underscore',
     'uiElement',
-    'Magento_Ui/js/lib/view/utils/async'
-], function (ko, $, _, Element) {
+    'Magento_Ui/js/lib/view/utils/async',
+], function(ko, $, _, Element) {
     'use strict';
 
-    var transformProp,
+    let transformProp,
         isTouchDevice = typeof document.ontouchstart !== 'undefined';
 
     /**
@@ -30,8 +30,8 @@ define([
      *
      * @returns {String|Undefined}
      */
-    transformProp = (function () {
-        var style = document.createElement('div').style,
+    transformProp = (function() {
+        let style = document.createElement('div').style,
             base = 'Transform',
             vendors = ['webkit', 'moz', 'ms', 'o'],
             vi = vendors.length,
@@ -54,7 +54,7 @@ define([
         defaults: {
             separatorsClass: {
                 top: '_dragover-top',
-                bottom: '_dragover-bottom'
+                bottom: '_dragover-bottom',
             },
             step: 'auto',
             tableClass: 'table.admin__dynamic-rows',
@@ -63,11 +63,11 @@ define([
             draggableElementClass: '_dragged',
             elemPositions: [],
             listens: {
-                '${ $.recordsProvider }:elems': 'setCacheRecords'
+                '${ $.recordsProvider }:elems': 'setCacheRecords',
             },
             modules: {
-                parentComponent: '${ $.recordsProvider }'
-            }
+                parentComponent: '${ $.recordsProvider }',
+            },
         },
 
         /**
@@ -75,7 +75,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(
                 this,
                 'mousemoveHandler',
@@ -94,10 +94,10 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe([
-                    'recordsCache'
+                    'recordsCache',
                 ]);
 
             return this;
@@ -109,7 +109,7 @@ define([
          * @param {Object} elem - DOM element
          * @param {Object} data - element data
          */
-        initListeners: function (elem, data) {
+        initListeners: function(elem, data) {
             if (isTouchDevice) {
                 $(elem).on('touchstart', this.mousedownHandler.bind(this, data, elem));
             } else {
@@ -124,8 +124,8 @@ define([
          * @param {Object} elem - element
          * @param {Object} event - key down event
          */
-        mousedownHandler: function (data, elem, event) {
-            var recordNode = this.getRecordNode(elem),
+        mousedownHandler: function(data, elem, event) {
+            let recordNode = this.getRecordNode(elem),
                 originRecord = $(elem).parents('tr').eq(0),
                 drEl = this.draggableElement,
                 $table = $(elem).parents('table').eq(0),
@@ -150,7 +150,6 @@ define([
                 this.body.bind('mousemove', this.mousemoveHandler);
                 this.body.bind('mouseup', this.mouseupHandler);
             }
-
         },
 
         /**
@@ -158,8 +157,8 @@ define([
          *
          * @param {Object} event - mouse move event
          */
-        mousemoveHandler: function (event) {
-            var depEl = this.draggableElement,
+        mousemoveHandler: function(event) {
+            let depEl = this.draggableElement,
                 pageY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY,
                 positionY = pageY - depEl.eventMousedownY,
                 processingPositionY = positionY + 'px',
@@ -191,8 +190,8 @@ define([
         /**
          * Mouse up handler
          */
-        mouseupHandler: function (event) {
-            var depElementCtx,
+        mouseupHandler: function(event) {
+            let depElementCtx,
                 drEl = this.draggableElement,
                 pageY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY,
                 positionY = pageY - drEl.eventMousedownY;
@@ -230,8 +229,8 @@ define([
          * @param {Object} depElementCtx - dep element context
          * @param {Object} dragData - data draggable element
          */
-        setPosition: function (depElem, depElementCtx, dragData) {
-            var depElemPosition = ~~depElementCtx.position;
+        setPosition: function(depElem, depElementCtx, dragData) {
+            let depElemPosition = ~~depElementCtx.position;
 
             this.cacheElementsPosition();
 
@@ -247,9 +246,9 @@ define([
         /**
          * Saves elements position from current elements
          */
-        cacheElementsPosition: function () {
+        cacheElementsPosition: function() {
             this.elemPositions = [];
-            this.parentComponent().elems.each(function (elem) {
+            this.parentComponent().elems.each(function(elem) {
                 this.elemPositions.push(elem.position);
             }, this);
         },
@@ -257,8 +256,8 @@ define([
         /**
          * Normalize position, uses start elements position
          */
-        normalizePositions: function () {
-            this.parentComponent().elems.each(function (item, index) {
+        normalizePositions: function() {
+            this.parentComponent().elems.each(function(item, index) {
                 item.position = this.elemPositions[index];
             }, this);
         },
@@ -269,12 +268,12 @@ define([
          * @param {Object} curInstance - current element instance
          * @param {Number} position
          */
-        getDepElement: function (curInstance, position, row) {
-            var tableSelector = this.tableClass + ' tr',
+        getDepElement: function(curInstance, position, row) {
+            let tableSelector = this.tableClass + ' tr',
                 $table = $(row).parents('table').eq(0),
                 $curInstance = $(curInstance),
                 recordsCollection = $table.find('table').length ?
-                    $table.find('tbody > tr').filter(function (index, elem) {
+                    $table.find('tbody > tr').filter(function(index, elem) {
                         return !$(elem).parents(tableSelector).length;
                     }) :
                     $table.find('tbody > tr'),
@@ -295,8 +294,8 @@ define([
          * @param {String} position - position to add
          * @param {Number} dragPosition - position drag element
          */
-        _getDepElement: function (collection, position, dragPosition) {
-            var rec,
+        _getDepElement: function(collection, position, dragPosition) {
+            let rec,
                 rangeEnd,
                 rangeStart,
                 result,
@@ -321,7 +320,7 @@ define([
                     result = {
                         elem: rec,
                         insert: rec[0] === this.draggableElement.originRow[0] ? 'none' : position,
-                        className: className
+                        className: className,
                     };
                 }
             }
@@ -335,8 +334,8 @@ define([
          * @param {Object} elem - current element instance
          * @param {Object} data - current element data
          */
-        _setDefaultPosition: function (elem, data) {
-            var originRecord = $(elem).parents('tr').eq(0),
+        _setDefaultPosition: function(elem, data) {
+            let originRecord = $(elem).parents('tr').eq(0),
                 position = originRecord.position();
 
             ++position.top;
@@ -348,7 +347,7 @@ define([
          *
          * @param {Object} records - record instance
          */
-        setCacheRecords: function (records) {
+        setCacheRecords: function(records) {
             this.recordsCache(records);
         },
 
@@ -359,8 +358,8 @@ define([
          * @param {Object} elem - elem instance
          * @returns {Object} instance data.
          */
-        processingStyles: function (data, elem) {
-            var table = $(elem).parents('table').eq(0),
+        processingStyles: function(data, elem) {
+            let table = $(elem).parents('table').eq(0),
                 columns = table.find('th'),
                 recordColumns = $(data).find('td');
 
@@ -377,7 +376,7 @@ define([
          * @param {Object} originalTable - original record instance
          * @param {Object} recordTable - draggable record instance
          */
-        _setTableWidth: function (originalTable, recordTable) {
+        _setTableWidth: function(originalTable, recordTable) {
             recordTable.outerWidth(originalTable.outerWidth());
         },
 
@@ -387,8 +386,8 @@ define([
          * @param {Object} originColumns - original record instance
          * @param {Object} recordColumns - draggable record instance
          */
-        _setColumnsWidth: function (originColumns, recordColumns) {
-            var i = 0,
+        _setColumnsWidth: function(originColumns, recordColumns) {
+            let i = 0,
                 length = originColumns.length;
 
             for (i; i < length; i++) {
@@ -402,8 +401,8 @@ define([
          * @param {Object} record - original record instance
          * @returns {Object} draggable record instance
          */
-        getRecordNode: function (record) {
-            var $record = $(record),
+        getRecordNode: function(record) {
+            let $record = $(record),
                 table = $record.parents('table')[0].cloneNode(true),
                 $table = $(table);
 
@@ -419,12 +418,12 @@ define([
          * @param {Object} elem - original element
          * @returns {Object} draggable record context
          */
-        getRecord: function (elem) {
-            var ctx = getContext(elem),
+        getRecord: function(elem) {
+            let ctx = getContext(elem),
                 index = _.isFunction(ctx.$index) ? ctx.$index() : ctx.$index;
 
             return this.recordsCache()[index];
-        }
+        },
 
     });
 });

@@ -11,9 +11,9 @@ define(
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Ui/js/lib/view/utils/dom-observer',
         'paypalInContextExpressCheckout',
-        'Magento_Customer/js/customer-data'
+        'Magento_Customer/js/customer-data',
     ],
-    function (
+    function(
         _,
         $,
         Component,
@@ -26,7 +26,7 @@ define(
         'use strict';
 
         // State of PayPal module initialization
-        var clientInit = false;
+        let clientInit = false;
 
         return Component.extend({
 
@@ -37,23 +37,23 @@ define(
                     /**
                      * @param {Object} event
                      */
-                    click: function (event) {
+                    click: function(event) {
                         event.preventDefault();
 
                         if (additionalValidators.validate()) {
                             paypalExpressCheckout.checkout.initXO();
                             this.selectPaymentMethod();
                             setPaymentMethodAction(this.messageContainer).done(
-                                function () {
+                                function() {
                                     $('body').trigger('processStart');
 
                                     $.get(
                                         this.path,
                                         {
-                                            button: 0
+                                            button: 0,
                                         }
                                     ).done(
-                                        function (response) {
+                                        function(response) {
                                             if (response && response.url) {
                                                 paypalExpressCheckout.checkout.startFlow(response.url);
 
@@ -64,28 +64,27 @@ define(
                                             window.location.reload();
                                         }
                                     ).fail(
-                                        function () {
+                                        function() {
                                             paypalExpressCheckout.checkout.closeFlow();
                                             window.location.reload();
                                         }
                                     ).always(
-                                        function () {
+                                        function() {
                                             $('body').trigger('processStop');
                                             customerData.invalidate(['cart']);
                                         }
                                     );
-
                                 }.bind(this)
                             );
                         }
-                    }
-                }
+                    },
+                },
             },
 
             /**
              * @returns {Object}
              */
-            initialize: function () {
+            initialize: function() {
                 this._super();
                 this.initClient();
 
@@ -95,23 +94,23 @@ define(
             /**
              * @returns {Object}
              */
-            initClient: function () {
-                var selector = '#' + this.getButtonId();
+            initClient: function() {
+                let selector = '#' + this.getButtonId();
 
-                _.each(this.clientConfig, function (fn, name) {
+                _.each(this.clientConfig, function(fn, name) {
                     if (typeof fn === 'function') {
                         this.clientConfig[name] = fn.bind(this);
                     }
                 }, this);
 
                 if (!clientInit) {
-                    domObserver.get(selector, function () {
+                    domObserver.get(selector, function() {
                         paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
                         clientInit = true;
                         domObserver.off(selector);
                     }.bind(this));
                 } else {
-                    domObserver.get(selector, function () {
+                    domObserver.get(selector, function() {
                         $(selector).on('click', this.clientConfig.click);
                         domObserver.off(selector);
                     }.bind(this));
@@ -123,9 +122,9 @@ define(
             /**
              * @returns {String}
              */
-            getButtonId: function () {
+            getButtonId: function() {
                 return this.inContextId;
-            }
+            },
         });
     }
 );

@@ -13,8 +13,8 @@ define([
     'prototype',
     'Magento_Ui/js/form/element/abstract',
     'jquery/colorpicker/js/colorpicker',
-    'jquery/ui'
-], function (_, jQuery, mageTemplate, rg, prototype, Abstract) {
+    'jquery/ui',
+], function(_, jQuery, mageTemplate, rg, prototype, Abstract) {
     'use strict';
 
     /**
@@ -26,7 +26,7 @@ define([
      * @param {String} elementName
      */
     function oldCode(value, container, uploadUrl, elementName) {
-        var swatchVisualOption = {
+        let swatchVisualOption = {
             itemCount: 0,
             totalItems: 0,
             rendered: 0,
@@ -35,7 +35,7 @@ define([
             /**
              * Initialize.
              */
-            initialize: function () {
+            initialize: function() {
                 if (_.isEmpty(value)) {
                     container.addClassName('unavailable');
                 }
@@ -50,8 +50,8 @@ define([
             /**
              * ColorPicker initialization process
              */
-            initColorPicker: function () {
-                var element = this,
+            initColorPicker: function() {
+                let element = this,
                     hiddenColorPicker = !jQuery(element).data('colorpickerId');
 
                 jQuery(this).ColorPicker({
@@ -59,8 +59,8 @@ define([
                     /**
                      * ColorPicker onShow action
                      */
-                    onShow: function () {
-                        var color = jQuery(element).parent().parent().prev().prev('input').val(),
+                    onShow: function() {
+                        let color = jQuery(element).parent().parent().prev().prev('input').val(),
                             menu = jQuery(this).parents('.swatch_sub-menu_container');
 
                         menu.hide();
@@ -75,14 +75,14 @@ define([
                      * @param {String} rgb
                      * @param {String} el
                      */
-                    onSubmit: function (hsb, hex, rgb, el) {
-                        var localContainer = jQuery(el).parent().parent().prev();
+                    onSubmit: function(hsb, hex, rgb, el) {
+                        let localContainer = jQuery(el).parent().parent().prev();
 
                         jQuery(el).ColorPickerHide();
                         localContainer.parent().removeClass('unavailable');
                         localContainer.prev('input').val('#' + hex).trigger('change');
                         localContainer.css('background', '#' + hex);
-                    }
+                    },
                 });
 
                 if (hiddenColorPicker) {
@@ -95,12 +95,12 @@ define([
              *
              * @param {Object} event
              */
-            remove: function (event) {
-                var element = $(Event.findElement(event, 'tr')),
+            remove: function(event) {
+                let element = $(Event.findElement(event, 'tr')),
                     elementFlags; // !!! Button already have table parent in safari
 
                 // Safari workaround
-                element.ancestors().each(function (parentItem) {
+                element.ancestors().each(function(parentItem) {
                     if (parentItem.hasClassName('option-row')) {
                         element = parentItem;
                         throw $break;
@@ -127,15 +127,15 @@ define([
             /**
              * Update items count field
              */
-            updateItemsCountField: function () {
+            updateItemsCountField: function() {
                 $('swatch-visual-option-count-check').value = this.totalItems > 0 ? '1' : '';
-            }
+            },
         };
 
-        //swatchVisualOption.initColorPicker();
+        // swatchVisualOption.initColorPicker();
 
-        jQuery('body').on('click', function (event) {
-            var element = jQuery(event.target);
+        jQuery('body').on('click', function(event) {
+            let element = jQuery(event.target);
 
             if (
                 element.parents('.swatch_sub-menu_container').length === 1 ||
@@ -146,9 +146,8 @@ define([
             jQuery('.swatch_sub-menu_container').hide();
         });
 
-        jQuery(function ($) {
-
-            var swatchComponents = {
+        jQuery(function($) {
+            let swatchComponents = {
 
                 /**
                  * div wrapper for to hide all evement
@@ -176,13 +175,13 @@ define([
                  * @this {swatchComponents}
                  * @public
                  */
-                create: function () {
+                create: function() {
                     this.wrapper = $('<div>').css({
-                        display: 'none'
+                        display: 'none',
                     }).appendTo($('body'));
 
                     this.iframe = $('<iframe />', {
-                        name: 'upload_iframe_' + elementName
+                        name: 'upload_iframe_' + elementName,
                     }).appendTo(this.wrapper);
 
                     this.form = $('<form />', {
@@ -191,21 +190,21 @@ define([
                         method: 'post',
                         enctype: 'multipart/form-data',
                         class: 'ignore-validate',
-                        action: uploadUrl
+                        action: uploadUrl,
                     }).appendTo(this.wrapper);
 
                     this.inputFile = $('<input />', {
                         type: 'file',
                         name: 'datafile',
-                        class: 'swatch_option_file'
+                        class: 'swatch_option_file',
                     }).appendTo(this.form);
 
                     $('<input />', {
                         type: 'hidden',
                         name: 'form_key',
-                        value: FORM_KEY
+                        value: FORM_KEY,
                     }).appendTo(this.form);
-                }
+                },
             };
 
             swatchVisualOption.initialize();
@@ -218,20 +217,20 @@ define([
             /**
              * Register event for swatch input[type=file] change
              */
-            swatchComponents.inputFile.change(function () {
-                var localContainer = $('.' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
+            swatchComponents.inputFile.change(function() {
+                let localContainer = $('.' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
 
                     /**
                      * @this {iframe}
                      */
-                    iframeHandler = function () {
-                        var imageParams = $.parseJSON($(this).contents().find('body').html()),
+                    iframeHandler = function() {
+                        let imageParams = $.parseJSON($(this).contents().find('body').html()),
                             fullMediaUrl = imageParams['swatch_path'] + imageParams['file_path'];
 
                         localContainer.prev('input').val(imageParams['file_path']).trigger('change');
                         localContainer.css({
                             'background-image': 'url(' + fullMediaUrl + ')',
-                            'background-size': 'cover'
+                            'background-size': 'cover',
                         });
                         localContainer.parent().removeClass('unavailable');
                     };
@@ -245,7 +244,7 @@ define([
             /**
              * Register event for choose "upload image" option
              */
-            $(container).on('click', '.btn_choose_file_upload', function () {
+            $(container).on('click', '.btn_choose_file_upload', function() {
                 swatchComponents.inputFile.attr('data-called-by', $(this).data('class'));
                 swatchComponents.inputFile.click();
             });
@@ -253,8 +252,8 @@ define([
             /**
              * Register event for remove option
              */
-            $(container).on('click', '.btn_remove_swatch', function () {
-                var optionPanel = $(this).parents().eq(2);
+            $(container).on('click', '.btn_remove_swatch', function() {
+                let optionPanel = $(this).parents().eq(2);
 
                 optionPanel.children('input').val('').trigger('change');
                 optionPanel.children('.swatch_window').css('background', '');
@@ -265,7 +264,7 @@ define([
             /**
              * Toggle color upload chooser
              */
-            $(container).on('click', '.swatch_window', function () {
+            $(container).on('click', '.swatch_window', function() {
                 jQuery('.swatch_sub-menu_container').hide();
                 $(this).next('div').toggle();
             });
@@ -279,7 +278,7 @@ define([
             prefixElementName: '',
             elementName: '',
             value: '',
-            uploadUrl: ''
+            uploadUrl: '',
         },
 
         /**
@@ -287,7 +286,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
             this.configureDataScope();
@@ -300,7 +299,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initOldCode();
 
@@ -312,8 +311,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initOldCode: function () {
-            jQuery.async('.' + this.elementName, function (elem) {
+        initOldCode: function() {
+            jQuery.async('.' + this.elementName, function(elem) {
                 oldCode(this.value(), elem.parentElement, this.uploadUrl, this.elementName);
             }.bind(this));
 
@@ -323,8 +322,8 @@ define([
         /**
          * Configure data scope.
          */
-        configureDataScope: function () {
-            var recordId, prefixName;
+        configureDataScope: function() {
+            let recordId, prefixName;
 
             // Get recordId
             recordId = this.parentName.split('.').last();
@@ -344,8 +343,8 @@ define([
          * @param {String} dataScopeString
          * @returns {String}
          */
-        dataScopeToHtmlArray: function (dataScopeString) {
-            var dataScopeArray, dataScope, reduceFunction;
+        dataScopeToHtmlArray: function(dataScopeString) {
+            let dataScopeArray, dataScope, reduceFunction;
 
             /**
              * Add new level of nesting.
@@ -354,7 +353,7 @@ define([
              * @param {String} curr
              * @returns {String}
              */
-            reduceFunction = function (prev, curr) {
+            reduceFunction = function(prev, curr) {
                 return prev + '[' + curr + ']';
             };
 
@@ -364,6 +363,6 @@ define([
             dataScope += dataScopeArray.reduce(reduceFunction, '');
 
             return dataScope;
-        }
+        },
     });
 });

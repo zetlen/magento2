@@ -6,7 +6,7 @@
 /**
  * @api
  */
-define(function () {
+define(function() {
     'use strict';
 
     var utils = {
@@ -16,7 +16,7 @@ define(function () {
          * @param {String} value
          * @return {Boolean}
          */
-        isEmpty: function (value) {
+        isEmpty: function(value) {
             return value === '' || value == null || value.length === 0 || /^\s+$/.test(value);
         },
 
@@ -26,7 +26,7 @@ define(function () {
          * @param {String} value
          * @return {Boolean}
          */
-        isEmptyNoTrim: function (value) {
+        isEmptyNoTrim: function(value) {
             return value === '' || value == null || value.length === 0;
         },
 
@@ -38,7 +38,7 @@ define(function () {
          * @param {String} to
          * @return {Boolean}
          */
-        isBetween: function (value, from, to) {
+        isBetween: function(value, from, to) {
             return (from === null || from === '' || value >= utils.parseNumber(from)) &&
                    (to === null || to === '' || value <= utils.parseNumber(to));
         },
@@ -49,8 +49,8 @@ define(function () {
          * @param {String} value
          * @return {Number}
          */
-        parseNumber: function (value) {
-            var isDot, isComa;
+        parseNumber: function(value) {
+            let isDot, isComa;
 
             if (typeof value !== 'string') {
                 return parseFloat(value);
@@ -77,10 +77,10 @@ define(function () {
          * @param {String} value -  Value being stripped.
          * @return {String}
          */
-        stripHtml: function (value) {
+        stripHtml: function(value) {
             return value.replace(/<.[^<>]*?>/g, ' ').replace(/&nbsp;|&#160;/gi, ' ')
                 .replace(/[0-9.(),;:!?%#$'"_+=\/-]*/g, '');
-        }
+        },
     };
 
     return utils;

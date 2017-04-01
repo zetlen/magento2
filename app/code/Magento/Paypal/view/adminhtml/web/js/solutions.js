@@ -6,8 +6,8 @@ define([
     'jquery',
     'uiClass',
     'Magento_Paypal/js/solution',
-    'underscore'
-], function ($, Class, Solution, _) {
+    'underscore',
+], function($, Class, Solution, _) {
     'use strict';
 
     return Class.extend({
@@ -26,7 +26,7 @@ define([
             /**
              * The selector element responsible for configuration of payment method (CSS class)
              */
-            buttonConfiguration: '.button.action-configure'
+            buttonConfiguration: '.button.action-configure',
         },
 
         /**
@@ -35,7 +35,7 @@ define([
          * @param {Object} config
          * @returns {exports.initialize}
          */
-        initialize: function (config) {
+        initialize: function(config) {
             this.initConfig(config)
                 .initSolutions();
 
@@ -47,7 +47,7 @@ define([
          *
          * @returns {exports.initSolutions}
          */
-        initSolutions: function () {
+        initSolutions: function() {
             _.each(this.config.solutions, this.addSolution, this);
             this.initializeSolutions()
                 .wipeButtonsConfiguration();
@@ -62,10 +62,10 @@ define([
          * @param {Object} solution
          * @param {String} identifier
          */
-        addSolution: function (solution, identifier) {
+        addSolution: function(solution, identifier) {
             this.solutions[identifier] = new Solution({
                 config: solution,
-                buttonConfiguration: this.buttonConfiguration
+                buttonConfiguration: this.buttonConfiguration,
             }, identifier);
             this.solutionsElements[identifier] = this.solutions[identifier].$self;
         },
@@ -73,7 +73,7 @@ define([
         /**
          * Wiping buttons configuration of the payment method
          */
-        wipeButtonsConfiguration: function () {
+        wipeButtonsConfiguration: function() {
             $(this.buttonConfiguration).removeClass('disabled')
                 .removeAttr('disabled');
         },
@@ -83,8 +83,8 @@ define([
          *
          * @param {Object} solution
          */
-        applicationRules: function (solution) {
-            _.each(solution.afterLoadRules, function (rule) {
+        applicationRules: function(solution) {
+            _.each(solution.afterLoadRules, function(rule) {
                 rule.apply();
             });
         },
@@ -94,14 +94,14 @@ define([
          *
          * @returns {exports.initializeSolutions}
          */
-        initializeSolutions: function () {
-            _.each(this.solutions, function (solution) {
+        initializeSolutions: function() {
+            _.each(this.solutions, function(solution) {
                 solution.setSolutionsElements(this.solutionsElements)
                     .initEvents()
                     .addListeners();
             }, this);
 
             return this;
-        }
+        },
     });
 });

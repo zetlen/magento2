@@ -2,7 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(function () {
+define(function() {
     'use strict';
 
     return {
@@ -11,8 +11,8 @@ define(function () {
             disabled: true,
             imports: {
                 toggleDisable:
-                    'product_attribute_add_form.product_attribute_add_form.base_fieldset.frontend_input:value'
-            }
+                    'product_attribute_add_form.product_attribute_add_form.base_fieldset.frontend_input:value',
+            },
         },
 
         /**
@@ -20,8 +20,8 @@ define(function () {
          *
          * @param {Number} selected
          */
-        toggleDisable: function (selected) {
+        toggleDisable: function(selected) {
             this.disabled(!(selected in this.valuesForEnable));
-        }
+        },
     };
 });

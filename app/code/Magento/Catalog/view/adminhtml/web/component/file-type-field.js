@@ -4,8 +4,8 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function(Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -16,7 +16,7 @@ define([
          * @param {String} value
          * @returns {Boolean}
          */
-        isRelevant: function (value) {
+        isRelevant: function(value) {
             if (value === 'file') {
                 this.disabled(false);
                 this.visible(true);
@@ -29,6 +29,6 @@ define([
             this.visible(false);
 
             return false;
-        }
+        },
     });
 });

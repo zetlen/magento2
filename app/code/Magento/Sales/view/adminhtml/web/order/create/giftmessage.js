@@ -2,26 +2,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/********************* GIFT OPTIONS POPUP ***********************/
-/********************* GIFT OPTIONS SET ***********************/
+/** ******************* GIFT OPTIONS POPUP ***********************/
+/** ******************* GIFT OPTIONS SET ***********************/
 
 define([
-    "jquery",
-    "jquery/ui",
-    "mage/translate",
-    "mage/validation",
-    "prototype"
-], function(jQuery){
-
+    'jquery',
+    'jquery/ui',
+    'mage/translate',
+    'mage/validation',
+    'prototype'
+], function(jQuery) {
 window.giftMessagesController = {
-    toogleRequired: function(source, objects)
-    {
+    toogleRequired: function(source, objects)    {
         if(!$(source).value.blank()) {
             objects.each(function(item) {
                $(item).addClassName('required-entry');
-               var label = findFieldLabel($(item));
+               let label = findFieldLabel($(item));
+
                if (label) {
-                   var span = label.down('span');
+                   let span = label.down('span');
+
                    if (!span) {
                        Element.insert(label, {bottom: '&nbsp;<span class="required">*</span>'});
                    }
@@ -33,16 +33,18 @@ window.giftMessagesController = {
                     $(source).formObj.validator.reset(item);
                 }
                 $(item).removeClassName('required-entry');
-                var label = findFieldLabel($(item));
+                let label = findFieldLabel($(item));
+
                 if (label) {
-                    var span = label.down('span');
+                    let span = label.down('span');
+
                     if (span) {
                         Element.remove(span);
                     }
                 }
                 // Hide validation advices if exist
                 if ($(item) && $(item).advices) {
-                    $(item).advices.each(function (pair) {
+                    $(item).advices.each(function(pair) {
                         if (pair.value != null) pair.value.hide();
                     });
                 }
@@ -59,7 +61,8 @@ window.giftMessagesController = {
         } else {
             $(container).toogleGiftMessage = false;
             $(this.getFieldId(container, 'message')).formObj = $(this.getFieldId(container, 'form'));
-            var form = jQuery('#' + this.getFieldId(container, 'form'));
+            let form = jQuery('#' + this.getFieldId(container, 'form'));
+
             jQuery('#' + this.getFieldId(container, 'form')).validate({errorClass: 'mage-error'});
 
             if(!form.valid()) {
@@ -70,7 +73,6 @@ window.giftMessagesController = {
                 parameters: Form.serialize($(this.getFieldId(container, 'form')), true),
                 loaderArea: container,
                 onComplete: function(transport) {
-
                     $(container).down('.action-link').removeClassName('open');
                     $(container).down('.default-text').show();
                     $(container).down('.close-text').hide();
@@ -82,8 +84,7 @@ window.giftMessagesController = {
                         $(container).down('.default-text').down('.add').show();
                         $(container).down('.default-text').down('.edit').hide();
                     }
-
-                }.bind(this)
+                }.bind(this),
             });
         }
 
@@ -92,7 +93,8 @@ window.giftMessagesController = {
     saveGiftMessage: function(container) {
         $(this.getFieldId(container, 'message')).formObj = $(this.getFieldId(container, 'form'));
 
-        var form = jQuery('#' + this.getFieldId(container, 'form'));
+        let form = jQuery('#' + this.getFieldId(container, 'form'));
+
         form.validate({errorClass: 'mage-error'});
 
         if(!form.valid()) {
@@ -103,25 +105,29 @@ window.giftMessagesController = {
             parameters: Form.serialize($(this.getFieldId(container, 'form')), true),
             loaderArea: container,
             onSuccess: function(response) {
-                var message = '<div class="messages"><div class="message message-success success">'
+                let message = '<div class="messages"><div class="message message-success success">'
                     + response.responseText
                     + '<div data-ui-id="messages-message-success"></div></div></div>';
+
                 jQuery('#messages').html(message);
                 jQuery(document).scrollTop(0);
-            }
+            },
         });
     },
     getFieldId: function(container, name) {
         return container + '_' + name;
-    }
+    },
 };
 
 function findFieldLabel(field) {
-    var tdField = $(field).up('td');
+    let tdField = $(field).up('td');
+
     if (tdField) {
-       var tdLabel = tdField.previous('td');
+       let tdLabel = tdField.previous('td');
+
        if (tdLabel) {
-           var label = tdLabel.down('label');
+           let label = tdLabel.down('label');
+
            if (label) {
                return label;
            }
@@ -135,27 +141,30 @@ window.findFieldLabel = findFieldLabel;
 
 window.GiftOptionsPopup = Class.create();
 GiftOptionsPopup.prototype = {
-    //giftOptionsWindowMask: null,
+    // giftOptionsWindowMask: null,
     giftOptionsWindow: null,
 
     initialize: function() {
-        $$('.action-link').each(function (el) {
+        $$('.action-link').each(function(el) {
             Event.observe(el, 'click', this.showItemGiftOptions.bind(this));
         }, this);
 
         // Move gift options popup to start of body, because soon it will contain FORM tag that can break DOM layout if within other FORM
-        var oldPopupContainer = $('gift_options_configure');
+        let oldPopupContainer = $('gift_options_configure');
+
         if (oldPopupContainer) {
             oldPopupContainer.remove();
         }
 
-        var newPopupContainer = $('gift_options_configure_new');
+        let newPopupContainer = $('gift_options_configure_new');
+
         $(document.body).insert({top: newPopupContainer});
         newPopupContainer.id = 'gift_options_configure';
 
         // Put controls container inside a FORM tag so we can use Validator
-        var form = new Element('form', {action: '#', id: 'gift_options_configuration_form', method: 'post'});
-        var formContents = $('gift_options_form_contents');
+        let form = new Element('form', {action: '#', id: 'gift_options_configuration_form', method: 'post'});
+        let formContents = $('gift_options_form_contents');
+
         if (formContents) {
             formContents.parentNode.appendChild(form);
             form.appendChild(formContents);
@@ -164,32 +173,33 @@ GiftOptionsPopup.prototype = {
         this.giftOptionsWindow = $('gift_options_configure');
 
         jQuery(this.giftOptionsWindow).dialog({
-            autoOpen:   false,
-            modal:      true,
-            resizable:  false,
+            autoOpen: false,
+            modal: true,
+            resizable: false,
             dialogClass: 'gift-options-popup',
-            minWidth:   500,
-            width:      '75%',
+            minWidth: 500,
+            width: '75%',
             position: {
                 my: 'left+12.5% top',
                 at: 'center top',
-                of: 'body'
+                of: 'body',
             },
-            open: function () {
+            open: function() {
                 jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
 
-                var topMargin = jQuery(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+                let topMargin = jQuery(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+
                 jQuery(this).closest('.ui-dialog').css('margin-top', topMargin);
             },
             close: function() {
                 jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-            }
+            },
         });
     },
 
-    showItemGiftOptions : function(event) {
-        var element = Event.element(event).id;
-        var itemId = element.sub('gift_options_link_','');
+    showItemGiftOptions: function(event) {
+        let element = Event.element(event).id;
+        let itemId = element.sub('gift_options_link_', '');
 
         jQuery(this.giftOptionsWindow).dialog('open');
 
@@ -200,17 +210,19 @@ GiftOptionsPopup.prototype = {
         Event.stop(event);
     },
 
-    setTitle : function (itemId) {
-        var productTitleElement = $('order_item_' + itemId + '_title');
-        var productTitle = '';
+    setTitle: function(itemId) {
+        let productTitleElement = $('order_item_' + itemId + '_title');
+        let productTitle = '';
+
         if (productTitleElement) {
             productTitle = productTitleElement.innerHTML;
         }
-        jQuery(this.giftOptionsWindow).dialog({ title: jQuery.mage.__('Gift Options for ') + productTitle });
+        jQuery(this.giftOptionsWindow).dialog({title: jQuery.mage.__('Gift Options for ') + productTitle});
     },
 
-    onOkButton : function() {
-        var giftOptionsForm = jQuery('#gift_options_configuration_form');
+    onOkButton: function() {
+        let giftOptionsForm = jQuery('#gift_options_configuration_form');
+
         if (!giftOptionsForm.validate({errorClass: 'mage-error'}).valid()) {
             return false;
         }
@@ -221,14 +233,14 @@ GiftOptionsPopup.prototype = {
         return true;
     },
 
-    onCloseButton : function() {
+    onCloseButton: function() {
         this.closeWindow();
     },
 
-    closeWindow : function() {
+    closeWindow: function() {
         jQuery(this.giftOptionsWindow).dialog('close');
-    }
-}
+    },
+};
 
 
 window.GiftMessageSet = Class.create();
@@ -241,19 +253,20 @@ GiftMessageSet.prototype = {
     callback: null,
 
     initialize: function() {
-        $$('.action-link').each(function (el) {
+        $$('.action-link').each(function(el) {
             Event.observe(el, 'click', this.setData.bind(this));
         }, this);
     },
 
     setData: function(event) {
-        var element = Event.element(event).id;
-        this.id = element.sub('gift_options_link_','');
+        let element = Event.element(event).id;
+
+        this.id = element.sub('gift_options_link_', '');
 
         if ($('gift-message-form-data-' + this.id)) {
             this.fields.each(function(el) {
                 if ($(this.sourcePrefix + this.id + '_' + el) && $(this.destPrefix + el)) {
-                    $(this.destPrefix + el).value = $(this.sourcePrefix + this.id + '_' + el).value
+                    $(this.destPrefix + el).value = $(this.sourcePrefix + this.id + '_' + el).value;
                 }
             }, this);
             $('gift_options_giftmessage').show();
@@ -268,10 +281,12 @@ GiftMessageSet.prototype = {
     },
 
     prepareSaveData: function() {
-        var hash = $H();
-        $$("div[id^=gift_options_data_]").each(function (el) {
-            var fields = el.select('input', 'select', 'textarea');
-            var data = Form.serializeElements(fields, true);
+        let hash = $H();
+
+        $$('div[id^=gift_options_data_]').each(function(el) {
+            let fields = el.select('input', 'select', 'textarea');
+            let data = Form.serializeElements(fields, true);
+
             hash.update(data);
         });
         return hash;
@@ -283,7 +298,7 @@ GiftMessageSet.prototype = {
         }
     },
 
-    saveData: function(event){
+    saveData: function(event) {
         this.fields.each(function(el) {
             if ($(this.sourcePrefix + this.id + '_' + el) && $(this.destPrefix + el)) {
                 $(this.sourcePrefix + this.id + '_' + el).value = $(this.destPrefix + el).value;
@@ -291,16 +306,16 @@ GiftMessageSet.prototype = {
         }, this);
         if ($(this.sourcePrefix + this.id + '_form')) {
             $(this.sourcePrefix + this.id + '_form').request();
-        } else if (typeof(order) != 'undefined') {
-            var data = this.prepareSaveData();
-            var self = this;
+        } else if (typeof order != 'undefined') {
+            let data = this.prepareSaveData();
+            let self = this;
+
             jQuery.when(order.loadArea(['items'], true, data.toObject())).done(function() {
                 if (self.callback !== null) {
                     self.callback();
                 }
             });
         }
-    }
+    },
 };
-
 });

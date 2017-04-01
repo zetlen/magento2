@@ -9,32 +9,32 @@ define([
     'mageUtils',
     'uiComponent',
     'uiLayout',
-    'Magento_Customer/js/model/address-list'
-], function (_, ko, utils, Component, layout, addressList) {
+    'Magento_Customer/js/model/address-list',
+], function(_, ko, utils, Component, layout, addressList) {
     'use strict';
 
-    var defaultRendererTemplate = {
+    let defaultRendererTemplate = {
         parent: '${ $.$data.parentName }',
         name: '${ $.$data.name }',
-        component: 'Magento_Checkout/js/view/shipping-address/address-renderer/default'
+        component: 'Magento_Checkout/js/view/shipping-address/address-renderer/default',
     };
 
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-address/list',
             visible: addressList().length > 0,
-            rendererTemplates: []
+            rendererTemplates: [],
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initChildren();
 
-            addressList.subscribe(function (changes) {
-                    var self = this;
+            addressList.subscribe(function(changes) {
+                    let self = this;
 
-                    changes.forEach(function (change) {
+                    changes.forEach(function(change) {
                         if (change.status === 'added') {
                             self.createRendererComponent(change.value, change.index);
                         }
@@ -48,7 +48,7 @@ define([
         },
 
         /** @inheritdoc */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
             // the list of child components that are responsible for address rendering
             this.rendererComponents = [];
@@ -57,7 +57,7 @@ define([
         },
 
         /** @inheritdoc */
-        initChildren: function () {
+        initChildren: function() {
             _.each(addressList(), this.createRendererComponent, this);
 
             return this;
@@ -69,8 +69,8 @@ define([
          * @param {Object} address
          * @param {*} index
          */
-        createRendererComponent: function (address, index) {
-            var rendererTemplate, templateData, rendererComponent;
+        createRendererComponent: function(address, index) {
+            let rendererTemplate, templateData, rendererComponent;
 
             if (index in this.rendererComponents) {
                 this.rendererComponents[index].address(address);
@@ -81,15 +81,15 @@ define([
                     defaultRendererTemplate;
                 templateData = {
                     parentName: this.name,
-                    name: index
+                    name: index,
                 };
                 rendererComponent = utils.template(rendererTemplate, templateData);
                 utils.extend(rendererComponent, {
-                    address: ko.observable(address)
+                    address: ko.observable(address),
                 });
                 layout([rendererComponent]);
                 this.rendererComponents[index] = rendererComponent;
             }
-        }
+        },
     });
 });

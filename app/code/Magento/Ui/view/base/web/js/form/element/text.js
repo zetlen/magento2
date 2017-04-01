@@ -8,8 +8,8 @@
  */
 define([
     'uiElement',
-    'mageUtils'
-], function (Element, utils) {
+    'mageUtils',
+], function(Element, utils) {
     'use strict';
 
     return Element.extend({
@@ -20,8 +20,8 @@ define([
             uid: utils.uniqueid(),
             disabled: false,
             links: {
-                value: '${ $.provider }:${ $.dataScope }'
-            }
+                value: '${ $.provider }:${ $.dataScope }',
+            },
         },
 
         /**
@@ -29,7 +29,7 @@ define([
          *
          * @returns {Boolean} false.
          */
-        hasService: function () {
+        hasService: function() {
             return false;
         },
 
@@ -38,7 +38,7 @@ define([
          *
          * @returns {Boolean} false.
          */
-        hasAddons: function () {
+        hasAddons: function() {
             return false;
         },
 
@@ -47,11 +47,11 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('disabled visible value');
 
             return this;
-        }
+        },
     });
 });

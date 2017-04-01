@@ -4,8 +4,8 @@
  */
 
 define([
-    'prototype'
-], function () {
+    'prototype',
+], function() {
     'use strict';
 
     /**
@@ -13,7 +13,7 @@ define([
      * @param {Object} defaultsById
      */
     function parentThemeOnChange(selected, defaultsById) {
-        var statusBar = $$('.tab-item-link')[0],
+        let statusBar = $$('.tab-item-link')[0],
             isChanged = statusBar.hasClassName('changed'),
             defaults;
 

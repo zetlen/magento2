@@ -8,8 +8,8 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/shipping-service',
     'Magento_Checkout/js/model/shipping-rate-registry',
-    'Magento_Checkout/js/model/error-processor'
-], function (resourceUrlManager, quote, storage, shippingService, rateRegistry, errorProcessor) {
+    'Magento_Checkout/js/model/error-processor',
+], function(resourceUrlManager, quote, storage, shippingService, rateRegistry, errorProcessor) {
     'use strict';
 
     return {
@@ -17,8 +17,8 @@ define([
          * Get shipping rates for specified address.
          * @param {Object} address
          */
-        getRates: function (address) {
-            var cache, serviceUrl, payload;
+        getRates: function(address) {
+            let cache, serviceUrl, payload;
 
             shippingService.isLoading(true);
             cache = rateRegistry.get(address.getCacheKey());
@@ -43,8 +43,8 @@ define([
                         'telephone': address.telephone,
                         'fax': address.fax,
                         'custom_attributes': address.customAttributes,
-                        'save_in_address_book': address.saveInAddressBook
-                    }
+                        'save_in_address_book': address.saveInAddressBook,
+                    },
                 }
             );
 
@@ -54,16 +54,16 @@ define([
             } else {
                 storage.post(
                     serviceUrl, payload, false
-                ).done(function (result) {
+                ).done(function(result) {
                     rateRegistry.set(address.getCacheKey(), result);
                     shippingService.setShippingRates(result);
-                }).fail(function (response) {
+                }).fail(function(response) {
                     shippingService.setShippingRates([]);
                     errorProcessor.process(response);
-                }).always(function () {
+                }).always(function() {
                     shippingService.isLoading(false);
                 });
             }
-        }
+        },
     };
 });

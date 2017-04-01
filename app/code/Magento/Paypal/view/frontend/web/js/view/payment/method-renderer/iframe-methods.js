@@ -6,14 +6,14 @@ define([
     'Magento_Checkout/js/view/payment/default',
     'ko',
     'Magento_Paypal/js/model/iframe',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function (Component, ko, iframe, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+], function(Component, ko, iframe, fullScreenLoader) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_Paypal/payment/iframe-methods',
-            paymentReady: false
+            paymentReady: false,
         },
         redirectAfterPlaceOrder: false,
         isInAction: iframe.isInAction,
@@ -21,7 +21,7 @@ define([
         /**
          * @return {exports}
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('paymentReady');
 
@@ -31,7 +31,7 @@ define([
         /**
          * @return {*}
          */
-        isPaymentReady: function () {
+        isPaymentReady: function() {
             return this.paymentReady();
         },
 
@@ -39,14 +39,14 @@ define([
          * Get action url for payment method iframe.
          * @returns {String}
          */
-        getActionUrl: function () {
+        getActionUrl: function() {
             return this.isInAction() ? window.checkoutConfig.payment.paypalIframe.actionUrl[this.getCode()] : '';
         },
 
         /**
          * Places order in pending payment status.
          */
-        placePendingPaymentOrder: function () {
+        placePendingPaymentOrder: function() {
             if (this.placeOrder()) {
                 fullScreenLoader.startLoader();
                 this.isInAction(true);
@@ -58,10 +58,10 @@ define([
         /**
          * @return {*}
          */
-        getPlaceOrderDeferredObject: function () {
-            var self = this;
+        getPlaceOrderDeferredObject: function() {
+            let self = this;
 
-            return this._super().fail(function () {
+            return this._super().fail(function() {
                 fullScreenLoader.stopLoader();
                 self.isInAction(false);
                 document.removeEventListener('click', iframe.stopEventPropagation, true);
@@ -71,7 +71,7 @@ define([
         /**
          * After place order callback
          */
-        afterPlaceOrder: function () {
+        afterPlaceOrder: function() {
             if (this.iframeIsLoaded) {
                 document.getElementById(this.getCode() + '-iframe')
                     .contentWindow.location.reload();
@@ -86,8 +86,8 @@ define([
         /**
          * Hide loader when iframe is fully loaded.
          */
-        iframeLoaded: function () {
+        iframeLoaded: function() {
             fullScreenLoader.stopLoader();
-        }
+        },
     });
 });

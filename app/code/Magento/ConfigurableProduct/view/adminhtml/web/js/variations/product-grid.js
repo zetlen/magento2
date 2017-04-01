@@ -10,8 +10,8 @@ define([
     'Magento_Ui/js/core/app',
     'underscore',
     'notification',
-    'mage/translate'
-], function (Component, $, bootstrap, _) {
+    'mage/translate',
+], function(Component, $, bootstrap, _) {
     'use strict';
 
     return Component.extend({
@@ -26,13 +26,13 @@ define([
                 productsProvider: '${ $.productsProvider }',
                 productsMassAction: '${ $.productsMassAction }',
                 productsColumns: '${ $.productsColumns }',
-                variationsComponent: '${ $.configurableVariations }'
+                variationsComponent: '${ $.configurableVariations }',
             },
             listens: {
                 '${ $.productsProvider }:data': '_showMessageAssociatedGrid _handleManualGridOpening',
                 '${ $.productsMassAction }:selected': '_handleManualGridSelect',
-                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual _switchProductType'
-            }
+                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual _switchProductType',
+            },
         },
 
         /**
@@ -40,7 +40,7 @@ define([
          *
          * @param {Array} options
          */
-        initialize: function (options) {
+        initialize: function(options) {
             this._super(options);
             this.productsModal = $(this.gridSelector).modal({
                 title: $.mage.__('Select Associated Product'),
@@ -50,25 +50,25 @@ define([
                         text: $.mage.__('Cancel'),
 
                         /** Close modal */
-                        click: function () {
+                        click: function() {
                             this.closeModal();
-                        }
+                        },
                     }, {
                         text: $.mage.__('Done'),
-                        click: this.close.bind(this, null)
-                    }
-                ]
+                        click: this.close.bind(this, null),
+                    },
+                ],
             });
 
-            this.productsProvider(function () {
+            this.productsProvider(function() {
                 this.productsModal.notification();
             }.bind(this));
-            this.variationsComponent(function (variation) {
+            this.variationsComponent(function(variation) {
                 this._showButtonAddManual(variation.productMatrix());
             }.bind(this));
 
             this._initGrid = _.once(this._initGrid);
-            this._switchProductType = _.wrap(this._switchProductType.bind(this), function (func, params) {
+            this._switchProductType = _.wrap(this._switchProductType.bind(this), function(func, params) {
                 if (!!params.length !== !!this.init) {
                     this.init = !!params.length;
                     func(params);
@@ -80,7 +80,7 @@ define([
          * Initial observerable
          * @returns {*}
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super().observe('button');
 
             return this;
@@ -90,12 +90,12 @@ define([
          * init Grid
          * @private
          */
-        _initGrid: function (filterData) {
+        _initGrid: function(filterData) {
             $.ajax({
                 type: 'GET',
                 url: this._buildGridUrl(filterData),
-                context: $('body')
-            }).success(function (data) {
+                context: $('body'),
+            }).success(function(data) {
                 bootstrap(JSON.parse(data));
             });
         },
@@ -105,7 +105,7 @@ define([
          * @see configurable_associated_product_listing.xml
          * @param {Integer} rowIndex
          */
-        selectProduct: function (rowIndex) {
+        selectProduct: function(rowIndex) {
             this.close(rowIndex);
         },
 
@@ -117,10 +117,10 @@ define([
          * @param {String} callbackName
          * @param {Boolean} showMassActionColumn
          */
-        open: function (filterData, callbackName, showMassActionColumn) {
+        open: function(filterData, callbackName, showMassActionColumn) {
             this.callbackName = callbackName;
-            this.productsMassAction(function (massActionComponent) {
-                this.productsColumns().elems().each(function (rowElement) {
+            this.productsMassAction(function(massActionComponent) {
+                this.productsColumns().elems().each(function(rowElement) {
                     rowElement.disableAction = showMassActionColumn;
                 });
                 massActionComponent.visible = showMassActionColumn;
@@ -133,7 +133,7 @@ define([
         /**
          * Close
          */
-        close: function (rowIndex) {
+        close: function(rowIndex) {
             try {
                 if (this.productsMassAction().selected.getLength()) {
                     this.variationsComponent()[this.callbackName](this.productsMassAction()
@@ -148,7 +148,7 @@ define([
                     this.productsModal.notification('clear');
                     this.productsModal.notification('add', {
                         message: e.message,
-                        messageContainer: this.gridSelector
+                        messageContainer: this.gridSelector,
                     });
                 } else {
                     throw e;
@@ -161,9 +161,9 @@ define([
          * @param {Integer} productId
          * @returns {*}
          */
-        getProductById: function (productId) {
+        getProductById: function(productId) {
             return _.findWhere(this.productsProvider().data.items, {
-                'entity_id': productId
+                'entity_id': productId,
             });
         },
 
@@ -172,7 +172,7 @@ define([
          * @param {Integer} rowIndex
          * @returns {*}
          */
-        getProductByIndex: function (rowIndex) {
+        getProductByIndex: function(rowIndex) {
             return this.productsProvider().data.items[rowIndex];
         },
 
@@ -180,11 +180,11 @@ define([
          * Build grid url
          * @private
          */
-        _buildGridUrl: function (filterData) {
-            var params = '?' + $.param({
+        _buildGridUrl: function(filterData) {
+            let params = '?' + $.param({
                 'filters': filterData.filters,
                 'attributes_codes': this._getAttributesCodes(),
-                'filters_modifier': filterData['filters_modifier']
+                'filters_modifier': filterData['filters_modifier'],
             });
 
             return this.productsGridUrl + params;
@@ -196,7 +196,7 @@ define([
          * @returns {*}
          * @private
          */
-        _showButtonAddManual: function (variations) {
+        _showButtonAddManual: function(variations) {
             return this.button(variations.length);
         },
 
@@ -204,7 +204,7 @@ define([
          * @param {Array} variations
          * @private
          */
-        _switchProductType: function (variations) {
+        _switchProductType: function(variations) {
             $(document).trigger('changeConfigurableTypeProduct', variations.length);
         },
 
@@ -212,7 +212,7 @@ define([
          * Get attributes codes used for configurable
          * @private
          */
-        _getAttributesCodes: function () {
+        _getAttributesCodes: function() {
             return this.variationsComponent().attributes.pluck('code');
         },
 
@@ -220,18 +220,18 @@ define([
          * Show data associated grid
          * @private
          */
-        _showMessageAssociatedGrid: function (data) {
+        _showMessageAssociatedGrid: function(data) {
             this.productsModal.notification('clear');
 
             if (data.items.length) {
                 this.productsModal.notification('add', {
                     message: $.mage.__('Choose a new product to delete and replace the current product configuration.'),
-                    messageContainer: this.gridSelector
+                    messageContainer: this.gridSelector,
                 });
             } else {
                 this.productsModal.notification('add', {
                     message: $.mage.__('For better results, add attributes and attribute values to your products.'),
-                    messageContainer: this.gridSelector
+                    messageContainer: this.gridSelector,
                 });
             }
         },
@@ -239,23 +239,23 @@ define([
         /**
          * Show manually grid
          */
-        showManuallyGrid: function () {
-            var filterModifier = _.mapObject(_.object(this._getAttributesCodes(), []), function () {
+        showManuallyGrid: function() {
+            let filterModifier = _.mapObject(_.object(this._getAttributesCodes(), []), function() {
                     return {
-                        'condition_type': 'notnull'
+                        'condition_type': 'notnull',
                     };
                 }),
                 usedProductIds = _.values(this.variationsComponent().productAttributesMap);
 
             if (usedProductIds && usedProductIds.length > 0) {
                 filterModifier['entity_id'] = {
-                    'condition_type': 'nin', value: usedProductIds
+                    'condition_type': 'nin', "value": usedProductIds,
                 };
             }
 
             this.open(
                 {
-                    'filters_modifier': filterModifier
+                    'filters_modifier': filterModifier,
                 },
                 'appendProducts',
                 true
@@ -266,9 +266,9 @@ define([
          * Handle manual grid after opening
          * @private
          */
-        _handleManualGridOpening: function (data) {
-            if (data.items.length && this.callbackName == 'appendProducts') { //eslint-disable-line eqeqeq
-                this.productsColumns().elems().each(function (rowElement) {
+        _handleManualGridOpening: function(data) {
+            if (data.items.length && this.callbackName == 'appendProducts') { // eslint-disable-line eqeqeq
+                this.productsColumns().elems().each(function(rowElement) {
                     rowElement.disableAction = true;
                 });
 
@@ -284,18 +284,18 @@ define([
          * @param {Array} selected
          * @private
          */
-        _disableRows: function (items, selectedVariationKeys, selected) {
+        _disableRows: function(items, selectedVariationKeys, selected) {
             selectedVariationKeys = selectedVariationKeys === undefined ? [] : selectedVariationKeys;
             selected = selected === undefined ? [] : selected;
-            this.productsMassAction(function (massaction) {
-                var configurableVariationKeys = _.union(
+            this.productsMassAction(function(massaction) {
+                let configurableVariationKeys = _.union(
                         selectedVariationKeys,
                         _.pluck(this.variationsComponent().productMatrix(), 'variationKey')
                     ),
                     variationKeyMap = this._getVariationKeyMap(items),
                     rowsForDisable = _.keys(_.pick(
                         variationKeyMap,
-                        function (variationKey) {
+                        function(variationKey) {
                             return configurableVariationKeys.indexOf(variationKey) !== -1;
                         }
                     ));
@@ -307,11 +307,11 @@ define([
         /**
          * @private
          */
-        _handleManualGridSelect: function (selected) {
-            var selectedRows, selectedVariationKeys;
+        _handleManualGridSelect: function(selected) {
+            let selectedRows, selectedVariationKeys;
 
-            if (this.callbackName == 'appendProducts') { //eslint-disable-line eqeqeq
-                selectedRows = _.filter(this.productsProvider().data.items, function (row) {
+            if (this.callbackName == 'appendProducts') { // eslint-disable-line eqeqeq
+                selectedRows = _.filter(this.productsProvider().data.items, function(row) {
                     return selected.indexOf(row['entity_id']) !== -1;
                 });
                 selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
@@ -326,14 +326,13 @@ define([
          * @returns {Array} [{entity_id: variation-key}, ...]
          * @private
          */
-        _getVariationKeyMap: function (items) {
+        _getVariationKeyMap: function(items) {
             this._variationKeyMap = {};
 
-            _.each(items, function (row) {
+            _.each(items, function(row) {
                 this._variationKeyMap[row['entity_id']] = _.values(
                     _.pick(row, this._getAttributesCodes())
                 ).sort().join('-');
-
             }, this);
 
             return this._variationKeyMap;
@@ -343,18 +342,18 @@ define([
          * Set filter
          * @private
          */
-        _setFilter: function (filterData) {
-            this.productsProvider(function (provider) {
+        _setFilter: function(filterData) {
+            this.productsProvider(function(provider) {
                 provider.params['filters_modifier'] = filterData['filters_modifier'];
                 provider.params['attributes_codes'] = this._getAttributesCodes();
             }.bind(this));
 
-            this.productsFilter(function (filter) {
+            this.productsFilter(function(filter) {
                 filter.set('filters', _.extend({
-                    'filters_modifier': filterData['filters_modifier']
+                    'filters_modifier': filterData['filters_modifier'],
                 }, filterData.filters))
                     .apply();
             });
-        }
+        },
     });
 });

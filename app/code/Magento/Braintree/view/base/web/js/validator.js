@@ -2,11 +2,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define([
-    'underscore'
-], function (_) {
+    'underscore',
+], function(_) {
     'use strict';
 
     return {
@@ -16,7 +16,7 @@ define([
          * Set configuration
          * @param {Object} config
          */
-        setConfig: function (config) {
+        setConfig: function(config) {
             this.config = config;
         },
 
@@ -24,7 +24,7 @@ define([
          * Get List of available card types
          * @returns {*|exports.defaults.availableCardTypes|{}}
          */
-        getAvailableCardTypes: function () {
+        getAvailableCardTypes: function() {
             return this.config.availableCardTypes;
         },
 
@@ -32,7 +32,7 @@ define([
          * Get list of card types
          * @returns {Object}
          */
-        getCcTypesMapper: function () {
+        getCcTypesMapper: function() {
             return this.config.ccTypesMapper;
         },
 
@@ -42,8 +42,8 @@ define([
          * @param {Object} availableTypes
          * @returns {*}
          */
-        getMageCardType: function (type, availableTypes) {
-            var storedCardType = null,
+        getMageCardType: function(type, availableTypes) {
+            let storedCardType = null,
                 mapper = this.getCcTypesMapper();
 
             if (type && typeof mapper[type] !== 'undefined') {
@@ -63,8 +63,8 @@ define([
          * @param {Object} countrySpecificCardTypes
          * @returns {Object}
          */
-        collectTypes: function (availableTypes, countrySpecificCardTypes) {
-            var key,
+        collectTypes: function(availableTypes, countrySpecificCardTypes) {
+            let key,
                 filteredTypes = [];
 
             for (key in availableTypes) {
@@ -81,13 +81,12 @@ define([
          * @param {String} countryId
          * @returns {*}
          */
-        getCountrySpecificCardTypes: function (countryId) {
+        getCountrySpecificCardTypes: function(countryId) {
             if (typeof this.config.countrySpecificCardTypes[countryId] !== 'undefined') {
-
                 return this.config.countrySpecificCardTypes[countryId];
             }
 
             return false;
-        }
+        },
     };
 });

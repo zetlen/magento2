@@ -9,13 +9,13 @@
 define([
     'underscore',
     'uiRegistry',
-    'uiClass'
-], function (_, registry, Class) {
+    'uiClass',
+], function(_, registry, Class) {
     'use strict';
 
     return Class.extend({
         defaults: {
-            rules: []
+            rules: [],
         },
 
         /**
@@ -23,7 +23,7 @@ define([
          *
          * @returns {DataSwitcher} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initRules();
 
@@ -34,7 +34,7 @@ define([
          *
          * @returns {DataSwitcher} Chainable.
          */
-        initRules: function () {
+        initRules: function() {
             this.rules.forEach(this.initRule, this);
 
             return this;
@@ -45,8 +45,8 @@ define([
          * @param {Object} rule - Rule definition.
          * @returns {DataSwitcher} Chainable.
          */
-        initRule: function (rule) {
-            var handler = this.onValueChange.bind(this, rule);
+        initRule: function(rule) {
+            let handler = this.onValueChange.bind(this, rule);
 
             if (!rule.target) {
                 rule.target = this.target;
@@ -56,7 +56,7 @@ define([
                 rule.property = this.property;
             }
 
-            registry.get(rule.target, function (target) {
+            registry.get(rule.target, function(target) {
                 this.applyRule(rule, target.get(rule.property));
                 target.on(rule.property, handler);
             }.bind(this));
@@ -69,7 +69,7 @@ define([
          * @param {Object} rule - Rule definition.
          * @returns {DataSwitcher} Chainable.
          */
-        addRule: function (rule) {
+        addRule: function(rule) {
             this.rules.push(rule);
             this.initRule(rule);
 
@@ -81,10 +81,10 @@ define([
          * @param {Object} rule - Rule object.
          * @param {*} value - Current value associated with a rule.
          */
-        applyRule: function (rule, value) {
-            var actions = rule.actions;
+        applyRule: function(rule, value) {
+            let actions = rule.actions;
 
-            //TODO Refactor this logic in scope of MAGETWO-48585
+            // TODO Refactor this logic in scope of MAGETWO-48585
             /* eslint-disable eqeqeq */
             if (rule.value != value) {
                 return;
@@ -100,9 +100,9 @@ define([
          *
          * @param {Object} action - Action object.
          */
-        applyAction: function (action) {
-            registry.get(action.target, function (target) {
-                var callback = target[action.callback];
+        applyAction: function(action) {
+            registry.get(action.target, function(target) {
+                let callback = target[action.callback];
 
                 callback.apply(target, action.params || []);
             });
@@ -113,8 +113,8 @@ define([
          * @param {Object} rule - Rules object.
          * @param {*} value - Current value associated with a rule.
          */
-        onValueChange: function (rule, value) {
+        onValueChange: function(rule, value) {
             this.applyRule(rule, value);
-        }
+        },
     });
 });

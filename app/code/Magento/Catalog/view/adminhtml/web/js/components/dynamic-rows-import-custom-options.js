@@ -6,19 +6,19 @@
 define([
     'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
     'underscore',
-    'mageUtils'
-], function (DynamicRows, _, utils) {
+    'mageUtils',
+], function(DynamicRows, _, utils) {
     'use strict';
 
-    var maxId = 0,
+    let maxId = 0,
 
     /**
      * Stores max option_id value of the options from recordData once on initialization
      * @param {Array} data - array with records data
      */
-    initMaxId = function (data) {
+    initMaxId = function(data) {
         if (data && data.length) {
-            maxId = ~~_.max(data, function (record) {
+            maxId = ~~_.max(data, function(record) {
                 return ~~record['option_id'];
             })['option_id'];
         }
@@ -28,18 +28,18 @@ define([
         defaults: {
             mappingSettings: {
                 enabled: false,
-                distinct: false
+                distinct: false,
             },
             update: true,
             map: {
-                'option_id': 'option_id'
+                'option_id': 'option_id',
             },
             identificationProperty: 'option_id',
-            identificationDRProperty: 'option_id'
+            identificationDRProperty: 'option_id',
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
             initMaxId(this.recordData());
 
@@ -47,18 +47,18 @@ define([
         },
 
         /** @inheritdoc */
-        processingInsertData: function (data) {
-            var options = [],
+        processingInsertData: function(data) {
+            let options = [],
                 currentOption;
 
             if (!data) {
                 return;
             }
-            _.each(data, function (item) {
+            _.each(data, function(item) {
                 if (!item.options) {
                     return;
                 }
-                _.each(item.options, function (option) {
+                _.each(item.options, function(option) {
                     currentOption = utils.copy(option);
 
                     if (currentOption.hasOwnProperty('sort_order')) {
@@ -70,7 +70,7 @@ define([
                     }
 
                     if (currentOption.values.length > 0) {
-                        _.each(currentOption.values, function (optionValue) {
+                        _.each(currentOption.values, function(optionValue) {
                             delete optionValue['option_id'];
                             delete optionValue['option_type_id'];
                         });
@@ -83,7 +83,7 @@ define([
                 return;
             }
             this.cacheGridData = options;
-            _.each(options, function (opt) {
+            _.each(options, function(opt) {
                 this.mappingValue(opt);
             }, this);
 
@@ -93,12 +93,12 @@ define([
         /**
          * Set empty array to dataProvider
          */
-        clearDataProvider: function () {
+        clearDataProvider: function() {
             this.source.set(this.dataProvider, []);
         },
 
         /** @inheritdoc */
-        processingAddChild: function (ctx, index, prop) {
+        processingAddChild: function(ctx, index, prop) {
             if (ctx && !_.isNumber(ctx['option_id'])) {
                 ctx['option_id'] = ++maxId;
             } else if (!ctx) {
@@ -114,8 +114,8 @@ define([
         /**
          * Mutes parent method
          */
-        updateInsertData: function () {
+        updateInsertData: function() {
             return false;
-        }
+        },
     });
 });

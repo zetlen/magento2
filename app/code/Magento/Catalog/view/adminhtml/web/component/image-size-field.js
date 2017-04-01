@@ -8,14 +8,14 @@ define([
     'Magento_Ui/js/lib/validation/utils',
     'Magento_Ui/js/form/element/abstract',
     'Magento_Ui/js/lib/validation/validator',
-    'mage/translate'
-], function ($, utils, Abstract, validator) {
+    'mage/translate',
+], function($, utils, Abstract, validator) {
     'use strict';
 
     validator.addRule(
         'validate-image-size-range',
-        function (value) {
-            var dataAttrRange = /^(\d+)x(\d+)$/,
+        function(value) {
+            let dataAttrRange = /^(\d+)x(\d+)$/,
                 m;
 
             if (utils.isEmptyNoTrim(value)) {
@@ -24,7 +24,7 @@ define([
 
             m = dataAttrRange.exec(value);
 
-            return !!(m &&  m[1] > 0 && m[2] > 0);
+            return !!(m && m[1] > 0 && m[2] > 0);
         },
         $.mage.__('This value does not follow the specified format (for example, 200X300).')
     );
@@ -36,8 +36,8 @@ define([
          *
          * @returns {Boolean}
          */
-        isRangeCorrect: function () {
+        isRangeCorrect: function() {
             return validator('validate-image-size-range', this.value()).passed;
-        }
+        },
     });
 });

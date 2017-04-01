@@ -3,12 +3,12 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
             multiShipping: 'Magento_Multishipping/js/multi-shipping',
             orderOverview: 'Magento_Multishipping/js/overview',
-            payment: 'Magento_Multishipping/js/payment'
-        }
-    }
+            payment: 'Magento_Multishipping/js/payment',
+        },
+    },
 };

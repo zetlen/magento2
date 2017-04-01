@@ -4,9 +4,9 @@
  */
 define(
     [
-        'mage/url'
+        'mage/url',
     ],
-    function (url) {
+    function(url) {
         'use strict';
 
         return {
@@ -15,9 +15,9 @@ define(
             /**
              * Provide redirect to page
              */
-            execute: function () {
+            execute: function() {
                 window.location.replace(url.build(this.redirectUrl));
-            }
+            },
         };
     }
 );

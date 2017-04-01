@@ -9,8 +9,8 @@
 define([
     './insert',
     'mageUtils',
-    'jquery'
-], function (Insert, utils, $) {
+    'jquery',
+], function(Insert, utils, $) {
     'use strict';
 
     /**
@@ -21,7 +21,7 @@ define([
      * @returns {String}
      */
     function getPageActions(elem, actionsClass) {
-        var el = document.createElement('div');
+        let el = document.createElement('div');
 
         el.innerHTML = elem;
 
@@ -36,7 +36,7 @@ define([
      * @returns {String}
      */
     function removePageActions(elem, actionsClass) {
-        var el = document.createElement('div'),
+        let el = document.createElement('div'),
             actions;
 
         el.innerHTML = elem;
@@ -55,39 +55,39 @@ define([
             pageActionsClass: 'page-actions',
             actionsContainerClass: 'page-main-actions',
             exports: {
-                prefix: '${ $.externalFormName }:selectorPrefix'
+                prefix: '${ $.externalFormName }:selectorPrefix',
             },
             imports: {
                 toolbarSection: '${ $.toolbarContainer }:toolbarSection',
                 prefix: '${ $.toolbarContainer }:rootSelector',
-                messagesClass: '${ $.externalFormName }:messagesClass'
+                messagesClass: '${ $.externalFormName }:messagesClass',
             },
             settings: {
                 ajax: {
                     ajaxSave: true,
                     exports: {
-                        ajaxSave: '${ $.externalFormName }:ajaxSave'
+                        ajaxSave: '${ $.externalFormName }:ajaxSave',
                     },
                     imports: {
                         responseStatus: '${ $.externalFormName }:responseStatus',
-                        responseData: '${ $.externalFormName }:responseData'
-                    }
-                }
+                        responseData: '${ $.externalFormName }:responseData',
+                    },
+                },
             },
             modules: {
-                externalForm: '${ $.externalFormName }'
-            }
+                externalForm: '${ $.externalFormName }',
+            },
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             return this._super()
                 .observe('responseStatus');
         },
 
         /** @inheritdoc */
-        initConfig: function (config) {
-            var defaults = this.constructor.defaults;
+        initConfig: function(config) {
+            let defaults = this.constructor.defaults;
 
             utils.extend(defaults, defaults.settings[config.formSubmitType] || {});
 
@@ -95,7 +95,7 @@ define([
         },
 
         /** @inheritdoc*/
-        destroyInserted: function () {
+        destroyInserted: function() {
             if (this.isRendered && this.externalForm()) {
                 this.externalForm().delegate('destroy');
                 this.removeActions();
@@ -107,8 +107,8 @@ define([
         },
 
         /** @inheritdoc */
-        onRender: function (data) {
-            var actions = getPageActions(data, this.pageActionsClass);
+        onRender: function(data) {
+            let actions = getPageActions(data, this.pageActionsClass);
 
             if (!data.length) {
                 return this;
@@ -123,8 +123,8 @@ define([
          *
          * @param {String} actions
          */
-        renderActions: function (actions) {
-            var $container = $('<div/>');
+        renderActions: function(actions) {
+            let $container = $('<div/>');
 
             $container
                 .addClass(this.actionsContainerClass)
@@ -138,7 +138,7 @@ define([
         /**
          * Remove actions toolbar.
          */
-        removeActions: function () {
+        removeActions: function() {
             $(this.formHeader).siblings('.' + this.messagesClass).remove();
             $(this.formHeader).remove();
             this.formHeader = $();
@@ -147,11 +147,11 @@ define([
         /**
          * Reset external form data.
          */
-        resetForm: function () {
+        resetForm: function() {
             if (this.externalSource()) {
                 this.externalSource().trigger('data.reset');
                 this.responseStatus(undefined);
             }
-        }
+        },
     });
 });

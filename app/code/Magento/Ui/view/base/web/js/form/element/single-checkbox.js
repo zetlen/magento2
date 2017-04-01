@@ -9,8 +9,8 @@
 define([
     'Magento_Ui/js/form/element/abstract',
     'underscore',
-    'mage/translate'
-], function (AbstractField, _, $t) {
+    'mage/translate',
+], function(AbstractField, _, $t) {
     'use strict';
 
     return AbstractField.extend({
@@ -25,19 +25,19 @@ define([
             templates: {
                 radio: 'ui/form/components/single/radio',
                 checkbox: 'ui/form/components/single/checkbox',
-                toggle: 'ui/form/components/single/switcher'
+                toggle: 'ui/form/components/single/switcher',
             },
 
             listens: {
                 'checked': 'onCheckedChanged',
-                'value': 'onExtendedValueChanged'
-            }
+                'value': 'onExtendedValueChanged',
+            },
         },
 
         /**
          * @inheritdoc
          */
-        initConfig: function (config) {
+        initConfig: function(config) {
             this._super();
 
             if (!config.elementTmpl) {
@@ -57,7 +57,7 @@ define([
             if (this.prefer === 'toggle' && _.isEmpty(this.toggleLabels)) {
                 this.toggleLabels = {
                     'on': $t('Yes'),
-                    'off': $t('No')
+                    'off': $t('No'),
                 };
             }
 
@@ -84,7 +84,7 @@ define([
         /**
          * @inheritdoc
          */
-        initObservable: function () {
+        initObservable: function() {
             return this
                 ._super()
                 .observe('checked');
@@ -97,9 +97,9 @@ define([
          * @returns {Boolean|undefined}
          */
         getReverseValueMap: function getReverseValueMap(value) {
-            var bool = false;
+            let bool = false;
 
-            _.some(this.valueMap, function (iValue, iBool) {
+            _.some(this.valueMap, function(iValue, iBool) {
                 if (iValue === value) {
                     bool = iBool === 'true';
 
@@ -113,7 +113,7 @@ define([
         /**
          * @inheritdoc
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             if (_.isEmpty(this.valueMap)) {
                 this.on('value', this.onUpdate.bind(this));
             } else {
@@ -129,8 +129,8 @@ define([
          *
          * @param {*} newExportedValue
          */
-        onExtendedValueChanged: function (newExportedValue) {
-            var isMappedUsed = !_.isEmpty(this.valueMap),
+        onExtendedValueChanged: function(newExportedValue) {
+            let isMappedUsed = !_.isEmpty(this.valueMap),
                 oldChecked = this.checked.peek(),
                 oldValue = this.initialValue,
                 newChecked;
@@ -155,8 +155,8 @@ define([
          *
          * @param {Boolean} newChecked
          */
-        onCheckedChanged: function (newChecked) {
-            var isMappedUsed = !_.isEmpty(this.valueMap),
+        onCheckedChanged: function(newChecked) {
+            let isMappedUsed = !_.isEmpty(this.valueMap),
                 oldValue = this.initialValue,
                 newValue;
 
@@ -188,7 +188,7 @@ define([
         /**
          * @inheritdoc
          */
-        onUpdate: function () {
+        onUpdate: function() {
             if (this.hasUnique) {
                 this.setUnique();
             }
@@ -199,7 +199,7 @@ define([
         /**
          * @inheritdoc
          */
-        reset: function () {
+        reset: function() {
             if (this.multiple && this.initialChecked) {
                 this.value.push(this.initialValue);
             } else if (this.multiple && !this.initialChecked) {
@@ -216,7 +216,7 @@ define([
         /**
          * @inheritdoc
          */
-        clear: function () {
+        clear: function() {
             if (this.multiple) {
                 this.value([]);
             } else {
@@ -226,6 +226,6 @@ define([
             this.error(false);
 
             return this;
-        }
+        },
     });
 });

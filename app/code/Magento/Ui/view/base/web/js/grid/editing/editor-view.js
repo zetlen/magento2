@@ -11,8 +11,8 @@ define([
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'uiRegistry',
-    'uiClass'
-], function (ko, $, _, registry, Class) {
+    'uiClass',
+], function(ko, $, _, registry, Class) {
     'use strict';
 
     return Class.extend({
@@ -36,7 +36,7 @@ define([
                             '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
                     '<!-- /ko -->' +
-               '<!-- /ko -->'
+               '<!-- /ko -->',
         },
 
         /**
@@ -44,7 +44,7 @@ define([
          *
          * @returns {View} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(
                 this,
                 'initRoot',
@@ -71,7 +71,7 @@ define([
          * @param {HTMLElement} node
          * @returns {View} Chainable.
          */
-        initRoot: function (node) {
+        initRoot: function(node) {
             $(this.headerButtonsTmpl)
                 .insertBefore(node)
                 .applyBindings(this.model);
@@ -85,7 +85,7 @@ define([
          * @param {HTMLTableElement} table
          * @returns {View} Chainable.
          */
-        initTable: function (table) {
+        initTable: function(table) {
             $(table).bindings(this.tableBindings);
 
             this.initBulk(table);
@@ -100,8 +100,8 @@ define([
          * @param {HTMLTableElement} table
          * @returns {View} Chainable.
          */
-        initBulk: function (table) {
-            var tableBody = $('tbody', table)[0];
+        initBulk: function(table) {
+            let tableBody = $('tbody', table)[0];
 
             $(this.bulkTmpl)
                 .prependTo(tableBody)
@@ -116,11 +116,11 @@ define([
          * @param {HTMLTableRowElement} row
          * @returns {View} Chainable.
          */
-        initRow: function (row) {
-            var $editingRow;
+        initRow: function(row) {
+            let $editingRow;
 
             $(row).extendCtx({
-                    _editor: this.model
+                    _editor: this.model,
                 }).bindings(this.rowBindings);
 
             $editingRow = $(this.rowTmpl)
@@ -138,16 +138,16 @@ define([
          * @param {Object} ctx - Current context of a row.
          * @returns {Object}
          */
-        rowBindings: function (ctx) {
-            var model = this.model;
+        rowBindings: function(ctx) {
+            let model = this.model;
 
             return {
-                visible: ko.computed(function () {
-                    var record = ctx.$row(),
+                visible: ko.computed(function() {
+                    let record = ctx.$row(),
                         index = record && record._rowIndex;
 
                     return !model.isActive(index, true);
-                })
+                }),
             };
         },
 
@@ -156,15 +156,15 @@ define([
          *
          * @returns {Object}
          */
-        tableBindings: function () {
-            var model = this.model;
+        tableBindings: function() {
+            let model = this.model;
 
             return {
                 css: {
-                    '_in-edit': ko.computed(function () {
+                    '_in-edit': ko.computed(function() {
                         return model.hasActive() && !model.permanentlyActive;
-                    })
-                }
+                    }),
+                },
             };
         },
 
@@ -173,8 +173,8 @@ define([
          *
          * @param {ArrayLike} row
          */
-        removeEditingRow: function (row) {
+        removeEditingRow: function(row) {
             _.toArray(row).forEach(ko.removeNode);
-        }
+        },
     });
 });

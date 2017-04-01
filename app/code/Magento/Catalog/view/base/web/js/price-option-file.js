@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.priceOptionFile', {
@@ -15,23 +15,23 @@ define([
             fileNamed: '',
             fieldNameAction: '',
             changeFileSelector: '',
-            deleteFileSelector: ''
+            deleteFileSelector: '',
         },
 
         /**
          * Creates instance of widget
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.fileDeleteFlag = this.fileChangeFlag = false;
             this.inputField = this.element.find('input[name=' + this.options.fileName + ']')[0];
             this.inputFieldAction = this.element.find('input[name=' + this.options.fieldNameAction + ']')[0];
             this.fileNameSpan = this.element.parent('dd').find('.' + this.options.fileNamed);
 
-            $(this.options.changeFileSelector).on('click', $.proxy(function () {
+            $(this.options.changeFileSelector).on('click', $.proxy(function() {
                 this._toggleFileChange();
             }, this));
-            $(this.options.deleteFileSelector).on('click', $.proxy(function () {
+            $(this.options.deleteFileSelector).on('click', $.proxy(function() {
                 this._toggleFileDelete();
             }, this));
         },
@@ -41,7 +41,7 @@ define([
          * then the option to change the file is disabled.
          * @private
          */
-        _toggleFileChange: function () {
+        _toggleFileChange: function() {
             this.element.toggle();
             this.fileChangeFlag = !this.fileChangeFlag;
 
@@ -57,13 +57,13 @@ define([
          * disabled.
          * @private
          */
-        _toggleFileDelete: function () {
+        _toggleFileDelete: function() {
             this.fileDeleteFlag = $(this.options.deleteFileSelector + ':checked').val();
             $(this.inputFieldAction).attr('value',
                 this.fileDeleteFlag ? '' : this.fileChangeFlag ? 'save_new' : 'save_old');
             this.inputField.disabled = this.fileDeleteFlag || !this.fileChangeFlag;
             this.fileNameSpan.css('text-decoration', this.fileDeleteFlag ? 'line-through' : 'none');
-        }
+        },
     });
 
     return $.mage.priceOptionFile;

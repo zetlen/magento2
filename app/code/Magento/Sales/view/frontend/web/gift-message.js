@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.giftMessage', {
@@ -16,14 +16,14 @@ define([
             duration: 100, // Toggle duration.
             expandedClass: 'expanded', // Class added/removed to/from the 'Gift Message' link.
             expandedContentClass: 'expanded-content', // Class added/removed to/from the 'Gift Message' content.
-            lastClass: 'last' // Class added/removed to/from the last item's row in the products table.
+            lastClass: 'last', // Class added/removed to/from the last item's row in the products table.
         },
 
         /**
          * Bind a click handler on the widget's element to toggle the gift message.
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.element.on('click', $.proxy(this._toggleGiftMessage, this));
         },
 
@@ -32,15 +32,15 @@ define([
          * @private
          * @param {jQuery.Event} event - Click event.
          */
-        _toggleGiftMessage: function (event) {
-            var element = $(event.target), // Click target. The 'Gift Message' link or 'Close' button.
+        _toggleGiftMessage: function(event) {
+            let element = $(event.target), // Click target. The 'Gift Message' link or 'Close' button.
                 options = this.options, // Cached widget options.
                 itemId = element.data('item-id'), // The individual item's numeric id.
                 link = $(options.linkPrefix + itemId), // The 'Gift Message' expandable link.
                 row = $(options.rowPrefix + itemId), // The item's row in the products table.
                 region = $('#' + element.attr('aria-controls')); // The gift message container region.
 
-            region.toggleClass(options.expandedContentClass, options.duration, function () {
+            region.toggleClass(options.expandedContentClass, options.duration, function() {
                 if (region.attr('aria-expanded') === 'true') {
                     region.attr('aria-expanded', 'false');
 
@@ -57,7 +57,7 @@ define([
                 link.toggleClass(options.expandedClass);
             });
             event.preventDefault(); // Prevent event propagation and avoid going to the link's href.
-        }
+        },
     });
 
     return $.mage.giftMessage;

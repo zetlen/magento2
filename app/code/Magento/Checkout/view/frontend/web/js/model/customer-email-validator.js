@@ -6,8 +6,8 @@
 define([
     'jquery',
     'Magento_Customer/js/model/customer',
-    'mage/validation'
-], function ($, customer) {
+    'mage/validation',
+], function($, customer) {
     'use strict';
 
     return {
@@ -16,8 +16,8 @@ define([
          *
          * @returns {Boolean}
          */
-        validate: function () {
-            var emailValidationResult = customer.isLoggedIn(),
+        validate: function() {
+            let emailValidationResult = customer.isLoggedIn(),
                 loginFormSelector = 'form[data-role=email-with-possible-login]';
 
             if (!customer.isLoggedIn()) {
@@ -26,6 +26,6 @@ define([
             }
 
             return emailValidationResult;
-        }
+        },
     };
 });

@@ -1,12 +1,12 @@
 require([
     'jquery',
-    'Magento_Customer/js/customer-data'
-], function ($, customerData) {
+    'Magento_Customer/js/customer-data',
+], function($, customerData) {
     'use strict';
 
-    var selectors = {
+    let selectors = {
         qtySelector: '#product_addtocart_form [name="qty"]',
-        productIdSelector: '#product_addtocart_form [name="product"]'
+        productIdSelector: '#product_addtocart_form [name="product"]',
     },
     cartData = customerData.get('cart'),
     productId = $(selectors.productIdSelector).val(),
@@ -16,8 +16,7 @@ require([
     /**
     * Updates product's qty input value according to actual data
     */
-    updateQty = function () {
-
+    updateQty = function() {
         if (productQty || productQty === 0) {
             productQtyInput = productQtyInput || $(selectors.qtySelector);
 
@@ -32,13 +31,13 @@ require([
     *
     * @param {Object} data - cart data from customer-data
     */
-    setProductQty = function (data) {
-        var product;
+    setProductQty = function(data) {
+        let product;
 
         if (!(data && data.items && data.items.length && productId)) {
             return;
         }
-        product = data.items.find(function (item) {
+        product = data.items.find(function(item) {
             return item['product_id'] === productId ||
                 item['item_id'] === productId;
         });
@@ -49,7 +48,7 @@ require([
         productQty = product.qty;
     };
 
-    cartData.subscribe(function (updateCartData) {
+    cartData.subscribe(function(updateCartData) {
         setProductQty(updateCartData);
         updateQty();
     });

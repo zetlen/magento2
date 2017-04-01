@@ -6,21 +6,21 @@
 define([
     'uiComponent',
     'Magento_Checkout/js/model/quote',
-    'underscore'
-], function (Component, quote, _) {
+    'underscore',
+], function(Component, quote, _) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/review/actions',
-            displayArea: 'actions'
+            displayArea: 'actions',
         },
 
         /**
          * @return {*}
          */
-        getActiveView: function () {
-            var view = this.getViewByCode(quote.paymentMethod());
+        getActiveView: function() {
+            let view = this.getViewByCode(quote.paymentMethod());
 
             return view ? view : this.getDefaultView();
         },
@@ -29,9 +29,9 @@ define([
          * @param {*} code
          * @return {Object}
          */
-        getViewByCode: function (code) {
-            return _.find(this.elems(), function (elem) {
-                return elem.index == code && !elem.isDefault; //eslint-disable-line eqeqeq
+        getViewByCode: function(code) {
+            return _.find(this.elems(), function(elem) {
+                return elem.index == code && !elem.isDefault; // eslint-disable-line eqeqeq
             });
         },
 
@@ -40,10 +40,10 @@ define([
          *
          * @return {Object}
          */
-        getDefaultView: function () {
-            return _.find(this.elems(), function (elem) {
+        getDefaultView: function() {
+            return _.find(this.elems(), function(elem) {
                 return elem.isDefault;
             });
-        }
+        },
     });
 });

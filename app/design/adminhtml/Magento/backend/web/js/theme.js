@@ -4,11 +4,11 @@
  */
 
 define('globalNavigationScroll', [
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
-    var win = $(window),
+    let win = $(window),
         subMenuClass = '.submenu',
         fixedClassName = '_fixed',
         menu = $('.menu-wrapper'),
@@ -58,7 +58,6 @@ define('globalNavigationScroll', [
      * Calculate and apply menu position
      */
     function positionMenu() {
-
         //  Spotting positions and heights
         winHeight = win.height();
         contentHeight = content.height();
@@ -66,49 +65,39 @@ define('globalNavigationScroll', [
         scrollStep = winTop - winTopLast;
 
         if (isMenuFixed()) { // fixed menu cases
-
             checkAddClass(menu, fixedClassName);
 
             if (menuHeight > winHeight) { // smart scroll cases
-
-                if (winTop > winTopLast) { //eslint-disable-line max-depth
-
+                if (winTop > winTopLast) { // eslint-disable-line max-depth
                     menuScrollMax = menuHeight - winHeight;
 
                     nextTop < menuScrollMax - scrollStep ?
                         nextTop += scrollStep : nextTop = menuScrollMax;
 
                     menu.css('top', -nextTop);
-
                 } else if (winTop <= winTopLast) { // scroll up
-
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
 
                     menu.css('top', -nextTop);
-
                 }
-
             }
-
         } else { // static menu cases
             checkRemoveClass(menu, fixedClassName);
         }
 
         //  Save previous window scrollTop
         winTopLast = winTop;
-
     }
 
     positionMenu(); // page start calculation
 
     //  Change position on scroll
-    win.on('scroll', function () {
+    win.on('scroll', function() {
         positionMenu();
     });
 
-    win.on('resize', function () {
-
+    win.on('resize', function() {
         winHeight = win.height();
 
         //  Reset position if fixed and out of smart scroll
@@ -116,13 +105,11 @@ define('globalNavigationScroll', [
             menu.removeAttr('style');
             menuItems.off();
         }
-
     });
 
     //  Add event to menuItems to check submenu overlap
-    menuItems.on('click', function () {
-
-        var submenu = $(this).children(subMenuClass),
+    menuItems.on('click', function() {
+        let submenu = $(this).children(subMenuClass),
             delta,
             logo = $('.logo')[0].offsetHeight;
 
@@ -138,14 +125,13 @@ define('globalNavigationScroll', [
             menuHeight = submenuHeight;
         }
     });
-
 });
 
 define('globalNavigation', [
     'jquery',
     'jquery/ui',
-    'globalNavigationScroll'
-], function ($) {
+    'globalNavigationScroll',
+], function($) {
     'use strict';
 
     $.widget('mage.globalNavigation', {
@@ -156,14 +142,14 @@ define('globalNavigation', [
                 topLevelItem: '.level-0',
                 topLevelHref: '> a',
                 subMenu: '> .submenu',
-                closeSubmenuBtn: '[data-role="close-submenu"]'
+                closeSubmenuBtn: '[data-role="close-submenu"]',
             },
-            overlayTmpl: '<div class="admin__menu-overlay"></div>'
+            overlayTmpl: '<div class="admin__menu-overlay"></div>',
         },
 
         /** @inheritdoc */
-        _create: function () {
-            var selectors = this.options.selectors;
+        _create: function() {
+            let selectors = this.options.selectors;
 
             this.menu = this.element;
             this.menuLinks = $(selectors.topLevelHref, selectors.topLevelItem);
@@ -177,7 +163,7 @@ define('globalNavigation', [
          * @return {Object}
          * @private
          */
-        _initOverlay: function () {
+        _initOverlay: function() {
             this.overlay = $(this.options.overlayTmpl).appendTo('body').hide(0);
 
             return this;
@@ -186,8 +172,8 @@ define('globalNavigation', [
         /**
          * @private
          */
-        _bind: function () {
-            var focus = this._focus.bind(this),
+        _bind: function() {
+            let focus = this._focus.bind(this),
                 open = this._open.bind(this),
                 blur = this._blur.bind(this),
                 keyboard = this._keyboard.bind(this);
@@ -205,8 +191,8 @@ define('globalNavigation', [
          * Remove active class from current menu item
          * Turn back active class to current page menu item
          */
-        _blur: function (e) {
-            var selectors = this.options.selectors,
+        _blur: function(e) {
+            let selectors = this.options.selectors,
                 menuItem = $(e.target).closest(selectors.topLevelItem),
                 currentItem = $(selectors.menu).find(selectors.currentItem);
 
@@ -217,8 +203,8 @@ define('globalNavigation', [
         /**
          * Add focus to active menu item
          */
-        _keyboard: function (e) {
-            var selectors = this.options.selectors,
+        _keyboard: function(e) {
+            let selectors = this.options.selectors,
                 menuItem = $(e.target).closest(selectors.topLevelItem);
 
             if (e.which === 13) {
@@ -230,8 +216,8 @@ define('globalNavigation', [
         /**
          * Toggle active state on focus
          */
-        _focus: function (e) {
-            var selectors = this.options.selectors,
+        _focus: function(e) {
+            let selectors = this.options.selectors,
                 menuItem = $(e.target).closest(selectors.topLevelItem);
 
             menuItem.addClass('_active')
@@ -243,8 +229,8 @@ define('globalNavigation', [
          * @param {jQuery.Event} e
          * @private
          */
-        _closeSubmenu: function (e) {
-            var selectors = this.options.selectors,
+        _closeSubmenu: function(e) {
+            let selectors = this.options.selectors,
                 currentItem = $(selectors.menu).find(selectors.currentItem);
 
             this._close(e);
@@ -256,8 +242,8 @@ define('globalNavigation', [
          * @param {jQuery.Event} e
          * @private
          */
-        _open: function (e) {
-            var selectors = this.options.selectors,
+        _open: function(e) {
+            let selectors = this.options.selectors,
                 menuItemSelector = selectors.topLevelItem,
                 menuItem = $(e.target).closest(menuItemSelector),
                 subMenu = $(selectors.subMenu, menuItem),
@@ -284,8 +270,8 @@ define('globalNavigation', [
          * @param {jQuery.Event} e
          * @private
          */
-        _close: function (e) {
-            var selectors = this.options.selectors,
+        _close: function(e) {
+            let selectors = this.options.selectors,
                 menuItem = this.menu.find(selectors.topLevelItem + '._show'),
                 subMenu = $(selectors.subMenu, menuItem),
                 closeBtn = subMenu.find(selectors.closeSubmenuBtn),
@@ -302,7 +288,7 @@ define('globalNavigation', [
             subMenu.attr('aria-expanded', 'false');
 
             menuItem.removeClass('_show _active');
-        }
+        },
     });
 
     return $.mage.globalNavigation;
@@ -310,19 +296,19 @@ define('globalNavigation', [
 
 define('globalSearch', [
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.globalSearch', {
         options: {
             field: '.search-global-field',
             fieldActiveClass: '_active',
-            input: '#search-global'
+            input: '#search-global',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this.field = $(this.options.field);
             this.input = $(this.options.input);
             this._events();
@@ -331,19 +317,19 @@ define('globalSearch', [
         /**
          * @private
          */
-        _events: function () {
-            var self = this;
+        _events: function() {
+            let self = this;
 
-            this.input.on('blur.resetGlobalSearchForm', function () {
+            this.input.on('blur.resetGlobalSearchForm', function() {
                 if (!self.input.val()) {
                     self.field.removeClass(self.options.fieldActiveClass);
                 }
             });
 
-            this.input.on('focus.activateGlobalSearchForm', function () {
+            this.input.on('focus.activateGlobalSearchForm', function() {
                 self.field.addClass(self.options.fieldActiveClass);
             });
-        }
+        },
     });
 
     return $.mage.globalSearch;
@@ -351,19 +337,19 @@ define('globalSearch', [
 
 define('modalPopup', [
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.modalPopup', {
         options: {
             popup: '.popup',
             btnDismiss: '[data-dismiss="popup"]',
-            btnHide: '[data-hide="popup"]'
+            btnHide: '[data-hide="popup"]',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this.fade = this.element;
             this.popup = $(this.options.popup, this.fade);
             this.btnDismiss = $(this.options.btnDismiss, this.popup);
@@ -375,19 +361,19 @@ define('modalPopup', [
         /**
          * @private
          */
-        _events: function () {
-            var self = this;
+        _events: function() {
+            let self = this;
 
             this.btnDismiss
-                .on('click.dismissModalPopup', function () {
+                .on('click.dismissModalPopup', function() {
                     self.fade.remove();
                 });
 
             this.btnHide
-                .on('click.hideModalPopup', function () {
+                .on('click.hideModalPopup', function() {
                     self.fade.hide();
                 });
-        }
+        },
     });
 
     return $.mage.modalPopup;
@@ -395,8 +381,8 @@ define('modalPopup', [
 
 define('useDefault', [
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.useDefault', {
@@ -404,11 +390,11 @@ define('useDefault', [
             field: '.field',
             useDefault: '.use-default',
             checkbox: '.use-default-control',
-            label: '.use-default-label'
+            label: '.use-default-label',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this.el = this.element;
             this.field = $(this.el).closest(this.options.field);
             this.useDefault = $(this.options.useDefault, this.field);
@@ -422,15 +408,15 @@ define('useDefault', [
         /**
          * @private
          */
-        _events: function () {
-            var self = this;
+        _events: function() {
+            let self = this;
 
             this.el.on(
                     'change.toggleUseDefaultVisibility keyup.toggleUseDefaultVisibility',
                     $.proxy(this._toggleUseDefaultVisibility, this)
                 ).trigger('change.toggleUseDefaultVisibility');
 
-            this.checkboxon('change.setOrigValue', function () {
+            this.checkboxon('change.setOrigValue', function() {
                 if ($(this).prop('checked')) {
                     self.el
                         .val(self.origValue)
@@ -444,26 +430,26 @@ define('useDefault', [
         /**
          * @private
          */
-        _toggleUseDefaultVisibility: function () {
-            var curValue = this.el.val(),
+        _toggleUseDefaultVisibility: function() {
+            let curValue = this.el.val(),
                 origValue = this.origValue;
 
-            this[curValue != origValue ? '_show' : '_hide'](); //eslint-disable-line eqeqeq
+            this[curValue != origValue ? '_show' : '_hide'](); // eslint-disable-line eqeqeq
         },
 
         /**
          * @private
          */
-        _show: function () {
+        _show: function() {
             this.useDefault.show();
         },
 
         /**
          * @private
          */
-        _hide: function () {
+        _hide: function() {
             this.useDefault.hide();
-        }
+        },
     });
 
     return $.mage.useDefault;
@@ -471,8 +457,8 @@ define('useDefault', [
 
 define('loadingPopup', [
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.loadingPopup', {
@@ -481,11 +467,11 @@ define('loadingPopup', [
             timeout: 5000,
             timeoutId: null,
             callback: null,
-            template: null
+            template: null,
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this.template =
                 '<div class="popup popup-loading">' +
                 '<div class="popup-inner">' + this.options.message + '</div>' +
@@ -500,14 +486,14 @@ define('loadingPopup', [
         /**
          * @private
          */
-        _events: function () {
-            var self = this;
+        _events: function() {
+            let self = this;
 
             this.element
-                .on('showLoadingPopup', function () {
+                .on('showLoadingPopup', function() {
                     self._show();
                 })
-                .on('hideLoadingPopup', function () {
+                .on('hideLoadingPopup', function() {
                     self._hide();
                 });
         },
@@ -515,8 +501,8 @@ define('loadingPopup', [
         /**
          * @private
          */
-        _show: function () {
-            var options = this.options,
+        _show: function() {
+            let options = this.options,
                 timeout = options.timeout;
 
             $('body').trigger('processStart');
@@ -529,20 +515,20 @@ define('loadingPopup', [
         /**
          * @private
          */
-        _hide: function () {
+        _hide: function() {
             $('body').trigger('processStop');
         },
 
         /**
          * @private
          */
-        _delayedHide: function () {
+        _delayedHide: function() {
             this._hide();
 
             this.options.callback && this.options.callback();
 
             this.options.timeoutId && clearTimeout(this.options.timeoutId);
-        }
+        },
     });
 
     return $.mage.loadingPopup;
@@ -551,40 +537,40 @@ define('loadingPopup', [
 define('collapsable', [
     'jquery',
     'jquery/ui',
-    'jquery/jquery.tabs'
-], function ($) {
+    'jquery/jquery.tabs',
+], function($) {
     'use strict';
 
     $.widget('mage.collapsable', {
         options: {
             parent: null,
             openedClass: 'opened',
-            wrapper: '.fieldset-wrapper'
+            wrapper: '.fieldset-wrapper',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._events();
         },
 
         /** @inheritdoc */
-        _events: function () {
-            var self = this;
+        _events: function() {
+            let self = this;
 
             this.element
-                .on('show', function (e) {
-                    var fieldsetWrapper = $(this).closest(self.options.wrapper);
+                .on('show', function(e) {
+                    let fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.addClass(self.options.openedClass);
                     e.stopPropagation();
                 })
-                .on('hide', function (e) {
-                    var fieldsetWrapper = $(this).closest(self.options.wrapper);
+                .on('hide', function(e) {
+                    let fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.removeClass(self.options.openedClass);
                     e.stopPropagation();
                 });
-        }
+        },
     });
 
     return $.mage.collapsable;
@@ -595,15 +581,15 @@ define('js/theme', [
     'mage/smart-keyboard-handler',
     'mage/ie-class-fixer',
     'collapsable',
-    'domReady!'
-], function ($, keyboardHandler) {
+    'domReady!',
+], function($, keyboardHandler) {
     'use strict';
 
     /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
     $('.collapse').collapsable();
 
-    $.each($('.entry-edit'), function (i, entry) {
-        $('.collapse:first', entry).filter(function () {
+    $.each($('.entry-edit'), function(i, entry) {
+        $('.collapse:first', entry).filter(function() {
             return $(this).data('collapsed') !== true;
         }).collapse('show');
     });

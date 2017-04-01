@@ -17,9 +17,9 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
-    'mage/translate'
+    'mage/translate',
 ],
-function (
+function(
     ko,
     _,
     Component,
@@ -37,27 +37,27 @@ function (
 ) {
     'use strict';
 
-    var lastSelectedBillingAddress = null,
+    let lastSelectedBillingAddress = null,
         newAddressOption = {
             /**
              * Get new address label
              * @returns {String}
              */
-            getAddressInline: function () {
+            getAddressInline: function() {
                 return $t('New Address');
             },
-            customerAddressId: null
+            customerAddressId: null,
         },
         countryData = customerData.get('directory-data'),
-        addressOptions = addressList().filter(function (address) {
-            return address.getType() == 'customer-address'; //eslint-disable-line eqeqeq
+        addressOptions = addressList().filter(function(address) {
+            return address.getType() == 'customer-address'; // eslint-disable-line eqeqeq
         });
 
     addressOptions.push(newAddressOption);
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/billing-address'
+            template: 'Magento_Checkout/billing-address',
         },
         currentBillingAddress: quote.billingAddress,
         addressOptions: addressOptions,
@@ -66,9 +66,9 @@ function (
         /**
          * Init component
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
-            quote.paymentMethod.subscribe(function () {
+            quote.paymentMethod.subscribe(function() {
                 checkoutDataResolver.resolveBillingAddress();
             }, this);
         },
@@ -76,23 +76,23 @@ function (
         /**
          * @return {exports.initObservable}
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe({
                     selectedAddress: null,
                     isAddressDetailsVisible: quote.billingAddress() != null,
                     isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length === 1,
                     isAddressSameAsShipping: false,
-                    saveInAddressBook: 1
+                    saveInAddressBook: 1,
                 });
 
-            quote.billingAddress.subscribe(function (newAddress) {
+            quote.billingAddress.subscribe(function(newAddress) {
                 if (quote.isVirtual()) {
                     this.isAddressSameAsShipping(false);
                 } else {
                     this.isAddressSameAsShipping(
                         newAddress != null &&
-                        newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
+                        newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() // eslint-disable-line eqeqeq
                     );
                 }
 
@@ -107,7 +107,7 @@ function (
             return this;
         },
 
-        canUseShippingAddress: ko.computed(function () {
+        canUseShippingAddress: ko.computed(function() {
             return !quote.isVirtual() && quote.shippingAddress() && quote.shippingAddress().canUseForBilling();
         }),
 
@@ -115,14 +115,14 @@ function (
          * @param {Object} address
          * @return {*}
          */
-        addressOptionsText: function (address) {
+        addressOptionsText: function(address) {
             return address.getAddressInline();
         },
 
         /**
          * @return {Boolean}
          */
-        useShippingAddress: function () {
+        useShippingAddress: function() {
             if (this.isAddressSameAsShipping()) {
                 selectBillingAddress(quote.shippingAddress());
 
@@ -141,10 +141,10 @@ function (
         /**
          * Update address action
          */
-        updateAddress: function () {
-            var addressData, newBillingAddress;
+        updateAddress: function() {
+            let addressData, newBillingAddress;
 
-            if (this.selectedAddress() && this.selectedAddress() != newAddressOption) { //eslint-disable-line eqeqeq
+            if (this.selectedAddress() && this.selectedAddress() != newAddressOption) { // eslint-disable-line eqeqeq
                 selectBillingAddress(this.selectedAddress());
                 checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
             } else {
@@ -158,7 +158,7 @@ function (
                 if (!this.source.get('params.invalid')) {
                     addressData = this.source.get(this.dataScopePrefix);
 
-                    if (customer.isLoggedIn() && !this.customerHasAddresses) { //eslint-disable-line max-depth
+                    if (customer.isLoggedIn() && !this.customerHasAddresses) { // eslint-disable-line max-depth
                         this.saveInAddressBook(1);
                     }
                     addressData['save_in_address_book'] = this.saveInAddressBook() ? 1 : 0;
@@ -176,7 +176,7 @@ function (
         /**
          * Edit address action
          */
-        editAddress: function () {
+        editAddress: function() {
             lastSelectedBillingAddress = quote.billingAddress();
             quote.billingAddress(null);
             this.isAddressDetailsVisible(false);
@@ -185,7 +185,7 @@ function (
         /**
          * Cancel address edit action
          */
-        cancelAddressEdit: function () {
+        cancelAddressEdit: function() {
             this.restoreBillingAddress();
 
             if (quote.billingAddress()) {
@@ -202,7 +202,7 @@ function (
         /**
          * Restore billing address
          */
-        restoreBillingAddress: function () {
+        restoreBillingAddress: function() {
             if (lastSelectedBillingAddress != null) {
                 selectBillingAddress(lastSelectedBillingAddress);
             }
@@ -211,22 +211,22 @@ function (
         /**
          * @param {Object} address
          */
-        onAddressChange: function (address) {
-            this.isAddressFormVisible(address == newAddressOption); //eslint-disable-line eqeqeq
+        onAddressChange: function(address) {
+            this.isAddressFormVisible(address == newAddressOption); // eslint-disable-line eqeqeq
         },
 
         /**
          * @param {Number} countryId
          * @return {*}
          */
-        getCountryName: function (countryId) {
+        getCountryName: function(countryId) {
             return countryData()[countryId] != undefined ? countryData()[countryId].name : ''; //eslint-disable-line
         },
 
         /**
          * Trigger action to update shipping and billing addresses
          */
-        updateAddresses: function () {
+        updateAddresses: function() {
             if (window.checkoutConfig.reloadOnBillingAddress ||
                 !window.checkoutConfig.displayBillingOnPaymentMethod
             ) {
@@ -239,8 +239,8 @@ function (
          * @param {Object} parent
          * @returns {String}
          */
-        getCode: function (parent) {
+        getCode: function(parent) {
             return _.isFunction(parent.getCode) ? parent.getCode() : 'shared';
-        }
+        },
     });
 });

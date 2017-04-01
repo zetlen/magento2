@@ -6,25 +6,25 @@
 define([
     'uiComponent',
     'Magento_Customer/js/customer-data',
-    'Magento_Customer/js/view/customer'
-], function (Component, customerData) {
+    'Magento_Customer/js/view/customer',
+], function(Component, customerData) {
     'use strict';
 
     return Component.extend({
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             this.review = customerData.get('review').extend({
-                disposableCustomerData: 'review'
+                disposableCustomerData: 'review',
             });
         },
 
         /**
          * @return {*}
          */
-        nickname: function () {
+        nickname: function() {
             return this.review().nickname || customerData.get('customer')().firstname;
-        }
+        },
     });
 });

@@ -8,17 +8,17 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, Collapsible) {
+    'Magento_Ui/js/lib/collapsible',
+], function(_, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
         defaults: {
             listens: {
-                '${ $.provider }:data.validate': 'onValidate'
+                '${ $.provider }:data.validate': 'onValidate',
             },
             collapsible: false,
-            opened: true
+            opened: true,
         },
 
         /**
@@ -27,7 +27,7 @@ define([
          * @param {Object} elem
          * @returns {Object} - reference to instance
          */
-        initElement: function (elem) {
+        initElement: function(elem) {
             this._super()
                 .initActivation(elem);
 
@@ -41,8 +41,8 @@ define([
          * @param  {Object} elem
          * @returns {Object} - reference to instance
          */
-        initActivation: function (elem) {
-            var elems   = this.elems(),
+        initActivation: function(elem) {
+            let elems = this.elems(),
                 isFirst = !elems.indexOf(elem);
 
             if (isFirst || elem.active()) {
@@ -60,11 +60,11 @@ define([
          *
          * @param {Object} elem
          */
-        validate: function (elem) {
-            var result  = elem.delegate('validate'),
+        validate: function(elem) {
+            let result = elem.delegate('validate'),
                 invalid;
 
-            invalid = _.find(result, function (item) {
+            invalid = _.find(result, function(item) {
                 return !item.valid;
             });
 
@@ -80,10 +80,10 @@ define([
          * Sets 'allValid' property of instance to true, then calls 'validate' method
          * of instance for each element.
          */
-        onValidate: function () {
-            this.elems.sortBy(function (elem) {
+        onValidate: function() {
+            this.elems.sortBy(function(elem) {
                 return !elem.active();
             }).some(this.validate, this);
-        }
+        },
     });
 });

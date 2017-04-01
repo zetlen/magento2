@@ -7,8 +7,8 @@ define([
     'Magento_Ui/js/lib/view/utils/async',
     'uiRegistry',
     'underscore',
-    'Magento_Ui/js/form/components/insert-listing'
-], function ($, registry, _, InsertListing) {
+    'Magento_Ui/js/form/components/insert-listing',
+], function($, registry, _, InsertListing) {
     'use strict';
 
     return InsertListing.extend({
@@ -23,22 +23,22 @@ define([
             formProvider: '',
             modules: {
                 form: '${ $.formProvider }',
-                modal: '${ $.parentName }'
+                modal: '${ $.parentName }',
             },
-            productType: ''
+            productType: '',
         },
 
         /**
          * Render attribute
          */
-        render: function () {
+        render: function() {
             this._super();
         },
 
         /**
          * Save attribute
          */
-        save: function () {
+        save: function() {
             this.addSelectedAttributes();
             this._super();
         },
@@ -46,7 +46,7 @@ define([
         /**
          * Add selected attributes
          */
-        addSelectedAttributes: function () {
+        addSelectedAttributes: function() {
             $.ajax({
                 url: this.addAttributeUrl,
                 type: 'POST',
@@ -58,19 +58,19 @@ define([
                     groupName: this.groupName,
                     groupSortOrder: this.groupSortOrder,
                     productId: this.productId,
-                    componentJson: 1
+                    componentJson: 1,
                 },
-                success: function () {
+                success: function() {
                     this.form().params = {
                         set: this.attributeSetId,
                         id: this.productId,
-                        type: this.productType
+                        type: this.productType,
                     };
                     this.form().reload();
                     this.modal().state(false);
                     this.reload();
-                }.bind(this)
+                }.bind(this),
             });
-        }
+        },
     });
 });

@@ -2,12 +2,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true expr:true*/
+/* jshint browser:true jquery:true expr:true*/
 define([
     'jquery',
     'Magento_Catalog/catalog/type-events',
-    'Magento_Catalog/js/product/weight-handler'
-], function ($, productType, weight) {
+    'Magento_Catalog/js/product/weight-handler',
+], function($, productType, weight) {
     'use strict';
 
     return {
@@ -15,7 +15,7 @@ define([
         /**
          * Constructor component
          */
-        'Magento_Bundle/js/bundle-type-handler': function () {
+        'Magento_Bundle/js/bundle-type-handler': function() {
             this.bindAll();
             this._initType();
         },
@@ -23,7 +23,7 @@ define([
         /**
          * Bind all
          */
-        bindAll: function () {
+        'bindAll': function() {
             $(document).on('changeTypeProduct', this._initType.bind(this));
         },
 
@@ -31,7 +31,7 @@ define([
          * Init type
          * @private
          */
-        _initType: function () {
+        '_initType': function() {
             if (
                 productType.type.init === 'bundle' &&
                 productType.type.current !== 'bundle' &&
@@ -39,6 +39,6 @@ define([
             ) {
                 weight.switchWeight();
             }
-        }
+        },
     };
 });

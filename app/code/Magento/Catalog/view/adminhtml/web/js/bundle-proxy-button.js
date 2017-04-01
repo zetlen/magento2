@@ -6,8 +6,8 @@
 define([
     'Magento_Ui/js/form/components/button',
     'uiRegistry',
-    'underscore'
-], function (Button, registry, _) {
+    'underscore',
+], function(Button, registry, _) {
     'use strict';
 
     return Button.extend({
@@ -17,14 +17,14 @@ define([
             value: [],
             imports: {
                 currentRecordName: '${ $.provider }:${ $.currentRecordNamespace }',
-                listingData: '${ $.provider }:${ $.listingDataProvider }'
+                listingData: '${ $.provider }:${ $.listingDataProvider }',
             },
             links: {
-                value: '${ $.provider }:${ $.dataScope }'
+                value: '${ $.provider }:${ $.dataScope }',
             },
             listens: {
-                listingData: 'setListingData'
-            }
+                listingData: 'setListingData',
+            },
         },
 
         /**
@@ -32,7 +32,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initSource();
 
@@ -44,11 +44,11 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe([
                     'value',
-                    'listingData'
+                    'listingData',
                 ]);
 
             return this;
@@ -60,7 +60,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        destroy: function () {
+        destroy: function() {
             this._super();
             this.source.set(this.listingDataProvider, []);
 
@@ -74,7 +74,7 @@ define([
          * @returns {Object} Chainable.
          */
 
-        action: function () {
+        action: function() {
             this._super();
             this.source.set(this.currentRecordNamespace, this.name);
             this.source.set(this.listingDataProvider, this.value());
@@ -87,7 +87,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initSource: function () {
+        initSource: function() {
             if (!_.isFunction(this.source)) {
                 this.source = registry.get(this.provider);
             }
@@ -100,12 +100,12 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        setListingData: function (data) {
+        setListingData: function(data) {
             if (this.name === this.currentRecordName) {
                 this.source.set(this.dataScope, data);
             }
 
             return this;
-        }
+        },
     });
 });

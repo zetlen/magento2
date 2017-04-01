@@ -6,11 +6,11 @@
 /* @api */
 define([
     'jquery',
-    'mageUtils'
-], function ($, utils) {
+    'mageUtils',
+], function($, utils) {
     'use strict';
 
-    var types = [
+    let types = [
         {
             title: 'Visa',
             type: 'VI',
@@ -19,8 +19,8 @@ define([
             lengths: [16],
             code: {
                 name: 'CVV',
-                size: 3
-            }
+                size: 3,
+            },
         },
         {
             title: 'MasterCard',
@@ -30,8 +30,8 @@ define([
             lengths: [16],
             code: {
                 name: 'CVC',
-                size: 3
-            }
+                size: 3,
+            },
         },
         {
             title: 'American Express',
@@ -42,8 +42,8 @@ define([
             lengths: [15],
             code: {
                 name: 'CID',
-                size: 4
-            }
+                size: 4,
+            },
         },
         {
             title: 'Diners',
@@ -53,8 +53,8 @@ define([
             lengths: [14, 16, 17, 18, 19],
             code: {
                 name: 'CVV',
-                size: 3
-            }
+                size: 3,
+            },
         },
         {
             title: 'Discover',
@@ -64,8 +64,8 @@ define([
             lengths: [16, 17, 18, 19],
             code: {
                 name: 'CID',
-                size: 3
-            }
+                size: 3,
+            },
         },
         {
             title: 'JCB',
@@ -75,8 +75,8 @@ define([
             lengths: [16, 17, 18, 19],
             code: {
                 name: 'CVV',
-                size: 3
-            }
+                size: 3,
+            },
         },
         {
             title: 'UnionPay',
@@ -86,8 +86,8 @@ define([
             lengths: [16, 17, 18, 19],
             code: {
                 name: 'CVN',
-                size: 3
-            }
+                size: 3,
+            },
         },
         {
             title: 'Maestro International',
@@ -97,8 +97,8 @@ define([
             lengths: [12, 13, 14, 15, 16, 17, 18, 19],
             code: {
                 name: 'CVC',
-                size: 3
-            }
+                size: 3,
+            },
         },
         {
             title: 'Maestro Domestic',
@@ -108,9 +108,9 @@ define([
             lengths: [12, 13, 14, 15, 16, 17, 18, 19],
             code: {
                 name: 'CVC',
-                size: 3
-            }
-        }
+                size: 3,
+            },
+        },
     ];
 
     return {
@@ -118,8 +118,8 @@ define([
          * @param {*} cardNumber
          * @return {Array}
          */
-        getCardTypes: function (cardNumber) {
-            var i, value,
+        getCardTypes: function(cardNumber) {
+            let i, value,
                 result = [];
 
             if (utils.isEmpty(cardNumber)) {
@@ -139,6 +139,6 @@ define([
             }
 
             return result;
-        }
+        },
     };
 });

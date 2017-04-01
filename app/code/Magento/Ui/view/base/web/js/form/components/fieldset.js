@@ -8,8 +8,8 @@
  */
 define([
     'Magento_Ui/js/lib/collapsible',
-    'underscore'
-], function (Collapsible, _) {
+    'underscore',
+], function(Collapsible, _) {
     'use strict';
 
     return Collapsible.extend({
@@ -24,16 +24,16 @@ define([
             visible: true,
             disabled: false,
             listens: {
-                'opened': 'onVisibilityChange'
+                'opened': 'onVisibilityChange',
             },
-            additionalClasses: {}
+            additionalClasses: {},
         },
 
         /**
          * Extends instance with defaults. Invokes parent initialize method.
          * Calls initListeners and pushParams methods.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'onChildrenUpdate', 'onChildrenError', 'onContentLoading');
 
             return this._super()
@@ -45,7 +45,7 @@ define([
          *
          * @returns {Fieldset} Chainable.
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
             this._wasOpened = this.opened || !this.collapsible;
 
@@ -58,7 +58,7 @@ define([
          *
          * @returns {Object} Reference to instance
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('changed loading error visible');
 
@@ -72,20 +72,19 @@ define([
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */
-        initElement: function (elem) {
+        initElement: function(elem) {
             elem.initContainer(this);
 
             elem.on({
-                'update':   this.onChildrenUpdate,
-                'loading':  this.onContentLoading,
-                'error':  this.onChildrenError
+                'update': this.onChildrenUpdate,
+                'loading': this.onContentLoading,
+                'error': this.onChildrenError,
             });
 
             if (this.disabled) {
                 try {
                     elem.disabled(true);
-                }
-                catch (e) {
+                }                catch (e) {
 
                 }
             }
@@ -99,7 +98,7 @@ define([
          *
          * @param  {Boolean} hasChanged
          */
-        onChildrenUpdate: function (hasChanged) {
+        onChildrenUpdate: function(hasChanged) {
             if (!hasChanged) {
                 hasChanged = _.some(this.delegate('hasChanged'));
             }
@@ -113,24 +112,24 @@ define([
          *
          * @returns {Group} Chainable.
          */
-        _setClasses: function () {
-            var addtional = this.additionalClasses,
+        _setClasses: function() {
+            let addtional = this.additionalClasses,
                 classes;
 
             if (_.isString(addtional)) {
                 addtional = this.additionalClasses.split(' ');
                 classes = this.additionalClasses = {};
 
-                addtional.forEach(function (name) {
+                addtional.forEach(function(name) {
                     classes[name] = true;
                 }, this);
             }
 
             _.extend(this.additionalClasses, {
                 'admin__collapsible-block-wrapper': this.collapsible,
-                _show: this.opened,
-                _hide: !this.opened,
-                _disabled: this.disabled
+                "_show": this.opened,
+                "_hide": !this.opened,
+                "_disabled": this.disabled,
             });
 
             return this;
@@ -141,7 +140,7 @@ define([
          *
          * @param {Boolean} isOpened
          */
-        onVisibilityChange: function (isOpened) {
+        onVisibilityChange: function(isOpened) {
             if (!this._wasOpened) {
                 this._wasOpened = isOpened;
             }
@@ -153,8 +152,8 @@ define([
          *
          * @param {String} message - error message.
          */
-        onChildrenError: function (message) {
-            var hasErrors = this.elems.some('error');
+        onChildrenError: function(message) {
+            let hasErrors = this.elems.some('error');
 
             this.error(hasErrors || message);
         },
@@ -162,8 +161,8 @@ define([
         /**
          * Callback that sets loading property to true.
          */
-        onContentLoading: function (isLoading) {
+        onContentLoading: function(isLoading) {
             this.loading(isLoading);
-        }
+        },
     });
 });

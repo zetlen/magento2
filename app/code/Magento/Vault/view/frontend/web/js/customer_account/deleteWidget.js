@@ -5,15 +5,15 @@
 define([
     'jquery',
     'Magento_Ui/js/modal/modalToggle',
-    'mage/translate'
-], function ($, modalToggle) {
+    'mage/translate',
+], function($, modalToggle) {
     'use strict';
 
-    return function (config, deleteButton) {
+    return function(config, deleteButton) {
         config.buttons = [
             {
                 text: $.mage.__('Cancel'),
-                class: 'action secondary cancel'
+                class: 'action secondary cancel',
             }, {
                 text: $.mage.__('Delete'),
                 class: 'action primary',
@@ -21,10 +21,10 @@ define([
                 /**
                  * Default action on button click
                  */
-                click: function (event) { //eslint-disable-line no-unused-vars
+                click: function(event) { // eslint-disable-line no-unused-vars
                     deleteButton.form.submit();
-                }
-            }
+                },
+            },
         ];
 
         modalToggle(config, deleteButton);

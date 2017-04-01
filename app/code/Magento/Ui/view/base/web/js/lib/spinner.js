@@ -4,25 +4,25 @@
  */
 
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
-    var selector = '[data-role="spinner"]',
+    let selector = '[data-role="spinner"]',
         spinner = $(selector);
 
     return {
         /**
          * Show spinner.
          */
-        show: function () {
+        show: function() {
             spinner.show();
         },
 
         /**
          * Hide spinner.
          */
-        hide: function () {
+        hide: function() {
             spinner.hide();
         },
 
@@ -32,8 +32,8 @@ define([
          * @param {String} id
          * @return {jQuery}
          */
-        get: function (id) {
+        get: function(id) {
             return $(selector + '[data-component="' + id + '"]');
-        }
+        },
     };
 });

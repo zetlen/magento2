@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
             swatchesProductAttributes: 'Magento_Swatches/js/product-attributes',
-            swatchesTypeChange: 'Magento_Swatches/js/type-change'
-        }
-    }
+            swatchesTypeChange: 'Magento_Swatches/js/type-change',
+        },
+    },
 };

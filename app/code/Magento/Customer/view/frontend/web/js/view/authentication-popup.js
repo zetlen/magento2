@@ -13,8 +13,8 @@ define([
     'mage/translate',
     'mage/url',
     'Magento_Ui/js/modal/alert',
-    'mage/validation'
-], function ($, ko, Component, loginAction, customerData, authenticationPopup, $t, url, alert) {
+    'mage/validation',
+], function($, ko, Component, loginAction, customerData, authenticationPopup, $t, url, alert) {
     'use strict';
 
     return Component.extend({
@@ -25,43 +25,43 @@ define([
         isLoading: ko.observable(false),
 
         defaults: {
-            template: 'Magento_Customer/authentication-popup'
+            template: 'Magento_Customer/authentication-popup',
         },
 
         /**
          * Init
          */
-        initialize: function () {
-            var self = this;
+        initialize: function() {
+            let self = this;
 
             this._super();
             url.setBaseUrl(window.authenticationPopup.baseUrl);
-            loginAction.registerLoginCallback(function () {
+            loginAction.registerLoginCallback(function() {
                 self.isLoading(false);
             });
         },
 
         /** Init popup login window */
-        setModalElement: function (element) {
+        setModalElement: function(element) {
             if (authenticationPopup.modalWindow == null) {
                 authenticationPopup.createPopUp(element);
             }
         },
 
         /** Is login form enabled for current customer */
-        isActive: function () {
-            var customer = customerData.get('customer');
+        isActive: function() {
+            let customer = customerData.get('customer');
 
-            return customer() == false; //eslint-disable-line eqeqeq
+            return customer() == false; // eslint-disable-line eqeqeq
         },
 
         /** Show login popup window */
-        showModal: function () {
+        showModal: function() {
             if (this.modalWindow) {
                 $(this.modalWindow).modal('openModal');
             } else {
                 alert({
-                    content: $t('Guest checkout is disabled.')
+                    content: $t('Guest checkout is disabled.'),
                 });
             }
         },
@@ -71,13 +71,13 @@ define([
          *
          * @return {Boolean}
          */
-        login: function (formUiElement, event) {
-            var loginData = {},
+        login: function(formUiElement, event) {
+            let loginData = {},
                 formElement = $(event.currentTarget),
                 formDataArray = formElement.serializeArray();
 
             event.stopPropagation();
-            formDataArray.forEach(function (entry) {
+            formDataArray.forEach(function(entry) {
                 loginData[entry.name] = entry.value;
             });
 
@@ -89,6 +89,6 @@ define([
             }
 
             return false;
-        }
+        },
     });
 });

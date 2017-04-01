@@ -5,11 +5,11 @@
 
 define([
     'jquery',
-    'mage/validation'
-], function ($) {
+    'mage/validation',
+], function($) {
     'use strict';
 
-    var checkoutConfig = window.checkoutConfig,
+    let checkoutConfig = window.checkoutConfig,
         agreementsConfig = checkoutConfig ? checkoutConfig.checkoutAgreements : {},
         agreementsInputPath = '.payment-method._active div.checkout-agreements input';
 
@@ -19,14 +19,14 @@ define([
          *
          * @returns {Boolean}
          */
-        validate: function () {
+        validate: function() {
             if (!agreementsConfig.isEnabled || $(agreementsInputPath).length === 0) {
                 return true;
             }
 
             return $.validator.validateSingleElement(agreementsInputPath, {
-                errorElement: 'div'
+                errorElement: 'div',
             });
-        }
+        },
     };
 });

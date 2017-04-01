@@ -5,13 +5,13 @@
 
 /* @api */
 define([
-    'Magento_Checkout/js/view/payment/default'
-], function (Component) {
+    'Magento_Checkout/js/view/payment/default',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_OfflinePayments/payment/cashondelivery'
+            template: 'Magento_OfflinePayments/payment/cashondelivery',
         },
 
         /**
@@ -19,8 +19,8 @@ define([
          *
          * @return {*}
          */
-        getInstructions: function () {
+        getInstructions: function() {
             return window.checkoutConfig.payment.instructions[this.item.method];
-        }
+        },
     });
 });

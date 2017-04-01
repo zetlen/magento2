@@ -5,34 +5,34 @@
 
 define([
     'Magento_Ui/js/form/element/abstract',
-    'underscore'
-], function (Abstract, _) {
+    'underscore',
+], function(Abstract, _) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             'mappingValues': {
                 '1': true,
-                '2': false
+                '2': false,
             },
             'checked': false,
             'mappedValue': '',
             'links': {
-                value: false,
-                'mappedValue': '${ $.provider }:${ $.dataScope }'
+                "value": false,
+                'mappedValue': '${ $.provider }:${ $.dataScope }',
             },
-            imports: {
-                checked: 'mappedValue'
-            }
+            "imports": {
+                checked: 'mappedValue',
+            },
         },
 
         /**
          * @returns {*}
          */
-        setMappedValue: function () {
-            var newValue;
+        setMappedValue: function() {
+            let newValue;
 
-            _.some(this.mappingValues, function (item, key) {
+            _.some(this.mappingValues, function(item, key) {
                 if (item === this.value()) {
                     newValue = key;
 
@@ -46,14 +46,14 @@ define([
         /**
          * @returns {*}
          */
-        initObservable: function () {
+        initObservable: function() {
             return this.observe('mappedValue checked')._super();
         },
 
         /**
          * @returns {*}
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             this.value(this.mappedValue());
             this._super();
             this.mappedValue(this.initialValue);
@@ -66,10 +66,10 @@ define([
         /**
          * @returns {*}
          */
-        onUpdate: function () {
+        onUpdate: function() {
             this.mappedValue(this.setMappedValue());
 
             return this._super();
-        }
+        },
     });
 });

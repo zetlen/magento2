@@ -11,8 +11,8 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
-], function ($, mageTemplate) {
+    'jquery/ui',
+], function($, mageTemplate) {
     'use strict';
 
     $.widget('mage.rowBuilder', {
@@ -21,12 +21,12 @@ define([
          * options with default values for setting up the template
          */
         options: {
-            //Default template options
+            // Default template options
             rowTemplate: '#template-registrant',
             rowContainer: '#registrant-container',
-            //Row index used by the template rows.
+            // Row index used by the template rows.
             rowIndex: 0,
-            //Row count: Should not be set externally
+            // Row count: Should not be set externally
             rowCount: 0,
             rowParentElem: '<li></li>',
             rowContainerClass: 'fields',
@@ -34,7 +34,7 @@ define([
             btnRemoveIdPrefix: 'btn-remove',
             btnRemoveSelector: '.btn-remove',
             rowIdPrefix: 'row',
-            //This class is added to rows added after the first one. Adds the dotted separator
+            // This class is added to rows added after the first one. Adds the dotted separator
             additionalRowClass: 'add-row',
 
             /*
@@ -46,30 +46,30 @@ define([
              eg field1-name{index}
              */
             formDataPost: null,
-            //Default selectors for add element of a template
+            // Default selectors for add element of a template
             addEventSelector: 'button',
-            //Default selectors for remove markup elements of a template
+            // Default selectors for remove markup elements of a template
             remEventSelector: 'a',
-            //This option allows adding first row delete option and a row separator
+            // This option allows adding first row delete option and a row separator
             hideFirstRowAddSeparator: true,
-            //Max rows - This option should be set when instantiating the widget
+            // Max rows - This option should be set when instantiating the widget
             maxRows: 1000,
-            maxRowsMsg: '#max-registrant-message'
+            maxRowsMsg: '#max-registrant-message',
         },
 
         /**
          * Initialize create
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.rowTemplate = mageTemplate(this.options.rowTemplate);
 
             this.options.rowCount = this.options.rowIndex = 0;
 
-            //On document ready related tasks
+            // On document ready related tasks
             $($.proxy(this.ready, this));
 
-            //Binding template-wide events handlers for adding and removing rows
+            // Binding template-wide events handlers for adding and removing rows
             this.element.on(
                 'click',
                 this.options.addEventSelector + this.options.addRowBtn,
@@ -86,14 +86,14 @@ define([
          * Initialize template
          * @public
          */
-        ready: function () {
+        ready: function() {
             if (this.options.formDataPost &&
                 this.options.formDataPost.formData &&
                 this.options.formDataPost.formData.length
             ) {
                 this.processFormDataArr(this.options.formDataPost);
             } else if (this.options.rowIndex === 0 && this.options.maxRows !== 0) {
-                //If no form data , then add default row
+                // If no form data , then add default row
                 this.addRow(0);
             }
         },
@@ -104,8 +104,8 @@ define([
          * @public
          * @param {Object} formDataArr
          */
-        processFormDataArr: function (formDataArr) {
-            var formData = formDataArr.formData,
+        processFormDataArr: function(formDataArr) {
+            let formData = formDataArr.formData,
                 templateFields = formDataArr.templateFields,
                 formRow,
                 i, j;
@@ -119,7 +119,6 @@ define([
                     this.setFieldById(templateFields[j] + i, formRow[j]);
                 }
             }
-
         },
 
         /**
@@ -130,16 +129,16 @@ define([
          * @param {Number} index - current index/count of the created template. This will be used as the id
          * @return {*}
          */
-        addRow: function (index) {
-            var row = $(this.options.rowParentElem),
+        addRow: function(index) {
+            let row = $(this.options.rowParentElem),
                 tmpl;
 
             row.addClass(this.options.rowContainerClass).attr('id', this.options.rowIdPrefix + index);
 
             tmpl = this.rowTemplate({
                 data: {
-                    _index_: index
-                }
+                    _index_: index,
+                },
             });
 
             $(tmpl).appendTo(row);
@@ -148,7 +147,7 @@ define([
 
             row.addClass(this.options.additionalRowClass);
 
-            //Remove 'delete' link and additionalRowClass for first row
+            // Remove 'delete' link and additionalRowClass for first row
             if (this.options.rowIndex === 0 && this.options.hideFirstRowAddSeparator) {
                 $('#' + this._esc(this.options.btnRemoveIdPrefix) + '0').remove();
                 $('#' + this._esc(this.options.rowIdPrefix) + '0').removeClass(this.options.additionalRowClass);
@@ -165,7 +164,7 @@ define([
          * @param {*} rowIndex - return item information row index
          * @return {Boolean}
          */
-        removeRow: function (rowIndex) {
+        removeRow: function(rowIndex) {
             $('#' + this._esc(this.options.rowIdPrefix) + rowIndex).remove();
             this.maxRowCheck(--this.options.rowCount);
 
@@ -177,11 +176,11 @@ define([
          * @public
          * @param {Number} rowIndex
          */
-        maxRowCheck: function (rowIndex) {
-            var addRowBtn = $(this.options.addRowBtn),
+        maxRowCheck: function(rowIndex) {
+            let addRowBtn = $(this.options.addRowBtn),
                 maxRowMsg = $(this.options.maxRowsMsg);
 
-            //liIndex starts from 0
+            // liIndex starts from 0
             if (rowIndex >= this.options.maxRows) {
                 addRowBtn.hide();
                 maxRowMsg.show();
@@ -197,11 +196,10 @@ define([
          * @param {String} domId
          * @param {String} value
          */
-        setFieldById: function (domId, value) {
-            var x = $('#' + this._esc(domId));
+        setFieldById: function(domId, value) {
+            let x = $('#' + this._esc(domId));
 
             if (x.length) {
-
                 if (x.is(':checkbox')) {
                     x.attr('checked', true);
                 } else if (x.is('option')) {
@@ -217,7 +215,7 @@ define([
          * @public
          * @return {Boolean}
          */
-        handleAdd: function () {
+        handleAdd: function() {
             this.addRow(++this.options.rowIndex);
 
             return false;
@@ -229,7 +227,7 @@ define([
          * @param {Object} e - Native event object
          * @return {Boolean}
          */
-        handleRemove: function (e) {
+        handleRemove: function(e) {
             this.removeRow($(e.currentTarget).closest('[id^="' + this.options.btnRemoveIdPrefix + '"]')
                 .attr('id').replace(this.options.btnRemoveIdPrefix, ''));
 
@@ -242,9 +240,9 @@ define([
          * @param {String} str - String to be processed
          * @return {String}
          */
-        _esc: function (str) {
+        _esc: function(str) {
             return str ? str.replace(/([ ;&,.+*~\':"!\^$\[\]()=>|\/@])/g, '\\$1') : str;
-        }
+        },
     });
 
     return $.mage.rowBuilder;

@@ -4,8 +4,8 @@
  */
 
 require([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
     window.Product = {};
@@ -22,7 +22,7 @@ require([
      * @param {String} fieldId
      */
     function disableFieldEditMode(fieldId) {
-        var field = byId(fieldId);
+        let field = byId(fieldId);
 
         field.prop('disabled', true);
 
@@ -39,7 +39,7 @@ require([
      * @param {String} fieldId
      */
     function enableFieldEditMode(fieldId) {
-        var field = byId(fieldId);
+        let field = byId(fieldId);
 
         field.prop('disabled', false);
 
@@ -68,9 +68,9 @@ require([
      * On complete disable.
      */
     function onCompleteDisableInited() {
-        var item;
+        let item;
 
-        $.each($('[data-disable]'), function () {
+        $.each($('[data-disable]'), function() {
             item = $(this).data('disable');
             disableFieldEditMode(item);
         });
@@ -80,7 +80,7 @@ require([
      * @param {String} urlKey
      */
     function onUrlkeyChanged(urlKey) {
-        var hidden, chbx, oldValue;
+        let hidden, chbx, oldValue;
 
         urlKey = byId(urlKey);
         hidden = urlKey.siblings('input[type=hidden]');
@@ -95,13 +95,13 @@ require([
      * @param {HTMLElement} element
      */
     function onCustomUseParentChanged(element) {
-        var useParent, parent;
+        let useParent, parent;
 
         element = $(element);
-        useParent = element.val() == 1; //eslint-disable-line eqeqeq
+        useParent = element.val() == 1; // eslint-disable-line eqeqeq
         parent = element.offsetParent().parent();
 
-        parent.find('input, select, textarea').each(function (i, el) {
+        parent.find('input, select, textarea').each(function(i, el) {
             el = $(el);
 
             if (element.prop('id') !== el.prop('id')) {
@@ -109,7 +109,7 @@ require([
             }
         });
 
-        parent.find('img').each(function (i, el) {
+        parent.find('img').each(function(i, el) {
             if (useParent) {
                 $(el).hide();
             } else {

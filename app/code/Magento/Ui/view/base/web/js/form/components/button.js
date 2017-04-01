@@ -10,8 +10,8 @@ define([
     'uiElement',
     'uiRegistry',
     'uiLayout',
-    'mageUtils'
-], function (Element, registry, layout, utils) {
+    'mageUtils',
+], function(Element, registry, layout, utils) {
     'use strict';
 
     return Element.extend({
@@ -24,7 +24,7 @@ define([
             template: 'ui/form/components/button/simple',
             visible: true,
             disabled: false,
-            title: ''
+            title: '',
         },
 
         /**
@@ -32,26 +32,26 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             return this._super()
                 ._setClasses()
                 ._setButtonClasses();
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             return this._super()
                 .observe([
                     'visible',
                     'disabled',
-                    'title'
+                    'title',
                 ]);
         },
 
         /**
          * Performs configured actions
          */
-        action: function () {
+        action: function() {
             this.actions.forEach(this.applyAction, this);
         },
 
@@ -61,8 +61,8 @@ define([
          *
          * @param {Object} action - action configuration
          */
-        applyAction: function (action) {
-            var targetName = action.targetName,
+        applyAction: function(action) {
+            let targetName = action.targetName,
                 params = utils.copy(action.params) || [],
                 actionName = action.actionName,
                 target;
@@ -84,8 +84,8 @@ define([
          * @param {Object} targetName - name of component,
          * that supposed to be a template and need to be initialized
          */
-        getFromTemplate: function (targetName) {
-            var parentName = targetName.split('.'),
+        getFromTemplate: function(targetName) {
+            let parentName = targetName.split('.'),
                 index = parentName.pop(),
                 child;
 
@@ -93,7 +93,7 @@ define([
             child = utils.template({
                 parent: parentName,
                 name: index,
-                nodeTemplate: targetName
+                nodeTemplate: targetName,
             });
             layout([child]);
         },
@@ -103,7 +103,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        _setClasses: function () {
+        _setClasses: function() {
             if (typeof this.additionalClasses === 'string') {
                 if (this.additionalClasses === '') {
                     this.additionalClasses = {};
@@ -114,7 +114,7 @@ define([
                 this.additionalClasses = this.additionalClasses
                     .trim()
                     .split(' ')
-                    .reduce(function (classes, name) {
+                    .reduce(function(classes, name) {
                         classes[name] = true;
 
                         return classes;
@@ -130,8 +130,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        _setButtonClasses: function () {
-            var additional = this.buttonClasses;
+        _setButtonClasses: function() {
+            let additional = this.buttonClasses;
 
             if (_.isString(additional)) {
                 this.buttonClasses = {};
@@ -139,7 +139,7 @@ define([
                 if (additional.trim().length) {
                     additional = additional.trim().split(' ');
 
-                    additional.forEach(function (name) {
+                    additional.forEach(function(name) {
                         if (name.length) {
                             this.buttonClasses[name] = true;
                         }
@@ -149,10 +149,10 @@ define([
 
             _.extend(this.buttonClasses, {
                 'action-basic': !this.displayAsLink,
-                'action-additional': this.displayAsLink
+                'action-additional': this.displayAsLink,
             });
 
             return this;
-        }
+        },
     });
 });

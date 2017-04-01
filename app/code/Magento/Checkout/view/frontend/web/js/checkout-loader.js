@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    'rjsResolver'
-], function (resolver) {
+    'rjsResolver',
+], function(resolver) {
     'use strict';
 
     /**

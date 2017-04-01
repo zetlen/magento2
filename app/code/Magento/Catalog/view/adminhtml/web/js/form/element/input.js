@@ -4,8 +4,8 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/form/element/abstract'
-], function (_, Acstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function(_, Acstract) {
     'use strict';
 
     return Acstract.extend({
@@ -13,7 +13,7 @@ define([
             prefixName: '',
             prefixElementName: '',
             elementName: '',
-            suffixName: ''
+            suffixName: '',
         },
 
         /**
@@ -21,7 +21,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
             this.configureDataScope();
 
@@ -31,8 +31,8 @@ define([
         /**
          * Configure data scope.
          */
-        configureDataScope: function () {
-            var recordId,
+        configureDataScope: function() {
+            let recordId,
                 prefixName,
                 suffixName;
 
@@ -65,8 +65,8 @@ define([
          * @param {String} dataScopeString
          * @returns {String}
          */
-        dataScopeToHtmlArray: function (dataScopeString) {
-            var dataScopeArray, dataScope, reduceFunction;
+        dataScopeToHtmlArray: function(dataScopeString) {
+            let dataScopeArray, dataScope, reduceFunction;
 
             /**
              * Add new level of nesting.
@@ -75,7 +75,7 @@ define([
              * @param {String} curr
              * @returns {String}
              */
-            reduceFunction = function (prev, curr) {
+            reduceFunction = function(prev, curr) {
                 return prev + '[' + curr + ']';
             };
 
@@ -85,6 +85,6 @@ define([
             dataScope += dataScopeArray.reduce(reduceFunction, '');
 
             return dataScope;
-        }
+        },
     });
 });

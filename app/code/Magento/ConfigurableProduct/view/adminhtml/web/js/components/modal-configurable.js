@@ -6,23 +6,23 @@
 define([
     'Magento_Ui/js/modal/modal-component',
     'uiRegistry',
-    'underscore'
-], function (Modal, registry, _) {
+    'underscore',
+], function(Modal, registry, _) {
     'use strict';
 
     return Modal.extend({
         defaults: {
             stepWizard: '',
             modules: {
-                form: '${ $.formName }'
-            }
+                form: '${ $.formName }',
+            },
         },
 
         /**
          * Open modal
          */
-        openModal: function () {
-            var stepWizard = {};
+        openModal: function() {
+            let stepWizard = {};
 
             this.form().validate();
 
@@ -35,6 +35,6 @@ define([
 
                 this._super();
             }
-        }
+        },
     });
 });

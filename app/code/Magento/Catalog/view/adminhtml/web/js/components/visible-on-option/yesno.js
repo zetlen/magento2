@@ -4,8 +4,8 @@
  */
 define([
     'Magento_Ui/js/form/element/single-checkbox',
-    'Magento_Catalog/js/components/visible-on-option/strategy'
-], function (Element, strategy) {
+    'Magento_Catalog/js/components/visible-on-option/strategy',
+], function(Element, strategy) {
     'use strict';
 
     return Element.extend(strategy);

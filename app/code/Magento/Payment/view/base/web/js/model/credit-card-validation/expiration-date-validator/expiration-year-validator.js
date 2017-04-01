@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
     /**
@@ -14,12 +14,12 @@ define([], function () {
     function resultWrapper(isValid, isPotentiallyValid) {
         return {
             isValid: isValid,
-            isPotentiallyValid: isPotentiallyValid
+            isPotentiallyValid: isPotentiallyValid,
         };
     }
 
-    return function (value) {
-        var currentYear = new Date().getFullYear(),
+    return function(value) {
+        let currentYear = new Date().getFullYear(),
             len = value.length,
             valid,
             expMaxLifetime = 19;

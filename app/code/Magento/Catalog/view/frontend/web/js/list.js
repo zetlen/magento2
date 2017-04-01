@@ -5,15 +5,15 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.compareList', {
 
         /** @inheritdoc */
-        _create: function () {
-            var elem = this.element,
+        _create: function() {
+            let elem = this.element,
                 products = $('thead td', elem),
                 headings;
 
@@ -24,14 +24,14 @@ define([
 
                 elem.addClass('scroll');
 
-                $('th', elem).each(function () {
-                    var th = $(this),
+                $('th', elem).each(function() {
+                    let th = $(this),
                         thCopy = th.clone();
 
                     th.animate({
-                        top: '+=0'
-                    }, 50, function () {
-                        var height = th.height();
+                        top: '+=0',
+                    }, 50, function() {
+                        let height = th.height();
 
                         thCopy.css('height', height)
                             .appendTo(headings)
@@ -40,11 +40,11 @@ define([
                 });
             }
 
-            $(this.options.windowPrintSelector).on('click', function (e) {
+            $(this.options.windowPrintSelector).on('click', function(e) {
                 e.preventDefault();
                 window.print();
             });
-        }
+        },
     });
 
     return $.mage.compareList;

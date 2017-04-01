@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            giftOptions:    'Magento_GiftMessage/gift-options',
-            extraOptions:   'Magento_GiftMessage/extra-options'
-        }
-    }
+            giftOptions: 'Magento_GiftMessage/gift-options',
+            extraOptions: 'Magento_GiftMessage/extra-options',
+        },
+    },
 };

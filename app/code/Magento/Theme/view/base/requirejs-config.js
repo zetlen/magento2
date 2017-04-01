@@ -3,15 +3,15 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     'waitSeconds': 0,
     'map': {
         '*': {
             'ko': 'knockoutjs/knockout',
             'knockout': 'knockoutjs/knockout',
             'mageUtils': 'mage/utils/main',
-            'rjsResolver': 'mage/requirejs/resolver'
-        }
+            'rjsResolver': 'mage/requirejs/resolver',
+        },
     },
     'shim': {
         'jquery/jquery-migrate': ['jquery'],
@@ -26,17 +26,17 @@ var config = {
         'jquery/ui': ['jquery'],
         'MutationObserver': ['es6-collections'],
         'tinymce': {
-            'exports': 'tinymce'
+            'exports': 'tinymce',
         },
         'moment': {
-            'exports': 'moment'
+            'exports': 'moment',
         },
         'matchMedia': {
-            'exports': 'mediaCheck'
+            'exports': 'mediaCheck',
         },
         'jquery/jquery-storageapi': {
-            'deps': ['jquery/jquery.cookie']
-        }
+            'deps': ['jquery/jquery.cookie'],
+        },
     },
     'paths': {
         'jquery/validate': 'jquery/jquery.validate',
@@ -47,26 +47,26 @@ var config = {
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
         'text': 'mage/requirejs/text',
         'domReady': 'requirejs/domReady',
-        'tinymce': 'tiny_mce/tiny_mce_src'
+        'tinymce': 'tiny_mce/tiny_mce_src',
     },
     'deps': [
-        'jquery/jquery-migrate'
+        'jquery/jquery-migrate',
     ],
     'config': {
         'mixins': {
             'jquery/jstree/jquery.jstree': {
-                'mage/backend/jstree-mixin': true
-            }
+                'mage/backend/jstree-mixin': true,
+            },
         },
         'text': {
             'headers': {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }
-    }
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        },
+    },
 };
 
-require(['jquery'], function ($) {
+require(['jquery'], function($) {
     'use strict';
 
     $.noConflict();

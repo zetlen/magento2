@@ -5,11 +5,11 @@
 
 define([
     'jquery',
-    'ko'
-], function ($, ko) {
+    'ko',
+], function($, ko) {
     'use strict';
 
-    var steps = ko.observableArray();
+    let steps = ko.observableArray();
 
     return {
         steps: steps,
@@ -19,8 +19,8 @@ define([
         /**
          * @return {Boolean}
          */
-        handleHash: function () {
-            var hashString = window.location.hash.replace('#', ''),
+        handleHash: function() {
+            let hashString = window.location.hash.replace('#', ''),
                 isRequestedStepVisible;
 
             if (hashString === '') {
@@ -33,22 +33,21 @@ define([
                 return false;
             }
 
-            isRequestedStepVisible = steps.sort(this.sortItems).some(function (element) {
+            isRequestedStepVisible = steps.sort(this.sortItems).some(function(element) {
                 return (element.code == hashString || element.alias == hashString) && element.isVisible(); //eslint-disable-line
             });
 
-            //if requested step is visible, then we don't need to load step data from server
+            // if requested step is visible, then we don't need to load step data from server
             if (isRequestedStepVisible) {
                 return false;
             }
 
-            steps.sort(this.sortItems).forEach(function (element) {
-                if (element.code == hashString || element.alias == hashString) { //eslint-disable-line eqeqeq
+            steps.sort(this.sortItems).forEach(function(element) {
+                if (element.code == hashString || element.alias == hashString) { // eslint-disable-line eqeqeq
                     element.navigate();
                 } else {
                     element.isVisible(false);
                 }
-
             });
 
             return false;
@@ -62,8 +61,8 @@ define([
          * @param {*} navigate
          * @param {*} sortOrder
          */
-        registerStep: function (code, alias, title, isVisible, navigate, sortOrder) {
-            var hash;
+        registerStep: function(code, alias, title, isVisible, navigate, sortOrder) {
+            let hash;
 
             if ($.inArray(code, this.validCodes) !== -1) {
                 throw new DOMException('Step code [' + code + '] already registered in step navigator');
@@ -82,13 +81,13 @@ define([
                 title: title,
                 isVisible: isVisible,
                 navigate: navigate,
-                sortOrder: sortOrder
+                sortOrder: sortOrder,
             });
             this.stepCodes.push(code);
             hash = window.location.hash.replace('#', '');
 
-            if (hash != '' && hash != code) { //eslint-disable-line eqeqeq
-                //Force hiding of not active step
+            if (hash != '' && hash != code) { // eslint-disable-line eqeqeq
+                // Force hiding of not active step
                 isVisible(false);
             }
         },
@@ -98,17 +97,17 @@ define([
          * @param {Object} itemTwo
          * @return {Number}
          */
-        sortItems: function (itemOne, itemTwo) {
+        sortItems: function(itemOne, itemTwo) {
             return itemOne.sortOrder > itemTwo.sortOrder ? 1 : -1;
         },
 
         /**
          * @return {Number}
          */
-        getActiveItemIndex: function () {
-            var activeIndex = 0;
+        getActiveItemIndex: function() {
+            let activeIndex = 0;
 
-            steps.sort(this.sortItems).forEach(function (element, index) {
+            steps.sort(this.sortItems).forEach(function(element, index) {
                 if (element.isVisible()) {
                     activeIndex = index;
                 }
@@ -121,13 +120,13 @@ define([
          * @param {*} code
          * @return {Boolean}
          */
-        isProcessed: function (code) {
-            var activeItemIndex = this.getActiveItemIndex(),
+        isProcessed: function(code) {
+            let activeItemIndex = this.getActiveItemIndex(),
                 sortedItems = steps.sort(this.sortItems),
                 requestedItemIndex = -1;
 
-            sortedItems.forEach(function (element, index) {
-                if (element.code == code) { //eslint-disable-line eqeqeq
+            sortedItems.forEach(function(element, index) {
+                if (element.code == code) { // eslint-disable-line eqeqeq
                     requestedItemIndex = index;
                 }
             });
@@ -139,8 +138,8 @@ define([
          * @param {*} code
          * @param {*} scrollToElementId
          */
-        navigateTo: function (code, scrollToElementId) {
-            var sortedItems = steps.sort(this.sortItems),
+        navigateTo: function(code, scrollToElementId) {
+            let sortedItems = steps.sort(this.sortItems),
                 bodyElem = $.browser.safari || $.browser.chrome ? $('body') : $('html');
 
             scrollToElementId = scrollToElementId || null;
@@ -148,35 +147,34 @@ define([
             if (!this.isProcessed(code)) {
                 return;
             }
-            sortedItems.forEach(function (element) {
-                if (element.code == code) { //eslint-disable-line eqeqeq
+            sortedItems.forEach(function(element) {
+                if (element.code == code) { // eslint-disable-line eqeqeq
                     element.isVisible(true);
                     bodyElem.animate({
-                        scrollTop: $('#' + code).offset().top
-                    }, 0, function () {
+                        scrollTop: $('#' + code).offset().top,
+                    }, 0, function() {
                         window.location = window.checkoutConfig.checkoutUrl + '#' + code;
                     });
 
                     if (scrollToElementId && $('#' + scrollToElementId).length) {
                         bodyElem.animate({
-                            scrollTop: $('#' + scrollToElementId).offset().top
+                            scrollTop: $('#' + scrollToElementId).offset().top,
                         }, 0);
                     }
                 } else {
                     element.isVisible(false);
                 }
-
             });
         },
 
         /**
          * Next step.
          */
-        next: function () {
-            var activeIndex = 0,
+        next: function() {
+            let activeIndex = 0,
                 code;
 
-            steps.sort(this.sortItems).forEach(function (element, index) {
+            steps.sort(this.sortItems).forEach(function(element, index) {
                 if (element.isVisible()) {
                     element.isVisible(false);
                     activeIndex = index;
@@ -189,6 +187,6 @@ define([
                 window.location = window.checkoutConfig.checkoutUrl + '#' + code;
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
             }
-        }
+        },
     };
 });

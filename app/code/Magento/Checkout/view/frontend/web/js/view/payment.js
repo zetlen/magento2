@@ -14,8 +14,8 @@ define([
     'Magento_Checkout/js/model/payment/method-converter',
     'Magento_Checkout/js/action/get-payment-information',
     'Magento_Checkout/js/model/checkout-data-resolver',
-    'mage/translate'
-], function (
+    'mage/translate',
+], function(
     $,
     _,
     Component,
@@ -36,16 +36,16 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/payment',
-            activeMethod: ''
+            activeMethod: '',
         },
         isVisible: ko.observable(quote.isVirtual()),
         quoteIsVirtual: quote.isVirtual(),
-        isPaymentMethodsAvailable: ko.computed(function () {
+        isPaymentMethodsAvailable: ko.computed(function() {
             return paymentService.getAvailablePaymentMethods().length > 0;
         }),
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
             checkoutDataResolver.resolvePaymentMethod();
             stepNavigator.registerStep(
@@ -63,10 +63,10 @@ define([
         /**
          * Navigate method.
          */
-        navigate: function () {
-            var self = this;
+        navigate: function() {
+            let self = this;
 
-            getPaymentInformation().done(function () {
+            getPaymentInformation().done(function() {
                 self.isVisible(true);
             });
         },
@@ -74,8 +74,8 @@ define([
         /**
          * @return {*}
          */
-        getFormKey: function () {
+        getFormKey: function() {
             return window.checkoutConfig.formKey;
-        }
+        },
     });
 });

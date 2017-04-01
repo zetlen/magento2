@@ -7,24 +7,24 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/url-builder',
     'Magento_Customer/js/model/customer',
-    'Magento_Checkout/js/model/place-order'
-], function (quote, urlBuilder, customer, placeOrderService) {
+    'Magento_Checkout/js/model/place-order',
+], function(quote, urlBuilder, customer, placeOrderService) {
     'use strict';
 
-    return function (paymentData, messageContainer) {
-        var serviceUrl, payload;
+    return function(paymentData, messageContainer) {
+        let serviceUrl, payload;
 
         payload = {
             cartId: quote.getQuoteId(),
             billingAddress: quote.billingAddress(),
-            paymentMethod: paymentData
+            paymentMethod: paymentData,
         };
 
         if (customer.isLoggedIn()) {
             serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
         } else {
             serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
-                quoteId: quote.getQuoteId()
+                quoteId: quote.getQuoteId(),
             });
             payload.email = quote.guestEmail;
         }

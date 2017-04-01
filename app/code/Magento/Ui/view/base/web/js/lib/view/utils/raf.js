@@ -4,11 +4,11 @@
  */
 
 define([
-    'es6-collections'
-], function () {
+    'es6-collections',
+], function() {
     'use strict';
 
-    var processMap = new WeakMap(),
+    let processMap = new WeakMap(),
         origRaf,
         raf;
 
@@ -17,7 +17,7 @@ define([
         window.mozRequestAnimationFrame ||
         window.onRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
-        function (callback) {
+        function(callback) {
             window.setTimeout(callback, 1000 / 60);
         };
 
@@ -30,7 +30,7 @@ define([
      * @returns {Object}
      */
     function getProcess(id, fps) {
-        var process = processMap.get(id);
+        let process = processMap.get(id);
 
         if (!process) {
             process = {};
@@ -38,9 +38,9 @@ define([
         }
 
         if (process.fps !== fps) {
-            process.fps        = fps;
-            process.interval   = 1000 / fps;
-            process.update     = Date.now();
+            process.fps = fps;
+            process.interval = 1000 / fps;
+            process.update = Date.now();
         }
 
         return process;
@@ -56,8 +56,8 @@ define([
      * @returns {Number|Boolean} ID of request or a flag which indicates
      *      whether callback fits specified FPS.
      */
-    raf = function (callback, fps) {
-        var rafId = origRaf(callback);
+    raf = function(callback, fps) {
+        let rafId = origRaf(callback);
 
         return fps ? raf.tick(callback, fps) : rafId;
     };
@@ -71,10 +71,10 @@ define([
      * @param {Number} fps - Required FPS count.
      * @returns {Boolean}
      */
-    raf.tick = function (id, fps) {
-        var process  = getProcess(id, fps),
-            now      = Date.now(),
-            delta    = now - process.update,
+    raf.tick = function(id, fps) {
+        let process = getProcess(id, fps),
+            now = Date.now(),
+            delta = now - process.update,
             interval = process.interval;
 
         if (fps >= 60 || delta >= interval) {

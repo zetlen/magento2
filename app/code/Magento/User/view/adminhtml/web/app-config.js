@@ -14,11 +14,11 @@ require.config({
         'mage/common': ['jquery'],
         'mage/webapi': ['jquery'],
         'ko': {
-            exports: 'ko'
+            exports: 'ko',
         },
         'moment': {
-            exports: 'moment'
-        }
+            exports: 'moment',
+        },
     },
     'paths': {
         'jquery/ui': 'jquery/jquery-ui-1.9.2',
@@ -29,11 +29,11 @@ require.config({
         'prototype': 'prototype/prototype-amd',
         'text': 'requirejs/text',
         'domReady': 'requirejs/domReady',
-        'ko': 'ko/ko'
-    }
+        'ko': 'ko/ko',
+    },
 });
 
-require(['jquery'], function (jQuery) {
+require(['jquery'], function(jQuery) {
     'use strict';
 
     jQuery.noConflict();

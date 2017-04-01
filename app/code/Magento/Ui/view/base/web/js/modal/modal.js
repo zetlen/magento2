@@ -15,22 +15,22 @@ define([
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
     'jquery/ui',
-    'mage/translate'
-], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
+    'mage/translate',
+], function($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
 
     /**
      * Detect browser transition end event.
      * @return {String|undefined} - transition event.
      */
-    var transitionEvent =  (function () {
-        var transition,
+    let transitionEvent = (function() {
+        let transition,
             elementStyle = document.createElement('div').style,
             transitions = {
                 'transition': 'transitionend',
                 'OTransition': 'oTransitionEnd',
                 'MozTransition': 'transitionend',
-                'WebkitTransition': 'webkitTransitionEnd'
+                'WebkitTransition': 'webkitTransitionEnd',
             };
 
         for (transition in transitions) {
@@ -85,9 +85,9 @@ define([
                 /**
                  * Default action on button click
                  */
-                click: function (event) {
+                click: function(event) {
                     this.closeModal(event);
-                }
+                },
             }],
             keyEventHandlers: {
 
@@ -95,7 +95,7 @@ define([
                  * Tab key press handler,
                  * set focus to elements
                  */
-                tabKey: function () {
+                tabKey: function() {
                     if (document.activeElement === this.modal[0]) {
                         this._setFocus('start');
                     }
@@ -105,19 +105,19 @@ define([
                  * Escape key press handler,
                  * close modal window
                  */
-                escapeKey: function () {
+                escapeKey: function() {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
                         this.closeModal();
                     }
-                }
-            }
+                },
+            },
         },
 
         /**
          * Creates modal widget.
          */
-        _create: function () {
+        _create: function() {
             _.bindAll(
                 this,
                 'keyEventSwitcher',
@@ -132,11 +132,11 @@ define([
             this._createButtons();
             $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
             this._on(this.modal.find(this.options.modalCloseBtn), {
-                'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal
+                'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal,
             });
             this._on(this.element, {
                 'openModal': this.openModal,
-                'closeModal': this.closeModal
+                'closeModal': this.closeModal,
             });
             this.options.autoOpen ? this.openModal() : false;
         },
@@ -145,7 +145,7 @@ define([
          * Returns element from modal node.
          * @return {Object} - element.
          */
-        _getElem: function (elem) {
+        _getElem: function(elem) {
             return this.modal.find(elem);
         },
 
@@ -153,8 +153,8 @@ define([
          * Gets visible modal count.
          * * @return {Number} - visible modal count.
          */
-        _getVisibleCount: function () {
-            var modals = this.modalWrapper.find(this.options.modalBlock);
+        _getVisibleCount: function() {
+            let modals = this.modalWrapper.find(this.options.modalBlock);
 
             return modals.filter('.' + this.options.modalVisibleClass).length;
         },
@@ -163,8 +163,8 @@ define([
          * Gets count of visible modal by slide type.
          * * @return {Number} - visible modal count.
          */
-        _getVisibleSlideCount: function () {
-            var elems = this.modalWrapper.find('[data-type="slide"]');
+        _getVisibleSlideCount: function() {
+            let elems = this.modalWrapper.find('[data-type="slide"]');
 
             return elems.filter('.' + this.options.modalVisibleClass).length;
         },
@@ -173,8 +173,8 @@ define([
          * Listener key events.
          * Call handler function if it exists
          */
-        keyEventSwitcher: function (event) {
-            var key = keyCodes[event.keyCode];
+        keyEventSwitcher: function(event) {
+            let key = keyCodes[event.keyCode];
 
             if (this.options.keyEventHandlers.hasOwnProperty(key)) {
                 this.options.keyEventHandlers[key].apply(this, arguments);
@@ -186,8 +186,8 @@ define([
          *
          * @param {String} title
          */
-        setTitle: function (title) {
-            var $title = $(this.options.modalTitle),
+        setTitle: function(title) {
+            let $title = $(this.options.modalTitle),
                 $subTitle = this.modal.find(this.options.modalSubTitle);
 
             $title.text(title);
@@ -199,7 +199,7 @@ define([
          *
          * @param {String} subTitle
          */
-        setSubTitle: function (subTitle) {
+        setSubTitle: function(subTitle) {
             this.options.subTitle = subTitle;
             this.modal.find(this.options.modalSubTitle).html(subTitle);
         },
@@ -208,7 +208,7 @@ define([
          * Toggle modal.
          * * @return {Element} - current element.
          */
-        toggleModal: function () {
+        toggleModal: function() {
             if (this.options.isOpen === true) {
                 this.closeModal();
             } else {
@@ -220,7 +220,7 @@ define([
          * Open modal.
          * * @return {Element} - current element.
          */
-        openModal: function () {
+        openModal: function() {
             this.options.isOpen = true;
             this.focussedElement = document.activeElement;
             this._createOverlay();
@@ -250,8 +250,8 @@ define([
          *      If type is "opened" - looks to "this.options.focus"
          *      property and sets focus
          */
-        _setFocus: function (position, type) {
-            var focusableElements,
+        _setFocus: function(position, type) {
+            let focusableElements,
                 infelicity;
 
             if (type === 'opened' && this.options.focus) {
@@ -261,7 +261,7 @@ define([
             } else if (position === 'end') {
                 this.modal.find(this.options.modalCloseBtn).focus();
             } else if (position === 'start') {
-                infelicity = 2; //Constant for find last focusable element
+                infelicity = 2; // Constant for find last focusable element
                 focusableElements = this.modal.find(':focusable');
                 focusableElements.eq(focusableElements.length - infelicity).focus();
             }
@@ -270,7 +270,7 @@ define([
         /**
          * Set events listener when modal is opened.
          */
-        _setKeyListener: function () {
+        _setKeyListener: function() {
             this.modal.find(this.options.focusableStart).bind('focusin', this._tabSwitcher);
             this.modal.find(this.options.focusableEnd).bind('focusin', this._tabSwitcher);
             this.modal.bind('keydown', this.keyEventSwitcher);
@@ -279,7 +279,7 @@ define([
         /**
          * Remove events listener when modal is closed.
          */
-        _removeKeyListener: function () {
+        _removeKeyListener: function() {
             this.modal.find(this.options.focusableStart).unbind('focusin', this._tabSwitcher);
             this.modal.find(this.options.focusableEnd).unbind('focusin', this._tabSwitcher);
             this.modal.unbind('keydown', this.keyEventSwitcher);
@@ -289,8 +289,8 @@ define([
          * Switcher for focus event.
          * @param {Object} e - event
          */
-        _tabSwitcher: function (e) {
-            var target = $(e.target);
+        _tabSwitcher: function(e) {
+            let target = $(e.target);
 
             if (target.is(this.options.focusableStart)) {
                 this._setFocus('start');
@@ -303,12 +303,12 @@ define([
          * Close modal.
          * * @return {Element} - current element.
          */
-        closeModal: function () {
-            var that = this;
+        closeModal: function() {
+            let that = this;
 
             this._removeKeyListener();
             this.options.isOpen = false;
-            this.modal.one(this.options.transitionEvent, function () {
+            this.modal.one(this.options.transitionEvent, function() {
                 that._close();
             });
             this.modal.removeClass(this.options.modalVisibleClass);
@@ -323,8 +323,8 @@ define([
         /**
          * Helper for closeModal function.
          */
-        _close: function () {
-            var trigger = _.bind(this._trigger, this, 'closed', this.modal);
+        _close: function() {
+            let trigger = _.bind(this._trigger, this, 'closed', this.modal);
 
             $(this.focussedElement).focus();
             this._destroyOverlay();
@@ -335,8 +335,8 @@ define([
         /**
          * Set z-index and margin for modal and overlay.
          */
-        _setActive: function () {
-            var zIndex = this.modal.zIndex();
+        _setActive: function() {
+            let zIndex = this.modal.zIndex();
 
             this.prevOverlayIndex = this.overlay.zIndex();
             this.modal.zIndex(zIndex + this._getVisibleCount());
@@ -350,7 +350,7 @@ define([
         /**
          * Unset styles for modal and set z-index for previous modal.
          */
-        _unsetActive: function () {
+        _unsetActive: function() {
             this.modal.removeAttr('style');
 
             if (this.overlay) {
@@ -361,7 +361,7 @@ define([
         /**
          * Creates wrapper to hold all modals.
          */
-        _createWrapper: function () {
+        _createWrapper: function() {
             this.modalWrapper = $(this.options.appendTo).find('.' + this.options.wrapperClass);
 
             if (!this.modalWrapper.length) {
@@ -374,11 +374,11 @@ define([
         /**
          * Compile template and append to wrapper.
          */
-        _renderModal: function () {
+        _renderModal: function() {
             $(template(
                 this.options[this.options.type + 'Tpl'],
                 {
-                    data: this.options
+                    data: this.options,
                 })).appendTo(this.modalWrapper);
             this.modal = this.modalWrapper.find(this.options.modalBlock).last();
             this.element.appendTo(this._getElem(this.options.modalContent));
@@ -391,10 +391,10 @@ define([
         /**
          * Creates buttons pane.
          */
-        _createButtons: function () {
+        _createButtons: function() {
             this.buttons = this._getElem(this.options.modalAction);
-            _.each(this.options.buttons, function (btn, key) {
-                var button = this.buttons[key];
+            _.each(this.options.buttons, function(btn, key) {
+                let button = this.buttons[key];
 
                 if (btn.attr) {
                     $(button).attr(btn.attr);
@@ -414,8 +414,8 @@ define([
         /**
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
-        _createOverlay: function () {
-            var events,
+        _createOverlay: function() {
+            let events,
                 outerClickHandler = this.options.outerClickHandler || this.closeModal;
 
             this.overlay = $('.' + this.options.overlayClass);
@@ -434,7 +434,7 @@ define([
         /**
          * Destroy overlay.
          */
-        _destroyOverlay: function () {
+        _destroyOverlay: function() {
             if (this._getVisibleCount()) {
                 this.overlay.unbind().on('click', this.prevOverlayHandler);
             } else {
@@ -442,7 +442,7 @@ define([
                 this.overlay.remove();
                 this.overlay = null;
             }
-        }
+        },
     });
 
     return $.mage.modal;

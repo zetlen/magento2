@@ -6,5 +6,5 @@
 
 require([
     'Magento_Variable/variables',
-    'mage/adminhtml/browser'
+    'mage/adminhtml/browser',
 ]);

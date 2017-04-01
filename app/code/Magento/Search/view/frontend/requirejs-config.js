@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            quickSearch: 'Magento_Search/form-mini'
-        }
-    }
+            quickSearch: 'Magento_Search/form-mini',
+        },
+    },
 };

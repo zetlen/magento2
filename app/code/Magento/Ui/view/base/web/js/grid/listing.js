@@ -12,8 +12,8 @@ define([
     'Magento_Ui/js/lib/spinner',
     'rjsResolver',
     'uiLayout',
-    'uiCollection'
-], function (ko, _, loader, resolver, layout, Collection) {
+    'uiCollection',
+], function(ko, _, loader, resolver, layout, Collection) {
     'use strict';
 
     return Collection.extend({
@@ -27,46 +27,46 @@ define([
                 grid: {
                     value: 'grid',
                     label: 'Grid',
-                    template: '${ $.template }'
-                }
+                    template: '${ $.template }',
+                },
             },
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/grid/dnd',
                 columnsProvider: '${ $.name }',
-                enabled: true
+                enabled: true,
             },
             editorConfig: {
                 name: '${ $.name }_editor',
                 component: 'Magento_Ui/js/grid/editing/editor',
                 columnsProvider: '${ $.name }',
                 dataProvider: '${ $.provider }',
-                enabled: false
+                enabled: false,
             },
             resizeConfig: {
                 name: '${ $.name }_resize',
                 columnsProvider: '${ $.name }',
                 component: 'Magento_Ui/js/grid/resize',
-                enabled: false
+                enabled: false,
             },
             imports: {
-                rows: '${ $.provider }:data.items'
+                rows: '${ $.provider }:data.items',
             },
             listens: {
-                elems: 'updatePositions updateVisible',
+                "elems": 'updatePositions updateVisible',
                 '${ $.provider }:reload': 'onBeforeReload',
-                '${ $.provider }:reloaded': 'onDataReloaded'
+                '${ $.provider }:reloaded': 'onDataReloaded',
             },
             modules: {
                 dnd: '${ $.dndConfig.name }',
-                resize: '${ $.resizeConfig.name }'
+                resize: '${ $.resizeConfig.name }',
             },
             tracks: {
-                displayMode: true
+                displayMode: true,
             },
             statefull: {
-                displayMode: true
-            }
+                displayMode: true,
+            },
         },
 
         /**
@@ -74,7 +74,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'updateVisible');
 
             this._super()
@@ -90,11 +90,11 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track({
                     rows: [],
-                    visibleColumns: []
+                    visibleColumns: [],
                 });
 
             return this;
@@ -105,7 +105,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initDnd: function () {
+        initDnd: function() {
             if (this.dndConfig.enabled) {
                 layout([this.dndConfig]);
             }
@@ -118,7 +118,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initResize: function () {
+        initResize: function() {
             if (this.resizeConfig.enabled) {
                 layout([this.resizeConfig]);
             }
@@ -131,7 +131,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initEditor: function () {
+        initEditor: function() {
             if (this.editorConfig.enabled) {
                 layout([this.editorConfig]);
             }
@@ -144,8 +144,8 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initElement: function (element) {
-            var currentCount = this.elems().length,
+        initElement: function(element) {
+            let currentCount = this.elems().length,
                 totalCount = this.initChildCount;
 
             if (totalCount === currentCount) {
@@ -162,7 +162,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initPositions: function () {
+        initPositions: function() {
             this.on('positions', this.applyPositions.bind(this));
 
             this.setStatefull('positions');
@@ -175,10 +175,10 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        updatePositions: function () {
-            var positions = {};
+        updatePositions: function() {
+            let positions = {};
 
-            this.elems.each(function (elem, index) {
+            this.elems.each(function(elem, index) {
                 positions[elem.index] = index;
             });
 
@@ -194,13 +194,13 @@ define([
          *      index and value is its' position.
          * @returns {Listing} Chainable.
          */
-        applyPositions: function (positions) {
-            var sorting;
+        applyPositions: function(positions) {
+            let sorting;
 
-            sorting = this.elems.map(function (elem) {
+            sorting = this.elems.map(function(elem) {
                 return {
                     elem: elem,
-                    position: positions[elem.index]
+                    position: positions[elem.index],
                 };
             });
 
@@ -214,8 +214,8 @@ define([
          *
          * @returns {Array}
          */
-        getVisible: function () {
-            var observable = ko.getObservable(this, 'visibleColumns');
+        getVisible: function() {
+            let observable = ko.getObservable(this, 'visibleColumns');
 
             return observable || this.visibleColumns;
         },
@@ -226,8 +226,8 @@ define([
          *
          * @returns {String} Path to the template.
          */
-        getTemplate: function () {
-            var mode = this.displayModes[this.displayMode];
+        getTemplate: function() {
+            let mode = this.displayModes[this.displayMode];
 
             return mode.template;
         },
@@ -237,8 +237,8 @@ define([
          *
          * @returns {Array<Object>}
          */
-        getDisplayModes: function () {
-            var modes = this.displayModes;
+        getDisplayModes: function() {
+            let modes = this.displayModes;
 
             return _.values(modes);
         },
@@ -249,7 +249,7 @@ define([
          * @param {String} index
          * @returns {Listing} Chainable
          */
-        setDisplayMode: function (index) {
+        setDisplayMode: function(index) {
             this.displayMode = index;
 
             return this;
@@ -260,7 +260,7 @@ define([
          *
          * @returns {Number}
          */
-        countVisible: function () {
+        countVisible: function() {
             return this.visibleColumns.length;
         },
 
@@ -269,7 +269,7 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        updateVisible: function () {
+        updateVisible: function() {
             this.visibleColumns = this.elems.filter('visible');
 
             return this;
@@ -280,36 +280,36 @@ define([
          *
          * @returns {Boolean}
          */
-        hasData: function () {
+        hasData: function() {
             return !!this.rows && !!this.rows.length;
         },
 
         /**
          * Hides loader.
          */
-        hideLoader: function () {
+        hideLoader: function() {
             loader.get(this.name).hide();
         },
 
         /**
          * Shows loader.
          */
-        showLoader: function () {
+        showLoader: function() {
             loader.get(this.name).show();
         },
 
         /**
          * Handler of the data providers' 'reload' event.
          */
-        onBeforeReload: function () {
+        onBeforeReload: function() {
             this.showLoader();
         },
 
         /**
          * Handler of the data providers' 'reloaded' event.
          */
-        onDataReloaded: function () {
+        onDataReloaded: function() {
             resolver(this.hideLoader, this);
-        }
+        },
     });
 });

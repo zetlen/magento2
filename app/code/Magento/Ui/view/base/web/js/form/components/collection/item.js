@@ -9,13 +9,13 @@
 define([
     'underscore',
     'mageUtils',
-    '../tab'
-], function (_, utils, Tab) {
+    '../tab',
+], function(_, utils, Tab) {
     'use strict';
 
-    var previewConfig = {
+    let previewConfig = {
         separator: ' ',
-        prefix: ''
+        prefix: '',
     };
 
     /**
@@ -27,7 +27,7 @@ define([
     function parsePreview(data) {
         if (typeof data == 'string') {
             data = {
-                items: data
+                items: data,
             };
         }
 
@@ -40,13 +40,13 @@ define([
         defaults: {
             label: '',
             uniqueNs: 'activeCollectionItem',
-            previewTpl: 'ui/form/components/collection/preview'
+            previewTpl: 'ui/form/components/collection/preview',
         },
 
         /**
          * Extends instance with default config, calls initializes of parent class
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'buildPreview', 'hasPreview');
 
             return this._super();
@@ -58,7 +58,7 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
             this.displayed = [];
@@ -72,11 +72,11 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe({
                     noPreview: true,
-                    indexed: {}
+                    indexed: {},
                 });
 
             return this;
@@ -89,7 +89,7 @@ define([
          *
          * @param  {Object} elem
          */
-        initElement: function (elem) {
+        initElement: function(elem) {
             this._super()
                 .insertToIndexed(elem);
 
@@ -102,8 +102,8 @@ define([
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */
-        insertToIndexed: function (elem) {
-            var indexed = this.indexed();
+        insertToIndexed: function(elem) {
+            let indexed = this.indexed();
 
             indexed[elem.index] = elem;
 
@@ -116,7 +116,7 @@ define([
          * Destroys current instance along with all of its' children.
          * Overrides base method to clear data when this method is called.
          */
-        destroy: function () {
+        destroy: function() {
             this._super();
             this._clearData();
         },
@@ -127,7 +127,7 @@ define([
          *
          * @returns {Item} Chainable.
          */
-        _clearData: function () {
+        _clearData: function() {
             this.source.remove(this.dataScope);
 
             return this;
@@ -139,7 +139,7 @@ define([
          * @param  {Array} previews
          * @return {Array} - formatted previews
          */
-        formatPreviews: function (previews) {
+        formatPreviews: function(previews) {
             return previews.map(parsePreview);
         },
 
@@ -149,8 +149,8 @@ define([
          * @param  {Object} data
          * @return {Strict} - formatted preview string
          */
-        buildPreview: function (data) {
-            var preview = this.getPreview(data.items),
+        buildPreview: function(data) {
+            let preview = this.getPreview(data.items),
                 prefix = data.prefix;
 
             return prefix + preview.join(data.separator);
@@ -162,7 +162,7 @@ define([
          * @param  {Object}  data
          * @return {Boolean}
          */
-        hasPreview: function (data) {
+        hasPreview: function(data) {
             return !!this.getPreview(data.items).length;
         },
 
@@ -173,13 +173,13 @@ define([
          * @param  {Array} items - An array of element's indexes.
          * @returns {Array} An array of previews.
          */
-        getPreview: function (items) {
-            var elems = this.indexed(),
+        getPreview: function(items) {
+            let elems = this.indexed(),
                 displayed = this.displayed,
                 preview;
 
-            items = items.map(function (index) {
-                var elem = elems[index];
+            items = items.map(function(index) {
+                let elem = elems[index];
 
                 preview = elem && elem.visible() ? elem.getPreview() : '';
 
@@ -195,6 +195,6 @@ define([
             this.noPreview(!displayed.length);
 
             return _.compact(items);
-        }
+        },
     });
 });

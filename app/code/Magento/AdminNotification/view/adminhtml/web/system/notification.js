@@ -7,8 +7,8 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
-    'Magento_Ui/js/modal/modal'
-], function ($, mageTemplate) {
+    'Magento_Ui/js/modal/modal',
+], function($, mageTemplate) {
     'use strict';
 
     $.widget('mage.systemMessageDialog', $.mage.modal, {
@@ -20,37 +20,37 @@ define([
                         '<% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
                         '<%= item.text %>' +
                     '</li>' +
-                '<% }); %>'
+                '<% }); %>',
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this.options.title = $('#message-system-all').attr('title');
             this._super();
         },
 
         /** @inheritdoc */
-        openModal: function (severity) {
-            var superMethod = $.proxy(this._super, this);
+        openModal: function(severity) {
+            let superMethod = $.proxy(this._super, this);
 
             $.ajax({
                 url: this.options.ajaxUrl,
                 type: 'GET',
                 data: {
-                    severity: severity
-                }
-            }).done($.proxy(function (data) {
-                var tmpl = mageTemplate(this.options.systemMessageTemplate, {
+                    severity: severity,
+                },
+            }).done($.proxy(function(data) {
+                let tmpl = mageTemplate(this.options.systemMessageTemplate, {
                     data: {
-                        items: data
-                    }
+                        items: data,
+                    },
                 });
 
                 tmpl = $(tmpl);
 
                 this.element.html(
                     $('<ul />', {
-                        'class': 'message-system-list'
+                        'class': 'message-system-list',
                     }).append(tmpl)
                 ).trigger('contentUpdated');
 
@@ -61,17 +61,17 @@ define([
         },
 
         /** @inheritdoc */
-        closeModal: function () {
+        closeModal: function() {
             this._super();
-        }
+        },
     });
 
-    $(document).ready(function () {
-        $('#system_messages .message-system-short .error').on('click', function () {
+    $(document).ready(function() {
+        $('#system_messages .message-system-short .error').on('click', function() {
             $('#message-system-all').systemMessageDialog('openModal', 1);
         });
 
-        $('#system_messages .message-system-short .warning').on('click', function () {
+        $('#system_messages .message-system-short .warning').on('click', function() {
             $('#message-system-all').systemMessageDialog('openModal', 2);
         });
     });

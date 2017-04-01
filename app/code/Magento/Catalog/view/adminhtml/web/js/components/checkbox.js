@@ -4,8 +4,8 @@
 
 define([
     'Magento_Ui/js/form/element/abstract',
-    'knockout'
-], function (Abstract, ko) {
+    'knockout',
+], function(Abstract, ko) {
     'use strict';
 
     return Abstract.extend({
@@ -15,7 +15,7 @@ define([
          *
          * @returns {Element} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('checked');
 
@@ -24,22 +24,22 @@ define([
                 /**
                  * use 'mappedValue' as value if checked
                  */
-                read: function () {
+                read: function() {
                     return this.checked() ? this.mappedValue : '';
                 },
 
                 /**
                  * any value made checkbox checked
                  */
-                write: function (val) {
+                write: function(val) {
                     if (val) {
                         this.checked(true);
                     }
                 },
-                owner: this
+                owner: this,
             });
 
             return this;
-        }
+        },
     });
 });

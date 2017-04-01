@@ -4,20 +4,20 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/select'
-], function (Select) {
+    'Magento_Ui/js/form/element/select',
+], function(Select) {
     'use strict';
 
     return Select.extend({
         defaults: {
             filterBy: {
                 field: 'country',
-                target: '${ $.parentName }.country:value'
-            }
+                target: '${ $.parentName }.country:value',
+            },
         },
 
         /** @inheritdoc */
-        filter: function () {
+        filter: function() {
             this._super();
             this.disableSelect();
         },
@@ -27,8 +27,8 @@ define([
          *
          * @returns {*} instance - Chainable
          */
-        disableSelect: function () {
-            var empty = !this.options().length;
+        disableSelect: function() {
+            let empty = !this.options().length;
 
             this.disabled(empty);
 
@@ -37,6 +37,6 @@ define([
             }
 
             return this;
-        }
+        },
     });
 });

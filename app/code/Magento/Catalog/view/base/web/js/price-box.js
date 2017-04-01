@@ -8,15 +8,15 @@ define([
     'Magento_Catalog/js/price-utils',
     'underscore',
     'mage/template',
-    'jquery/ui'
-], function ($, utils, _, mageTemplate) {
+    'jquery/ui',
+], function($, utils, _, mageTemplate) {
     'use strict';
 
-    var globalOptions = {
+    let globalOptions = {
         productId: null,
         priceConfig: null,
         prices: {},
-        priceTemplate: '<span class="price"><%- data.formatted %></span>'
+        priceTemplate: '<span class="price"><%- data.formatted %></span>',
     };
 
     $.widget('mage.priceBox', {
@@ -28,7 +28,7 @@ define([
          * changed options.prices -> changed cached prices -> recalculation -> redraw price box
          */
         _init: function initPriceBox() {
-            var box = this.element;
+            let box = this.element;
 
             box.trigger('updatePrice');
             this.cache.displayPrices = utils.deepClone(this.options.prices);
@@ -39,7 +39,7 @@ define([
          */
         _create: function createPriceBox() {
             this.cache = {};
-            var box = this.element;
+            let box = this.element;
 
             this._setDefaultsFromPriceConfig();
             this._setDefaultsFromDataSet();
@@ -70,7 +70,7 @@ define([
          * @param {Object} newPrices
          */
         updatePrice: function updatePrice(newPrices) {
-            var prices = this.cache.displayPrices,
+            let prices = this.cache.displayPrices,
                 additionalPrice = {},
                 pricesCode = [],
                 priceValue, origin, finalPrice;
@@ -87,22 +87,22 @@ define([
                 pricesCode = _.keys(prices);
             }
 
-            _.each(this.cache.additionalPriceObject, function (additional) {
+            _.each(this.cache.additionalPriceObject, function(additional) {
                 if (additional && !_.isEmpty(additional)) {
                     pricesCode = _.keys(additional);
                 }
-                _.each(pricesCode, function (priceCode) {
+                _.each(pricesCode, function(priceCode) {
                     priceValue = additional[priceCode] || {};
                     priceValue.amount = +priceValue.amount || 0;
                     priceValue.adjustments = priceValue.adjustments || {};
 
                     additionalPrice[priceCode] = additionalPrice[priceCode] || {
                             'amount': 0,
-                            'adjustments': {}
+                            'adjustments': {},
                         };
-                    additionalPrice[priceCode].amount =  0 + (additionalPrice[priceCode].amount || 0) +
+                    additionalPrice[priceCode].amount = 0 + (additionalPrice[priceCode].amount || 0) +
                         priceValue.amount;
-                    _.each(priceValue.adjustments, function (adValue, adCode) {
+                    _.each(priceValue.adjustments, function(adValue, adCode) {
                         additionalPrice[priceCode].adjustments[adCode] = 0 +
                             (additionalPrice[priceCode].adjustments[adCode] || 0) + adValue;
                     });
@@ -112,7 +112,7 @@ define([
             if (_.isEmpty(additionalPrice)) {
                 this.cache.displayPrices = utils.deepClone(this.options.prices);
             } else {
-                _.each(additionalPrice, function (option, priceCode) {
+                _.each(additionalPrice, function(option, priceCode) {
                     origin = this.options.prices[priceCode] || {};
                     finalPrice = prices[priceCode] || {};
                     option.amount = option.amount || 0;
@@ -121,7 +121,7 @@ define([
                     finalPrice.adjustments = finalPrice.adjustments || {};
 
                     finalPrice.amount = 0 + origin.amount + option.amount;
-                    _.each(option.adjustments, function (pa, paCode) {
+                    _.each(option.adjustments, function(pa, paCode) {
                         finalPrice.adjustments[paCode] = 0 + (origin.adjustments[paCode] || 0) + pa;
                     });
                 }, this);
@@ -130,28 +130,28 @@ define([
             this.element.trigger('reloadPrice');
         },
 
-        /*eslint-disable no-extra-parens*/
+        /* eslint-disable no-extra-parens*/
         /**
          * Render price unit block.
          */
         reloadPrice: function reDrawPrices() {
-            var priceFormat = (this.options.priceConfig && this.options.priceConfig.priceFormat) || {},
+            let priceFormat = (this.options.priceConfig && this.options.priceConfig.priceFormat) || {},
                 priceTemplate = mageTemplate(this.options.priceTemplate);
 
-            _.each(this.cache.displayPrices, function (price, priceCode) {
-                price.final = _.reduce(price.adjustments, function (memo, amount) {
+            _.each(this.cache.displayPrices, function(price, priceCode) {
+                price.final = _.reduce(price.adjustments, function(memo, amount) {
                     return memo + amount;
                 }, price.amount);
 
                 price.formatted = utils.formatPrice(price.final, priceFormat);
 
                 $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({
-                    data: price
+                    data: price,
                 }));
             }, this);
         },
 
-        /*eslint-enable no-extra-parens*/
+        /* eslint-enable no-extra-parens*/
         /**
          * Overwrites initial (default) prices object.
          * @param {Object} prices
@@ -181,20 +181,20 @@ define([
          * setDefaultsFromDataSet
          */
         _setDefaultsFromDataSet: function _setDefaultsFromDataSet() {
-            var box = this.element,
+            let box = this.element,
                 priceHolders = $('[data-price-type]', box),
                 prices = this.options.prices;
 
             this.options.productId = box.data('productId');
 
             if (_.isEmpty(prices)) {
-                priceHolders.each(function (index, element) {
-                    var type = $(element).data('priceType'),
+                priceHolders.each(function(index, element) {
+                    let type = $(element).data('priceType'),
                         amount = parseFloat($(element).data('priceAmount'));
 
                     if (type && !_.isNaN(amount)) {
                         prices[type] = {
-                            amount: amount
+                            amount: amount,
                         };
                     }
                 });
@@ -205,12 +205,12 @@ define([
          * setDefaultsFromPriceConfig
          */
         _setDefaultsFromPriceConfig: function _setDefaultsFromPriceConfig() {
-            var config = this.options.priceConfig;
+            let config = this.options.priceConfig;
 
             if (config && config.prices) {
                 this.options.prices = config.prices;
             }
-        }
+        },
     });
 
     return $.mage.priceBox;

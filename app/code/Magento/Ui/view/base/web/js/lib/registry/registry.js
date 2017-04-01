@@ -9,11 +9,11 @@
 define([
     'jquery',
     'underscore',
-    'es6-collections'
-], function ($, _) {
+    'es6-collections',
+], function($, _) {
     'use strict';
 
-    var privateData = new WeakMap();
+    let privateData = new WeakMap();
 
     /**
      * Extarcts private items storage associated
@@ -51,11 +51,11 @@ define([
      * @returns {*}
      */
     function async(name, registry, method) {
-        var args = _.toArray(arguments).slice(3);
+        let args = _.toArray(arguments).slice(3);
 
         if (_.isString(method)) {
-            registry.get(name, function (component) {
-                component[method].apply(component, args);
+            registry.get(name, function(component) {
+                component[method](...args);
             });
         } else if (_.isFunction(method)) {
             registry.get(name, method);
@@ -75,7 +75,7 @@ define([
      * @returns {Boolean}
      */
     function compare(query, target) {
-        var matches = true,
+        let matches = true,
             index,
             keys,
             key;
@@ -113,7 +113,7 @@ define([
      *      => {key: 'value', key2: 'value2'}
      */
     function explode(query) {
-        var result = {},
+        let result = {},
             index,
             data;
 
@@ -144,7 +144,7 @@ define([
      * @returns {Array|Object|*}
      */
     function find(data, query, findAll) {
-        var iterator,
+        let iterator,
             item;
 
         query = explode(query);
@@ -172,9 +172,9 @@ define([
      * @constructor
      */
     function Registry() {
-        var data = {
+        let data = {
             items: {},
-            requests: []
+            requests: [],
         };
 
         this._updateRequests = _.debounce(this._updateRequests.bind(this), 10);
@@ -220,7 +220,7 @@ define([
          *      registry.set('second', {index: 'test2'});
          *      registry.get(['first', 'second'], function (first, second) {});
          */
-        get: function (query, callback) {
+        get: function(query, callback) {
             if (typeof callback !== 'function') {
                 return find(getItems(this), query);
             }
@@ -235,7 +235,7 @@ define([
          * @param {*} item - Item's data.
          * returns {Registry} Chainable.
          */
-        set: function (id, item) {
+        set: function(id, item) {
             getItems(this)[id] = item;
 
             this._updateRequests();
@@ -250,7 +250,7 @@ define([
          * @param {String} id - Item's identifier.
          * @returns {Registry} Chainable.
          */
-        remove: function (id) {
+        remove: function(id) {
             delete getItems(this)[id];
 
             return this;
@@ -264,7 +264,7 @@ define([
          *      See 'get' method for the syntax examples.
          * @returns {Array} Found elements.
          */
-        filter: function (query) {
+        filter: function(query) {
             return find(getItems(this), query, true);
         },
 
@@ -276,7 +276,7 @@ define([
          *      See 'get' method for the syntax examples.
          * @returns {Boolean}
          */
-        has: function (query) {
+        has: function(query) {
             return !!this.get(query);
         },
 
@@ -286,7 +286,7 @@ define([
          * @param {*} item - Item to be checked.
          * @returns {Boolean}
          */
-        contains: function (item) {
+        contains: function(item) {
             return _.contains(getItems(this), item);
         },
 
@@ -296,8 +296,8 @@ define([
          * @param {*} item - Item whose identifier will be extracted.
          * @returns {String|Undefined}
          */
-        indexOf: function (item) {
-            return _.findKey(getItems(this), function (elem) {
+        indexOf: function(item) {
+            return _.findKey(getItems(this), function(elem) {
                 return item === elem;
             });
         },
@@ -310,8 +310,8 @@ define([
          *      See 'get' method for the syntax examples.
          * @returns {jQueryPromise}
          */
-        promise: function (query) {
-            var defer    = $.Deferred(),
+        promise: function(query) {
+            let defer = $.Deferred(),
                 callback = defer.resolve.bind(defer);
 
             this.get(query, callback);
@@ -344,7 +344,7 @@ define([
          *          component.trigger(true);
          *      });
          */
-        async: function (query) {
+        async: function(query) {
             return async.bind(null, query, this);
         },
 
@@ -353,7 +353,7 @@ define([
          *
          * @returns {Registry} New instance.
          */
-        create: function () {
+        create: function() {
             return new Registry;
         },
 
@@ -368,8 +368,8 @@ define([
          *      all of the requested items are available.
          * @returns {Registry}
          */
-        _addRequest: function (queries, callback) {
-            var request;
+        _addRequest: function(queries, callback) {
+            let request;
 
             if (!Array.isArray(queries)) {
                 queries = queries ? [queries] : [];
@@ -377,7 +377,7 @@ define([
 
             request = {
                 queries: queries.map(explode),
-                callback: callback
+                callback: callback,
             };
 
             this._canResolve(request) ?
@@ -393,7 +393,7 @@ define([
          * @private
          * @returns {Registry} Chainable.
          */
-        _updateRequests: function () {
+        _updateRequests: function() {
             getRequests(this)
                 .filter(this._canResolve, this)
                 .forEach(this._resolveRequest, this);
@@ -409,10 +409,10 @@ define([
          * @param {Object} request - Request object.
          * @returns {Registry} Chainable.
          */
-        _resolveRequest: function (request) {
-            var requests = getRequests(this),
-                items    = request.queries.map(this.get, this),
-                index    = requests.indexOf(request);
+        _resolveRequest: function(request) {
+            let requests = getRequests(this),
+                items = request.queries.map(this.get, this),
+                index = requests.indexOf(request);
 
             request.callback.apply(null, items);
 
@@ -430,11 +430,11 @@ define([
          * @param {Object} request - Request object.
          * @returns {Boolean}
          */
-        _canResolve: function (request) {
-            var queries = request.queries;
+        _canResolve: function(request) {
+            let queries = request.queries;
 
             return queries.every(this.has, this);
-        }
+        },
     };
 
     return new Registry;

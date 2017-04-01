@@ -4,8 +4,8 @@
  */
 define([
     'ko',
-    '../template/renderer'
-], function (ko, renderer) {
+    '../template/renderer',
+], function(ko, renderer) {
     'use strict';
 
     ko.bindingHandlers.simpleChecked = {
@@ -16,8 +16,8 @@ define([
          * but with a difference that it wont' change values array if
          * value of DOM element changes.
          */
-        init: function (element, valueAccessor) {
-            var isCheckbox = element.type === 'checkbox',
+        "init": function(element, valueAccessor) {
+            let isCheckbox = element.type === 'checkbox',
                 isRadio = element.type === 'radio',
                 updateView,
                 updateModel;
@@ -29,8 +29,8 @@ define([
             /**
              * Updates checked observable
              */
-            updateModel = function () {
-                var  modelValue = ko.dependencyDetection.ignore(valueAccessor),
+            updateModel = function() {
+                let  modelValue = ko.dependencyDetection.ignore(valueAccessor),
                     isChecked = element.checked;
 
                 if (ko.computedContext.isInitial()) {
@@ -51,8 +51,8 @@ define([
             /**
              * Updates checkbox state
              */
-            updateView = function () {
-                var modelValue = ko.utils.unwrapObservable(valueAccessor());
+            updateView = function() {
+                let modelValue = ko.utils.unwrapObservable(valueAccessor());
 
                 element.checked = !!modelValue;
             };
@@ -60,18 +60,18 @@ define([
             ko.utils.registerEventHandler(element, 'change', updateModel);
 
             ko.computed(updateModel, null, {
-                disposeWhenNodeIsRemoved: element
+                disposeWhenNodeIsRemoved: element,
             });
             ko.computed(updateView, null, {
-                disposeWhenNodeIsRemoved: element
+                disposeWhenNodeIsRemoved: element,
             });
-        }
+        },
     };
 
     ko.expressionRewriting.twoWayBindings.simpleChecked = true;
 
     renderer.addAttribute('simpleChecked');
     renderer.addAttribute('simple-checked', {
-        binding: 'simpleChecked'
+        binding: 'simpleChecked',
     });
 });

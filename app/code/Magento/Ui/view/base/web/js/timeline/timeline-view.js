@@ -12,12 +12,12 @@ define([
     'underscore',
     'Magento_Ui/js/lib/view/utils/raf',
     'uiRegistry',
-    'uiClass'
-], function (ko, $, _, raf, registry, Class) {
+    'uiClass',
+], function(ko, $, _, raf, registry, Class) {
     'use strict';
 
-    var hasClassList = (function () {
-        var list = document.createElement('_').classList;
+    let hasClassList = (function() {
+        let list = document.createElement('_').classList;
 
         return !!list && !list.toggle('_test', false);
     })();
@@ -28,15 +28,15 @@ define([
      * @param {HTMLElement} elem
      */
     function toggleClass(elem) {
-        var classList   = elem.classList,
-            args        = Array.prototype.slice.call(arguments, 1),
+        let classList = elem.classList,
+            args = Array.prototype.slice.call(arguments, 1),
             $elem;
 
         if (hasClassList) {
-            classList.toggle.apply(classList, args);
+            classList.toggle(...args);
         } else {
             $elem = $(elem);
-            $elem.toggleClass.apply($elem, args);
+            $elem.toggleClass(...args);
         }
     }
 
@@ -46,8 +46,8 @@ define([
                 content: '.timeline-content',
                 timeUnit: '.timeline-unit',
                 item: '.timeline-item:not([data-role=no-data-msg])',
-                event: '.timeline-event'
-            }
+                event: '.timeline-event',
+            },
         },
 
         /**
@@ -55,7 +55,7 @@ define([
          *
          * @returns {TimelineView} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(
                 this,
                 'refresh',
@@ -85,8 +85,8 @@ define([
          *
          * @returns {TimelineView} Chainable.
          */
-        initModel: function () {
-            var model = registry.get(this.model);
+        initModel: function() {
+            let model = registry.get(this.model);
 
             model.on('scale', this.onScaleChange);
             model.source.on('reloaded', this.onDataReloaded);
@@ -102,10 +102,10 @@ define([
          *
          * @returns {TimelineView} Chainable.
          */
-        waitContent: function () {
+        waitContent: function() {
             $.async({
                 selector: this.selectors.content,
-                component: this.model
+                component: this.model,
             }, this.initContent);
 
             return this;
@@ -117,7 +117,7 @@ define([
          * @param {HTMLElement} content
          * @returns {TimelineView} Chainable.
          */
-        initContent: function (content) {
+        initContent: function(content) {
             this.$content = content;
 
             $(content).on('scroll', this.onContentScroll);
@@ -139,7 +139,7 @@ define([
          * @param {HTMLElement} elem
          * @returns {TimelineView} Chainable.
          */
-        initItem: function (elem) {
+        initItem: function(elem) {
             $(elem)
                 .bindings(this.getItemBindings)
                 .on('click', '._toend', this.onToEndClick)
@@ -154,7 +154,7 @@ define([
          * @param {HTMLElement} elem
          * @returns {TimelineView} Chainable.
          */
-        initTimeUnit: function (elem) {
+        initTimeUnit: function(elem) {
             $(elem).bindings(this.getTimeUnitBindings());
 
             return this;
@@ -164,7 +164,7 @@ define([
          * Updates items positions in a
          * loop if state of a view has changed.
          */
-        refresh: function () {
+        refresh: function() {
             raf(this.refresh);
 
             if (this._update) {
@@ -180,13 +180,13 @@ define([
          *
          * @returns {Object}
          */
-        getTimeUnitBindings: function () {
+        getTimeUnitBindings: function() {
             return {
                 style: {
-                    width: ko.computed(function () {
+                    width: ko.computed(function() {
                         return this.getTimeUnitWidth() + '%';
-                    }.bind(this))
-                }
+                    }.bind(this)),
+                },
             };
         },
 
@@ -197,17 +197,17 @@ define([
          * @param {Object} ctx
          * @returns {Object}
          */
-        getItemBindings: function (ctx) {
+        getItemBindings: function(ctx) {
             return {
                 style: {
-                    width: ko.computed(function () {
+                    "width": ko.computed(function() {
                         return this.getItemWidth(ctx.$row()) + '%';
                     }.bind(this)),
 
-                    'margin-left': ko.computed(function () {
+                    'margin-left': ko.computed(function() {
                         return this.getItemMargin(ctx.$row()) + '%';
-                    }.bind(this))
-                }
+                    }.bind(this)),
+                },
             };
         },
 
@@ -216,7 +216,7 @@ define([
          *
          * @returns {Number}
          */
-        getTimeUnitWidth: function () {
+        getTimeUnitWidth: function() {
             return 100 / this.model.scale;
         },
 
@@ -226,14 +226,14 @@ define([
          * @param {Object} record
          * @returns {String}
          */
-        getItemWidth: function (record) {
-            var days = 0;
+        getItemWidth: function(record) {
+            let days = 0;
 
             if (record) {
                 days = this.model.getDaysLength(record);
             }
 
-            return this.getTimeUnitWidth()  * days;
+            return this.getTimeUnitWidth() * days;
         },
 
         /**
@@ -242,8 +242,8 @@ define([
          * @param {Object} record
          * @returns {String}
          */
-        getItemMargin: function (record) {
-            var offset = 0;
+        getItemMargin: function(record) {
+            let offset = 0;
 
             if (record) {
                 offset = this.model.getStartDelta(record);
@@ -258,8 +258,8 @@ define([
          *
          * @returns {Array<HTMLElement>}
          */
-        getItems: function () {
-            var items = this.$content.querySelectorAll(this.selectors.item);
+        getItems: function() {
+            let items = this.$content.querySelectorAll(this.selectors.item);
 
             return _.toArray(items);
         },
@@ -269,7 +269,7 @@ define([
          *
          * @returns {TimelineView} Chainable.
          */
-        updateItemsPosition: function () {
+        updateItemsPosition: function() {
             this.getItems()
                 .forEach(this.updatePositionFor, this);
 
@@ -282,10 +282,10 @@ define([
          * @param {HTMLElement} $elem
          * @returns {TimelineView} Chainable.
          */
-        updatePositionFor: function ($elem) {
-            var $event      = $elem.querySelector(this.selectors.event),
-                leftEdge    = this.getLeftEdgeFor($elem),
-                rightEdge   = this.getRightEdgeFor($elem);
+        updatePositionFor: function($elem) {
+            let $event = $elem.querySelector(this.selectors.event),
+                leftEdge = this.getLeftEdgeFor($elem),
+                rightEdge = this.getRightEdgeFor($elem);
 
             if ($event) {
                 $event.style.left = Math.max(-leftEdge, 0) + 'px';
@@ -304,8 +304,8 @@ define([
          * @param {HTMLElement} elem
          * @returns {TimelineView}
          */
-        toStartOf: function (elem) {
-            var leftEdge = this.getLeftEdgeFor(elem);
+        toStartOf: function(elem) {
+            let leftEdge = this.getLeftEdgeFor(elem);
 
             this.$content.scrollLeft += leftEdge;
 
@@ -318,8 +318,8 @@ define([
          * @param {HTMLElement} elem
          * @returns {TimelineView}
          */
-        toEndOf: function (elem) {
-            var rightEdge = this.getRightEdgeFor(elem);
+        toEndOf: function(elem) {
+            let rightEdge = this.getRightEdgeFor(elem);
 
             this.$content.scrollLeft += rightEdge + 1;
 
@@ -333,8 +333,8 @@ define([
          * @param {HTMLElement} elem
          * @returns {Number}
          */
-        getLeftEdgeFor: function (elem) {
-            var leftOffset = elem.getBoundingClientRect().left;
+        getLeftEdgeFor: function(elem) {
+            let leftOffset = elem.getBoundingClientRect().left;
 
             return leftOffset - this.$content.getBoundingClientRect().left;
         },
@@ -346,9 +346,9 @@ define([
          * @param {HTMLElement} elem
          * @returns {Number}
          */
-        getRightEdgeFor: function (elem) {
-            var elemWidth   = elem.offsetWidth,
-                leftEdge    = this.getLeftEdgeFor(elem);
+        getRightEdgeFor: function(elem) {
+            let elemWidth = elem.offsetWidth,
+                leftEdge = this.getLeftEdgeFor(elem);
 
             return leftEdge + elemWidth - this.$content.offsetWidth;
         },
@@ -358,8 +358,8 @@ define([
          *
          * @param {jQueryEvent} event
          */
-        onToStartClick: function (event) {
-            var elem = event.originalEvent.currentTarget;
+        onToStartClick: function(event) {
+            let elem = event.originalEvent.currentTarget;
 
             event.stopPropagation();
 
@@ -371,8 +371,8 @@ define([
          *
          * @param {jQueryEvent} event
          */
-        onToEndClick: function (event) {
-            var elem = event.originalEvent.currentTarget;
+        onToEndClick: function(event) {
+            let elem = event.originalEvent.currentTarget;
 
             event.stopPropagation();
 
@@ -382,7 +382,7 @@ define([
         /**
          * Handler of the scale value 'change' event.
          */
-        onScaleChange: function () {
+        onScaleChange: function() {
             this._update = true;
         },
 
@@ -390,29 +390,29 @@ define([
          * Callback function which is invoked
          * when event element was rendered.
          */
-        onEventElementRender: function () {
+        onEventElementRender: function() {
             this._update = true;
         },
 
         /**
          * Window 'resize' event handler.
          */
-        onWindowResize: function () {
+        onWindowResize: function() {
             this._update = true;
         },
 
         /**
          * Content container 'scroll' event handler.
          */
-        onContentScroll: function () {
+        onContentScroll: function() {
             this._update = true;
         },
 
         /**
          * Data 'reload' event handler.
          */
-        onDataReloaded: function () {
+        onDataReloaded: function() {
             this._update = true;
-        }
+        },
     });
 });

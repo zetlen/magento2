@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            fptAttribute: 'Magento_Weee/js/fpt-attribute'
-        }
-    }
+            fptAttribute: 'Magento_Weee/js/fpt-attribute',
+        },
+    },
 };

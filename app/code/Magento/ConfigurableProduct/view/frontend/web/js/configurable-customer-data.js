@@ -1,11 +1,11 @@
 require([
     'jquery',
-    'Magento_ConfigurableProduct/js/options-updater'
-], function ($, Updater) {
+    'Magento_ConfigurableProduct/js/options-updater',
+], function($, Updater) {
     'use strict';
 
-    var selectors = {
-            formSelector: '#product_addtocart_form'
+    let selectors = {
+            formSelector: '#product_addtocart_form',
         },
         configurableWidgetName = 'mageConfigurable',
         widgetInitEvent = 'configurable.initialized',
@@ -13,8 +13,8 @@ require([
     /**
     * Sets all configurable attribute's selected values
     */
-    updateConfigurableOptions = function () {
-        var configurableWidget = $(selectors.formSelector).data(configurableWidgetName);
+    updateConfigurableOptions = function() {
+        let configurableWidget = $(selectors.formSelector).data(configurableWidgetName);
 
         if (!configurableWidget) {
             return;

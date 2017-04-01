@@ -9,8 +9,8 @@ define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Payment/js/model/credit-card-validation/credit-card-data',
     'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator',
-    'mage/translate'
-], function (_, Component, creditCardData, cardNumberValidator, $t) {
+    'mage/translate',
+], function(_, Component, creditCardData, cardNumberValidator, $t) {
     'use strict';
 
     return Component.extend({
@@ -23,11 +23,11 @@ define([
             creditCardSsStartYear: '',
             creditCardSsIssue: '',
             creditCardVerificationNumber: '',
-            selectedCardType: null
+            selectedCardType: null,
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe([
                     'creditCardType',
@@ -38,7 +38,7 @@ define([
                     'creditCardSsStartMonth',
                     'creditCardSsStartYear',
                     'creditCardSsIssue',
-                    'selectedCardType'
+                    'selectedCardType',
                 ]);
 
             return this;
@@ -47,14 +47,14 @@ define([
         /**
          * Init component
          */
-        initialize: function () {
-            var self = this;
+        initialize: function() {
+            let self = this;
 
             this._super();
 
-            //Set credit card number to credit card data object
-            this.creditCardNumber.subscribe(function (value) {
-                var result;
+            // Set credit card number to credit card data object
+            this.creditCardNumber.subscribe(function(value) {
+                let result;
 
                 self.selectedCardType(null);
 
@@ -78,18 +78,18 @@ define([
                 }
             });
 
-            //Set expiration year to credit card data object
-            this.creditCardExpYear.subscribe(function (value) {
+            // Set expiration year to credit card data object
+            this.creditCardExpYear.subscribe(function(value) {
                 creditCardData.expirationYear = value;
             });
 
-            //Set expiration month to credit card data object
-            this.creditCardExpMonth.subscribe(function (value) {
+            // Set expiration month to credit card data object
+            this.creditCardExpMonth.subscribe(function(value) {
                 creditCardData.expirationMonth = value;
             });
 
-            //Set cvv code to credit card data object
-            this.creditCardVerificationNumber.subscribe(function (value) {
+            // Set cvv code to credit card data object
+            this.creditCardVerificationNumber.subscribe(function(value) {
                 creditCardData.cvvCode = value;
             });
         },
@@ -98,7 +98,7 @@ define([
          * Get code
          * @returns {String}
          */
-        getCode: function () {
+        getCode: function() {
             return 'cc';
         },
 
@@ -106,7 +106,7 @@ define([
          * Get data
          * @returns {Object}
          */
-        getData: function () {
+        getData: function() {
             return {
                 'method': this.item.method,
                 'additional_data': {
@@ -117,8 +117,8 @@ define([
                     'cc_type': this.creditCardType(),
                     'cc_exp_year': this.creditCardExpYear(),
                     'cc_exp_month': this.creditCardExpMonth(),
-                    'cc_number': this.creditCardNumber()
-                }
+                    'cc_number': this.creditCardNumber(),
+                },
             };
         },
 
@@ -126,7 +126,7 @@ define([
          * Get list of available credit card types
          * @returns {Object}
          */
-        getCcAvailableTypes: function () {
+        getCcAvailableTypes: function() {
             return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
         },
 
@@ -135,7 +135,7 @@ define([
          * @param {String} type
          * @returns {Boolean}
          */
-        getIcons: function (type) {
+        getIcons: function(type) {
             return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type) ?
                 window.checkoutConfig.payment.ccform.icons[type]
                 : false;
@@ -145,7 +145,7 @@ define([
          * Get list of months
          * @returns {Object}
          */
-        getCcMonths: function () {
+        getCcMonths: function() {
             return window.checkoutConfig.payment.ccform.months[this.getCode()];
         },
 
@@ -153,7 +153,7 @@ define([
          * Get list of years
          * @returns {Object}
          */
-        getCcYears: function () {
+        getCcYears: function() {
             return window.checkoutConfig.payment.ccform.years[this.getCode()];
         },
 
@@ -161,7 +161,7 @@ define([
          * Check if current payment has verification
          * @returns {Boolean}
          */
-        hasVerification: function () {
+        hasVerification: function() {
             return window.checkoutConfig.payment.ccform.hasVerification[this.getCode()];
         },
 
@@ -169,7 +169,7 @@ define([
          * @deprecated
          * @returns {Boolean}
          */
-        hasSsCardType: function () {
+        hasSsCardType: function() {
             return window.checkoutConfig.payment.ccform.hasSsCardType[this.getCode()];
         },
 
@@ -177,7 +177,7 @@ define([
          * Get image url for CVV
          * @returns {String}
          */
-        getCvvImageUrl: function () {
+        getCvvImageUrl: function() {
             return window.checkoutConfig.payment.ccform.cvvImageUrl[this.getCode()];
         },
 
@@ -185,7 +185,7 @@ define([
          * Get image for CVV
          * @returns {String}
          */
-        getCvvImageHtml: function () {
+        getCvvImageHtml: function() {
             return '<img src="' + this.getCvvImageUrl() +
                 '" alt="' + $t('Card Verification Number Visual Reference') +
                 '" title="' + $t('Card Verification Number Visual Reference') +
@@ -196,7 +196,7 @@ define([
          * @deprecated
          * @returns {Object}
          */
-        getSsStartYears: function () {
+        getSsStartYears: function() {
             return window.checkoutConfig.payment.ccform.ssStartYears[this.getCode()];
         },
 
@@ -204,11 +204,11 @@ define([
          * Get list of available credit card types values
          * @returns {Object}
          */
-        getCcAvailableTypesValues: function () {
-            return _.map(this.getCcAvailableTypes(), function (value, key) {
+        getCcAvailableTypesValues: function() {
+            return _.map(this.getCcAvailableTypes(), function(value, key) {
                 return {
                     'value': key,
-                    'type': value
+                    'type': value,
                 };
             });
         },
@@ -217,11 +217,11 @@ define([
          * Get list of available month values
          * @returns {Object}
          */
-        getCcMonthsValues: function () {
-            return _.map(this.getCcMonths(), function (value, key) {
+        getCcMonthsValues: function() {
+            return _.map(this.getCcMonths(), function(value, key) {
                 return {
                     'value': key,
-                    'month': value
+                    'month': value,
                 };
             });
         },
@@ -230,11 +230,11 @@ define([
          * Get list of available year values
          * @returns {Object}
          */
-        getCcYearsValues: function () {
-            return _.map(this.getCcYears(), function (value, key) {
+        getCcYearsValues: function() {
+            return _.map(this.getCcYears(), function(value, key) {
                 return {
                     'value': key,
-                    'year': value
+                    'year': value,
                 };
             });
         },
@@ -243,11 +243,11 @@ define([
          * @deprecated
          * @returns {Object}
          */
-        getSsStartYearsValues: function () {
-            return _.map(this.getSsStartYears(), function (value, key) {
+        getSsStartYearsValues: function() {
+            return _.map(this.getSsStartYears(), function(value, key) {
                 return {
                     'value': key,
-                    'year': value
+                    'year': value,
                 };
             });
         },
@@ -256,7 +256,7 @@ define([
          * Is legend available to display
          * @returns {Boolean}
          */
-        isShowLegend: function () {
+        isShowLegend: function() {
             return false;
         },
 
@@ -265,12 +265,12 @@ define([
          * @param {String} code
          * @returns {String}
          */
-        getCcTypeTitleByCode: function (code) {
-            var title = '',
+        getCcTypeTitleByCode: function(code) {
+            let title = '',
                 keyValue = 'value',
                 keyType = 'type';
 
-            _.each(this.getCcAvailableTypesValues(), function (value) {
+            _.each(this.getCcAvailableTypesValues(), function(value) {
                 if (value[keyValue] === code) {
                     title = value[keyType];
                 }
@@ -284,7 +284,7 @@ define([
          * @param {String} number
          * @returns {String}
          */
-        formatDisplayCcNumber: function (number) {
+        formatDisplayCcNumber: function(number) {
             return 'xxxx-' + number.substr(-4);
         },
 
@@ -292,15 +292,15 @@ define([
          * Get credit card details
          * @returns {Array}
          */
-        getInfo: function () {
+        getInfo: function() {
             return [
                 {
-                    'name': 'Credit Card Type', value: this.getCcTypeTitleByCode(this.creditCardType())
+                    'name': 'Credit Card Type', "value": this.getCcTypeTitleByCode(this.creditCardType()),
                 },
                 {
-                    'name': 'Credit Card Number', value: this.formatDisplayCcNumber(this.creditCardNumber())
-                }
+                    'name': 'Credit Card Number', "value": this.formatDisplayCcNumber(this.creditCardNumber()),
+                },
             ];
-        }
+        },
     });
 });

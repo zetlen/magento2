@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery'], function ($) {
+define(['jquery'], function($) {
     'use strict';
 
-    var ratesRules = {},
+    let ratesRules = {},
         checkoutConfig = window.checkoutConfig;
 
     return {
@@ -14,7 +14,7 @@ define(['jquery'], function ($) {
          * @param {String} carrier
          * @param {Object} rules
          */
-        registerRules: function (carrier, rules) {
+        registerRules: function(carrier, rules) {
             if (checkoutConfig.activeCarriers.indexOf(carrier) !== -1) {
                 ratesRules[carrier] = rules.getRules();
             }
@@ -23,19 +23,19 @@ define(['jquery'], function ($) {
         /**
          * @return {Object}
          */
-        getRules: function () {
+        getRules: function() {
             return ratesRules;
         },
 
         /**
          * @return {Array}
          */
-        getObservableFields: function () {
-            var self = this,
+        getObservableFields: function() {
+            let self = this,
                 observableFields = [];
 
-            $.each(self.getRules(), function (carrier, fields) {
-                $.each(fields, function (field) {
+            $.each(self.getRules(), function(carrier, fields) {
+                $.each(fields, function(field) {
                     if (observableFields.indexOf(field) === -1) {
                         observableFields.push(field);
                     }
@@ -43,6 +43,6 @@ define(['jquery'], function ($) {
             });
 
             return observableFields;
-        }
+        },
     };
 });

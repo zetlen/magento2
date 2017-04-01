@@ -4,11 +4,11 @@
  */
 
 define([
-    '../model/quote'
-], function (quote) {
+    '../model/quote',
+], function(quote) {
     'use strict';
 
-    return function (shippingMethod) {
+    return function(shippingMethod) {
         quote.shippingMethod(shippingMethod);
     };
 });

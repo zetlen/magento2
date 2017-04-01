@@ -8,8 +8,8 @@
  */
 define([
     'underscore',
-    'uiCollection'
-], function (_, Collection) {
+    'uiCollection',
+], function(_, Collection) {
     'use strict';
 
     return Collection.extend({
@@ -22,14 +22,14 @@ define([
             fieldTemplate: 'ui/form/field',
             breakLine: true,
             validateWholeGroup: false,
-            additionalClasses: {}
+            additionalClasses: {},
         },
 
         /**
          * Extends this with defaults and config.
          * Then calls initObservable, iniListenes and extractData methods.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 ._setClasses();
 
@@ -42,11 +42,11 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('visible')
                 .observe({
-                    required: !!+this.required
+                    required: !!+this.required,
                 });
 
             return this;
@@ -57,15 +57,15 @@ define([
          *
          * @returns {Group} Chainable.
          */
-        _setClasses: function () {
-            var addtional = this.additionalClasses,
+        _setClasses: function() {
+            let addtional = this.additionalClasses,
                 classes;
 
             if (_.isString(addtional)) {
                 addtional = this.additionalClasses.split(' ');
                 classes = this.additionalClasses = {};
 
-                addtional.forEach(function (name) {
+                addtional.forEach(function(name) {
                     classes[name] = true;
                 }, this);
             }
@@ -73,9 +73,9 @@ define([
             _.extend(this.additionalClasses, {
                 'admin__control-grouped': !this.breakLine,
                 'admin__control-fields': this.breakLine,
-                required:   this.required,
-                _error:     this.error,
-                _disabled:  this.disabled
+                "required": this.required,
+                "_error": this.error,
+                "_disabled": this.disabled,
             });
 
             return this;
@@ -85,7 +85,7 @@ define([
          * Defines if group has only one element.
          * @return {Boolean}
          */
-        isSingle: function () {
+        isSingle: function() {
             return this.elems.getLength() === 1;
         },
 
@@ -93,7 +93,7 @@ define([
          * Defines if group has multiple elements.
          * @return {Boolean}
          */
-        isMultiple: function () {
+        isMultiple: function() {
             return this.elems.getLength() > 1;
         },
 
@@ -102,8 +102,8 @@ define([
          *
          * @returns {Array}
          */
-        getPreview: function () {
+        getPreview: function() {
             return this.elems.map('getPreview');
-        }
+        },
     });
 });

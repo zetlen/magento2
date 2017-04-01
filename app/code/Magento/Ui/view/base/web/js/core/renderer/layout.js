@@ -8,11 +8,11 @@ define([
     'jquery',
     'mageUtils',
     'uiRegistry',
-    './types'
-], function (_, $, utils, registry, types) {
+    './types',
+], function(_, $, utils, registry, types) {
     'use strict';
 
-    var templates = registry.create(),
+    let templates = registry.create(),
         layout = {},
         cachedConfig = {};
 
@@ -25,7 +25,7 @@ define([
      * @returns {String}
      */
     function getNodeName(parent, node, name) {
-        var parentName = parent && parent.name;
+        let parentName = parent && parent.name;
 
         if (typeof name !== 'string') {
             name = node.name || name;
@@ -53,7 +53,7 @@ define([
      * @returns {String}
      */
     function getDataScope(parent, node) {
-        var dataScope = node.dataScope,
+        let dataScope = node.dataScope,
             parentScope = parent && parent.dataScope;
 
         return !utils.isEmpty(parentScope) ?
@@ -70,9 +70,9 @@ define([
      * @returns {jQueryPromise}
      */
     function loadDeps(node) {
-        var loaded = $.Deferred();
+        let loaded = $.Deferred();
 
-        registry.get(node.deps, function (deps) {
+        registry.get(node.deps, function(deps) {
             node.provider = node.extendProvider ? deps && deps.name : node.provider;
             loaded.resolve(node);
         });
@@ -87,10 +87,10 @@ define([
      * @returns {jQueryPromise}
      */
     function loadSource(node) {
-        var loaded = $.Deferred(),
+        let loaded = $.Deferred(),
             source = node.component;
 
-        require([source], function (constr) {
+        require([source], function(constr) {
             loaded.resolve(node, constr);
         });
 
@@ -104,7 +104,7 @@ define([
      * @param {Function} Constr
      */
     function initComponent(node, Constr) {
-        var component = new Constr(_.omit(node, 'children'));
+        let component = new Constr(_.omit(node, 'children'));
 
         registry.set(node.name, component);
     }
@@ -139,8 +139,8 @@ define([
          * @param {Object} parent
          * @param {Object|String} node
          */
-        iterator: function (parent, node) {
-            var action = _.isString(node) ?
+        iterator: function(parent, node) {
+            let action = _.isString(node) ?
                 this.addChild :
                 this.process;
 
@@ -155,7 +155,7 @@ define([
          * @param {String} name
          * @returns {Object}
          */
-        process: function (parent, node, name) {
+        process: function(parent, node, name) {
             if (!parent && node.parent) {
                 return this.waitParent(node, name);
             }
@@ -187,13 +187,13 @@ define([
          * @param {String} name
          * @returns {Boolean|Object}
          */
-        build: function (parent, node, name) {
-            var defaults    = parent && parent.childDefaults || {},
-                children    = node.children,
-                type        = getNodeType(parent, node),
-                dataScope   = getDataScope(parent, node),
+        build: function(parent, node, name) {
+            let defaults = parent && parent.childDefaults || {},
+                children = node.children,
+                type = getNodeType(parent, node),
+                dataScope = getDataScope(parent, node),
                 component,
-                extendDeps  = true,
+                extendDeps = true,
                 nodeName;
 
             node.children = false;
@@ -228,7 +228,7 @@ define([
                 name: nodeName,
                 dataScope: dataScope,
                 parentName: utils.getPart(nodeName, -2),
-                parentScope: utils.getPart(dataScope, -2)
+                parentScope: utils.getPart(dataScope, -2),
             });
 
             node.children = children;
@@ -245,7 +245,7 @@ define([
                 node.isTemplate = false;
 
                 templates.set(node.name, node);
-                registry.get(node.parentName, function (parentComp) {
+                registry.get(node.parentName, function(parentComp) {
                     parentComp.childTemplate = node;
                 });
 
@@ -265,7 +265,7 @@ define([
          * @param {Object} node
          * @returns {Object}
          */
-        initComponent: function (node) {
+        initComponent: function(node) {
             if (!node.component) {
                 return this;
             }
@@ -275,7 +275,7 @@ define([
                 .done(initComponent);
 
             return this;
-        }
+        },
     });
 
     _.extend(layout, {
@@ -286,10 +286,10 @@ define([
          * @param {Object} node
          * @returns {Object}
          */
-        waitTemplate: function (parent, node) {
-            var args = _.toArray(arguments);
+        waitTemplate: function(parent, node) {
+            let args = _.toArray(arguments);
 
-            templates.get(node.nodeTemplate, function () {
+            templates.get(node.nodeTemplate, function() {
                 this.applyTemplate.apply(this, args);
             }.bind(this));
 
@@ -303,10 +303,10 @@ define([
          * @param {String} name
          * @returns {Object}
          */
-        waitParent: function (node, name) {
-            var process = this.process.bind(this);
+        waitParent: function(node, name) {
+            let process = this.process.bind(this);
 
-            registry.get(node.parent, function (parent) {
+            registry.get(node.parent, function(parent) {
                 process(parent, node, name);
             });
 
@@ -320,15 +320,15 @@ define([
          * @param {Object} node
          * @param {String} name
          */
-        applyTemplate: function (parent, node, name) {
-            var template = templates.get(node.nodeTemplate);
+        applyTemplate: function(parent, node, name) {
+            let template = templates.get(node.nodeTemplate);
 
             node = utils.extend({}, template, node);
 
             delete node.nodeTemplate;
 
             this.process(parent, node, name);
-        }
+        },
     });
 
     _.extend(layout, {
@@ -338,8 +338,8 @@ define([
          * @param {Object} node
          * @returns {Object}
          */
-        manipulate: function (node) {
-            var name = node.name;
+        manipulate: function(node) {
+            let name = node.name;
 
             if (node.appendTo) {
                 this.insert(name, node.appendTo, -1);
@@ -364,8 +364,8 @@ define([
          * @param {Number} position
          * @returns {Object}
          */
-        insert: function (item, target, position) {
-            registry.get(target, function (container) {
+        insert: function(item, target, position) {
+            registry.get(target, function(container) {
                 container.insertChild(item, position);
             });
 
@@ -379,8 +379,8 @@ define([
          * @param {Array} targets
          * @returns {Object}
          */
-        insertTo: function (item, targets) {
-            _.each(targets, function (info, target) {
+        insertTo: function(item, targets) {
+            _.each(targets, function(info, target) {
                 this.insert(item, target, info.position);
             }, this);
 
@@ -394,8 +394,8 @@ define([
          * @param {Object|String} child
          * @returns {Object}
          */
-        addChild: function (parent, child) {
-            var name;
+        addChild: function(parent, child) {
+            let name;
 
             if (parent && parent.component) {
                 name = child.name || child;
@@ -411,15 +411,15 @@ define([
          *
          * @param {Array} components
          */
-        merge: function (components) {
-            var cachedKey = _.keys(components)[0],
+        merge: function(components) {
+            let cachedKey = _.keys(components)[0],
                 compared = utils.compare(cachedConfig[cachedKey], components),
                 remove = this.filterComponents(this.getByProperty(compared.changes, 'type', 'remove'), true),
                 update = this.getByProperty(compared.changes, 'type', 'update'),
                 dataSources = this.getDataSources(components),
                 names, index, name, component;
 
-            _.each(dataSources, function (val, key) {
+            _.each(dataSources, function(val, key) {
                 name = key.replace(/\.children|\.config/g, '');
                 component = registry.get(name);
 
@@ -431,7 +431,7 @@ define([
                 );
             }, this);
 
-            _.each(remove, function (val) {
+            _.each(remove, function(val) {
                 component = registry.get(val.path);
 
                 if (component) {
@@ -439,11 +439,11 @@ define([
                 }
             });
 
-            update = _.compact(_.filter(update, function (val) {
+            update = _.compact(_.filter(update, function(val) {
                 return !_.isEqual(val.oldValue, val.value);
             }));
 
-            _.each(update, function (val) {
+            _.each(update, function(val) {
                 names = val.path.split('.');
                 index = Math.max(_.lastIndexOf(names, 'config'), _.lastIndexOf(names, 'children') + 2);
                 name = _.without(names.splice(0, index), 'children', 'config').join('.');
@@ -470,8 +470,8 @@ define([
          * @param {String} parentPath
          * @returns {Object}
          */
-        getDataSources: function (config, parentPath) {
-            var dataSources = {},
+        getDataSources: function(config, parentPath) {
+            let dataSources = {},
                 key, obj;
 
             /* eslint-disable no-loop-func, max-depth */
@@ -486,7 +486,7 @@ define([
                     } else if (_.isObject(config[key])) {
                         obj = this.getDataSources(config[key], utils.fullPath(parentPath, key));
 
-                        _.each(obj, function (value, path) {
+                        _.each(obj, function(value, path) {
                             dataSources[path] = value;
                         });
                     }
@@ -505,8 +505,8 @@ define([
          * @param {Object} config
          * @returns {Boolean|Object}
          */
-        getFullConfig: function (path, config) {
-            var index;
+        getFullConfig: function(path, config) {
+            let index;
 
             path = path.split('.');
             index = _.lastIndexOf(path, 'config');
@@ -516,7 +516,7 @@ define([
             }
             path = path.splice(0, index);
 
-            _.each(path, function (val) {
+            _.each(path, function(val) {
                 config = config[val];
             });
 
@@ -530,8 +530,8 @@ define([
          * @param {String} prop
          * @param {*} propValue
          */
-        getByProperty: function (data, prop, propValue) {
-            return _.filter(data, function (value) {
+        getByProperty: function(data, prop, propValue) {
+            return _.filter(data, function(value) {
                 return value[prop] === propValue;
             });
         },
@@ -546,17 +546,17 @@ define([
          * @param {String} keyName
          * @returns {Array}
          */
-        filterComponents: function (data, splitPath, index, separator, keyName) {
-            var result = [],
+        filterComponents: function(data, splitPath, index, separator, keyName) {
+            let result = [],
                 names, length;
 
             index = -2;
             separator = '.' || separator;
             keyName = 'children' || keyName;
 
-            _.each(data, function (val) {
+            _.each(data, function(val) {
                 names = val.path.split(separator);
-                length  = names.length;
+                length = names.length;
 
                 if (names[length + index] === keyName) {
                     val.path = splitPath ? _.without(names, keyName).join(separator) : val.path;
@@ -565,7 +565,7 @@ define([
             });
 
             return result;
-        }
+        },
     });
 
     return run;

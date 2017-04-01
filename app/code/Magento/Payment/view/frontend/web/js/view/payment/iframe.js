@@ -12,8 +12,8 @@ define([
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/action/set-payment-information',
     'Magento_Checkout/js/model/payment/additional-validators',
-    'Magento_Ui/js/modal/alert'
-], function (
+    'Magento_Ui/js/modal/alert',
+], function(
     $,
     Component,
     messageList,
@@ -29,62 +29,62 @@ define([
         defaults: {
             template: 'Magento_Payment/payment/iframe',
             timeoutId: null,
-            timeoutMessage: 'Sorry, but something went wrong.'
+            timeoutMessage: 'Sorry, but something went wrong.',
         },
 
         /**
          * @returns {String}
          */
-        getSource: function () {
+        getSource: function() {
             return window.checkoutConfig.payment.iframe.source[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getControllerName: function () {
+        getControllerName: function() {
             return window.checkoutConfig.payment.iframe.controllerName[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getPlaceOrderUrl: function () {
+        getPlaceOrderUrl: function() {
             return window.checkoutConfig.payment.iframe.placeOrderUrl[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getCgiUrl: function () {
+        getCgiUrl: function() {
             return window.checkoutConfig.payment.iframe.cgiUrl[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getSaveOrderUrl: function () {
+        getSaveOrderUrl: function() {
             return window.checkoutConfig.payment.iframe.saveOrderUrl[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getDateDelim: function () {
+        getDateDelim: function() {
             return window.checkoutConfig.payment.iframe.dateDelim[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getCardFieldsMap: function () {
+        getCardFieldsMap: function() {
             return window.checkoutConfig.payment.iframe.cardFieldsMap[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getExpireYearLength: function () {
+        getExpireYearLength: function() {
             return window.checkoutConfig.payment.iframe.expireYearLength[this.getCode()];
         },
 
@@ -92,30 +92,29 @@ define([
          * @param {Object} parent
          * @returns {Function}
          */
-        originalPlaceOrder: function (parent) {
+        originalPlaceOrder: function(parent) {
             return parent.placeOrder.bind(parent);
         },
 
         /**
          * @returns {Number}
          */
-        getTimeoutTime: function () {
+        getTimeoutTime: function() {
             return window.checkoutConfig.payment.iframe.timeoutTime[this.getCode()];
         },
 
         /**
          * @returns {String}
          */
-        getTimeoutMessage: function () {
+        getTimeoutMessage: function() {
             return $t(this.timeoutMessage);
         },
 
         /**
          * @override
          */
-        placeOrder: function () {
+        placeOrder: function() {
             if (this.validateHandler() && additionalValidators.validate()) {
-
                 fullScreenLoader.startLoader();
 
                 this.isPlaceOrderActionAllowed(false);
@@ -124,7 +123,7 @@ define([
                     setPaymentInformationAction(
                         this.messageContainer,
                         {
-                            method: this.getCode()
+                            method: this.getCode(),
                         }
                     )
                 ).done(this.done.bind(this))
@@ -137,7 +136,7 @@ define([
         /**
          * {Function}
          */
-        initTimeoutHandler: function () {
+        initTimeoutHandler: function() {
             this.timeoutId = setTimeout(
                 this.timeoutHandler.bind(this),
                 this.getTimeoutTime()
@@ -150,7 +149,7 @@ define([
         /**
          * {Function}
          */
-        clearTimeout: function () {
+        clearTimeout: function() {
             clearTimeout(this.timeoutId);
             this.fail();
 
@@ -160,7 +159,7 @@ define([
         /**
          * {Function}
          */
-        timeoutHandler: function () {
+        timeoutHandler: function() {
             this.clearTimeout();
 
             alert(
@@ -171,8 +170,8 @@ define([
                         /**
                          * {Function}
                          */
-                        always: this.alertActionHandler.bind(this)
-                    }
+                        always: this.alertActionHandler.bind(this),
+                    },
                 }
             );
 
@@ -182,7 +181,7 @@ define([
         /**
          * {Function}
          */
-        alertActionHandler: function () {
+        alertActionHandler: function() {
             fullScreenLoader.startLoader();
             window.location.reload();
         },
@@ -190,7 +189,7 @@ define([
         /**
          * {Function}
          */
-        fail: function () {
+        fail: function() {
             fullScreenLoader.stopLoader();
             this.isPlaceOrderActionAllowed(true);
 
@@ -200,12 +199,12 @@ define([
         /**
          * {Function}
          */
-        done: function () {
-            this.placeOrderHandler().fail(function () {
+        done: function() {
+            this.placeOrderHandler().fail(function() {
                 fullScreenLoader.stopLoader();
             });
 
             return this;
-        }
+        },
     });
 });

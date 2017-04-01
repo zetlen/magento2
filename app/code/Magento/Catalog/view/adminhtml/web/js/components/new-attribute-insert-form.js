@@ -4,31 +4,30 @@
  */
 
 define([
-    'Magento_Ui/js/form/components/insert-form'
-], function (InsertForm) {
+    'Magento_Ui/js/form/components/insert-form',
+], function(InsertForm) {
     'use strict';
 
     return InsertForm.extend({
         defaults: {
             modules: {
-                productForm: 'product_form.product_form'
+                productForm: 'product_form.product_form',
             },
             listens: {
-                responseStatus: 'processResponseStatus'
+                responseStatus: 'processResponseStatus',
             },
             attributeSetId: 0,
-            productId: 0
+            productId: 0,
         },
 
         /**
          * Process response status.
          */
-        processResponseStatus: function () {
+        processResponseStatus: function() {
             if (this.responseStatus()) {
-
                 if (this.productForm().params === undefined) {
                     this.productForm().params = {
-                        set: this.attributeSetId
+                        set: this.attributeSetId,
                     };
                 }
 
@@ -40,6 +39,6 @@ define([
                 this.productForm().reload();
                 this.resetForm();
             }
-        }
+        },
     });
 });

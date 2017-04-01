@@ -8,8 +8,8 @@ define([
     'mage/template',
     'underscore',
     'jquery/ui',
-    'mage/validation'
-], function ($, mageTemplate, _) {
+    'mage/validation',
+], function($, mageTemplate, _) {
     'use strict';
 
     $.widget('mage.regionUpdater', {
@@ -22,14 +22,14 @@ define([
             isZipRequired: true,
             isCountryRequired: true,
             currentRegion: null,
-            isMultipleCountriesAllowed: true
+            isMultipleCountriesAllowed: true,
         },
 
         /**
          *
          * @private
          */
-        _create: function () {
+        _create: function() {
             this._initCountryElement();
 
             this.currentRegionOption = this.options.currentRegion;
@@ -37,12 +37,12 @@ define([
 
             this._updateRegion(this.element.find('option:selected').val());
 
-            $(this.options.regionListId).on('change', $.proxy(function (e) {
+            $(this.options.regionListId).on('change', $.proxy(function(e) {
                 this.setOption = false;
                 this.currentRegionOption = $(e.target).val();
             }, this));
 
-            $(this.options.regionInputId).on('focusout', $.proxy(function () {
+            $(this.options.regionInputId).on('focusout', $.proxy(function() {
                 this.setOption = true;
             }, this));
         },
@@ -51,11 +51,10 @@ define([
          *
          * @private
          */
-        _initCountryElement: function () {
-
+        _initCountryElement: function() {
             if (this.options.isMultipleCountriesAllowed) {
                 this.element.parents('div.field').show();
-                this.element.on('change', $.proxy(function (e) {
+                this.element.on('change', $.proxy(function(e) {
                     this._updateRegion($(e.target).val());
                 }, this));
 
@@ -74,8 +73,8 @@ define([
          * @param {Object} selectElement - jQuery object for dropdown list
          * @private
          */
-        _removeSelectOptions: function (selectElement) {
-            selectElement.find('option').each(function (index) {
+        _removeSelectOptions: function(selectElement) {
+            selectElement.find('option').each(function(index) {
                 if (index) {
                     $(this).remove();
                 }
@@ -89,9 +88,9 @@ define([
          * @param {Object} value - region object
          * @private
          */
-        _renderSelectOption: function (selectElement, key, value) {
-            selectElement.append($.proxy(function () {
-                var name = value.name.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, '\\$&'),
+        _renderSelectOption: function(selectElement, key, value) {
+            selectElement.append($.proxy(function() {
+                let name = value.name.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, '\\$&'),
                     tmplData,
                     tmpl;
 
@@ -103,7 +102,7 @@ define([
                 tmplData = {
                     value: key,
                     title: value.name,
-                    isSelected: false
+                    isSelected: false,
                 };
 
                 if (this.options.defaultRegion === key) {
@@ -111,7 +110,7 @@ define([
                 }
 
                 tmpl = this.regionTmpl({
-                    data: tmplData
+                    data: tmplData,
                 });
 
                 return $(tmpl);
@@ -123,8 +122,8 @@ define([
          * If no form is passed as option, look up the closest form and call clearError method.
          * @private
          */
-        _clearError: function () {
-            var args = ['clearError', this.options.regionListId, this.options.regionInputId, this.options.postcodeId];
+        _clearError: function() {
+            let args = ['clearError', this.options.regionListId, this.options.regionInputId, this.options.postcodeId];
 
             if (this.options.clearError && typeof this.options.clearError === 'function') {
                 this.options.clearError.call(this);
@@ -151,9 +150,9 @@ define([
          * @param {String} country - 2 uppercase letter for country code
          * @private
          */
-        _updateRegion: function (country) {
+        _updateRegion: function(country) {
             // Clear validation error messages
-            var regionList = $(this.options.regionListId),
+            let regionList = $(this.options.regionListId),
                 regionInput = $(this.options.regionInputId),
                 postcode = $(this.options.postcodeId),
                 label = regionList.parent().siblings('label'),
@@ -165,7 +164,7 @@ define([
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
                 this._removeSelectOptions(regionList);
-                $.each(this.options.regionJson[country], $.proxy(function (key, value) {
+                $.each(this.options.regionJson[country], $.proxy(function(key, value) {
                     this._renderSelectOption(regionList, key, value);
                 }, this));
 
@@ -174,7 +173,7 @@ define([
                 }
 
                 if (this.setOption) {
-                    regionList.find('option').filter(function () {
+                    regionList.find('option').filter(function() {
                         return this.text === regionInput.val();
                     }).attr('selected', true);
                 }
@@ -186,7 +185,7 @@ define([
                     regionList.removeClass('required-entry validate-select').removeAttr('data-validate');
                     requiredLabel.removeClass('required');
 
-                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
+                    if (!this.options.optionalRegionAllowed) { // eslint-disable-line max-depth
                         regionList.attr('disabled', 'disabled');
                     }
                 }
@@ -199,7 +198,7 @@ define([
                     regionInput.addClass('required-entry').removeAttr('disabled');
                     requiredLabel.addClass('required');
                 } else {
-                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
+                    if (!this.options.optionalRegionAllowed) { // eslint-disable-line max-depth
                         regionInput.attr('disabled', 'disabled');
                     }
                     requiredLabel.removeClass('required');
@@ -228,16 +227,16 @@ define([
          * @param {String} country - Code of the country - 2 uppercase letter for country code
          * @private
          */
-        _checkRegionRequired: function (country) {
-            var self = this;
+        _checkRegionRequired: function(country) {
+            let self = this;
 
             this.options.isRegionRequired = false;
-            $.each(this.options.regionJson.config['regions_required'], function (index, elem) {
+            $.each(this.options.regionJson.config['regions_required'], function(index, elem) {
                 if (elem === country) {
                     self.options.isRegionRequired = true;
                 }
             });
-        }
+        },
     });
 
     return $.mage.regionUpdater;

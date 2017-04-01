@@ -5,8 +5,8 @@
 define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
-    'Magento_Customer/js/customer-data'
-], function ($, confirm, customerData) {
+    'Magento_Customer/js/customer-data',
+], function($, confirm, customerData) {
     'use strict';
 
     $.widget('mage.billingAgreement', {
@@ -14,31 +14,31 @@ define([
             invalidateOnLoad: false,
             cancelButtonSelector: '.block-billing-agreements-view button.cancel',
             cancelMessage: '',
-            cancelUrl: ''
+            cancelUrl: '',
         },
 
         /**
          * Initialize billing agreements events
          * @private
          */
-        _create: function () {
-            var self = this;
+        _create: function() {
+            let self = this;
 
             if (this.options.invalidateOnLoad) {
                 this.invalidate();
             }
-            $(this.options.cancelButtonSelector).on('click', function () {
+            $(this.options.cancelButtonSelector).on('click', function() {
                 confirm({
                     content: self.options.cancelMessage,
                     actions: {
                         /**
                          * 'Confirm' action handler.
                          */
-                        confirm: function () {
+                        confirm: function() {
                             self.invalidate();
                             window.location.href = self.options.cancelUrl;
-                        }
-                    }
+                        },
+                    },
                 });
 
                 return false;
@@ -49,9 +49,9 @@ define([
          * clear paypal billing agreement customer data
          * @returns void
          */
-        invalidate: function () {
+        invalidate: function() {
             customerData.invalidate(['paypal-billing-agreement']);
-        }
+        },
     });
 
     return $.mage.billingAgreement;

@@ -8,11 +8,11 @@ define([
     'jquery',
     'underscore',
     '../template/renderer',
-    'jquery/ui'
-], function (ko, $, _, renderer) {
+    'jquery/ui',
+], function(ko, $, _, renderer) {
     'use strict';
 
-    var isTouchDevice = !_.isUndefined(document.ontouchstart),
+    let isTouchDevice = !_.isUndefined(document.ontouchstart),
         sliderFn = 'slider';
 
     ko.bindingHandlers.range = {
@@ -23,9 +23,9 @@ define([
          * @param {HTMLElement} element
          * @param {Function} valueAccessor
          */
-        init: function (element, valueAccessor) {
-            var config  = valueAccessor(),
-                value   = config.value;
+        init: function(element, valueAccessor) {
+            let config = valueAccessor(),
+                value = config.value;
 
             _.extend(config, {
                 value: value(),
@@ -36,9 +36,9 @@ define([
                  * @param {Event} event
                  * @param {Object} ui
                  */
-                slide: function (event, ui) {
+                slide: function(event, ui) {
                     value(ui.value);
-                }
+                },
             });
 
             $(element)[sliderFn](config);
@@ -50,13 +50,13 @@ define([
          * @param {HTMLElement} element
          * @param {Function} valueAccessor
          */
-        update: function (element, valueAccessor) {
-            var config = valueAccessor();
+        update: function(element, valueAccessor) {
+            let config = valueAccessor();
 
             config.value = ko.unwrap(config.value);
 
             $(element)[sliderFn]('option', config);
-        }
+        },
     };
 
     renderer.addAttribute('range');
@@ -72,7 +72,7 @@ define([
          *
          * @override
          */
-        _create: function () {
+        _create: function() {
             _.bindAll(
                 this,
                 '_mouseDown',
@@ -87,8 +87,8 @@ define([
          * Initializes mouse events on element.
          * @override
          */
-        _mouseInit: function () {
-            var result = this._superApply(arguments);
+        _mouseInit: function() {
+            let result = this._superApply(arguments);
 
             this.element
                 .off('mousedown.' + this.widgetName)
@@ -101,8 +101,8 @@ define([
          * Elements' 'mousedown' event handler polyfill.
          * @override
          */
-        _mouseDown: function (event) {
-            var prevDelegate = this._mouseMoveDelegate,
+        _mouseDown: function(event) {
+            let prevDelegate = this._mouseMoveDelegate,
                 result;
 
             event = this._touchToMouse(event);
@@ -130,7 +130,7 @@ define([
          * @override
          * @param {Event} event - Touch event object.
          */
-        _mouseMove: function (event) {
+        _mouseMove: function(event) {
             event = this._touchToMouse(event);
 
             return this._super(event);
@@ -139,7 +139,7 @@ define([
         /**
          * Documents' 'touchend' event handler.
          */
-        _onTouchEnd: function (event) {
+        _onTouchEnd: function(event) {
             $(document).trigger('mouseup');
 
             return this._mouseUp(event);
@@ -150,7 +150,7 @@ define([
          *
          * @override
          */
-        _mouseUp: function () {
+        _mouseUp: function() {
             this._removeTouchHandlers();
 
             return this._superApply(arguments);
@@ -161,7 +161,7 @@ define([
          *
          * @override
          */
-        _mouseDestroy: function () {
+        _mouseDestroy: function() {
             this._removeTouchHandlers();
 
             return this._superApply(arguments);
@@ -170,7 +170,7 @@ define([
         /**
          * Removes touch events from document object.
          */
-        _removeTouchHandlers: function () {
+        _removeTouchHandlers: function() {
             $(document)
                 .off('touchmove.' + this.widgetName)
                 .off('touchend.' + this.widgetName)
@@ -183,20 +183,20 @@ define([
          * @param {Event} event - Touch event object.
          * @returns {Event}
          */
-        _touchToMouse: function (event) {
-            var orig = event.originalEvent,
+        _touchToMouse: function(event) {
+            let orig = event.originalEvent,
                 touch = orig.touches[0];
 
             return _.extend(event, {
-                which:      1,
-                pageX:      touch.pageX,
-                pageY:      touch.pageY,
-                clientX:    touch.clientX,
-                clientY:    touch.clientY,
-                screenX:    touch.screenX,
-                screenY:    touch.screenY
+                which: 1,
+                pageX: touch.pageX,
+                pageY: touch.pageY,
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+                screenX: touch.screenX,
+                screenY: touch.screenY,
             });
-        }
+        },
     });
 
     sliderFn = 'touchSlider';

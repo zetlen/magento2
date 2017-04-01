@@ -9,16 +9,16 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/shipping-service',
     'Magento_Checkout/js/model/shipping-rate-registry',
-    'Magento_Checkout/js/model/error-processor'
-], function (resourceUrlManager, quote, storage, shippingService, rateRegistry, errorProcessor) {
+    'Magento_Checkout/js/model/error-processor',
+], function(resourceUrlManager, quote, storage, shippingService, rateRegistry, errorProcessor) {
     'use strict';
 
     return {
         /**
          * @param {Object} address
          */
-        getRates: function (address) {
-            var cache;
+        getRates: function(address) {
+            let cache;
 
             shippingService.isLoading(true);
             cache = rateRegistry.get(address.getKey());
@@ -30,20 +30,20 @@ define([
                 storage.post(
                     resourceUrlManager.getUrlForEstimationShippingMethodsByAddressId(),
                     JSON.stringify({
-                        addressId: address.customerAddressId
+                        addressId: address.customerAddressId,
                     }),
                     false
-                ).done(function (result) {
+                ).done(function(result) {
                     rateRegistry.set(address.getKey(), result);
                     shippingService.setShippingRates(result);
-                }).fail(function (response) {
+                }).fail(function(response) {
                     shippingService.setShippingRates([]);
                     errorProcessor.process(response);
-                }).always(function () {
+                }).always(function() {
                     shippingService.isLoading(false);
                 }
                 );
             }
-        }
+        },
     };
 });

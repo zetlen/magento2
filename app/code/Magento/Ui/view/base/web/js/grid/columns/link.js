@@ -8,14 +8,14 @@
  */
 define([
     './column',
-    'mageUtils'
-], function (Column, utils) {
+    'mageUtils',
+], function(Column, utils) {
     'use strict';
 
     return Column.extend({
         defaults: {
             link: 'link',
-            bodyTmpl: 'ui/grid/cells/link'
+            bodyTmpl: 'ui/grid/cells/link',
         },
 
         /**
@@ -24,7 +24,7 @@ define([
          * @param {Object} record - Data to be preprocessed.
          * @returns {String}
          */
-        getLink: function (record) {
+        getLink: function(record) {
             return utils.nested(record, this.link);
         },
 
@@ -33,8 +33,8 @@ define([
          * @param {Object} record - Data to be preprocessed.
          * @returns {Boolean}
          */
-        isLink: function (record) {
+        isLink: function(record) {
             return !!utils.nested(record, this.link);
-        }
+        },
     });
 });

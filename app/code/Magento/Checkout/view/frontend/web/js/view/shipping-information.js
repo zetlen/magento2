@@ -8,27 +8,27 @@ define([
     'uiComponent',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/step-navigator',
-    'Magento_Checkout/js/model/sidebar'
-], function ($, Component, quote, stepNavigator, sidebarModel) {
+    'Magento_Checkout/js/model/sidebar',
+], function($, Component, quote, stepNavigator, sidebarModel) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/shipping-information'
+            template: 'Magento_Checkout/shipping-information',
         },
 
         /**
          * @return {Boolean}
          */
-        isVisible: function () {
+        isVisible: function() {
             return !quote.isVirtual() && stepNavigator.isProcessed('shipping');
         },
 
         /**
          * @return {String}
          */
-        getShippingMethodTitle: function () {
-            var shippingMethod = quote.shippingMethod();
+        getShippingMethodTitle: function() {
+            let shippingMethod = quote.shippingMethod();
 
             return shippingMethod ? shippingMethod['carrier_title'] + ' - ' + shippingMethod['method_title'] : '';
         },
@@ -36,7 +36,7 @@ define([
         /**
          * Back step.
          */
-        back: function () {
+        back: function() {
             sidebarModel.hide();
             stepNavigator.navigateTo('shipping');
         },
@@ -44,9 +44,9 @@ define([
         /**
          * Back to shipping method.
          */
-        backToShippingMethod: function () {
+        backToShippingMethod: function() {
             sidebarModel.hide();
             stepNavigator.navigateTo('shipping', 'opc-shipping_method');
-        }
+        },
     });
 });

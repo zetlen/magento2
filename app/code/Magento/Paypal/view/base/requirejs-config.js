@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            transparent: 'Magento_Payment/transparent'
-        }
-    }
+            transparent: 'Magento_Payment/transparent',
+        },
+    },
 };

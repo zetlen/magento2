@@ -3,18 +3,18 @@
  * See COPYING.txt for license details.
  */
 
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/* jshint browser:true jquery:true*/
+/* global alert*/
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
-    var agreementsConfig = window.checkoutConfig.checkoutAgreements;
+    let agreementsConfig = window.checkoutConfig.checkoutAgreements;
 
     /** Override default place order action and add agreement_ids to request */
-    return function (paymentData) {
-        var agreementForm,
+    return function(paymentData) {
+        let agreementForm,
             agreementData,
             agreementIds;
 
@@ -26,7 +26,7 @@ define([
         agreementData = agreementForm.serializeArray();
         agreementIds = [];
 
-        agreementData.forEach(function (item) {
+        agreementData.forEach(function(item) {
             agreementIds.push(item.value);
         });
 

@@ -9,8 +9,8 @@ define([
     'jquery/ui',
     'mage/translate',
     'mage/mage',
-    'mage/validation'
-], function ($, alert) {
+    'mage/validation',
+], function($, alert) {
     'use strict';
 
     $.widget('mage.orderReview', {
@@ -29,7 +29,7 @@ define([
             reviewSubmitSelector: '#review-submit',
             shippingMethodUpdateUrl: null,
             updateOrderSubmitUrl: null,
-            canEditShippingMethod: false
+            canEditShippingMethod: false,
         },
 
         /**
@@ -39,10 +39,10 @@ define([
         isShippingSubmitForm: false,
 
         /** @inheritdoc */
-        _create: function () {
-            var isDisable;
+        _create: function() {
+            let isDisable;
 
-            //change handler for ajaxEnabled
+            // change handler for ajaxEnabled
             if (this.options.isAjax) {
                 this._submitOrder = this._ajaxSubmitOrder;
             }
@@ -89,35 +89,35 @@ define([
         /**
          * show ajax loader
          */
-        _ajaxBeforeSend: function () {
+        _ajaxBeforeSend: function() {
             this.element.find(this.options.waitLoadingContainer).show();
         },
 
         /**
          * hide ajax loader
          */
-        _ajaxComplete: function () {
+        _ajaxComplete: function() {
             this.element.find(this.options.waitLoadingContainer).hide();
         },
 
         /**
          * trigger propertychange for input type select
          */
-        _propertyChange: function () {
+        _propertyChange: function() {
             $(this).trigger('propertychange');
         },
 
         /**
          * trigger change for the update of shippping methods from server
          */
-        _updateOrderHandler: function () {
+        _updateOrderHandler: function() {
             $(this.options.shippingSelector).trigger('change');
         },
 
         /**
          * Attempt to submit order
          */
-        _submitOrder: function () {
+        _submitOrder: function() {
             if (this._validateForm()) {
                 this.element.find(this.options.updateOrderSelector).fadeTo(0, 0.5)
                     .end().find(this.options.waitLoadingContainer).show()
@@ -129,7 +129,7 @@ define([
         /**
          * Attempt to ajax submit order
          */
-        _ajaxSubmitOrder: function () {
+        _ajaxSubmitOrder: function() {
             if (this.element.find(this.options.waitLoadingContainer).is(':visible')) {
                 return false;
             }
@@ -138,15 +138,15 @@ define([
                 type: 'post',
                 context: this,
                 data: {
-                    isAjax: 1
+                    isAjax: 1,
                 },
                 dataType: 'json',
                 beforeSend: this._ajaxBeforeSend,
                 complete: this._ajaxComplete,
 
                 /** @inheritdoc */
-                success: function (response) {
-                    var msg;
+                success: function(response) {
+                    let msg;
 
                     if ($.type(response) === 'object' && !$.isEmptyObject(response)) {
                         if (response['error_messages']) {
@@ -162,7 +162,7 @@ define([
 
                             /* eslint-enablemax-depth */
                             alert({
-                                content: msg
+                                content: msg,
                             });
 
                             return false;
@@ -179,27 +179,27 @@ define([
                         }
                         this._ajaxComplete();
                         alert({
-                            content: $.mage.__('Sorry, something went wrong.')
+                            content: $.mage.__('Sorry, something went wrong.'),
                         });
                     }
                 },
 
                 /** @inheritdoc */
-                error: function () {
+                error: function() {
                     alert({
-                        content: $.mage.__('Sorry, something went wrong. Please try again later.')
+                        content: $.mage.__('Sorry, something went wrong. Please try again later.'),
                     });
                     this._ajaxComplete();
-                }
+                },
             });
         },
 
         /**
          * Validate Order form
          */
-        _validateForm: function () {
-            this.element.find(this.options.agreementSelector).off('change').on('change', $.proxy(function () {
-                var isValid = this._validateForm();
+        _validateForm: function() {
+            this.element.find(this.options.agreementSelector).off('change').on('change', $.proxy(function() {
+                let isValid = this._validateForm();
 
                 this._updateOrderSubmit(!isValid);
             }, this));
@@ -218,7 +218,7 @@ define([
          * @param {Function} [fn] - function for shipping change handler
          * @param {*} [*] - if true the property change will be set to true
          */
-        _updateOrderSubmit: function (shouldDisable, fn) {
+        _updateOrderSubmit: function(shouldDisable, fn) {
             this._toggleButton(this.options.orderReviewSubmitSelector, shouldDisable);
 
             if ($.type(fn) === 'function') {
@@ -231,9 +231,9 @@ define([
          * @param {jQuery} button - button selector to be toggled
          * @param {*} disable - boolean for toggling
          */
-        _toggleButton: function (button, disable) {
+        _toggleButton: function(button, disable) {
             $(button).prop({
-                'disabled': disable
+                'disabled': disable,
             }).toggleClass('no-checkout', disable).fadeTo(0, disable ? 0.5 : 1);
         },
 
@@ -241,8 +241,8 @@ define([
          * Copy element value from shipping to billing address
          * @param {jQuery.Event} e - optional
          */
-        _shippingTobilling: function (e) {
-            var isChecked, opacity;
+        _shippingTobilling: function(e) {
+            let isChecked, opacity;
 
             if (this.options.shippingSubmitFormSelector) {
                 return false;
@@ -253,15 +253,15 @@ define([
             if (isChecked) {
                 this.element.validation('clearError', ':input[name^="billing"]');
             }
-            $(':input[name^="shipping"]', this.element).each($.proxy(function (key, value) {
-                var fieldObj = $(value.id.replace('shipping:', '#billing\\:'));
+            $(':input[name^="shipping"]', this.element).each($.proxy(function(key, value) {
+                let fieldObj = $(value.id.replace('shipping:', '#billing\\:'));
 
                 if (isChecked) {
                     fieldObj = fieldObj.val($(value).val());
                 }
                 fieldObj.prop({
                     'readonly': isChecked,
-                    'disabled': isChecked
+                    'disabled': isChecked,
                 }).fadeTo(0, opacity);
 
                 if (fieldObj.is('select')) {
@@ -281,8 +281,8 @@ define([
          * @param {*} url - url where to submit shipping method
          * @param {*} resultId - id of element to be updated
          */
-        _submitUpdateOrder: function (url, resultId) {
-            var isChecked, formData, callBackResponseHandler, shippingMethod;
+        _submitUpdateOrder: function(url, resultId) {
+            let isChecked, formData, callBackResponseHandler, shippingMethod;
 
             if (this.element.find(this.options.waitLoadingContainer).is(':visible')) {
                 return false;
@@ -304,7 +304,7 @@ define([
                     /**
                      * @param {Object} response
                      */
-                    callBackResponseHandler = function (response) {
+                    callBackResponseHandler = function(response) {
                         $(resultId).html(response);
                         this._updateOrderSubmit(false);
                         this._ajaxComplete();
@@ -315,7 +315,7 @@ define([
                     /**
                      * @param {Object} response
                      */
-                    callBackResponseHandler = function (response) {
+                    callBackResponseHandler = function(response) {
                         $(resultId).html(response);
                         this._ajaxShippingUpdate(shippingMethod);
                     };
@@ -330,7 +330,7 @@ define([
                     context: this,
                     beforeSend: this._ajaxBeforeSend,
                     data: formData,
-                    success: callBackResponseHandler
+                    success: callBackResponseHandler,
                 });
             }
         },
@@ -339,35 +339,35 @@ define([
          * Update Shipping Methods Element from server
          * @param {*} shippingMethod
          */
-        _ajaxShippingUpdate: function (shippingMethod) {
+        _ajaxShippingUpdate: function(shippingMethod) {
             $.ajax({
                 url: this.options.shippingMethodUpdateUrl,
                 data: {
-                    isAjax: true,
-                    'shipping_method': shippingMethod
+                    "isAjax": true,
+                    'shipping_method': shippingMethod,
                 },
                 type: 'post',
                 context: this,
 
                 /** @inheritdoc */
-                success: function (response) {
+                success: function(response) {
                     $(this.options.shippingMethodContainer).parent().html(response);
                     this._toggleButton(this.options.updateOrderSelector, false);
                     this._updateOrderSubmit(false);
                 },
-                complete: this._ajaxComplete
+                complete: this._ajaxComplete,
             });
         },
 
         /**
          * Actions on change Shipping Address data
          */
-        _onShippingChange: function () {
+        _onShippingChange: function() {
             if (this.triggerPropertyChange && $.trim($(this.options.shippingSelector).val())) {
                 this.element.find(this.options.shippingSelector).hide().end()
                     .find(this.options.shippingSelector + '_update').show();
             }
-        }
+        },
     });
 
     return $.mage.orderReview;

@@ -7,11 +7,11 @@ define([
     'jquery',
     'ko',
     'underscore',
-    './address-list'
-], function ($, ko, _, addressList) {
+    './address-list',
+], function($, ko, _, addressList) {
     'use strict';
 
-    var isLoggedIn = ko.observable(window.isCustomerLoggedIn),
+    let isLoggedIn = ko.observable(window.isCustomerLoggedIn),
         customerData = {};
 
     if (isLoggedIn()) {
@@ -28,21 +28,21 @@ define([
         /**
          * @param {Boolean} flag
          */
-        setIsLoggedIn: function (flag) {
+        setIsLoggedIn: function(flag) {
             isLoggedIn(flag);
         },
 
         /**
          * @return {Array}
          */
-        getBillingAddressList: function () {
+        getBillingAddressList: function() {
             return addressList();
         },
 
         /**
          * @return {Array}
          */
-        getShippingAddressList: function () {
+        getShippingAddressList: function() {
             return addressList();
         },
 
@@ -50,7 +50,7 @@ define([
          * @param {String} fieldName
          * @param {*} value
          */
-        setDetails: function (fieldName, value) {
+        setDetails: function(fieldName, value) {
             if (fieldName) {
                 this.customerDetails[fieldName] = value;
             }
@@ -60,7 +60,7 @@ define([
          * @param {String} fieldName
          * @return {*}
          */
-        getDetails: function (fieldName) {
+        getDetails: function(fieldName) {
             if (fieldName) {
                 if (this.customerDetails.hasOwnProperty(fieldName)) {
                     return this.customerDetails[fieldName];
@@ -76,11 +76,11 @@ define([
          * @param {Array} address
          * @return {Number}
          */
-        addCustomerAddress: function (address) {
-            var fields = [
+        addCustomerAddress: function(address) {
+            let fields = [
                     'customer_id', 'country_id', 'street', 'company', 'telephone', 'fax', 'postcode', 'city',
                     'firstname', 'lastname', 'middlename', 'prefix', 'suffix', 'vat_id', 'default_billing',
-                    'default_shipping'
+                    'default_shipping',
                 ],
                 customerAddress = {},
                 hasAddress = 0,
@@ -95,7 +95,7 @@ define([
             if (address.hasOwnProperty('region_id')) {
                 customerAddress.region = {
                     'region_id': address['region_id'],
-                    region: address.region
+                    "region": address.region,
                 };
             }
 
@@ -119,7 +119,7 @@ define([
          * @param {*} addressId
          * @return {Boolean}
          */
-        setAddressAsDefaultBilling: function (addressId) {
+        setAddressAsDefaultBilling: function(addressId) {
             if (this.customerData.addresses[addressId]) {
                 this.customerData.addresses[addressId]['default_billing'] = 1;
 
@@ -133,7 +133,7 @@ define([
          * @param {*} addressId
          * @return {Boolean}
          */
-        setAddressAsDefaultShipping: function (addressId) {
+        setAddressAsDefaultShipping: function(addressId) {
             if (this.customerData.addresses[addressId]) {
                 this.customerData.addresses[addressId]['default_shipping'] = 1;
 
@@ -141,6 +141,6 @@ define([
             }
 
             return false;
-        }
+        },
     };
 });

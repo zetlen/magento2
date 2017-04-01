@@ -11,9 +11,9 @@ define(
         'jquery',
         'braintree',
         'Magento_Braintree/js/paypal/form-builder',
-        'domReady!'
+        'domReady!',
     ],
-    function (
+    function(
         resolver,
         registry,
         Component,
@@ -48,8 +48,8 @@ define(
                     /**
                      * @param {Object} integration
                      */
-                    onReady: function (integration) {
-                        resolver(function () {
+                    onReady: function(integration) {
+                        resolver(function() {
                             registry.set(this.integrationName, integration);
                             $('#' + this.id).removeAttr('disabled');
                         }, this);
@@ -58,25 +58,25 @@ define(
                     /**
                      * @param {Object} payload
                      */
-                    onPaymentMethodReceived: function (payload) {
+                    onPaymentMethodReceived: function(payload) {
                         $('body').trigger('processStart');
 
                         formBuilder.build(
                             {
                                 action: this.actionSuccess,
                                 fields: {
-                                    result: JSON.stringify(payload)
-                                }
+                                    result: JSON.stringify(payload),
+                                },
                             }
                         ).submit();
-                    }
-                }
+                    },
+                },
             },
 
             /**
              * @returns {Object}
              */
-            initialize: function () {
+            initialize: function() {
                 this._super()
                     .initComponent();
 
@@ -86,25 +86,25 @@ define(
             /**
              * @returns {Object}
              */
-            initComponent: function () {
-                var currentIntegration = registry.get(this.integrationName),
+            initComponent: function() {
+                let currentIntegration = registry.get(this.integrationName),
                     $this = $('#' + this.id),
                     self = this,
                     data = {
                         amount: $this.data('amount'),
                         locale: $this.data('locale'),
-                        currency: $this.data('currency')
+                        currency: $this.data('currency'),
                     },
-                    initCallback = function () {
+                    initCallback = function() {
                         $this.attr('disabled', 'disabled');
                         registry.remove(this.integrationName);
                         braintree.setup(this.clientToken, 'custom', this.getClientConfig(data));
 
                         $this.off('click')
-                            .on('click', function (event) {
+                            .on('click', function(event) {
                                 event.preventDefault();
 
-                                registry.get(self.integrationName, function (integration) {
+                                registry.get(self.integrationName, function(integration) {
                                     integration.paypal.initAuthFlow();
                                 });
                             });
@@ -120,28 +120,28 @@ define(
             /**
              * @returns {Object}
              */
-            getClientConfig: function (data) {
+            getClientConfig: function(data) {
                 this.clientConfig.paypal = {
                     singleUse: true,
                     amount: data.amount,
                     currency: data.currency,
                     locale: data.locale,
                     enableShippingAddress: true,
-                    headless: true
+                    headless: true,
                 };
 
                 if (this.displayName) {
                     this.clientConfig.paypal.displayName = this.displayName;
                 }
 
-                _.each(this.clientConfig, function (fn, name) {
+                _.each(this.clientConfig, function(fn, name) {
                     if (typeof fn === 'function') {
                         this.clientConfig[name] = fn.bind(this);
                     }
                 }, this);
 
                 return this.clientConfig;
-            }
+            },
         });
     }
 );

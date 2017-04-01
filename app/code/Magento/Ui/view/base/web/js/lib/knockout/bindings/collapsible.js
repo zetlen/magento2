@@ -6,18 +6,18 @@ define([
     'ko',
     'jquery',
     'underscore',
-    '../template/renderer'
-], function (ko, $, _, renderer) {
+    '../template/renderer',
+], function(ko, $, _, renderer) {
     'use strict';
 
-    var collapsible,
+    let collapsible,
         defaults;
 
     defaults = {
         closeOnOuter: true,
         onTarget: false,
         openClass: '_active',
-        as: '$collapsible'
+        as: '$collapsible',
     };
 
     collapsible = {
@@ -25,23 +25,23 @@ define([
         /**
          * Sets 'opened' property to true.
          */
-        open: function () {
+        open: function() {
             this.opened(true);
         },
 
         /**
          * Sets 'opened' property to false.
          */
-        close: function () {
+        close: function() {
             this.opened(false);
         },
 
         /**
          * Toggles value of the 'opened' property.
          */
-        toggle: function () {
+        toggle: function() {
             this.opened(!this.opened());
-        }
+        },
     };
 
     /**
@@ -53,7 +53,7 @@ define([
      * @param {EventObject} e
      */
     function onOuterClick(container, model, e) {
-        var target = e.target;
+        let target = e.target;
 
         if (target !== container && !container.contains(target)) {
             model.close();
@@ -69,12 +69,12 @@ define([
      * @returns {Object}
      */
     function getClassBinding(model, name) {
-        var binding = {};
+        let binding = {};
 
         binding[name] = model.opened;
 
         return {
-            css: binding
+            css: binding,
         };
     }
 
@@ -98,8 +98,8 @@ define([
         /**
          * Initializes 'collapsible' binding.
          */
-        init: function (element, valueAccessor, allBindings, viewModel, bindingCtx) {
-            var $collapsible = Object.create(collapsible),
+        init: function(element, valueAccessor, allBindings, viewModel, bindingCtx) {
+            let $collapsible = Object.create(collapsible),
                 config = buildConfig(valueAccessor()),
                 outerClick,
                 bindings;
@@ -115,7 +115,7 @@ define([
 
                 $(document).on('click', outerClick);
 
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     $(document).off('click', outerClick);
                 });
             }
@@ -132,12 +132,12 @@ define([
 
             if (viewModel && _.isFunction(viewModel.on)) {
                 viewModel.on({
-                    close:          $collapsible.close,
-                    open:           $collapsible.open,
-                    toggleOpened:   $collapsible.toggle
+                    close: $collapsible.close,
+                    open: $collapsible.open,
+                    toggleOpened: $collapsible.toggle,
                 });
             }
-        }
+        },
     };
 
     ko.bindingHandlers.closeCollapsible = {
@@ -146,14 +146,14 @@ define([
          * Creates listener for the click event on provided DOM element,
          * which closes associated with it collapsible model.
          */
-        init: function (element, valueAccessor, allBindings, viewModel, bindingCtx) {
-            var name = valueAccessor() || defaults.as,
+        init: function(element, valueAccessor, allBindings, viewModel, bindingCtx) {
+            let name = valueAccessor() || defaults.as,
                 $collapsible = bindingCtx[name];
 
             if ($collapsible) {
                 $(element).on('click', $collapsible.close);
             }
-        }
+        },
     };
 
     ko.bindingHandlers.openCollapsible = {
@@ -162,14 +162,14 @@ define([
          * Creates listener for the click event on provided DOM element,
          * which opens associated with it collapsible model.
          */
-        init: function (element, valueAccessor, allBindings, viewModel, bindingCtx) {
-            var name = valueAccessor() || defaults.as,
+        init: function(element, valueAccessor, allBindings, viewModel, bindingCtx) {
+            let name = valueAccessor() || defaults.as,
                 $collapsible = bindingCtx[name];
 
             if ($collapsible) {
                 $(element).on('click', $collapsible.open);
             }
-        }
+        },
     };
 
     ko.bindingHandlers.toggleCollapsible = {
@@ -178,14 +178,14 @@ define([
          * Creates listener for the click event on provided DOM element,
          * which toggles associated with it collapsible model.
          */
-        init: function (element, valueAccessor, allBindings, viewModel, bindingCtx) {
-            var name = valueAccessor() || defaults.as,
+        init: function(element, valueAccessor, allBindings, viewModel, bindingCtx) {
+            let name = valueAccessor() || defaults.as,
                 $collapsible = bindingCtx[name];
 
             if ($collapsible) {
                 $(element).on('click', $collapsible.toggle);
             }
-        }
+        },
     };
 
     renderer

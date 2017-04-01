@@ -7,14 +7,14 @@ define([
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',
     'Magento_Catalog/js/price-utils',
-    'Magento_Checkout/js/model/totals'
-], function (Component, quote, priceUtils, totals) {
+    'Magento_Checkout/js/model/totals',
+], function(Component, quote, priceUtils, totals) {
     'use strict';
 
     return Component.extend({
         defaults: {
             isFullTaxSummaryDisplayed: window.checkoutConfig.isFullTaxSummaryDisplayed || false,
-            template: 'Magento_Tax/checkout/summary/grand-total'
+            template: 'Magento_Tax/checkout/summary/grand-total',
         },
         totals: quote.getTotals(),
         isTaxDisplayedInGrandTotal: window.checkoutConfig.includeTaxInGrandTotal || false,
@@ -22,15 +22,15 @@ define([
         /**
          * @return {*}
          */
-        isDisplayed: function () {
+        isDisplayed: function() {
             return this.isFullMode();
         },
 
         /**
          * @return {*|String}
          */
-        getValue: function () {
-            var price = 0;
+        getValue: function() {
+            let price = 0;
 
             if (this.totals()) {
                 price = totals.getSegment('grand_total').value;
@@ -42,8 +42,8 @@ define([
         /**
          * @return {*|String}
          */
-        getBaseValue: function () {
-            var price = 0;
+        getBaseValue: function() {
+            let price = 0;
 
             if (this.totals()) {
                 price = this.totals()['base_grand_total'];
@@ -55,8 +55,8 @@ define([
         /**
          * @return {*}
          */
-        getGrandTotalExclTax: function () {
-            var total = this.totals();
+        getGrandTotalExclTax: function() {
+            let total = this.totals();
 
             if (!total) {
                 return 0;
@@ -68,14 +68,14 @@ define([
         /**
          * @return {Boolean}
          */
-        isBaseGrandTotalDisplayNeeded: function () {
-            var total = this.totals();
+        isBaseGrandTotalDisplayNeeded: function() {
+            let total = this.totals();
 
             if (!total) {
                 return false;
             }
 
-            return totals['base_currency_code'] != totals['quote_currency_code']; //eslint-disable-line eqeqeq
-        }
+            return totals['base_currency_code'] != totals['quote_currency_code']; // eslint-disable-line eqeqeq
+        },
     });
 });

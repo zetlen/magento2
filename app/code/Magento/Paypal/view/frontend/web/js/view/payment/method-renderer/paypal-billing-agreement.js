@@ -6,18 +6,18 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/payment/default',
-    'mage/validation'
-], function ($, Component) {
+    'mage/validation',
+], function($, Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_Paypal/payment/paypal_billing_agreement-form',
-            selectedBillingAgreement: ''
+            selectedBillingAgreement: '',
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('selectedBillingAgreement');
 
@@ -27,22 +27,22 @@ define([
         /**
          * @return {*}
          */
-        getTransportName: function () {
+        getTransportName: function() {
             return window.checkoutConfig.payment.paypalBillingAgreement.transportName;
         },
 
         /**
          * @return {*}
          */
-        getBillingAgreements: function () {
+        getBillingAgreements: function() {
             return window.checkoutConfig.payment.paypalBillingAgreement.agreements;
         },
 
         /**
          * @return {Object}
          */
-        getData: function () {
-            var additionalData = null;
+        getData: function() {
+            let additionalData = null;
 
             if (this.getTransportName()) {
                 additionalData = {};
@@ -51,17 +51,17 @@ define([
 
             return {
                 'method': this.item.method,
-                'additional_data': additionalData
+                'additional_data': additionalData,
             };
         },
 
         /**
          * @return {jQuery}
          */
-        validate: function () {
-            var form = '#billing-agreement-form';
+        validate: function() {
+            let form = '#billing-agreement-form';
 
             return $(form).validation() && $(form).validation('isValid');
-        }
+        },
     });
 });

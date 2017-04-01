@@ -9,25 +9,25 @@
 define([
     'jquery',
     'underscore',
-    'uiComponent'
-], function ($, _, Component) {
+    'uiComponent',
+], function($, _, Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            content:        '',
-            showSpinner:    false,
-            loading:        false,
-            visible:        true,
-            template:       'ui/content/content',
-            additionalClasses: {}
+            content: '',
+            showSpinner: false,
+            loading: false,
+            visible: true,
+            template: 'ui/content/content',
+            additionalClasses: {},
         },
 
         /**
          * Extends instance with default config, calls 'initialize' method of
          *     parent, calls 'initAjaxConfig'
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'onContainerToggle', 'onDataLoaded');
 
             this._super()
@@ -43,7 +43,7 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('content loading visible');
 
@@ -55,28 +55,28 @@ define([
          *
          * @returns {Group} Chainable.
          */
-        _setClasses: function () {
-            var additional = this.additionalClasses,
+        _setClasses: function() {
+            let additional = this.additionalClasses,
                 classes;
 
             if (_.isString(additional)) {
                 additional = this.additionalClasses.split(' ');
                 classes = this.additionalClasses = {};
 
-                additional.forEach(function (name) {
+                additional.forEach(function(name) {
                     classes[name] = true;
                 }, this);
             }
 
             _.extend(this.additionalClasses, {
-                'admin__scope-old': !!additional
+                'admin__scope-old': !!additional,
             });
 
             return this;
         },
 
         /** @inheritdoc */
-        initContainer: function (parent) {
+        initContainer: function(parent) {
             this._super();
 
             parent.on('active', this.onContainerToggle);
@@ -89,13 +89,13 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        initAjaxConfig: function () {
+        initAjaxConfig: function() {
             this.ajaxConfig = {
                 url: this.url,
                 data: {
-                    FORM_KEY: window.FORM_KEY
+                    FORM_KEY: window.FORM_KEY,
                 },
-                success:    this.onDataLoaded
+                success: this.onDataLoaded,
             };
 
             return this;
@@ -107,7 +107,7 @@ define([
          *
          * @param  {Boolean} active
          */
-        onContainerToggle: function (active) {
+        onContainerToggle: function(active) {
             if (active && this.shouldLoad()) {
                 this.loadData();
             }
@@ -118,7 +118,7 @@ define([
          *
          * @return {Boolean} [description]
          */
-        hasData: function () {
+        hasData: function() {
             return !!this.content();
         },
 
@@ -127,7 +127,7 @@ define([
          *
          * @return {Boolean}
          */
-        shouldLoad: function () {
+        shouldLoad: function() {
             return this.url && !this.hasData() && !this.loading();
         },
 
@@ -136,7 +136,7 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        loadData: function () {
+        loadData: function() {
             this.loading(true);
 
             $.ajax(this.ajaxConfig);
@@ -150,7 +150,7 @@ define([
          *
          * @param  {String} data
          */
-        onDataLoaded: function (data) {
+        onDataLoaded: function(data) {
             this.updateContent(data)
                 .loading(false);
         },
@@ -161,10 +161,10 @@ define([
          * @param  {String} content
          * @return {Object} - reference to instance
          */
-        updateContent: function (content) {
+        updateContent: function(content) {
             this.content(content);
 
             return this;
-        }
+        },
     });
 });

@@ -5,8 +5,8 @@
 
 define([
     'Magento_Ui/js/form/element/single-checkbox',
-    'uiRegistry'
-], function (Checkbox, registry) {
+    'uiRegistry',
+], function(Checkbox, registry) {
     'use strict';
 
     return Checkbox.extend({
@@ -14,13 +14,13 @@ define([
             clearing: false,
             parentContainer: '',
             parentSelections: '',
-            changer: ''
+            changer: '',
         },
 
         /**
          * @inheritdoc
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super().
                 observe('elementTmpl');
 
@@ -30,7 +30,7 @@ define([
         /**
          * @inheritdoc
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
             this.imports.changeType = this.retrieveParentName(this.parentContainer) + '.' + this.changer + ':value';
 
@@ -40,7 +40,7 @@ define([
         /**
          * @inheritdoc
          */
-        onUpdate: function () {
+        onUpdate: function() {
             if (this.prefer === 'radio' && this.checked() && !this.clearing) {
                 this.clearValues();
             }
@@ -53,8 +53,8 @@ define([
          *
          * @param {String} type - type to change.
          */
-        changeType: function (type) {
-            var typeMap = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.changer).typeMap;
+        changeType: function(type) {
+            let typeMap = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.changer).typeMap;
 
             this.prefer = typeMap[type];
             this.elementTmpl(this.templates[typeMap[type]]);
@@ -63,15 +63,15 @@ define([
         /**
          * Clears values in components like this.
          */
-        clearValues: function () {
-            var records = registry.get(this.retrieveParentName(this.parentSelections)),
+        clearValues: function() {
+            let records = registry.get(this.retrieveParentName(this.parentSelections)),
                 index = this.index,
                 uid = this.uid;
 
-            records.elems.each(function (record) {
-                record.elems.filter(function (comp) {
+            records.elems.each(function(record) {
+                record.elems.filter(function(comp) {
                     return comp.index === index && comp.uid !== uid;
-                }).each(function (comp) {
+                }).each(function(comp) {
                     comp.clearing = true;
                     comp.clear();
                     comp.clearing = false;
@@ -85,8 +85,8 @@ define([
          * @param {String} parent - parent name.
          * @returns {String}
          */
-        retrieveParentName: function (parent) {
+        retrieveParentName: function(parent) {
             return this.name.replace(new RegExp('^(.+?\\.)?' + parent + '\\..+'), '$1' + parent);
-        }
+        },
     });
 });

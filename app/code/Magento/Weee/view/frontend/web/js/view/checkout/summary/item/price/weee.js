@@ -5,8 +5,8 @@
 
 define([
     'Magento_Checkout/js/view/summary/abstract-total',
-    'Magento_Checkout/js/model/quote'
-], function (Component) {
+    'Magento_Checkout/js/model/quote',
+], function(Component) {
     'use strict';
 
     return Component.extend({
@@ -14,7 +14,7 @@ define([
          * @param {Object} item
          * @return {Boolean}
          */
-        isDisplayPriceWithWeeeDetails: function (item) {
+        isDisplayPriceWithWeeeDetails: function(item) {
             if (!parseFloat(item['weee_tax_applied_amount']) || parseFloat(item['weee_tax_applied_amount'] <= 0)) {
                 return false;
             }
@@ -26,7 +26,7 @@ define([
          * @param {Object} item
          * @return {Boolean}
          */
-        isDisplayFinalPrice: function (item) {
+        isDisplayFinalPrice: function(item) {
             if (!parseFloat(item['weee_tax_applied_amount'])) {
                 return false;
             }
@@ -38,12 +38,12 @@ define([
          * @param {Object} item
          * @return {Array}
          */
-        getWeeeTaxApplied: function (item) {
+        getWeeeTaxApplied: function(item) {
             if (item['weee_tax_applied']) {
                 return JSON.parse(item['weee_tax_applied']);
             }
 
             return [];
-        }
+        },
     });
 });

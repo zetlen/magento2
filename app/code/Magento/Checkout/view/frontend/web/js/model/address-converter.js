@@ -7,11 +7,11 @@ define([
     'jquery',
     'Magento_Checkout/js/model/new-customer-address',
     'Magento_Customer/js/customer-data',
-    'mage/utils/objects'
-], function ($, address, customerData, mageUtils) {
+    'mage/utils/objects',
+], function($, address, customerData, mageUtils) {
     'use strict';
 
-    var countryData = customerData.get('directory-data');
+    let countryData = customerData.get('directory-data');
 
     return {
         /**
@@ -19,9 +19,9 @@ define([
          * @param {Object} formData
          * @returns {Object}
          */
-        formAddressDataToQuoteAddress: function (formData) {
+        formAddressDataToQuoteAddress: function(formData) {
             // clone address form data to new object
-            var addressData = $.extend(true, {}, formData),
+            let addressData = $.extend(true, {}, formData),
                 region,
                 regionName = addressData.region;
 
@@ -32,7 +32,7 @@ define([
             addressData.region = {
                 'region_id': addressData['region_id'],
                 'region_code': addressData['region_code'],
-                region: regionName
+                "region": regionName,
             };
 
             if (addressData['region_id'] &&
@@ -65,20 +65,20 @@ define([
          * @param {Object} addrs
          * @returns {Object}
          */
-        quoteAddressToFormAddressData: function (addrs) {
-            var self = this,
+        quoteAddressToFormAddressData: function(addrs) {
+            let self = this,
                 output = {},
                 streetObject;
 
             if ($.isArray(addrs.street)) {
                 streetObject = {};
-                addrs.street.forEach(function (value, index) {
+                addrs.street.forEach(function(value, index) {
                     streetObject[index] = value;
                 });
                 addrs.street = streetObject;
             }
 
-            $.each(addrs, function (key) {
+            $.each(addrs, function(key) {
                 if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
                     output[self.toUnderscore(key)] = addrs[key];
                 }
@@ -90,8 +90,8 @@ define([
         /**
          * @param {String} string
          */
-        toUnderscore: function (string) {
-            return string.replace(/([A-Z])/g, function ($1) {
+        toUnderscore: function(string) {
+            return string.replace(/([A-Z])/g, function($1) {
                 return '_' + $1.toLowerCase();
             });
         },
@@ -101,19 +101,19 @@ define([
          * @param {String} formIndex
          * @return {Object}
          */
-        formDataProviderToFlatData: function (formProviderData, formIndex) {
-            var addressData = {};
+        formDataProviderToFlatData: function(formProviderData, formIndex) {
+            let addressData = {};
 
-            $.each(formProviderData, function (path, value) {
-                var pathComponents = path.split('.'),
+            $.each(formProviderData, function(path, value) {
+                let pathComponents = path.split('.'),
                     dataObject = {};
 
                 pathComponents.splice(pathComponents.indexOf(formIndex), 1);
                 pathComponents.reverse();
-                $.each(pathComponents, function (index, pathPart) {
-                    var parent = {};
+                $.each(pathComponents, function(index, pathPart) {
+                    let parent = {};
 
-                    if (index == 0) { //eslint-disable-line eqeqeq
+                    if (index == 0) { // eslint-disable-line eqeqeq
                         dataObject[pathPart] = value;
                     } else {
                         parent[pathPart] = dataObject;
@@ -131,10 +131,10 @@ define([
          * @param {Object} object
          * @returns {Array}
          */
-        objectToArray: function (object) {
-            var convertedArray = [];
+        objectToArray: function(object) {
+            let convertedArray = [];
 
-            $.each(object, function (key) {
+            $.each(object, function(key) {
                 return typeof object[key] === 'string' ? convertedArray.push(object[key]) : false;
             });
 
@@ -145,15 +145,15 @@ define([
          * @param {Object} addrs
          * @return {*|Object}
          */
-        addressToEstimationAddress: function (addrs) {
-            var self = this,
+        addressToEstimationAddress: function(addrs) {
+            let self = this,
                 estimatedAddressData = {};
 
-            $.each(addrs, function (key) {
+            $.each(addrs, function(key) {
                 estimatedAddressData[self.toUnderscore(key)] = addrs[key];
             });
 
             return this.formAddressDataToQuoteAddress(estimatedAddressData);
-        }
+        },
     };
 });

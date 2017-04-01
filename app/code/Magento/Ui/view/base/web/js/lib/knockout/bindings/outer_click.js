@@ -7,12 +7,12 @@ define([
     'ko',
     'jquery',
     'underscore',
-    '../template/renderer'
-], function (ko, $, _, renderer) {
+    '../template/renderer',
+], function(ko, $, _, renderer) {
     'use strict';
 
-    var defaults = {
-        onlyIfVisible: true
+    let defaults = {
+        onlyIfVisible: true,
     };
 
     /**
@@ -22,15 +22,15 @@ define([
      * @returns {Boolean}
      */
     function isVisible(el) {
-        var style = window.getComputedStyle(el),
+        let style = window.getComputedStyle(el),
             visibility = {
                 display: 'none',
                 visibility: 'hidden',
-                opacity: '0'
+                opacity: '0',
             },
             visible = true;
 
-        _.each(visibility, function (val, key) {
+        _.each(visibility, function(val, key) {
             if (style[key] === val) {
                 visible = false;
             }
@@ -49,7 +49,7 @@ define([
      * @param {EventObject} e
      */
     function onOuterClick(container, config, e) {
-        var target = e.target,
+        let target = e.target,
             callback = config.callback;
 
         if (container === target || container.contains(target)) {
@@ -73,11 +73,11 @@ define([
      * @returns {Object}
      */
     function buildConfig(options) {
-        var config = {};
+        let config = {};
 
         if (_.isFunction(options)) {
             options = {
-                callback: options
+                callback: options,
             };
         } else if (!_.isObject(options)) {
             options = {};
@@ -91,25 +91,25 @@ define([
         /**
          * Initializes outer click binding.
          */
-        init: function (element, valueAccessor) {
-            var config = buildConfig(valueAccessor()),
+        init: function(element, valueAccessor) {
+            let config = buildConfig(valueAccessor()),
                 outerClick = onOuterClick.bind(null, element, config),
                 isTouchDevice = typeof document.ontouchstart !== 'undefined';
 
             if (isTouchDevice) {
                 $(document).on('touchstart', outerClick);
 
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     $(document).off('touchstart', outerClick);
                 });
             } else {
                 $(document).on('click', outerClick);
 
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     $(document).off('click', outerClick);
                 });
             }
-        }
+        },
     };
 
     renderer.addAttribute('outerClick');

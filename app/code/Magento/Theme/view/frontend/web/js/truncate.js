@@ -10,15 +10,15 @@
  */
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.truncateOptions', {
         options: {
             detailsLink: 'a.details',
             mouseEvents: 'mouseover mouseout',
-            truncatedFullValue: 'div.truncated.full.value'
+            truncatedFullValue: 'div.truncated.full.value',
         },
 
         /**
@@ -26,7 +26,7 @@ define([
          *
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.element.on(this.options.mouseEvents, $.proxy(this._toggleShow, this))
                 .find(this.options.detailsLink).on(this.options.mouseEvents, $.proxy(this._toggleShow, this));
         },
@@ -37,8 +37,8 @@ define([
          * @private
          * @param {jQuery.Event} event - Mouse over/out event.
          */
-        _toggleShow: function (event) {
+        _toggleShow: function(event) {
             $(event.currentTarget).find(this.options.truncatedFullValue).toggleClass('show');
-        }
+        },
     });
 });

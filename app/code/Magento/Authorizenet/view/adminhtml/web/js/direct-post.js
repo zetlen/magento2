@@ -3,22 +3,21 @@
  * See COPYING.txt for license details.
  */
 
-(function (factory) {
+(function(factory) {
     if (typeof define === 'function' && define.amd) {
         define([
-            "jquery",
-            "mage/backend/validation",
-            "prototype"
+            'jquery',
+            'mage/backend/validation',
+            'prototype'
         ], factory);
     } else {
         factory(jQuery);
     }
-}(function (jQuery) {
-
+}(function(jQuery) {
 window.directPost = Class.create();
 directPost.prototype = {
-    initialize : function(methodCode, iframeId, controller, orderSaveUrl, cgiUrl, nativeAction) {
-        var prepare = function (event, method) {
+    initialize: function(methodCode, iframeId, controller, orderSaveUrl, cgiUrl, nativeAction) {
+        let prepare = function(event, method) {
             if (method === 'authorizenet_directpost') {
                 this.preparePayment();
             } else {
@@ -26,6 +25,7 @@ directPost.prototype = {
                     .off('submitOrder.authorizenet');
             }
         };
+
         this.iframeId = iframeId;
         this.controller = controller;
         this.orderSaveUrl = orderSaveUrl;
@@ -50,12 +50,12 @@ directPost.prototype = {
         jQuery('#edit_form').trigger(
             'changePaymentMethod',
             [
-                jQuery('#edit_form').find(':radio[name="payment[method]"]:checked').val()
+                jQuery('#edit_form').find(':radio[name="payment[method]"]:checked').val(),
             ]
         );
     },
 
-    validate : function() {
+    validate: function() {
         this.isValid = true;
         this.inputs.each(function(elemIndex) {
             if ($(this.code + '_' + elemIndex)) {
@@ -68,7 +68,7 @@ directPost.prototype = {
         return this.isValid;
     },
 
-    changeInputOptions : function(param, value) {
+    changeInputOptions: function(param, value) {
         this.inputs.each(function(elemIndex) {
             if ($(this.code + '_' + elemIndex)) {
                 $(this.code + '_' + elemIndex).writeAttribute(param, value);
@@ -76,7 +76,7 @@ directPost.prototype = {
         }, this);
     },
 
-    preparePayment : function() {
+    preparePayment: function() {
         this.changeInputOptions('autocomplete', 'off');
         jQuery('#edit_form')
             .off('submitOrder')
@@ -95,7 +95,7 @@ directPost.prototype = {
         }
     },
 
-    loadIframe : function() {
+    loadIframe: function() {
         if (this.paymentRequestSent) {
             if (!this.orderRequestSent) {
                 this.paymentRequestSent = false;
@@ -113,16 +113,17 @@ directPost.prototype = {
         }
     },
 
-    loadOrderIframe : function() {
+    loadOrderIframe: function() {
         if (this.orderRequestSent) {
             $(this.iframeId).hide();
-            var data = $('order-' + this.iframeId).contentWindow.document.body.getElementsByTagName('pre')[0].innerHTML;
+            let data = $('order-' + this.iframeId).contentWindow.document.body.getElementsByTagName('pre')[0].innerHTML;
+
             this.saveAdminOrderSuccess(data);
             this.orderRequestSent = false;
         }
     },
 
-    showError : function(msg) {
+    showError: function(msg) {
         this.hasError = true;
         if (this.controller == 'onepage') {
             $(this.iframeId).hide();
@@ -131,10 +132,11 @@ directPost.prototype = {
         alert(msg);
     },
 
-    returnQuote : function() {
-        var url = this.orderSaveUrl.replace('place', 'returnQuote');
+    returnQuote: function() {
+        let url = this.orderSaveUrl.replace('place', 'returnQuote');
+
         new Ajax.Request(url, {
-            onSuccess : function(transport) {
+            onSuccess: function(transport) {
                 try {
                     response = transport.responseText.evalJSON(true);
                 } catch (e) {
@@ -147,27 +149,28 @@ directPost.prototype = {
                 this.changeInputOptions('disabled', false);
                 jQuery('body').trigger('processStop');
                 enableElements('save');
-            }.bind(this)
+            }.bind(this),
         });
     },
 
-    setLoadWaiting : function() {
+    setLoadWaiting: function() {
         this.headers.each(function(header) {
             header.removeClassName('allow');
         });
         checkout.setLoadWaiting('review');
     },
 
-    resetLoadWaiting : function() {
+    resetLoadWaiting: function() {
         this.headers.each(function(header) {
             header.addClassName('allow');
         });
         checkout.setLoadWaiting(false);
     },
 
-    submitAdminOrder : function() {
+    submitAdminOrder: function() {
         // Temporary solution will be removed after refactoring Authorize.Net (sales) functionality
-        var editForm = jQuery('#edit_form');
+        let editForm = jQuery('#edit_form');
+
         if (editForm.valid()) {
             // Temporary solution will be removed after refactoring Authorize.Net (sales) functionality
             paymentMethodEl = editForm.find(':radio[name="payment[method]"]:checked');
@@ -196,13 +199,15 @@ directPost.prototype = {
         }
     },
 
-    recollectQuote : function() {
-        var area = [ 'sidebar', 'items', 'shipping_method', 'billing_method', 'totals', 'giftmessage' ];
+    recollectQuote: function() {
+        let area = ['sidebar', 'items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
+
         area = order.prepareArea(area);
-        var url = order.loadBaseUrl + 'block/' + area;
-        var info = $('order-items_grid').select('input', 'select', 'textarea');
-        var data = {};
-        for ( var i = 0; i < info.length; i++) {
+        let url = order.loadBaseUrl + 'block/' + area;
+        let info = $('order-items_grid').select('input', 'select', 'textarea');
+        let data = {};
+
+        for ( let i = 0; i < info.length; i++) {
             if (!info[i].disabled && (info[i].type != 'checkbox' || info[i].checked)) {
                 data[info[i].name] = info[i].getValue();
             }
@@ -214,16 +219,15 @@ directPost.prototype = {
         }
         data.json = true;
         new Ajax.Request(url, {
-            parameters : data,
-            loaderArea : 'html-body',
-            onSuccess : function(transport) {
+            parameters: data,
+            loaderArea: 'html-body',
+            onSuccess: function(transport) {
                 jQuery('#edit_form').submit();
-            }.bind(this)
+            },
         });
-
     },
 
-    saveAdminOrderSuccess : function(data) {
+    saveAdminOrderSuccess: function(data) {
         try {
             response = data.evalJSON(true);
         } catch (e) {
@@ -232,20 +236,23 @@ directPost.prototype = {
 
         if (response.directpost) {
             this.orderIncrementId = response.directpost.fields.x_invoice_num;
-            var paymentData = {};
-            for ( var key in response.directpost.fields) {
+            let paymentData = {};
+
+            for ( let key in response.directpost.fields) {
                 paymentData[key] = response.directpost.fields[key];
             }
-            var preparedData = this.preparePaymentRequest(paymentData);
+            let preparedData = this.preparePaymentRequest(paymentData);
+
             this.sendPaymentRequest(preparedData);
         } else {
             if (response.redirect) {
                 window.location = response.redirect;
             }
             if (response.error_messages) {
-                var msg = response.error_messages;
-                if (typeof (msg) == 'object') {
-                    msg = msg.join("\n");
+                let msg = response.error_messages;
+
+                if (typeof msg == 'object') {
+                    msg = msg.join('\n');
                 }
                 if (msg) {
                     alert(msg);
@@ -254,15 +261,17 @@ directPost.prototype = {
         }
     },
 
-    preparePaymentRequest : function(data) {
+    preparePaymentRequest: function(data) {
         if ($(this.code + '_cc_cid')) {
             data.x_card_code = $(this.code + '_cc_cid').value;
         }
-        var year = $(this.code + '_expiration_yr').value;
+        let year = $(this.code + '_expiration_yr').value;
+
         if (year.length > 2) {
             year = year.substring(2);
         }
-        var month = parseInt($(this.code + '_expiration').value, 10);
+        let month = parseInt($(this.code + '_expiration').value, 10);
+
         if (month < 10) {
             month = '0' + month;
         }
@@ -273,7 +282,7 @@ directPost.prototype = {
         return data;
     },
 
-    sendPaymentRequest : function(preparedData) {
+    sendPaymentRequest: function(preparedData) {
         this.recreateIframe();
         this.tmpForm = document.createElement('form');
         this.tmpForm.style.display = 'none';
@@ -284,7 +293,7 @@ directPost.prototype = {
         this.tmpForm.target = $(this.iframeId).readAttribute('name');
         this.tmpForm.setAttribute('target', $(this.iframeId).readAttribute('name'));
 
-        for ( var param in preparedData) {
+        for ( let param in preparedData) {
             this.tmpForm.appendChild(this.createHiddenElement(param, preparedData[param]));
         }
 
@@ -292,8 +301,9 @@ directPost.prototype = {
         this.tmpForm.submit();
     },
 
-    createHiddenElement : function(name, value) {
-        var field;
+    createHiddenElement: function(name, value) {
+        let field;
+
         if (isIE) {
             field = document.createElement('input');
             field.setAttribute('type', 'hidden');
@@ -309,19 +319,21 @@ directPost.prototype = {
         return field;
     },
 
-    recreateIframe : function() {
+    recreateIframe: function() {
         if ($(this.iframeId)) {
-            var nextElement = $(this.iframeId).next();
-            var src = $(this.iframeId).readAttribute('src');
-            var name = $(this.iframeId).readAttribute('name');
+            let nextElement = $(this.iframeId).next();
+            let src = $(this.iframeId).readAttribute('src');
+            let name = $(this.iframeId).readAttribute('name');
+
             $(this.iframeId).stopObserving();
             $(this.iframeId).remove();
-            var iframe = '<iframe id="' + this.iframeId +
+            let iframe = '<iframe id="' + this.iframeId +
                 '" allowtransparency="true" frameborder="0"  name="' + name +
                 '" style="display:none;width:100%;background-color:transparent" src="' + src + '" />';
-            Element.insert(nextElement, {'before':iframe});
+
+            Element.insert(nextElement, {'before': iframe});
             $(this.iframeId).observe('load', this.onLoadIframe);
         }
-    }
+    },
 };
 }));

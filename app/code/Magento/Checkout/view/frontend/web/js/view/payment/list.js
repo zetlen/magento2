@@ -13,8 +13,8 @@ define([
     'uiLayout',
     'Magento_Checkout/js/model/checkout-data-resolver',
     'mage/translate',
-    'uiRegistry'
-], function (_, ko, utils, Component, paymentMethods, rendererList, layout, checkoutDataResolver, $t, registry) {
+    'uiRegistry',
+], function(_, ko, utils, Component, paymentMethods, rendererList, layout, checkoutDataResolver, $t, registry) {
     'use strict';
 
     return Component.extend({
@@ -23,10 +23,10 @@ define([
             visible: paymentMethods().length > 0,
             configDefaultGroup: {
                 name: 'methodGroup',
-                component: 'Magento_Checkout/js/model/payment/method-group'
+                component: 'Magento_Checkout/js/model/payment/method-group',
             },
             paymentGroupsList: [],
-            defaultGroupTitle: $t('Select a new payment method')
+            defaultGroupTitle: $t('Select a new payment method'),
         },
 
         /**
@@ -34,19 +34,19 @@ define([
          *
          * @returns {Component} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super().initDefaulGroup().initChildren();
             paymentMethods.subscribe(
-                function (changes) {
+                function(changes) {
                     checkoutDataResolver.resolvePaymentMethod();
-                    //remove renderer for "deleted" payment methods
-                    _.each(changes, function (change) {
+                    // remove renderer for "deleted" payment methods
+                    _.each(changes, function(change) {
                         if (change.status === 'deleted') {
                             this.removeRenderer(change.value.method);
                         }
                     }, this);
-                    //add renderer for "added" payment methods
-                    _.each(changes, function (change) {
+                    // add renderer for "added" payment methods
+                    _.each(changes, function(change) {
                         if (change.status === 'added') {
                             this.createRenderer(change.value);
                         }
@@ -57,7 +57,7 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             this._super().
                 observe(['paymentGroupsList']);
 
@@ -69,9 +69,9 @@ define([
          *
          * @returns {Component} Chainable.
          */
-        initDefaulGroup: function () {
+        initDefaulGroup: function() {
             layout([
-                this.configDefaultGroup
+                this.configDefaultGroup,
             ]);
 
             return this;
@@ -82,10 +82,10 @@ define([
          *
          * @returns {Component} Chainable.
          */
-        initChildren: function () {
-            var self = this;
+        initChildren: function() {
+            let self = this;
 
-            _.each(paymentMethods(), function (paymentMethodData) {
+            _.each(paymentMethods(), function(paymentMethodData) {
                 self.createRenderer(paymentMethodData);
             });
 
@@ -95,25 +95,25 @@ define([
         /**
          * @returns
          */
-        createComponent: function (payment) {
-            var rendererTemplate,
+        createComponent: function(payment) {
+            let rendererTemplate,
                 rendererComponent,
                 templateData;
 
             templateData = {
                 parentName: this.name,
-                name: payment.name
+                name: payment.name,
             };
             rendererTemplate = {
                 parent: '${ $.$data.parentName }',
                 name: '${ $.$data.name }',
                 displayArea: payment.displayArea,
-                component: payment.component
+                component: payment.component,
             };
             rendererComponent = utils.template(rendererTemplate, templateData);
             utils.extend(rendererComponent, {
                 item: payment.item,
-                config: payment.config
+                config: payment.config,
             });
 
             return rendererComponent;
@@ -124,13 +124,12 @@ define([
          *
          * @param {Object} paymentMethodData
          */
-        createRenderer: function (paymentMethodData) {
-            var isRendererForMethod = false,
+        createRenderer: function(paymentMethodData) {
+            let isRendererForMethod = false,
                 currentGroup;
 
-            registry.get(this.configDefaultGroup.name, function (defaultGroup) {
-                _.each(rendererList(), function (renderer) {
-
+            registry.get(this.configDefaultGroup.name, function(defaultGroup) {
+                _.each(rendererList(), function(renderer) {
                     if (renderer.hasOwnProperty('typeComparatorCallback') &&
                         typeof renderer.typeComparatorCallback == 'function'
                     ) {
@@ -152,7 +151,7 @@ define([
                                     name: renderer.type,
                                     method: paymentMethodData.method,
                                     item: paymentMethodData,
-                                    displayArea: currentGroup.displayArea
+                                    displayArea: currentGroup.displayArea,
                                 }
                             )]);
                     }
@@ -165,15 +164,15 @@ define([
          *
          * @param {Object} group
          */
-        collectPaymentGroups: function (group) {
-            var groupsList = this.paymentGroupsList(),
-                isGroupExists = _.some(groupsList, function (existsGroup) {
+        collectPaymentGroups: function(group) {
+            let groupsList = this.paymentGroupsList(),
+                isGroupExists = _.some(groupsList, function(existsGroup) {
                     return existsGroup.alias === group.alias;
                 });
 
             if (!isGroupExists) {
                 groupsList.push(group);
-                groupsList = _.sortBy(groupsList, function (existsGroup) {
+                groupsList = _.sortBy(groupsList, function(existsGroup) {
                     return existsGroup.sortOrder;
                 });
                 this.paymentGroupsList(groupsList);
@@ -186,8 +185,8 @@ define([
          * @param {Object} group
          * @returns {String}
          */
-        getGroupTitle: function (group) {
-            var title = group().title;
+        getGroupTitle: function(group) {
+            let title = group().title;
 
             if (group().isDefault() && this.paymentGroupsList().length > 1) {
                 title = this.defaultGroupTitle;
@@ -201,8 +200,8 @@ define([
          *
          * @returns {String}
          */
-        isPaymentMethodsAvailable: function () {
-            return _.some(this.paymentGroupsList(), function (group) {
+        isPaymentMethodsAvailable: function() {
+            return _.some(this.paymentGroupsList(), function(group) {
                 return this.getRegion(group.displayArea)().length;
             }, this);
         },
@@ -212,19 +211,19 @@ define([
          *
          * @param {String} paymentMethodCode
          */
-        removeRenderer: function (paymentMethodCode) {
-            var items;
+        removeRenderer: function(paymentMethodCode) {
+            let items;
 
-            _.each(this.paymentGroupsList(), function (group) {
+            _.each(this.paymentGroupsList(), function(group) {
                 items = this.getRegion(group.displayArea);
 
-                _.find(items(), function (value) {
+                _.find(items(), function(value) {
                     if (value.item.method.indexOf(paymentMethodCode) === 0) {
                         value.disposeSubscriptions();
                         value.destroy();
                     }
                 });
             }, this);
-        }
+        },
     });
 });

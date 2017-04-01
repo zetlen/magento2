@@ -12,8 +12,8 @@ define([
     'Magento_Checkout/js/model/payment/method-converter',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/action/select-billing-address'
-], function (
+    'Magento_Checkout/js/action/select-billing-address',
+], function(
     ko,
     quote,
     resourceUrlManager,
@@ -30,8 +30,8 @@ define([
         /**
          * @return {jQuery.Deferred}
          */
-        saveShippingInformation: function () {
-            var payload;
+        saveShippingInformation: function() {
+            let payload;
 
             if (!quote.billingAddress()) {
                 selectBillingAddressAction(quote.shippingAddress());
@@ -42,8 +42,8 @@ define([
                     'shipping_address': quote.shippingAddress(),
                     'billing_address': quote.billingAddress(),
                     'shipping_method_code': quote.shippingMethod()['method_code'],
-                    'shipping_carrier_code': quote.shippingMethod()['carrier_code']
-                }
+                    'shipping_carrier_code': quote.shippingMethod()['carrier_code'],
+                },
             };
 
             fullScreenLoader.startLoader();
@@ -52,17 +52,17 @@ define([
                 resourceUrlManager.getUrlForSetShippingInformation(quote),
                 JSON.stringify(payload)
             ).done(
-                function (response) {
+                function(response) {
                     quote.setTotals(response.totals);
                     paymentService.setPaymentMethods(methodConverter(response['payment_methods']));
                     fullScreenLoader.stopLoader();
                 }
             ).fail(
-                function (response) {
+                function(response) {
                     errorProcessor.process(response);
                     fullScreenLoader.stopLoader();
                 }
             );
-        }
+        },
     };
 });

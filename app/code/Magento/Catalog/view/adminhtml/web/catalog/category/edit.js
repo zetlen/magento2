@@ -9,15 +9,15 @@
 /* global tree */
 define([
     'jquery',
-    'prototype'
-], function (jQuery) {
+    'prototype',
+], function(jQuery) {
     'use strict';
 
     /** Category submit. */
-    var categorySubmit = function () {
-        var activeTab = $('active_tab_id'),
+    let categorySubmit = function() {
+        let activeTab = $('active_tab_id'),
             params = {},
-            fields, i,categoryId, isCreating, path, parentId, currentNode, oldClass, newClass;
+            fields, i, categoryId, isCreating, path, parentId, currentNode, oldClass, newClass;
 
         if (activeTab) {
             if (activeTab.tabsJsObject && activeTab.tabsJsObject.tabs('activeAnchor')) {
@@ -29,7 +29,7 @@ define([
 
         for (i = 0; i < fields.length; i++) {
             if (!fields[i].name) {
-                continue;//jscs:ignore
+                continue;// jscs:ignore
             }
             params[fields[i].name] = fields[i].getValue();
         }
@@ -58,8 +58,8 @@ define([
             if (tree && tree.storeId == 0) {// eslint-disable-line eqeqeq, no-lonely-if
                 currentNode = tree.getNodeById(categoryId);
 
-                if (currentNode) {//eslint-disable-line max-depth
-                    if (parseInt(params['general[is_active]'])) {//eslint-disable-line radix, max-depth
+                if (currentNode) {// eslint-disable-line max-depth
+                    if (parseInt(params['general[is_active]'])) {// eslint-disable-line radix, max-depth
                         oldClass = 'no-active-category';
                         newClass = 'active-category';
                     } else {
@@ -77,9 +77,9 @@ define([
         jQuery('#category_edit_form').trigger('submit');
     };
 
-    return function (config, element) {
+    return function(config, element) {
         config = config || {};
-        jQuery(element).on('click', function () {
+        jQuery(element).on('click', function() {
             categorySubmit(config.url, config.ajax);
         });
     };

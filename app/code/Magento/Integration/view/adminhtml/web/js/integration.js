@@ -8,8 +8,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'mage/translate',
-    'Magento_Ui/js/modal/modal'
-], function ($, alert) {
+    'Magento_Ui/js/modal/modal',
+], function($, alert) {
     'use strict';
 
     $.widget('mage.integration', {
@@ -22,14 +22,14 @@ define([
              * URL of the integration grid.
              * @type {String}
              */
-            gridUrl: ''
+            gridUrl: '',
         },
 
         /**
          * Bind event handler for the action when admin clicks "Save & Activate" button.
          * @private
          */
-        _create: function () {
+        _create: function() {
             if ($('#save-split-button-activate').length) {
                 // We're on the "New integration" page - bind related handler
                 this._form = $('#edit_form');
@@ -41,7 +41,7 @@ define([
          * Save new integration, then kick off the activate dialog.
          * @private
          */
-        _saveAndActivate: function () {
+        _saveAndActivate: function() {
             if (this._form.validation && !this._form.validation('isValid')) {
                 return false;
             }
@@ -54,13 +54,13 @@ define([
                 context: this,
 
                 /** @inheritdoc */
-                beforeSend: function () {
+                beforeSend: function() {
                     $('body').trigger('processStart');
                 },
 
                 /** @inheritdoc */
-                success: function (data) {
-                    var integrationName, that;
+                success: function(data) {
+                    let integrationName, that;
 
                     if (data._redirect) {
                         window.location.href = data._redirect;
@@ -75,10 +75,10 @@ define([
                             // escaped. To avoid double escaping we do it here instead of the output.
                             'data-row-name': $('<div>').text(integrationName).html(),
                             'data-row-is-reauthorize': '0',
-                            'data-row-is-token-exchange': data.isTokenExchange
+                            'data-row-is-token-exchange': data.isTokenExchange,
                         }));
                         that = this;
-                        $('#integration-popup-container').on('dialogclose', function () {
+                        $('#integration-popup-container').on('dialogclose', function() {
                             $('body').trigger('processStart');
                             window.location.href = that.options.gridUrl;
 
@@ -88,21 +88,21 @@ define([
                 },
 
                 /** @inheritdoc */
-                error: function (jqXHR, status, error) {
+                error: function(jqXHR, status, error) {
                     alert({
-                        content: $.mage.__('Sorry, something went wrong. Please try again later.')
+                        content: $.mage.__('Sorry, something went wrong. Please try again later.'),
                     });
                     window.console && console.log(status + ': ' + error + '\nResponse text:\n' + jqXHR.responseText);
                 },
 
                 /** @inheritdoc */
-                complete: function () {
+                complete: function() {
                     $('body').trigger('processStop');
-                }
+                },
             });
 
             return true;
-        }
+        },
     });
 
     /**
@@ -114,7 +114,7 @@ define([
      * @return {Object}
      * @constructor
      */
-    window.Integration = function (
+    window.Integration = function(
         permissionsDialogUrl,
         tokensDialogUrl,
         tokensExchangeUrl,
@@ -125,14 +125,14 @@ define([
             permissions: permissionsDialogUrl,
             tokens: tokensDialogUrl,
             tokensExchange: tokensExchangeUrl,
-            grid: gridUrl
+            grid: gridUrl,
         },
         IdentityLogin = {
             win: null,
             strLocation: null,
             checker: null,
             isCalledBack: false,
-            //Info popup dialog. Should be hidden when login window is closed
+            // Info popup dialog. Should be hidden when login window is closed
             jqInfoDialog: $('#integration-popup-container'),
             successCallbackUrl: successCallbackUrl,
             Constants: {
@@ -141,13 +141,13 @@ define([
                  give the checker function enough time to detect if the successCallback has been invoked
                  */
                 CHECKER_INTERVAL: 500,
-                //Login screen size plus some buffer
+                // Login screen size plus some buffer
                 WIDTH: 680,
                 HEIGHT: 510,
                 // subtract pixels(30) and width(680) from screen width to move popup from extreme left
                 LEFT: screen.width - 680 - 30,
                 // subtract pixels(300) and height(300) from screen height to move from top
-                TOP: screen.height - 510 - 300
+                TOP: screen.height - 510 - 300,
             },
 
             /**
@@ -155,15 +155,15 @@ define([
              * @param {*} consumerKey
              * @param {*} jqInfoDialog
              */
-            invokePopup: function (identityCallbackUrl, consumerKey, jqInfoDialog) {
-                var param;
+            invokePopup: function(identityCallbackUrl, consumerKey, jqInfoDialog) {
+                let param;
 
                 // Callback should be invoked only once. Reset callback flag on subsequent invocations.
                 IdentityLogin.isCalledBack = false;
                 IdentityLogin.jqInfoDialog = jqInfoDialog;
                 param = $.param({
                     'oauth_consumer_key': consumerKey,
-                    'success_call_back': IdentityLogin.successCallbackUrl
+                    'success_call_back': IdentityLogin.successCallbackUrl,
                 });
                 IdentityLogin.win = window.open(identityCallbackUrl + '?' + param, '',
                     'top=' + IdentityLogin.Constants.TOP +
@@ -172,10 +172,10 @@ define([
                         ', height=' + IdentityLogin.Constants.HEIGHT + ',scrollbars=no');
 
                 if (IdentityLogin.checker != null) {
-                    //Clear any previous check
+                    // Clear any previous check
                     clearInterval(IdentityLogin.checker);
                 }
-                //Polling to detect url of the child window.
+                // Polling to detect url of the child window.
                 IdentityLogin.checker = setInterval(
                     IdentityLogin.fnCheckLocation, IdentityLogin.Constants.CHECKER_INTERVAL
                 );
@@ -185,25 +185,25 @@ define([
              * Function to check the location of the child popoup window.
              * Once detected if the callback is successful, parent window will be reloaded
              */
-            fnCheckLocation: function () {
+            fnCheckLocation: function() {
                 if (IdentityLogin.win == null) {
                     return;
                 }
                 // Check to see if the location has changed.
                 try {
-                    //Is the success callback invoked
+                    // Is the success callback invoked
                     if (IdentityLogin.win.closed ||
-                        IdentityLogin.win.location.href == IdentityLogin.successCallbackUrl //eslint-disable-line eqeqeq
+                        IdentityLogin.win.location.href == IdentityLogin.successCallbackUrl // eslint-disable-line eqeqeq
                     ) {
-                        //Stop the the polling
+                        // Stop the the polling
                         clearInterval(IdentityLogin.checker);
                         $('body').trigger('processStart');
-                        //Check for window closed
+                        // Check for window closed
                         window.location.reload();
                         IdentityLogin.jqInfoDialog.modal('closeModal');
                     }
                 } catch (e) {
-                    //squash. In case Window closed without success callback, clear polling
+                    // squash. In case Window closed without success callback, clear polling
                     if (IdentityLogin.win.closed) {
                         IdentityLogin.jqInfoDialog.modal('closeModal');
                         clearInterval(IdentityLogin.checker);
@@ -211,19 +211,19 @@ define([
 
                     return;
                 }
-            }
+            },
         },
 
         /**
          * @param {Object} popupWindow
          * @return {Boolean}
          */
-        isPopupBlocked = function (popupWindow) {
+        isPopupBlocked = function(popupWindow) {
             try {
                 popupWindow.focus();
             } catch (e) {
                 alert({
-                    content: $.mage.__('Popup Blocker is enabled! Please add this site to your exception list.')
+                    content: $.mage.__('Popup Blocker is enabled! Please add this site to your exception list.'),
                 });
 
                 return true;
@@ -239,24 +239,24 @@ define([
          * @param {*} ajaxUrl
          * @private
          */
-        _showPopup = function (dialog, title, okButton, ajaxUrl) {
+        _showPopup = function(dialog, title, okButton, ajaxUrl) {
             $.ajax({
                 url: ajaxUrl,
                 cache: false,
                 data: {
-                    'form_key': window.FORM_KEY
+                    'form_key': window.FORM_KEY,
                 },
                 method: 'GET',
 
                 /** @inheritdoc */
-                beforeSend: function () {
+                beforeSend: function() {
                     // Show the spinner
                     $('body').trigger('processStart');
                 },
 
                 /** @inheritdoc */
-                success: function (result) {
-                    var redirect = result._redirect,
+                success: function(result) {
+                    let redirect = result._redirect,
                         identityLinkUrl, consumerKey, popupHtml, popup, resultObj, buttons, dialogProperties;
 
                     if (redirect) {
@@ -276,11 +276,10 @@ define([
                             result;
 
                         identityLinkUrl = resultObj['identity_link_url'];
-                        consumerKey      = resultObj['oauth_consumer_key'];
-                        popupHtml       = resultObj['popup_content'];
-
+                        consumerKey = resultObj['oauth_consumer_key'];
+                        popupHtml = resultObj['popup_content'];
                     } catch (e) {
-                        //This is expected if result is not json. Do nothing.
+                        // This is expected if result is not json. Do nothing.
                     }
 
                     if (identityLinkUrl && consumerKey && popupHtml) {
@@ -318,18 +317,18 @@ define([
                 },
 
                 /** @inheritdoc */
-                error: function (jqXHR, status, error) {
+                error: function(jqXHR, status, error) {
                     alert({
-                        content: $.mage.__('Sorry, something went wrong. Please try again later.')
+                        content: $.mage.__('Sorry, something went wrong. Please try again later.'),
                     });
                     window.console && console.log(status + ': ' + error + '\nResponse text:\n' + jqXHR.responseText);
                 },
 
                 /** @inheritdoc */
-                complete: function () {
+                complete: function() {
                     // Hide the spinner
                     $('body').trigger('processStop');
-                }
+                },
             });
         };
 
@@ -338,8 +337,8 @@ define([
                 /**
                  * @param {*} ctx
                  */
-                show: function (ctx) {
-                    var dialog = $(ctx).attr('data-row-dialog'),
+                show: function(ctx) {
+                    let dialog = $(ctx).attr('data-row-dialog'),
                         isReauthorize = $(ctx).attr('data-row-is-reauthorize'),
                         isTokenExchange = $(ctx).attr('data-row-is-token-exchange'),
                         integrationId, ajaxUrl, integrationName, okButton;
@@ -374,45 +373,45 @@ define([
                         permissions: {
                             text: isReauthorize == '1' ? $.mage.__('Reauthorize') : $.mage.__('Allow'), //eslint-disable-line
                             'class': 'action-primary',
-                            attr: {
+                            "attr": {
                                 'data-row-id': integrationId,
                                 'data-row-name': integrationName,
                                 'data-row-dialog': isTokenExchange == '1' ? 'tokensExchange' : 'tokens', //eslint-disable-line
                                 'data-row-is-reauthorize': isReauthorize,
-                                'data-row-is-token-exchange': isTokenExchange
+                                'data-row-is-token-exchange': isTokenExchange,
                             },
 
                             /**
                              * Click.
                              */
-                            click: function () {
+                            "click": function() {
                                 // Find the 'Allow' button and clone - it has all necessary data, but is going to be
                                 // destroyed along with the current dialog
-                                var context = this.modal.find('button.action-primary').clone(true);
+                                let context = this.modal.find('button.action-primary').clone(true);
 
                                 this.closeModal();
                                 this.modal.remove();
                                 // Make popup out of data we saved from 'Allow' button
                                 window.integration.popup.show(context);
-                            }
+                            },
                         },
                         tokens: {
-                            text: $.mage.__('Done'),
+                            "text": $.mage.__('Done'),
                             'class': 'action-primary',
 
                             /**
                              * Click.
                              */
-                            click: function () {
+                            "click": function() {
                                 // Integration has been activated at the point of generating tokens
                                 window.location.href = url.grid;
-                            }
-                        }
+                            },
+                        },
                     };
 
                     _showPopup(dialog, integrationName, okButton[dialog], ajaxUrl);
-                }
-            }
+                },
+            },
         };
     };
 

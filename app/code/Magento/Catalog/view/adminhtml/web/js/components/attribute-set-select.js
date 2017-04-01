@@ -4,18 +4,18 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/ui-select'
-], function (Select) {
+    'Magento_Ui/js/form/element/ui-select',
+], function(Select) {
     'use strict';
 
     return Select.extend({
         defaults: {
             listens: {
-                'value': 'changeFormSubmitUrl'
+                'value': 'changeFormSubmitUrl',
             },
             modules: {
-                formProvider: '${ $.provider }'
-            }
+                formProvider: '${ $.provider }',
+            },
         },
 
         /**
@@ -23,8 +23,8 @@ define([
          *
          * @param {String|Number} value
          */
-        changeFormSubmitUrl: function (value) {
-            var pattern = /(set\/)(\d)*?\//,
+        changeFormSubmitUrl: function(value) {
+            let pattern = /(set\/)(\d)*?\//,
                 change = '$1' + value + '/';
 
             this.formProvider().client.urls.save = this.formProvider().client.urls.save.replace(pattern, change);
@@ -32,6 +32,6 @@ define([
                 pattern,
                 change
             );
-        }
+        },
     });
 });

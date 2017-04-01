@@ -5,11 +5,11 @@
 define([
     'ko',
     'underscore',
-    'es6-collections'
-], function (ko, _) {
+    'es6-collections',
+], function(ko, _) {
     'use strict';
 
-    var eventsMap = new WeakMap();
+    let eventsMap = new WeakMap();
 
     /**
      * Returns events map or a specific event
@@ -20,7 +20,7 @@ define([
      * @returns {Map|Array|Boolean}
      */
     function getEvents(obj, name) {
-        var events = eventsMap.get(obj);
+        let events = eventsMap.get(obj);
 
         if (!events) {
             return false;
@@ -38,7 +38,7 @@ define([
      * @param {String} name - Name of the event.
      */
     function addHandler(obj, ns, callback, name) {
-        var events      = getEvents(obj),
+        let events = getEvents(obj),
             observable,
             data;
 
@@ -60,7 +60,7 @@ define([
 
         data = {
             callback: callback,
-            ns: ns
+            ns: ns,
         };
 
         events.has(name) ?
@@ -76,13 +76,13 @@ define([
      * @returns {Boolean}
      */
     function trigger(handlers, args) {
-        var bubble = true,
+        let bubble = true,
             callback;
 
-        handlers.forEach(function (handler) {
+        handlers.forEach(function(handler) {
             callback = handler.callback;
 
-            if (callback.apply(null, args) === false) {
+            if (callback(...args) === false) {
                 bubble = false;
             }
         });
@@ -98,8 +98,8 @@ define([
          * @param  {Function} callback
          * @return {Object} reference to this
          */
-        on: function (events, callback, ns) {
-            var iterator;
+        on: function(events, callback, ns) {
+            let iterator;
 
             if (arguments.length < 2) {
                 ns = callback;
@@ -119,15 +119,15 @@ define([
          * @param  {String} ns
          * @return {Object} reference to this
          */
-        off: function (ns) {
-            var storage = getEvents(this);
+        off: function(ns) {
+            let storage = getEvents(this);
 
             if (!storage) {
                 return this;
             }
 
-            storage.forEach(function (handlers, name) {
-                handlers = handlers.filter(function (handler) {
+            storage.forEach(function(handlers, name) {
+                handlers = handlers.filter(function(handler) {
                     return !ns ? false : handler.ns !== ns;
                 });
 
@@ -145,8 +145,8 @@ define([
          * @param {String} name - Name of the event to be triggered.
          * @returns {Boolean}
          */
-        trigger: function (name) {
-            var handlers,
+        trigger: function(name) {
+            let handlers,
                 args;
 
             handlers = getEvents(this, name),
@@ -157,6 +157,6 @@ define([
             }
 
             return trigger(handlers, args);
-        }
+        },
     };
 });

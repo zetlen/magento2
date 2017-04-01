@@ -2,37 +2,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 /* @api */
 define(
     [
-        'uiElement'
+        'uiElement',
     ],
-    function (
+    function(
         Component
     ) {
         'use strict';
 
         return Component.extend({
             defaults: {
-                isActivePaymentTokenEnabler: true
+                isActivePaymentTokenEnabler: true,
             },
 
             /**
              * @param {String} paymentCode
              */
-            setPaymentCode: function (paymentCode) {
+            setPaymentCode: function(paymentCode) {
                 this.paymentCode = paymentCode;
             },
 
             /**
              * @returns {Object}
              */
-            initObservable: function () {
+            initObservable: function() {
                 this._super()
                     .observe([
-                        'isActivePaymentTokenEnabler'
+                        'isActivePaymentTokenEnabler',
                     ]);
 
                 return this;
@@ -41,7 +41,7 @@ define(
             /**
              * @param {Object} data
              */
-            visitAdditionalData: function (data) {
+            visitAdditionalData: function(data) {
                 if (!this.isVaultEnabled()) {
                     return;
                 }
@@ -56,10 +56,10 @@ define(
             /**
              * @returns {Boolean}
              */
-            isVaultEnabled: function () {
+            isVaultEnabled: function() {
                 return typeof window.checkoutConfig.vault[this.paymentCode] !== 'undefined' &&
                     window.checkoutConfig.vault[this.paymentCode]['is_enabled'] === true;
-            }
+            },
         });
     }
 );

@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            groupedProduct: 'Magento_GroupedProduct/js/grouped-product'
-        }
-    }
+            groupedProduct: 'Magento_GroupedProduct/js/grouped-product',
+        },
+    },
 };

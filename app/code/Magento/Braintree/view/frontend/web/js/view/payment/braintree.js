@@ -2,20 +2,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define(
     [
         'uiComponent',
-        'Magento_Checkout/js/model/payment/renderer-list'
+        'Magento_Checkout/js/model/payment/renderer-list',
     ],
-    function (
+    function(
         Component,
         rendererList
     ) {
         'use strict';
 
-        var config = window.checkoutConfig.payment,
+        let config = window.checkoutConfig.payment,
             braintreeType = 'braintree',
             payPalType = 'braintree_paypal';
 
@@ -23,7 +23,7 @@ define(
             rendererList.push(
                 {
                     type: braintreeType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/hosted-fields'
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/hosted-fields',
                 }
             );
         }
@@ -32,7 +32,7 @@ define(
             rendererList.push(
                 {
                     type: payPalType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/paypal'
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/paypal',
                 }
             );
         }

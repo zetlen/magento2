@@ -15,8 +15,8 @@ define([
     'mageUtils',
     'jquery',
     'Magento_Ui/js/core/app',
-    'mage/validation'
-], function (_, loader, resolver, adapter, Collection, utils, $, app) {
+    'mage/validation',
+], function(_, loader, resolver, adapter, Collection, utils, $, app) {
     'use strict';
 
     /**
@@ -26,9 +26,9 @@ define([
      * @returns {Array}
      */
     function prepareParams(params) {
-        var result = '?';
+        let result = '?';
 
-        _.each(params, function (value, key) {
+        _.each(params, function(value, key) {
             result += key + '=' + value + '&';
         });
 
@@ -42,12 +42,12 @@ define([
      * @returns {Object}
      */
     function collectData(items) {
-        var result = {},
+        let result = {},
             name;
 
         items = Array.prototype.slice.call(items);
 
-        items.forEach(function (item) {
+        items.forEach(function(item) {
             switch (item.type) {
                 case 'checkbox':
                     result[item.name] = +!!item.checked;
@@ -60,7 +60,7 @@ define([
                     break;
 
                 case 'select-multiple':
-                    name = item.name.substring(0, item.name.length - 2); //remove [] from the name ending
+                    name = item.name.substring(0, item.name.length - 2); // remove [] from the name ending
                     result[name] = _.pluck(item.selectedOptions, 'value');
                     break;
 
@@ -81,7 +81,7 @@ define([
      * @returns {*}
      */
     function makeRequest(params, data, url) {
-        var save = $.Deferred();
+        let save = $.Deferred();
 
         data = utils.serialize(data);
         data['form_key'] = window.FORM_KEY;
@@ -102,7 +102,7 @@ define([
              * @param {Object} resp
              * @returns {Boolean}
              */
-            success: function (resp) {
+            success: function(resp) {
                 if (resp.ajaxExpired) {
                     window.location.href = resp.ajaxRedirect;
                 }
@@ -114,7 +114,7 @@ define([
                 }
 
                 $('body').notification('clear');
-                $.each(resp.messages, function (key, message) {
+                $.each(resp.messages, function(key, message) {
                     $('body').notification('add', {
                         error: resp.error,
                         message: message,
@@ -123,9 +123,9 @@ define([
                          * Inserts message on page
                          * @param {String} msg
                          */
-                        insertMethod: function (msg) {
+                        insertMethod: function(msg) {
                             $('.page-main-actions').after(msg);
-                        }
+                        },
                     });
                 });
             },
@@ -133,9 +133,9 @@ define([
             /**
              * Complete callback.
              */
-            complete: function () {
+            complete: function() {
                 $('body').trigger('processStop');
-            }
+            },
         });
 
         return save.promise();
@@ -148,9 +148,9 @@ define([
      * @returns {Boolean}
      */
     function isValidFields(items) {
-        var result = true;
+        let result = true;
 
-        _.each(items, function (item) {
+        _.each(items, function(item) {
             if (!$.validator.validateSingleElement(item)) {
                 result = false;
             }
@@ -170,20 +170,20 @@ define([
             ajaxSave: false,
             ajaxSaveType: 'default',
             imports: {
-                reloadUrl: '${ $.provider}:reloadUrl'
+                reloadUrl: '${ $.provider}:reloadUrl',
             },
             listens: {
-                selectorPrefix: 'destroyAdapter initAdapter',
-                '${ $.name }.${ $.reloadItem }': 'params.set reload'
+                "selectorPrefix": 'destroyAdapter initAdapter',
+                '${ $.name }.${ $.reloadItem }': 'params.set reload',
             },
             exports: {
                 selectorPrefix: '${ $.provider }:client.selectorPrefix',
-                messagesClass: '${ $.provider }:client.messagesClass'
-            }
+                messagesClass: '${ $.provider }:client.messagesClass',
+            },
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initAdapter();
 
@@ -193,16 +193,16 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             return this._super()
                 .observe([
                     'responseData',
-                    'responseStatus'
+                    'responseStatus',
                 ]);
         },
 
         /** @inheritdoc */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
             this.selector = '[data-form-part=' + this.namespace + ']';
@@ -215,11 +215,11 @@ define([
          *
          * @returns {Object}
          */
-        initAdapter: function () {
+        initAdapter: function() {
             adapter.on({
                 'reset': this.reset.bind(this),
                 'save': this.save.bind(this, true, {}),
-                'saveAndContinue': this.save.bind(this, false, {})
+                'saveAndContinue': this.save.bind(this, false, {}),
             }, this.selectorPrefix, this.eventPrefix);
 
             return this;
@@ -230,11 +230,11 @@ define([
          *
          * @returns {Object}
          */
-        destroyAdapter: function () {
+        destroyAdapter: function() {
             adapter.off([
                 'reset',
                 'save',
-                'saveAndContinue'
+                'saveAndContinue',
             ], this.eventPrefix);
 
             return this;
@@ -245,7 +245,7 @@ define([
          *
          * @returns {Object}
          */
-        hideLoader: function () {
+        hideLoader: function() {
             loader.get(this.name).hide();
 
             return this;
@@ -257,7 +257,7 @@ define([
          * @param {String} redirect
          * @param {Object} data
          */
-        save: function (redirect, data) {
+        save: function(redirect, data) {
             this.validate();
 
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
@@ -273,8 +273,8 @@ define([
          *
          * @returns {Object}
          */
-        focusInvalid: function () {
-            var invalidField = _.find(this.delegate('checkInvalid'));
+        focusInvalid: function() {
+            let invalidField = _.find(this.delegate('checkInvalid'));
 
             if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
                 invalidField.focused(true);
@@ -289,8 +289,8 @@ define([
          * @param {Object} data
          * @returns {Object}
          */
-        setAdditionalData: function (data) {
-            _.each(data, function (value, name) {
+        setAdditionalData: function(data) {
+            _.each(data, function(value, name) {
                 this.source.set('data.' + name, value);
             }, this);
 
@@ -302,11 +302,11 @@ define([
          *
          * @param {String} redirect
          */
-        submit: function (redirect) {
-            var additional = collectData(this.additionalFields),
+        submit: function(redirect) {
+            let additional = collectData(this.additionalFields),
                 source = this.source;
 
-            _.each(additional, function (value, name) {
+            _.each(additional, function(value, name) {
                 source.set('data.' + name, value);
             });
 
@@ -316,18 +316,18 @@ define([
                 ajaxSaveType: this.ajaxSaveType,
                 response: {
                     data: this.responseData,
-                    status: this.responseStatus
+                    status: this.responseStatus,
                 },
                 attributes: {
-                    id: this.namespace
-                }
+                    id: this.namespace,
+                },
             });
         },
 
         /**
          * Validates each element and returns true, if all elements are valid.
          */
-        validate: function () {
+        validate: function() {
             this.additionalFields = document.querySelectorAll(this.selector);
             this.source.set('params.invalid', false);
             this.source.trigger('data.validate');
@@ -337,24 +337,24 @@ define([
         /**
          * Trigger reset form data.
          */
-        reset: function () {
+        reset: function() {
             this.source.trigger('data.reset');
         },
 
         /**
          * Trigger overload form data.
          */
-        overload: function () {
+        overload: function() {
             this.source.trigger('data.overload');
         },
 
         /**
          * Updates data from server.
          */
-        reload: function () {
-            makeRequest(this.params, this.data, this.reloadUrl).then(function (data) {
+        reload: function() {
+            makeRequest(this.params, this.data, this.reloadUrl).then(function(data) {
                 app(data, true);
             });
-        }
+        },
     });
 });

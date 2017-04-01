@@ -9,8 +9,8 @@ define([
     'jquery',
     'mage/template',
     'Magento_Ui/js/modal/alert',
-    'Magento_Payment/js/model/credit-card-validation/validator'
-], function ($, mageTemplate, alert) {
+    'Magento_Payment/js/model/credit-card-validation/validator',
+], function($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.transparent', {
@@ -30,18 +30,18 @@ define([
             gateway: null,
             dateDelim: null,
             cardFieldsMap: null,
-            expireYearLength: 2
+            expireYearLength: 2,
         },
 
         /**
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
 
             $(this.options.editFormSelector).on('changePaymentMethod', this._setPlaceOrderHandler.bind(this));
             $(this.options.editFormSelector).trigger('changePaymentMethod', [
-                $(this.options.editFormSelector).find(':radio[name="payment[method]"]:checked').val()
+                $(this.options.editFormSelector).find(':radio[name="payment[method]"]:checked').val(),
             ]);
         },
 
@@ -51,11 +51,11 @@ define([
          * @param {Object} event
          * @param {String} method
          */
-        _setPlaceOrderHandler: function (event, method) {
+        _setPlaceOrderHandler: function(event, method) {
             if (method === this.options.gateway) {
                 $(this.options.editFormSelector)
                     .off('submitOrder')
-                    .on('submitOrder.' +  this.options.gateway, this._placeOrderHandler.bind(this));
+                    .on('submitOrder.' + this.options.gateway, this._placeOrderHandler.bind(this));
             } else {
                 $(this.options.editFormSelector)
                     .off('submitOrder.' + this.options.gateway);
@@ -68,7 +68,7 @@ define([
          * @return {Boolean}
          * @private
          */
-        _placeOrderHandler: function () {
+        _placeOrderHandler: function() {
             if ($(this.options.editFormSelector).valid()) {
                 this._orderSave();
             } else {
@@ -84,10 +84,10 @@ define([
          *
          * @private
          */
-        _orderSave: function () {
-            var postData = {
+        _orderSave: function() {
+            let postData = {
                 'form_key': FORM_KEY,
-                'cc_type': this.ccType()
+                'cc_type': this.ccType(),
             };
 
             $.ajax({
@@ -101,7 +101,7 @@ define([
                  * Success callback
                  * @param {Object} response
                  */
-                success: function (response) {
+                success: function(response) {
                     if (response.success && response[this.options.gateway]) {
                         this._postPaymentToGateway(response);
                     } else {
@@ -110,9 +110,9 @@ define([
                 },
 
                 /** @inheritdoc */
-                complete: function () {
+                complete: function() {
                     $('body').trigger('processStop');
-                }
+                },
             });
         },
 
@@ -122,8 +122,8 @@ define([
          * @param {Object} response
          * @private
          */
-        _postPaymentToGateway: function (response) {
-            var $iframeSelector = $('[data-container="' + this.options.gateway + '-transparent-iframe"]'),
+        _postPaymentToGateway: function(response) {
+            let $iframeSelector = $('[data-container="' + this.options.gateway + '-transparent-iframe"]'),
                 data,
                 tmpl,
                 iframe;
@@ -133,12 +133,12 @@ define([
                 data: {
                     target: $iframeSelector.attr('name'),
                     action: this.options.cgiUrl,
-                    inputs: data
-                }
+                    inputs: data,
+                },
             });
 
             iframe = $iframeSelector
-                .on('submit', function (event) {
+                .on('submit', function(event) {
                     event.stopPropagation();
                 });
             $(tmpl).appendTo(iframe).submit();
@@ -148,7 +148,7 @@ define([
         /**
          * @returns {String}
          */
-        ccType: function () {
+        ccType: function() {
             return this.element.find(
                 '[data-container="' + this.options.gateway + '-cc-type"]'
             ).val();
@@ -160,8 +160,8 @@ define([
          * @param {Object} response
          * @private
          */
-        _preparePaymentData: function (response) {
-            var ccfields,
+        _preparePaymentData: function(response) {
+            let ccfields,
                 data,
                 preparedata;
 
@@ -187,8 +187,8 @@ define([
          * @returns {Object}
          * @private
          */
-        _prepareExpDate: function () {
-            var year = this.element.find('[data-container="' + this.options.gateway + '-cc-year"]').val(),
+        _prepareExpDate: function() {
+            let year = this.element.find('[data-container="' + this.options.gateway + '-cc-year"]').val(),
                 month = parseInt(
                     this.element.find('[data-container="' + this.options.gateway + '-cc-month"]').val(), 10
                 );
@@ -202,7 +202,7 @@ define([
             }
 
             return {
-                month: month, year: year
+                month: month, year: year,
             };
         },
 
@@ -212,21 +212,21 @@ define([
          * @param {Object} response
          * @private
          */
-        _processErrors: function (response) {
-            var msg = response['error_messages'];
+        _processErrors: function(response) {
+            let msg = response['error_messages'];
 
             if (typeof msg === 'object') {
                 alert({
-                    content: msg.join('\n')
+                    content: msg.join('\n'),
                 });
             }
 
             if (msg) {
                 alert({
-                    content: msg
+                    content: msg,
                 });
             }
-        }
+        },
     });
 
     return $.mage.transparent;

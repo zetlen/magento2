@@ -7,8 +7,8 @@ define([
     'ko',
     'underscore',
     'mageUtils',
-    'uiRegistry'
-], function (ko, _, utils, registry) {
+    'uiRegistry',
+], function(ko, _, utils, registry) {
     'use strict';
 
     /**
@@ -38,7 +38,7 @@ define([
         return {
             target: data[0],
             property: data[1],
-            direction: direction
+            direction: direction,
         };
     }
 
@@ -61,7 +61,7 @@ define([
      * @param {*} value
      */
     function updateValue(data, owner, target, value) {
-        var component = target.component,
+        let component = target.component,
             property = target.property,
             linked = data.linked;
 
@@ -91,7 +91,7 @@ define([
      * @returns {*}
      */
     function getValue(owner) {
-        var component = owner.component,
+        let component = owner.component,
             property = owner.property;
 
         return component.get(property);
@@ -108,18 +108,18 @@ define([
      * @returns {Object}
      */
     function form(ownerComponent, targetComponent, ownerProp, targetProp, direction) {
-        var result,
+        let result,
             tmp;
 
         result = {
             owner: {
                 component: ownerComponent,
-                property: ownerProp
+                property: ownerProp,
             },
             target: {
                 component: targetComponent,
-                property: targetProp
-            }
+                property: targetProp,
+            },
         };
 
         if (direction === 'exports') {
@@ -138,7 +138,7 @@ define([
      * @param {Object} data
      */
     function setLinked(map, data) {
-        var match;
+        let match;
 
         if (!map) {
             return;
@@ -147,7 +147,7 @@ define([
         match = _.findWhere(map, {
             linked: false,
             target: data.target,
-            property: data.property
+            property: data.property,
         });
 
         if (match) {
@@ -164,8 +164,8 @@ define([
      * @param {Object} data
      */
     function setData(maps, property, data) {
-        var direction   = data.direction,
-            map         = maps[direction];
+        let direction = data.direction,
+            map = maps[direction];
 
         data.linked = false;
 
@@ -186,7 +186,7 @@ define([
      * @param {Boolean} immediate
      */
     function setLink(target, owner, data, property, immediate) {
-        var direction = data.direction,
+        let direction = data.direction,
             formated = form(target, owner, data.property, property, direction),
             callback,
             value;
@@ -214,7 +214,7 @@ define([
      * @param {Object} data
      */
     function transfer(owner, data) {
-        var args = _.toArray(arguments);
+        let args = _.toArray(arguments);
 
         if (data.target.substr(0, 1) === '!') {
             data.target = data.target.substr(1);
@@ -224,12 +224,12 @@ define([
         if (owner.name === data.target) {
             args.unshift(owner);
 
-            setLink.apply(null, args);
+            setLink(...args);
         } else {
-            registry.get(data.target, function (target) {
+            registry.get(data.target, function(target) {
                 args.unshift(target);
 
-                setLink.apply(null, args);
+                setLink(...args);
             });
         }
     }
@@ -241,16 +241,16 @@ define([
          * @param {Object} listeners
          * @returns {Object} Chainable
          */
-        setListeners: function (listeners) {
-            var owner = this,
+        setListeners: function(listeners) {
+            let owner = this,
                 data;
 
-            _.each(listeners, function (callbacks, sources) {
+            _.each(listeners, function(callbacks, sources) {
                 sources = sources.split(' ');
                 callbacks = callbacks.split(' ');
 
-                sources.forEach(function (target) {
-                    callbacks.forEach(function (callback) {//eslint-disable-line max-nested-callbacks
+                sources.forEach(function(target) {
+                    callbacks.forEach(function(callback) {// eslint-disable-line max-nested-callbacks
                         data = parseData(owner.name, target, 'imports');
 
                         if (data) {
@@ -271,8 +271,8 @@ define([
          * @param {String} direction
          * @returns {Object} Chainable
          */
-        setLinks: function (links, direction) {
-            var owner = this,
+        setLinks: function(links, direction) {
+            let owner = this,
                 property,
                 data;
 
@@ -280,7 +280,7 @@ define([
                 if (links.hasOwnProperty(property)) {
                     data = parseData(owner.name, links[property], direction);
 
-                    if (data) {//eslint-disable-line max-depth
+                    if (data) {// eslint-disable-line max-depth
                         setData(owner.maps, property, data);
                         transfer(owner, data, property, true);
                     }
@@ -288,6 +288,6 @@ define([
             }
 
             return this;
-        }
+        },
     };
 });

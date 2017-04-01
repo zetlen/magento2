@@ -6,8 +6,8 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
-], function ($, mageTemplate) {
+    'jquery/ui',
+], function($, mageTemplate) {
     'use strict';
 
     $.widget('theme.themeJsList', {
@@ -16,7 +16,7 @@ define([
             emptyTemplateId: null,
             refreshFileListEvent: null,
             prefixItemId: '',
-            suffixItemId: ''
+            suffixItemId: '',
         },
 
         /**
@@ -24,7 +24,7 @@ define([
          *
          * @protected
          */
-        _create: function () {
+        _create: function() {
             this._bind();
         },
 
@@ -33,7 +33,7 @@ define([
          *
          * @protected
          */
-        _bind: function () {
+        _bind: function() {
             $('body').on(this.options.refreshFileListEvent, $.proxy(this._onRefreshList, this));
         },
 
@@ -44,7 +44,7 @@ define([
          * @param {Object} data
          * @protected
          */
-        _onRefreshList: function (event, data) {
+        _onRefreshList: function(event, data) {
             $(this.element).html('');
 
             if (data.jsList.length) {
@@ -61,7 +61,7 @@ define([
          * @return {String}
          * @protected
          */
-        _getItemId: function (fileId) {
+        _getItemId: function(fileId) {
             return this.options.prefixItemId + fileId + this.options.suffixItemId;
         },
 
@@ -71,8 +71,8 @@ define([
          * @param {Array} jsList
          * @protected
          */
-        _renderList: function (jsList) {
-            var itemTmpl,
+        _renderList: function(jsList) {
+            let itemTmpl,
                 index,
                 tmpl;
 
@@ -84,7 +84,7 @@ define([
                 itemTmpl.attr('id', this._getItemId(jsList[index].id));
 
                 tmpl = mageTemplate(itemTmpl.html(), {
-                    data: jsList[index]
+                    data: jsList[index],
                 });
 
                 itemTmpl.html(tmpl);
@@ -99,14 +99,14 @@ define([
          *
          * @protected
          */
-        _renderEmptyList: function () {
-            var itemTmpl = $('<li></li>').html($(this.options.emptyTemplateId).html());
+        _renderEmptyList: function() {
+            let itemTmpl = $('<li></li>').html($(this.options.emptyTemplateId).html());
 
             $(itemTmpl).attr('class', $(this.options.emptyTemplateId).attr('class'));
 
             itemTmpl.attr('id', 'empty-js-list');
             itemTmpl.removeClass('no-display');
             itemTmpl.appendTo(this.element);
-        }
+        },
     });
 });

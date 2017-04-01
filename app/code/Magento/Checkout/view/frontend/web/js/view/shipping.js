@@ -26,8 +26,8 @@ define([
     'Magento_Checkout/js/checkout-data',
     'uiRegistry',
     'mage/translate',
-    'Magento_Checkout/js/model/shipping-rate-service'
-], function (
+    'Magento_Checkout/js/model/shipping-rate-service',
+], function(
     $,
     _,
     Component,
@@ -53,14 +53,14 @@ define([
 ) {
     'use strict';
 
-    var popUp = null;
+    let popUp = null;
 
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping',
             shippingFormTemplate: 'Magento_Checkout/shipping-address/form',
             shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list',
-            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item'
+            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item',
         },
         visible: ko.observable(!quote.isVirtual()),
         errorValidationMessage: ko.observable(false),
@@ -74,8 +74,8 @@ define([
         /**
          * @return {exports}
          */
-        initialize: function () {
-            var self = this,
+        initialize: function() {
+            let self = this,
                 hasNewAddress,
                 fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
 
@@ -92,24 +92,24 @@ define([
             }
             checkoutDataResolver.resolveShippingAddress();
 
-            hasNewAddress = addressList.some(function (address) {
-                return address.getType() == 'new-customer-address'; //eslint-disable-line eqeqeq
+            hasNewAddress = addressList.some(function(address) {
+                return address.getType() == 'new-customer-address'; // eslint-disable-line eqeqeq
             });
 
             this.isNewAddressAdded(hasNewAddress);
 
-            this.isFormPopUpVisible.subscribe(function (value) {
+            this.isFormPopUpVisible.subscribe(function(value) {
                 if (value) {
                     self.getPopUp().openModal();
                 }
             });
 
-            quote.shippingMethod.subscribe(function () {
+            quote.shippingMethod.subscribe(function() {
                 self.errorValidationMessage(false);
             });
 
-            registry.async('checkoutProvider')(function (checkoutProvider) {
-                var shippingAddressData = checkoutData.getShippingAddressFromData();
+            registry.async('checkoutProvider')(function(checkoutProvider) {
+                let shippingAddressData = checkoutData.getShippingAddressFromData();
 
                 if (shippingAddressData) {
                     checkoutProvider.set(
@@ -117,7 +117,7 @@ define([
                         $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                     );
                 }
-                checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
+                checkoutProvider.on('shippingAddress', function(shippingAddrsData) {
                     checkoutData.setShippingAddressFromData(shippingAddrsData);
                 });
                 shippingRatesValidator.initFields(fieldsetName);
@@ -129,15 +129,15 @@ define([
         /**
          * Load data from server for shipping step
          */
-        navigate: function () {
-            //load data from server for shipping step
+        navigate: function() {
+            // load data from server for shipping step
         },
 
         /**
          * @return {*}
          */
-        getPopUp: function () {
-            var self = this,
+        getPopUp: function() {
+            let self = this,
                 buttons;
 
             if (!popUp) {
@@ -146,21 +146,21 @@ define([
                     {
                         text: buttons.save.text ? buttons.save.text : $t('Save Address'),
                         class: buttons.save.class ? buttons.save.class : 'action primary action-save-address',
-                        click: self.saveNewAddress.bind(self)
+                        click: self.saveNewAddress.bind(self),
                     },
                     {
                         text: buttons.cancel.text ? buttons.cancel.text : $t('Cancel'),
                         class: buttons.cancel.class ? buttons.cancel.class : 'action secondary action-hide-popup',
 
                         /** @inheritdoc */
-                        click: function () {
+                        click: function() {
                             this.closeModal();
-                        }
-                    }
+                        },
+                    },
                 ];
 
                 /** @inheritdoc */
-                this.popUpForm.options.closed = function () {
+                this.popUpForm.options.closed = function() {
                     self.isFormPopUpVisible(false);
                 };
                 popUp = modal(this.popUpForm.options, $(this.popUpForm.element));
@@ -172,15 +172,15 @@ define([
         /**
          * Show address form popup
          */
-        showFormPopUp: function () {
+        showFormPopUp: function() {
             this.isFormPopUpVisible(true);
         },
 
         /**
          * Save new shipping address
          */
-        saveNewAddress: function () {
-            var addressData,
+        saveNewAddress: function() {
+            let addressData,
                 newShippingAddress;
 
             this.source.set('params.invalid', false);
@@ -206,7 +206,7 @@ define([
          */
         rates: shippingService.getShippingRates(),
         isLoading: shippingService.isLoading,
-        isSelected: ko.computed(function () {
+        isSelected: ko.computed(function() {
             return quote.shippingMethod() ?
                 quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
                 null;
@@ -216,7 +216,7 @@ define([
          * @param {Object} shippingMethod
          * @return {Boolean}
          */
-        selectShippingMethod: function (shippingMethod) {
+        selectShippingMethod: function(shippingMethod) {
             selectShippingMethodAction(shippingMethod);
             checkoutData.setSelectedShippingRate(shippingMethod['carrier_code'] + '_' + shippingMethod['method_code']);
 
@@ -226,10 +226,10 @@ define([
         /**
          * Set shipping information handler
          */
-        setShippingInformation: function () {
+        setShippingInformation: function() {
             if (this.validateShippingInformation()) {
                 setShippingInformationAction().done(
-                    function () {
+                    function() {
                         stepNavigator.next();
                     }
                 );
@@ -239,8 +239,8 @@ define([
         /**
          * @return {Boolean}
          */
-        validateShippingInformation: function () {
-            var shippingAddress,
+        validateShippingInformation: function() {
+            let shippingAddress,
                 addressData,
                 loginFormSelector = 'form[data-role=email-with-possible-login]',
                 emailValidationResult = customer.isLoggedIn(),
@@ -276,9 +276,9 @@ define([
                     this.source.get('shippingAddress')
                 );
 
-                //Copy form data to quote shipping address object
+                // Copy form data to quote shipping address object
                 for (field in addressData) {
-                    if (addressData.hasOwnProperty(field) &&  //eslint-disable-line max-depth
+                    if (addressData.hasOwnProperty(field) &&  // eslint-disable-line max-depth
                         shippingAddress.hasOwnProperty(field) &&
                         typeof addressData[field] != 'function' &&
                         _.isEqual(shippingAddress[field], addressData[field])
@@ -309,12 +309,12 @@ define([
         /**
          * Trigger Shipping data Validate Event.
          */
-        triggerShippingDataValidateEvent: function () {
+        triggerShippingDataValidateEvent: function() {
             this.source.trigger('shippingAddress.data.validate');
 
             if (this.source.get('shippingAddress.custom_attributes')) {
                 this.source.trigger('shippingAddress.custom_attributes.data.validate');
             }
-        }
+        },
     });
 });

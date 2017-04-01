@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            orderEditDialog: 'Magento_Sales/order/edit/message'
-        }
-    }
+            orderEditDialog: 'Magento_Sales/order/edit/message',
+        },
+    },
 };

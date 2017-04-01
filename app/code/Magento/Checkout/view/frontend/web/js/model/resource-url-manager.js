@@ -6,8 +6,8 @@
 define([
     'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/model/url-builder',
-    'mageUtils'
-], function (customer, urlBuilder, utils) {
+    'mageUtils',
+], function(customer, urlBuilder, utils) {
         'use strict';
 
         return {
@@ -15,14 +15,14 @@ define([
              * @param {Object} quote
              * @return {*}
              */
-            getUrlForTotalsEstimationForNewAddress: function (quote) {
-                var params = this.getCheckoutMethod() == 'guest' ? //eslint-disable-line eqeqeq
+            getUrlForTotalsEstimationForNewAddress: function(quote) {
+                let params = this.getCheckoutMethod() == 'guest' ? // eslint-disable-line eqeqeq
                         {
-                            cartId: quote.getQuoteId()
+                            cartId: quote.getQuoteId(),
                         } : {},
                     urls = {
                         'guest': '/guest-carts/:cartId/totals-information',
-                        'customer': '/carts/mine/totals-information'
+                        'customer': '/carts/mine/totals-information',
                     };
 
                 return this.getUrl(urls, params);
@@ -32,14 +32,14 @@ define([
              * @param {Object} quote
              * @return {*}
              */
-            getUrlForEstimationShippingMethodsForNewAddress: function (quote) {
-                var params = this.getCheckoutMethod() == 'guest' ? //eslint-disable-line eqeqeq
+            getUrlForEstimationShippingMethodsForNewAddress: function(quote) {
+                let params = this.getCheckoutMethod() == 'guest' ? // eslint-disable-line eqeqeq
                         {
-                            quoteId: quote.getQuoteId()
+                            quoteId: quote.getQuoteId(),
                         } : {},
                     urls = {
                         'guest': '/guest-carts/:quoteId/estimate-shipping-methods',
-                        'customer': '/carts/mine/estimate-shipping-methods'
+                        'customer': '/carts/mine/estimate-shipping-methods',
                     };
 
                 return this.getUrl(urls, params);
@@ -49,13 +49,13 @@ define([
              * @param {Object} quote
              * @return {*}
              */
-            getUrlForEstimationShippingMethodsByAddressId: function (quote) {
-                var params = this.getCheckoutMethod() == 'guest' ? //eslint-disable-line eqeqeq
+            getUrlForEstimationShippingMethodsByAddressId: function(quote) {
+                let params = this.getCheckoutMethod() == 'guest' ? // eslint-disable-line eqeqeq
                         {
-                            quoteId: quote.getQuoteId()
+                            quoteId: quote.getQuoteId(),
                         } : {},
                     urls = {
-                        'default': '/carts/mine/estimate-shipping-methods-by-address-id'
+                        'default': '/carts/mine/estimate-shipping-methods-by-address-id',
                     };
 
                 return this.getUrl(urls, params);
@@ -66,14 +66,14 @@ define([
              * @param {String} quoteId
              * @return {*}
              */
-            getApplyCouponUrl: function (couponCode, quoteId) {
-                var params = this.getCheckoutMethod() == 'guest' ? //eslint-disable-line eqeqeq
+            getApplyCouponUrl: function(couponCode, quoteId) {
+                let params = this.getCheckoutMethod() == 'guest' ? // eslint-disable-line eqeqeq
                         {
-                            quoteId: quoteId
+                            quoteId: quoteId,
                         } : {},
                     urls = {
                         'guest': '/guest-carts/' + quoteId + '/coupons/' + couponCode,
-                        'customer': '/carts/mine/coupons/' + couponCode
+                        'customer': '/carts/mine/coupons/' + couponCode,
                     };
 
                 return this.getUrl(urls, params);
@@ -83,14 +83,14 @@ define([
              * @param {String} quoteId
              * @return {*}
              */
-            getCancelCouponUrl: function (quoteId) {
-                var params = this.getCheckoutMethod() == 'guest' ? //eslint-disable-line eqeqeq
+            getCancelCouponUrl: function(quoteId) {
+                let params = this.getCheckoutMethod() == 'guest' ? // eslint-disable-line eqeqeq
                         {
-                            quoteId: quoteId
+                            quoteId: quoteId,
                         } : {},
                     urls = {
                         'guest': '/guest-carts/' + quoteId + '/coupons/',
-                        'customer': '/carts/mine/coupons/'
+                        'customer': '/carts/mine/coupons/',
                     };
 
                 return this.getUrl(urls, params);
@@ -100,14 +100,14 @@ define([
              * @param {Object} quote
              * @return {*}
              */
-            getUrlForCartTotals: function (quote) {
-                var params = this.getCheckoutMethod() == 'guest' ? //eslint-disable-line eqeqeq
+            getUrlForCartTotals: function(quote) {
+                let params = this.getCheckoutMethod() == 'guest' ? // eslint-disable-line eqeqeq
                         {
-                            quoteId: quote.getQuoteId()
+                            quoteId: quote.getQuoteId(),
                         } : {},
                     urls = {
                         'guest': '/guest-carts/:quoteId/totals',
-                        'customer': '/carts/mine/totals'
+                        'customer': '/carts/mine/totals',
                     };
 
                 return this.getUrl(urls, params);
@@ -117,14 +117,14 @@ define([
              * @param {Object} quote
              * @return {*}
              */
-            getUrlForSetShippingInformation: function (quote) {
-                var params = this.getCheckoutMethod() == 'guest' ? //eslint-disable-line eqeqeq
+            getUrlForSetShippingInformation: function(quote) {
+                let params = this.getCheckoutMethod() == 'guest' ? // eslint-disable-line eqeqeq
                         {
-                            cartId: quote.getQuoteId()
+                            cartId: quote.getQuoteId(),
                         } : {},
                     urls = {
                         'guest': '/guest-carts/:cartId/shipping-information',
-                        'customer': '/carts/mine/shipping-information'
+                        'customer': '/carts/mine/shipping-information',
                     };
 
                 return this.getUrl(urls, params);
@@ -137,8 +137,8 @@ define([
              * @param {*} urlParams
              * @return {String|*}
              */
-            getUrl: function (urls, urlParams) {
-                var url;
+            getUrl: function(urls, urlParams) {
+                let url;
 
                 if (utils.isEmpty(urls)) {
                     return 'Provided service call does not exist.';
@@ -156,9 +156,9 @@ define([
             /**
              * @return {String}
              */
-            getCheckoutMethod: function () {
+            getCheckoutMethod: function() {
                 return customer.isLoggedIn() ? 'customer' : 'guest';
-            }
+            },
         };
     }
 );

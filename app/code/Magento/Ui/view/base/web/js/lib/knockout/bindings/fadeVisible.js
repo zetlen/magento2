@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'ko'
-], function ($, ko) {
+    'ko',
+], function($, ko) {
     'use strict';
 
     ko.bindingHandlers.fadeVisible = {
@@ -16,8 +16,8 @@ define([
          * @param {HTMLElement} element
          * @param {Function} valueAccessor
          */
-        init: function (element, valueAccessor) {
-            var value = valueAccessor();
+        init: function(element, valueAccessor) {
+            let value = valueAccessor();
 
             // Use "unwrapObservable" so we can handle values that may or may not be observable
             $(element).toggle(ko.unwrap(value));
@@ -29,10 +29,10 @@ define([
          * @param {HTMLElement} element
          * @param {Function} valueAccessor
          */
-        update: function (element, valueAccessor) {
-            var value = valueAccessor();
+        update: function(element, valueAccessor) {
+            let value = valueAccessor();
 
             ko.unwrap(value) ? $(element).fadeIn() : $(element).fadeOut();
-        }
+        },
     };
 });

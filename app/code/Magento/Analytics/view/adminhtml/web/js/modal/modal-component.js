@@ -6,19 +6,19 @@ define([
     'jquery',
     'Magento_Ui/js/modal/modal-component',
     'Magento_Ui/js/modal/alert',
-    'mage/translate'
-], function ($, Modal, alert, $t) {
+    'mage/translate',
+], function($, Modal, alert, $t) {
     'use strict';
 
     return Modal.extend({
         defaults: {
             postponeOptions: {},
             imports: {
-                postponeUrl:  '${ $.provider }:postpone_url'
+                postponeUrl: '${ $.provider }:postpone_url',
             },
             modules: {
-                form: '${ $.parentName }'
-            }
+                form: '${ $.parentName }',
+            },
         },
 
         /**
@@ -26,16 +26,16 @@ define([
          *
          * @param {Object} options - additional request options.
          */
-        sendPostponeRequest: function (options) {
-            var self = this,
+        sendPostponeRequest: function(options) {
+            let self = this,
                 data = $.extend(this.form().source.data, options);
 
             $.ajax({
                 type: 'POST',
                 url: this.postponeUrl,
                 data: data,
-                showLoader: true
-            }).done(function (xhr) {
+                showLoader: true,
+            }).done(function(xhr) {
                 if (xhr.error) {
                     self.onError(xhr);
                 }
@@ -47,20 +47,20 @@ define([
          *
          * @param {Object} xhr - request result.
          */
-        onError: function (xhr) {
+        onError: function(xhr) {
             if (xhr.statusText === 'abort') {
                 return;
             }
 
             alert({
-                content: xhr.message || $t('An error occurred while subscription process.')
+                content: xhr.message || $t('An error occurred while subscription process.'),
             });
         },
 
         /** @inheritdoc */
-        actionCancel: function () {
+        actionCancel: function() {
             this.sendPostponeRequest(this.postponeOptions);
             this.closeModal();
-        }
+        },
     });
 });

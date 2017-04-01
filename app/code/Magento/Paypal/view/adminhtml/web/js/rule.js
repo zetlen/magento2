@@ -4,8 +4,8 @@
  */
 define([
     'uiClass',
-    'Magento_Paypal/js/rules'
-], function (Class, Rules) {
+    'Magento_Paypal/js/rules',
+], function(Class, Rules) {
     'use strict';
 
     return Class.extend({
@@ -16,7 +16,7 @@ define([
          * @param {Object} config
          * @returns {exports.initialize}
          */
-        initialize: function (config) {
+        initialize: function(config) {
             this.rules = new Rules();
             this.initConfig(config);
 
@@ -26,8 +26,8 @@ define([
         /**
          * To apply the rule
          */
-        apply: function () {
+        apply: function() {
             this.rules[this.name](this.$target, this.$owner, this.data);
-        }
+        },
     });
 });

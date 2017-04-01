@@ -3,14 +3,14 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
             editTrigger: 'mage/edit-trigger',
-            addClass: 'Magento_Translation/add-class'
-        }
+            addClass: 'Magento_Translation/add-class',
+        },
     },
     deps: [
-        'mage/translate-inline'
-    ]
+        'mage/translate-inline',
+    ],
 };

@@ -5,30 +5,30 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert'
-], function ($, alert) {
+    'Magento_Ui/js/modal/alert',
+], function($, alert) {
     'use strict';
 
-    return function (config) {
-        var categoryForm = {
+    return function(config) {
+        let categoryForm = {
             options: {
                 categoryIdSelector: 'input[name="id"]',
                 categoryPathSelector: 'input[name="path"]',
-                refreshUrl: config.refreshUrl
+                refreshUrl: config.refreshUrl,
             },
 
             /**
              * Sending ajax to server to refresh field 'path'
              * @protected
              */
-            refreshPath: function () {
+            refreshPath: function() {
                 if (!$(this.options.categoryIdSelector)) {
                     return false;
                 }
                 $.ajax({
                     url: this.options.refreshUrl,
                     method: 'GET',
-                    showLoader: true
+                    showLoader: true,
                 }).done(this._refreshPathSuccess.bind(this));
             },
 
@@ -37,16 +37,16 @@ define([
              * @param {Object} data
              * @private
              */
-            _refreshPathSuccess: function (data) {
+            _refreshPathSuccess: function(data) {
                 if (data.error) {
                     alert({
-                        content: data.message
+                        content: data.message,
                     });
                 } else {
                     $(this.options.categoryIdSelector).val(data.id).change();
                     $(this.options.categoryPathSelector).val(data.path).change();
                 }
-            }
+            },
         };
 
         $('body').on('categoryMove.tree', $.proxy(categoryForm.refreshPath.bind(categoryForm), this));

@@ -8,20 +8,20 @@
  */
 define([
     'underscore',
-    './column'
-], function (_, Column) {
+    './column',
+], function(_, Column) {
     'use strict';
 
     return Column.extend({
 
-        /*eslint-disable eqeqeq*/
+        /* eslint-disable eqeqeq*/
         /**
          * Retrieves label associated with a provided value.
          *
          * @returns {String}
          */
-        getLabel: function () {
-            var options = this.options || [],
+        getLabel: function() {
+            let options = this.options || [],
                 values = this._super(),
                 label = [];
 
@@ -33,13 +33,13 @@ define([
                 values = [values];
             }
 
-            values = values.map(function (value) {
+            values = values.map(function(value) {
                 return value + '';
             });
 
             options = this.flatOptions(options);
 
-            options.forEach(function (item) {
+            options.forEach(function(item) {
                 if (_.contains(values, item.value + '')) {
                     label.push(item.label);
                 }
@@ -54,10 +54,10 @@ define([
          * @param {Array} options
          * @returns {Array}
          */
-        flatOptions: function (options) {
-            var self = this;
+        flatOptions: function(options) {
+            let self = this;
 
-            return options.reduce(function (options, option) {
+            return options.reduce(function(options, option) {
                 if (_.isArray(option.value)) {
                     options = options.concat(self.flatOptions(option.value));
                 } else {
@@ -66,8 +66,8 @@ define([
 
                 return options;
             }, []);
-        }
+        },
 
-        /*eslint-enable eqeqeq*/
+        /* eslint-enable eqeqeq*/
     });
 });

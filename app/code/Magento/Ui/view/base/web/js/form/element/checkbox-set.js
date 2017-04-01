@@ -9,21 +9,21 @@
 define([
     'underscore',
     'mageUtils',
-    './abstract'
-], function (_, utils, Abstract) {
+    './abstract',
+], function(_, utils, Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             template: 'ui/form/element/checkbox-set',
             multiple: false,
-            multipleScopeValue: null
+            multipleScopeValue: null,
         },
 
         /**
          * @inheritdoc
          */
-        initConfig: function () {
+        initConfig: function() {
             this._super();
 
             this.value = this.normalizeData(this.value);
@@ -34,8 +34,8 @@ define([
         /**
          * @inheritdoc
          */
-        initLinks: function () {
-            var scope = this.source.get(this.dataScope);
+        initLinks: function() {
+            let scope = this.source.get(this.dataScope);
 
             this.multipleScopeValue = this.multiple && _.isArray(scope) ? utils.copy(scope) : undefined;
 
@@ -45,7 +45,7 @@ define([
         /**
          * @inheritdoc
          */
-        reset: function () {
+        reset: function() {
             this.value(utils.copy(this.initialValue));
             this.error(false);
 
@@ -55,8 +55,8 @@ define([
         /**
          * @inheritdoc
          */
-        clear: function () {
-            var value = this.multiple ? [] : '';
+        clear: function() {
+            let value = this.multiple ? [] : '';
 
             this.value(value);
             this.error(false);
@@ -67,7 +67,7 @@ define([
         /**
          * @inheritdoc
          */
-        normalizeData: function (value) {
+        normalizeData: function(value) {
             if (!this.multiple) {
                 return this._super();
             }
@@ -78,7 +78,7 @@ define([
         /**
          * @inheritdoc
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             this._super();
 
             this.initialValue = utils.copy(this.initialValue);
@@ -89,15 +89,15 @@ define([
         /**
          * @inheritdoc
          */
-        getInitialValue: function () {
-            var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
+        getInitialValue: function() {
+            let values = [this.multipleScopeValue, this.default, this.value.peek(), []],
                 value;
 
             if (!this.multiple) {
                 return this._super();
             }
 
-            values.some(function (v) {
+            values.some(function(v) {
                 return _.isArray(v) && (value = utils.copy(v));
             });
 
@@ -109,8 +109,8 @@ define([
          *
          * @returns {String|Array}
          */
-        getPreview: function () {
-            var option;
+        getPreview: function() {
+            let option;
 
             if (!this.multiple) {
                 option = this.getOption(this.value());
@@ -118,7 +118,7 @@ define([
                 return option ? option.label : '';
             }
 
-            return this.value.map(function (value) {
+            return this.value.map(function(value) {
                 return this.getOption(value).label;
             }, this);
         },
@@ -129,22 +129,22 @@ define([
          * @param {String} value
          * @returns {Object}
          */
-        getOption: function (value) {
+        getOption: function(value) {
             return _.findWhere(this.options, {
-                value: value
+                value: value,
             });
         },
 
         /**
          * @inheritdoc
          */
-        hasChanged: function () {
-            var value = this.value(),
+        hasChanged: function() {
+            let value = this.value(),
                 initial = this.initialValue;
 
             return this.multiple ?
                 !utils.equalArrays(value, initial) :
                 this._super();
-        }
+        },
     });
 });

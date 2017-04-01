@@ -10,8 +10,8 @@ define([
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation',
-    'newVideoDialog'
-], function ($, productGallery) {
+    'newVideoDialog',
+], function($, productGallery) {
     'use strict';
 
     $.widget('mage.productGallery', productGallery, {
@@ -20,8 +20,8 @@ define([
          * Bind events
          * @private
          */
-        _bind: function () {
-            var events = {},
+        _bind: function() {
+            let events = {},
                 itemId;
 
             this._super();
@@ -30,7 +30,7 @@ define([
              * Add item_id value to opened modal
              * @param {Object} event
              */
-            events['click ' + this.options.imageSelector] = function (event) {
+            events['click ' + this.options.imageSelector] = function(event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
                     itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
                     this.videoDialog.find('#item_id').val(itemId);
@@ -44,7 +44,7 @@ define([
         /**
          * @private
          */
-        _create: function () {
+        _create: function() {
             this._super();
             this.videoDialog = this.element.find('#new-video');
             this.videoDialog.mage('newVideoDialog', this.videoDialog.data('modalInfo'));
@@ -54,8 +54,7 @@ define([
          * Open dialog for external video
          * @private
          */
-        _onOpenDialog: function (e, imageData) {
-
+        _onOpenDialog: function(e, imageData) {
             if (imageData['media_type'] !== 'external-video') {
                 this._superApply(arguments);
             } else {
@@ -66,9 +65,9 @@ define([
         /**
          * Fired on trigger "openModal"
          */
-        showModal: function () {
+        showModal: function() {
             this.videoDialog.modal('openModal');
-        }
+        },
     });
 
     return $.mage.productGallery;

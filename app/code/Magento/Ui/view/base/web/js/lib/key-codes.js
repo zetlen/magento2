@@ -6,7 +6,7 @@
 /**
  * @api
  */
-define([], function () {
+define([], function() {
     'use strict';
 
     return {
@@ -15,11 +15,11 @@ define([], function () {
         40: 'pageDownKey',
         38: 'pageUpKey',
         32: 'spaceKey',
-        9:  'tabKey',
+        9: 'tabKey',
         37: 'pageLeftKey',
         39: 'pageRightKey',
         17: 'ctrlKey',
         18: 'altKey',
-        16: 'shiftKey'
+        16: 'shiftKey',
     };
 });

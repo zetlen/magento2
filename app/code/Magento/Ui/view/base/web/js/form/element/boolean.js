@@ -7,22 +7,22 @@
  * @api
  */
 define([
-    './abstract'
-], function (Abstract) {
+    './abstract',
+], function(Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             checked: false,
             links: {
-                checked: 'value'
-            }
+                checked: 'value',
+            },
         },
 
         /**
          * @returns {*|void|Element}
          */
-        initObservable: function () {
+        initObservable: function() {
             return this._super()
                     .observe('checked');
         },
@@ -32,7 +32,7 @@ define([
          *
          * @returns {Boolean}
          */
-        normalizeData: function () {
+        normalizeData: function() {
             return !!+this._super();
         },
 
@@ -42,12 +42,12 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        onUpdate: function () {
+        onUpdate: function() {
             if (this.hasUnique) {
                 this.setUnique();
             }
 
             return this._super();
-        }
+        },
     });
 });

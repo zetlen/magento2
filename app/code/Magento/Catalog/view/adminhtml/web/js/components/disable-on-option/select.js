@@ -4,8 +4,8 @@
  */
 define([
     'Magento_Ui/js/form/element/select',
-    'Magento_Catalog/js/components/disable-on-option/strategy'
-], function (Element, strategy) {
+    'Magento_Catalog/js/components/disable-on-option/strategy',
+], function(Element, strategy) {
     'use strict';
 
     return Element.extend(strategy);

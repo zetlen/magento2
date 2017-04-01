@@ -7,8 +7,8 @@ define([
     'ko',
     'underscore',
     'mage/apply/main',
-    '../template/renderer'
-], function (ko, _, mage, renderer) {
+    '../template/renderer',
+], function(ko, _, mage, renderer) {
     'use strict';
 
     /**
@@ -48,9 +48,9 @@ define([
          *
          * @returns {Object} - Knockout declaration for it to let binding control descendants.
          */
-        init: function () {
+        init: function() {
             return {
-                controlsDescendantBindings: true
+                controlsDescendantBindings: true,
             };
         },
 
@@ -64,10 +64,10 @@ define([
          * @param {Object} viewModel - Object, which represents view model binded to el.
          * @param {ko.bindingContext} bindingContext - Instance of ko.bindingContext, passed to binding initially.
          */
-        update: function (el, valueAccessor, allBindings, viewModel, bindingContext) {
+        update: function(el, valueAccessor, allBindings, viewModel, bindingContext) {
             setHtml(el, valueAccessor());
             applyComponents(el, bindingContext);
-        }
+        },
     };
 
     renderer.addAttribute('bindHtml');

@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            configurable: 'Magento_ConfigurableProduct/js/configurable'
-        }
-    }
+            configurable: 'Magento_ConfigurableProduct/js/configurable',
+        },
+    },
 };

@@ -4,5 +4,5 @@
  */
 
 require([
-    'mage/backend/editablemultiselect'
+    'mage/backend/editablemultiselect',
 ]);

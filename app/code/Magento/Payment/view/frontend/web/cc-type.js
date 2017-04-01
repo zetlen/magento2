@@ -6,13 +6,13 @@
 /* @api */
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.creditCardType', {
         options: {
-            typeCodes: ['SS', 'SM', 'SO'] // Type codes for Switch/Maestro/Solo credit cards.
+            typeCodes: ['SS', 'SM', 'SO'], // Type codes for Switch/Maestro/Solo credit cards.
         },
 
         /**
@@ -20,7 +20,7 @@ define([
          * the Switch/Maestro or Solo credit card type container for those credit card types.
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.element.on('change', $.proxy(this._toggleCardType, this)).trigger('change');
         },
 
@@ -29,10 +29,10 @@ define([
          * credit card type is selected.
          * @private
          */
-        _toggleCardType: function () {
+        _toggleCardType: function() {
             $(this.options.creditCardTypeContainer)
                 .toggle($.inArray(this.element.val(), this.options.typeCodes) !== -1);
-        }
+        },
     });
 
     return $.mage.creditCardType;

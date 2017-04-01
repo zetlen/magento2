@@ -4,8 +4,8 @@
  */
 define([
     'jquery',
-    'Magento_Catalog/catalog/type-events'
-], function ($, productType) {
+    'Magento_Catalog/catalog/type-events',
+], function($, productType) {
     'use strict';
 
     return {
@@ -13,7 +13,7 @@ define([
         /**
          * Bind event
          */
-        bindAll: function () {
+        "bindAll": function() {
             $('[data-form=edit-product] [data-role=tabs]').on(
                 'contentUpdated',
                 this._switchToTypeByApplyAttr.bind(this)
@@ -30,7 +30,7 @@ define([
         /**
          * Constructor component
          */
-        'Magento_Catalog/catalog/apply-to-type-switcher': function () {
+        'Magento_Catalog/catalog/apply-to-type-switcher': function() {
             this.bindAll();
             this._switchToTypeByApplyAttr();
         },
@@ -40,9 +40,9 @@ define([
          *
          * @private
          */
-        _switchToTypeByApplyAttr: function () {
-            $('[data-apply-to]:not(.removed)').each(function (index, element) {
-                var attrContainer = $(element),
+        "_switchToTypeByApplyAttr": function() {
+            $('[data-apply-to]:not(.removed)').each(function(index, element) {
+                let attrContainer = $(element),
                     applyTo = attrContainer.data('applyTo') || [],
                     $inputs = attrContainer.find('select, input, textarea');
 
@@ -54,6 +54,6 @@ define([
                     $inputs.addClass('ignore-validate');
                 }
             });
-        }
+        },
     };
 });

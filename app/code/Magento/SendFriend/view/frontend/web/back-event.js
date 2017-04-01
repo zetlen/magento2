@@ -4,12 +4,12 @@
 */
 
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
-    return function (config, element) {
-        $(element).on('click', function () {
+    return function(config, element) {
+        $(element).on('click', function() {
             history.back();
 
             return false;

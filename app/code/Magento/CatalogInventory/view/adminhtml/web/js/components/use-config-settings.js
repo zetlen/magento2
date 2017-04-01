@@ -8,20 +8,20 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/single-checkbox'
-], function (checkbox) {
+    'Magento_Ui/js/form/element/single-checkbox',
+], function(checkbox) {
     'use strict';
 
     return checkbox.extend({
-        defaults: {
+        'defaults': {
             valueFromConfig: '',
-            linkedValue: ''
+            linkedValue: '',
         },
 
         /**
          * @returns {Element}
          */
-        initObservable: function () {
+        'initObservable': function() {
             return this
                 ._super()
                 .observe(['valueFromConfig', 'linkedValue']);
@@ -30,12 +30,12 @@ define([
         /**
          * @inheritdoc
          */
-        'onCheckedChanged': function (newChecked) {
+        'onCheckedChanged': function(newChecked) {
             if (newChecked) {
                 this.linkedValue(this.valueFromConfig());
             }
 
             this._super(newChecked);
-        }
+        },
     });
 });

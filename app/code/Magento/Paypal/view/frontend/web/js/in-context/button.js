@@ -6,9 +6,9 @@ define(
     [
         'uiComponent',
         'jquery',
-        'domReady!'
+        'domReady!',
     ],
-    function (
+    function(
         Component,
         $
     ) {
@@ -21,7 +21,7 @@ define(
             /**
              * @returns {Object}
              */
-            initialize: function () {
+            initialize: function() {
                 this._super();
 
                 return this.initEvents();
@@ -30,7 +30,7 @@ define(
             /**
              * @returns {Object}
              */
-            initEvents: function () {
+            initEvents: function() {
                 $('#' + this.id).off('click.' + this.id)
                     .on('click.' + this.id, this.click.bind(this));
 
@@ -41,11 +41,11 @@ define(
              * @param {Object} event
              * @returns void
              */
-            click: function (event) {
+            click: function(event) {
                 event.preventDefault();
 
                 $('#' + this.paypalButton).click();
-            }
+            },
         });
     }
 );

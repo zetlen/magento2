@@ -9,20 +9,20 @@ define([
     'uiRegistry',
     'underscore',
     '../template/renderer',
-    'jquery/ui'
-], function (ko, $, async, registry, _, renderer) {
+    'jquery/ui',
+], function(ko, $, async, registry, _, renderer) {
     'use strict';
 
-    var sizeOptions = [
+    let sizeOptions = [
             'minHeight',
             'maxHeight',
             'minWidth',
-            'maxWidth'
+            'maxWidth',
         ],
 
         handles = {
             height: '.ui-resizable-s, .ui-resizable-n',
-            width: '.ui-resizable-w, .ui-resizable-e'
+            width: '.ui-resizable-w, .ui-resizable-e',
         };
 
     /**
@@ -30,7 +30,7 @@ define([
      * @param {HTMLElement} element
      */
     function adjustSize(element) {
-        var maxHeight,
+        let maxHeight,
             maxWidth;
 
         element = $(element);
@@ -60,7 +60,7 @@ define([
      * @param {Boolean} hasWidthUpdate
      */
     function recalcAllowedSize(sizeConstraints, componentName, element, hasWidthUpdate) {
-        var size;
+        let size;
 
         element = $(element);
 
@@ -72,11 +72,11 @@ define([
             element.css('width', 'auto');
         }
 
-        _.each(sizeConstraints, function (selector, key) {
+        _.each(sizeConstraints, function(selector, key) {
             async.async({
                 component: componentName,
-                selector: selector
-            }, function (elem) {
+                selector: selector,
+            }, function(elem) {
                 size = key.indexOf('Height') !== -1 ? $(elem).outerHeight(true) : $(elem).outerWidth(true);
 
                 if (element.data('resizable')) {
@@ -98,7 +98,7 @@ define([
      * @return {Object} config
      */
     function processConfig(config, viewModel, element) {
-        var sizeConstraint,
+        let sizeConstraint,
             sizeConstraints = {},
             recalc,
             hasWidthUpdate;
@@ -106,7 +106,7 @@ define([
         if (_.isEmpty(config)) {
             return {};
         }
-        _.each(sizeOptions, function (key) {
+        _.each(sizeOptions, function(key) {
             sizeConstraint = config[key];
 
             if (sizeConstraint && !_.isNumber(sizeConstraint)) {
@@ -114,7 +114,7 @@ define([
                 delete config[key];
             }
         });
-        hasWidthUpdate =  _.some(sizeConstraints, function (value, key) {
+        hasWidthUpdate = _.some(sizeConstraints, function(value, key) {
             return key.indexOf('Width') !== -1;
         });
 
@@ -136,11 +136,11 @@ define([
          * @param {Function} allBindings
          * @param {Object} viewModel
          */
-        init: function (element, valueAccessor, allBindings, viewModel) {
-            var config = processConfig(valueAccessor(), viewModel, element);
+        init: function(element, valueAccessor, allBindings, viewModel) {
+            let config = processConfig(valueAccessor(), viewModel, element);
 
             $(element).resizable(config);
-        }
+        },
     };
 
     renderer.addAttribute('resizable');

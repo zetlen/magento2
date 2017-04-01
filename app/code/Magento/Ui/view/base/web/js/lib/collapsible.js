@@ -7,14 +7,14 @@
  * @api
  */
 define([
-    'uiComponent'
-], function (Component) {
+    'uiComponent',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
             opened: false,
-            collapsible: true
+            collapsible: true,
         },
 
         /**
@@ -22,7 +22,7 @@ define([
          *
          * @returns {Collapsible} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('opened');
 
@@ -34,7 +34,7 @@ define([
          *
          * @returns {Collapsible} Chainable.
          */
-        toggleOpened: function () {
+        toggleOpened: function() {
             this.opened() ?
                 this.close() :
                 this.open();
@@ -47,7 +47,7 @@ define([
          *
          * @returns {Collapsible} Chainable.
          */
-        close: function () {
+        close: function() {
             if (this.collapsible) {
                 this.opened(false);
             }
@@ -60,12 +60,12 @@ define([
          *
          * @returns {Collapsible} Chainable.
          */
-        open: function () {
+        open: function() {
             if (this.collapsible) {
                 this.opened(true);
             }
 
             return this;
-        }
+        },
     });
 });

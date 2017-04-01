@@ -13,11 +13,11 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/checkout-data',
     'Magento_Checkout/js/model/full-screen-loader',
-    'mage/validation'
-], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
+    'mage/validation',
+], function($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
 
-    var validatedEmail = checkoutData.getValidatedEmailValue();
+    let validatedEmail = checkoutData.getValidatedEmailValue();
 
     if (validatedEmail && !customer.isLoggedIn()) {
         quote.guestEmail = validatedEmail;
@@ -32,8 +32,8 @@ define([
             isPasswordVisible: false,
             listens: {
                 email: 'emailHasChanged',
-                emailFocused: 'validateEmail'
-            }
+                emailFocused: 'validateEmail',
+            },
         },
         checkDelay: 2000,
         checkRequest: null,
@@ -47,7 +47,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe(['email', 'emailFocused', 'isLoading', 'isPasswordVisible']);
 
@@ -57,8 +57,8 @@ define([
         /**
          * Callback on changing email property
          */
-        emailHasChanged: function () {
-            var self = this;
+        emailHasChanged: function() {
+            let self = this;
 
             clearTimeout(this.emailCheckTimeout);
 
@@ -66,7 +66,7 @@ define([
                 quote.guestEmail = self.email();
                 checkoutData.setValidatedEmailValue(self.email());
             }
-            this.emailCheckTimeout = setTimeout(function () {
+            this.emailCheckTimeout = setTimeout(function() {
                 if (self.validateEmail()) {
                     self.checkEmailAvailability();
                 } else {
@@ -80,19 +80,19 @@ define([
         /**
          * Check email existing.
          */
-        checkEmailAvailability: function () {
-            var self = this;
+        checkEmailAvailability: function() {
+            let self = this;
 
             this.validateRequest();
             this.isEmailCheckComplete = $.Deferred();
             this.isLoading(true);
             this.checkRequest = checkEmailAvailability(this.isEmailCheckComplete, this.email());
 
-            $.when(this.isEmailCheckComplete).done(function () {
+            $.when(this.isEmailCheckComplete).done(function() {
                 self.isPasswordVisible(false);
-            }).fail(function () {
+            }).fail(function() {
                 self.isPasswordVisible(true);
-            }).always(function () {
+            }).always(function() {
                 self.isLoading(false);
             });
         },
@@ -104,7 +104,7 @@ define([
          * 2 - The request has been sent
          * 3 - The request is in process
          */
-        validateRequest: function () {
+        validateRequest: function() {
             if (this.checkRequest != null && $.inArray(this.checkRequest.readyState, [1, 2, 3])) {
                 this.checkRequest.abort();
                 this.checkRequest = null;
@@ -117,8 +117,8 @@ define([
          * @param {Boolean} focused - input focus.
          * @returns {Boolean} - validation result.
          */
-        validateEmail: function (focused) {
-            var loginFormSelector = 'form[data-role=email-with-possible-login]',
+        validateEmail: function(focused) {
+            let loginFormSelector = 'form[data-role=email-with-possible-login]',
                 usernameSelector = loginFormSelector + ' input[name=username]',
                 loginForm = $(loginFormSelector),
                 validator;
@@ -139,20 +139,20 @@ define([
          *
          * @param {HTMLElement} loginForm - form element.
          */
-        login: function (loginForm) {
-            var loginData = {},
+        login: function(loginForm) {
+            let loginData = {},
                 formDataArray = $(loginForm).serializeArray();
 
-            formDataArray.forEach(function (entry) {
+            formDataArray.forEach(function(entry) {
                 loginData[entry.name] = entry.value;
             });
 
             if (this.isPasswordVisible() && $(loginForm).validation() && $(loginForm).validation('isValid')) {
                 fullScreenLoader.startLoader();
-                loginAction(loginData).always(function () {
+                loginAction(loginData).always(function() {
                     fullScreenLoader.stopLoader();
                 });
             }
-        }
+        },
     });
 });

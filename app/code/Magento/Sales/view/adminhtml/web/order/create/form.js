@@ -6,11 +6,11 @@
 /* global AdminOrder */
 define([
     'jquery',
-    'Magento_Sales/order/create/scripts'
-], function (jQuery) {
+    'Magento_Sales/order/create/scripts',
+], function(jQuery) {
     'use strict';
 
-    var $el = jQuery('#edit_form'),
+    let $el = jQuery('#edit_form'),
         config,
         baseUrl,
         order,
@@ -27,7 +27,7 @@ define([
     order.setLoadBaseUrl(baseUrl);
 
     payment = {
-        switchMethod: order.switchPaymentMethod.bind(order)
+        switchMethod: order.switchPaymentMethod.bind(order),
     };
 
     window.order = order;

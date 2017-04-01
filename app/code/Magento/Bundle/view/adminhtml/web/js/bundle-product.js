@@ -3,9 +3,9 @@
  * See COPYING.txt for license details.
  */
 
-/*global FORM_KEY*/
-/*global bSelection*/
-/*global $H*/
+/* global FORM_KEY*/
+/* global bSelection*/
+/* global $H*/
 define([
     'jquery',
     'Magento_Catalog/js/product/weight-handler',
@@ -13,13 +13,13 @@ define([
     'jquery/ui',
     'mage/translate',
     'Magento_Theme/js/sortable',
-    'prototype'
-], function ($, weightHandler) {
+    'prototype',
+], function($, weightHandler) {
     'use strict';
 
     $.widget('mage.bundleProduct', {
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._initOptionBoxes()
                 ._initSortableSelections()
                 ._bindCheckboxHandlers()
@@ -32,22 +32,22 @@ define([
          * @return {Object}
          * @private
          */
-        _initOptionBoxes: function () {
-            var syncOptionTitle;
+        _initOptionBoxes: function() {
+            let syncOptionTitle;
 
             this.element.sortable({
                 axis: 'y',
                 handle: '[data-role=draggable-handle]',
                 items: '.option-box',
                 update: this._updateOptionBoxPositions,
-                tolerance: 'pointer'
+                tolerance: 'pointer',
             });
 
             /**
              * @param {jQuery.Event} event
              */
-            syncOptionTitle = function (event) {
-                var originalValue = $(event.target).attr('data-original-value'),
+            syncOptionTitle = function(event) {
+                let originalValue = $(event.target).attr('data-original-value'),
                     currentValue = $(event.target).val(),
                     optionBoxTitle = $('.title > span', $(event.target).closest('.option-box')),
                     newOptionTitle = $.mage.__('New Option');
@@ -57,7 +57,7 @@ define([
             this._on({
                 'change .field-option-title input[name$="[title]"]': syncOptionTitle,
                 'keyup .field-option-title input[name$="[title]"]': syncOptionTitle,
-                'paste .field-option-title input[name$="[title]"]': syncOptionTitle
+                'paste .field-option-title input[name$="[title]"]': syncOptionTitle,
             });
 
             return this;
@@ -67,7 +67,7 @@ define([
          * @return {Object}
          * @private
          */
-        _initSortableSelections: function () {
+        _initSortableSelections: function() {
             this.element.find('.option-box .form-list tbody').sortable({
                 axis: 'y',
                 handle: '[data-role=draggable-handle]',
@@ -77,15 +77,15 @@ define([
                  * @param {jQuery} ui
                  * @return {jQuery}
                  */
-                helper: function (event, ui) {
-                    ui.children().each(function () {
+                helper: function(event, ui) {
+                    ui.children().each(function() {
                         $(this).width($(this).width());
                     });
 
                     return ui;
                 },
                 update: this._updateSelectionsPositions,
-                tolerance: 'pointer'
+                tolerance: 'pointer',
             });
 
             return this;
@@ -95,12 +95,12 @@ define([
          * @return {Object}
          * @private
          */
-        _initCheckboxState: function () {
-            this.element.find('.is-required').each(function () {
+        _initCheckboxState: function() {
+            this.element.find('.is-required').each(function() {
                 $(this).prop('checked', $(this).closest('.option-box').find('[name$="[required]"]').val() > 0);
             });
 
-            this.element.find('.is-user-defined-qty').each(function () {
+            this.element.find('.is-user-defined-qty').each(function() {
                 $(this).prop('checked', $(this).closest('.qty-box').find('.select').val() > 0);
             });
 
@@ -111,22 +111,22 @@ define([
          * @return {Object}
          * @private
          */
-        _bindAddSelectionDialog: function () {
-            var widget = this;
+        _bindAddSelectionDialog: function() {
+            let widget = this;
 
             this._on({
                 /**
                  * @param {jQuery.Event} event
                  */
-                'click .add-selection': function (event) {
-                    var $optionBox = $(event.target).closest('.option-box'),
+                'click .add-selection': function(event) {
+                    let $optionBox = $(event.target).closest('.option-box'),
                         $selectionGrid = $optionBox.find('.selection-search').clone(),
                         optionIndex = $optionBox.attr('id').replace('bundle_option_', ''),
                         productIds = [],
                         productSkus = [],
                         selectedProductList = {};
 
-                    $optionBox.find('[name$="[product_id]"]').each(function () {
+                    $optionBox.find('[name$="[product_id]"]').each(function() {
                         if (!$(this).closest('tr').find('[name$="[delete]"]').val()) {
                             productIds.push($(this).val());
                             productSkus.push($(this).closest('tr').find('.col-sku').text());
@@ -138,17 +138,17 @@ define([
                     bSelection.gridSelectedProductSkus = productSkus;
 
                     $selectionGrid.on('contentUpdated', bSelection.gridUpdateCallback);
-                    $selectionGrid.on('change', '.col-id input', function () {
-                        var tr = $(this).closest('tr');
+                    $selectionGrid.on('change', '.col-id input', function() {
+                        let tr = $(this).closest('tr');
 
                         if ($(this).is(':checked')) {
                             selectedProductList[$(this).val()] = {
-                                name: $.trim(tr.find('.col-name').html()),
-                                sku: $.trim(tr.find('.col-sku').html()),
+                                "name": $.trim(tr.find('.col-name').html()),
+                                "sku": $.trim(tr.find('.col-sku').html()),
                                 'product_id': $(this).val(),
                                 'option_id': $('bundle_selection_id_' + optionIndex).val(),
                                 'selection_price_value': 0,
-                                'selection_qty': 1
+                                'selection_qty': 1,
                             };
                         } else {
                             delete selectedProductList[$(this).val()];
@@ -169,49 +169,49 @@ define([
                          * @param {jQuery.Event} e
                          * @param {Object} modalWindow
                          */
-                        closed: function (e, modalWindow) {
+                        closed: function(e, modalWindow) {
                             modalWindow.modal.remove();
                         },
                         buttons: [{
-                            text: $.mage.__('Add Selected Products'),
+                            "text": $.mage.__('Add Selected Products'),
                             'class': 'action-primary action-add',
 
                             /** Click action. */
-                            click: function () {
-                                $.each(selectedProductList, function () {
+                            "click": function() {
+                                $.each(selectedProductList, function() {
                                     window.bSelection.addRow(optionIndex, this);
                                 });
-                                bSelection.gridRemoval.each(function (pair) {
-                                    $optionBox.find('.col-sku').filter(function () {
+                                bSelection.gridRemoval.each(function(pair) {
+                                    $optionBox.find('.col-sku').filter(function() {
                                         return $.trim($(this).text()) === pair.key; // find row by SKU
                                     }).closest('tr').find('button.delete').trigger('click');
                                 });
                                 widget.refreshSortableElements();
                                 widget._updateSelectionsPositions.apply(widget.element);
                                 $selectionGrid.modal('closeModal');
-                            }
-                        }]
+                            },
+                        }],
                     });
                     $.ajax({
                         url: bSelection.selectionSearchUrl,
                         dataType: 'html',
                         data: {
-                            index: optionIndex,
-                            products: productIds,
+                            "index": optionIndex,
+                            "products": productIds,
                             'selected_products': productIds,
-                            'form_key': FORM_KEY
+                            'form_key': FORM_KEY,
                         },
 
                         /**
                          * @param {*} data
                          */
-                        success: function (data) {
+                        success: function(data) {
                             $selectionGrid.html(data).modal('openModal');
                         },
                         context: $('body'),
-                        showLoader: true
+                        showLoader: true,
                     });
-                }
+                },
             });
 
             return this;
@@ -220,7 +220,7 @@ define([
         /**
          * @private
          */
-        _hideProductTypeSwitcher: function () {
+        _hideProductTypeSwitcher: function() {
             weightHandler.hideWeightSwitcher();
         },
 
@@ -228,13 +228,13 @@ define([
          * @return {Object}
          * @private
          */
-        _bindCheckboxHandlers: function () {
+        _bindCheckboxHandlers: function() {
             this._on({
                 /**
                  * @param {jQuery.Event} event
                  */
-                'change .is-required': function (event) {
-                    var $this = $(event.target);
+                'change .is-required': function(event) {
+                    let $this = $(event.target);
 
                     $this.closest('.option-box').find('[name$="[required]"]').val($this.is(':checked') ? 1 : 0);
                 },
@@ -242,11 +242,11 @@ define([
                 /**
                  * @param {jQuery.Event} event
                  */
-                'change .is-user-defined-qty': function (event) {
-                    var $this = $(event.target);
+                'change .is-user-defined-qty': function(event) {
+                    let $this = $(event.target);
 
                     $this.closest('.qty-box').find('.select').val($this.is(':checked') ? 1 : 0);
-                }
+                },
             });
 
             return this;
@@ -256,8 +256,8 @@ define([
          * @return {Object}
          * @private
          */
-        _updateOptionBoxPositions: function () {
-            $(this).find('[name^=bundle_options][name$="[position]"]').each(function (index) {
+        _updateOptionBoxPositions: function() {
+            $(this).find('[name^=bundle_options][name$="[position]"]').each(function(index) {
                 $(this).val(index);
             });
 
@@ -268,8 +268,8 @@ define([
          * @return {Object}
          * @private
          */
-        _updateSelectionsPositions: function () {
-            $(this).find('[name^=bundle_selections][name$="[position]"]').each(function (index) {
+        _updateSelectionsPositions: function() {
+            $(this).find('[name^=bundle_selections][name$="[position]"]').each(function(index) {
                 $(this).val(index);
             });
 
@@ -280,14 +280,13 @@ define([
          *
          * @return {Object}
          */
-        refreshSortableElements: function () {
+        refreshSortableElements: function() {
             this.element.sortable('refresh');
             this._updateOptionBoxPositions.apply(this.element);
             this._initSortableSelections();
             this._initCheckboxState();
 
             return this;
-        }
+        },
     });
-
 });

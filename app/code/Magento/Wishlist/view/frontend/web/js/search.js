@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.wishlistSearch', {
@@ -14,7 +14,7 @@ define([
         /**
          * Bind handlers to events
          */
-        _create: function () {
+        _create: function() {
             this.element.on('change', $.proxy(this._toggleForm, this));
         },
 
@@ -22,7 +22,7 @@ define([
          * Toggle Form
          * @private
          */
-        _toggleForm: function () {
+        _toggleForm: function() {
             switch (this.element.val()) {
                 case 'name':
                     $(this.options.emailFormSelector).hide();
@@ -36,7 +36,7 @@ define([
                 default:
                     $(this.options.emailFormSelector).add(this.options.nameFormSelector).hide();
             }
-        }
+        },
     });
 
     return $.mage.wishlistSearch;

@@ -7,8 +7,8 @@ define([
     'jquery',
     'domReady',
     'jquery/ui',
-    'mage/cookies'
-], function ($, domReady) {
+    'mage/cookies',
+], function($, domReady) {
     'use strict';
 
     /**
@@ -19,7 +19,7 @@ define([
      * @returns {String}
      */
     function generateRandomString(chars, length) {
-        var result = '';
+        let result = '';
 
         length = length > 0 ? length : 1;
 
@@ -34,8 +34,8 @@ define([
      * Nodes tree to flat list converter
      * @returns {Array}
      */
-    $.fn.comments = function () {
-        var elements = [];
+    $.fn.comments = function() {
+        let elements = [];
 
         /**
          * @param {jQuery} element - Comment holder
@@ -43,7 +43,7 @@ define([
         (function lookup(element) {
             // prevent cross origin iframe content reading
             if ($(element).prop('tagName') === 'IFRAME') {
-                var iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                let iframeHostName = $('<a>').prop('href', $(element).prop('src'))
                                              .prop('hostname');
 
                 if (window.location.hostname !== iframeHostName) {
@@ -51,7 +51,7 @@ define([
                 }
             }
 
-            $(element).contents().each(function (index, el) {
+            $(element).contents().each(function(index, el) {
                 switch (el.nodeType) {
                     case 1: // ELEMENT_NODE
                         lookup(el);
@@ -78,22 +78,22 @@ define([
         options: {
             inputSelector: 'input[name="form_key"]',
             allowedCharacters: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            length: 16
+            length: 16,
         },
 
         /**
          * Creates widget 'mage.formKey'
          * @private
          */
-        _create: function () {
-            var formKey = $.mage.cookies.get('form_key');
+        _create: function() {
+            let formKey = $.mage.cookies.get('form_key');
 
             if (!formKey) {
                 formKey = generateRandomString(this.options.allowedCharacters, this.options.length);
                 $.mage.cookies.set('form_key', formKey);
             }
             $(this.options.inputSelector).val(formKey);
-        }
+        },
     });
 
     /**
@@ -106,15 +106,15 @@ define([
             patternPlaceholderOpen: /^ BLOCK (.+) $/,
             patternPlaceholderClose: /^ \/BLOCK (.+) $/,
             versionCookieName: 'private_content_version',
-            handles: []
+            handles: [],
         },
 
         /**
          * Creates widget 'mage.pageCache'
          * @private
          */
-        _create: function () {
-            var placeholders,
+        _create: function() {
+            let placeholders,
                 version = $.mage.cookies.get(this.options.versionCookieName);
 
             if (!version) {
@@ -133,8 +133,8 @@ define([
          * @returns {Array}
          * @private
          */
-        _searchPlaceholders: function (elements) {
-            var placeholders = [],
+        _searchPlaceholders: function(elements) {
+            let placeholders = [],
                 tmp = {},
                 ii,
                 len,
@@ -153,15 +153,15 @@ define([
                     name = matches[1];
                     tmp[name] = {
                         name: name,
-                        openElement: el
+                        openElement: el,
                     };
                 } else {
                     matches = this.options.patternPlaceholderClose.exec(el.nodeValue);
 
-                    if (matches) { //eslint-disable-line max-depth
+                    if (matches) { // eslint-disable-line max-depth
                         name = matches[1];
 
-                        if (tmp[name]) { //eslint-disable-line max-depth
+                        if (tmp[name]) { // eslint-disable-line max-depth
                             tmp[name].closeElement = el;
                             placeholders.push(tmp[name]);
                             delete tmp[name];
@@ -179,8 +179,8 @@ define([
          * @param {Object} html
          * @protected
          */
-        _replacePlaceholder: function (placeholder, html) {
-            var startReplacing = false,
+        _replacePlaceholder: function(placeholder, html) {
+            let startReplacing = false,
                 prevSibling = null,
                 parent, contents, yy, len, element;
 
@@ -194,18 +194,18 @@ define([
             for (yy = 0, len = contents.length; yy < len; yy++) {
                 element = contents[yy];
 
-                if (element == placeholder.openElement) { //eslint-disable-line eqeqeq
+                if (element == placeholder.openElement) { // eslint-disable-line eqeqeq
                     startReplacing = true;
                 }
 
                 if (startReplacing) {
                     $(element).remove();
-                } else if (element.nodeType != 8) { //eslint-disable-line eqeqeq
-                    //due to comment tag doesn't have siblings we try to find it manually
+                } else if (element.nodeType != 8) { // eslint-disable-line eqeqeq
+                    // due to comment tag doesn't have siblings we try to find it manually
                     prevSibling = element;
                 }
 
-                if (element == placeholder.closeElement) { //eslint-disable-line eqeqeq
+                if (element == placeholder.closeElement) { // eslint-disable-line eqeqeq
                     break;
                 }
             }
@@ -226,13 +226,13 @@ define([
          * @param {String} version
          * @private
          */
-        _ajax: function (placeholders, version) {
-            var ii,
+        _ajax: function(placeholders, version) {
+            let ii,
                 data = {
                     blocks: [],
                     handles: this.options.handles,
                     originalRequest: this.options.originalRequest,
-                    version: version
+                    version: version,
                 };
 
             for (ii = 0; ii < placeholders.length; ii++) {
@@ -253,8 +253,8 @@ define([
                  * Response handler
                  * @param {Object} response
                  */
-                success: function (response) {
-                    var placeholder, i;
+                success: function(response) {
+                    let placeholder, i;
 
                     for (i = 0; i < placeholders.length; i++) {
                         placeholder = placeholders[i];
@@ -263,18 +263,18 @@ define([
                             this._replacePlaceholder(placeholder, response[placeholder.name]);
                         }
                     }
-                }
+                },
             });
-        }
+        },
     });
 
-    domReady(function () {
+    domReady(function() {
         $('body')
             .formKey();
     });
 
     return {
         'pageCache': $.mage.pageCache,
-        'formKey': $.mage.formKey
+        'formKey': $.mage.formKey,
     };
 });

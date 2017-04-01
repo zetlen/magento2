@@ -7,8 +7,8 @@ define([
     'jquery',
     'mageUtils',
     '../shipping-rates-validation-rules/tablerate',
-    'mage/translate'
-], function ($, utils, validationRules, $t) {
+    'mage/translate',
+], function($, utils, validationRules, $t) {
     'use strict';
 
     return {
@@ -18,12 +18,12 @@ define([
          * @param {Object} address
          * @return {Boolean}
          */
-        validate: function (address) {
-            var self = this;
+        validate: function(address) {
+            let self = this;
 
             this.validationErrors = [];
-            $.each(validationRules.getRules(), function (field, rule) {
-                var message, regionFields;
+            $.each(validationRules.getRules(), function(field, rule) {
+                let message, regionFields;
 
                 if (rule.required && utils.isEmpty(address[field])) {
                     message = $t('Field ') + field + $t(' is required.');
@@ -38,7 +38,7 @@ define([
                 }
             });
 
-            return !Boolean(this.validationErrors.length);
-        }
+            return !this.validationErrors.length;
+        },
     };
 });

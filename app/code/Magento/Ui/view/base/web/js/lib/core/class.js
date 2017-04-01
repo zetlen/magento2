@@ -5,11 +5,11 @@
 define([
     'underscore',
     'mageUtils',
-    'mage/utils/wrapper'
-], function (_, utils, wrapper) {
+    'mage/utils/wrapper',
+], function(_, utils, wrapper) {
     'use strict';
 
-    var Class;
+    let Class;
 
     /**
      * Returns property of an object if
@@ -32,21 +32,20 @@ define([
      * @returns {Function} Created consturctor.
      */
     function createConstructor(protoProps, consturctor) {
-        var UiClass = consturctor;
+        let UiClass = consturctor;
 
         if (!UiClass) {
-
             /**
              * Default constructor function.
              */
-            UiClass = function () {
-                var obj = this;
+            UiClass = function() {
+                let obj = this;
 
                 if (!_.isObject(obj) || Object.getPrototypeOf(obj) !== UiClass.prototype) {
                     obj = Object.create(UiClass.prototype);
                 }
 
-                obj.initialize.apply(obj, arguments);
+                obj.initialize(...arguments);
 
                 return obj;
             };
@@ -66,7 +65,7 @@ define([
          * @param {Object} [options={}]
          * @returns {Class} Chainable.
          */
-        initialize: function (options) {
+        initialize: function(options) {
             this.initConfig(options);
 
             return this;
@@ -80,27 +79,27 @@ define([
          * @param {Object} [options={}]
          * @returns {Class} Chainable.
          */
-        initConfig: function (options) {
-            var defaults    = this.constructor.defaults,
-                config      = utils.extend({}, defaults, options || {}),
-                ignored     = config.ignoreTmpls || {},
-                cached      = utils.omit(config, ignored);
+        initConfig: function(options) {
+            let defaults = this.constructor.defaults,
+                config = utils.extend({}, defaults, options || {}),
+                ignored = config.ignoreTmpls || {},
+                cached = utils.omit(config, ignored);
 
             config = utils.template(config, this, false, true);
 
-            _.each(cached, function (value, key) {
+            _.each(cached, function(value, key) {
                 utils.nested(config, key, value);
             });
 
             return _.extend(this, config);
-        }
+        },
     });
 
     _.extend(Class, {
         defaults: {
             ignoreTmpls: {
-                templates: true
-            }
+                templates: true,
+            },
         },
 
         /**
@@ -110,11 +109,11 @@ define([
          * @param {Object} [extender={}]
          * @returns {Function} New constructor.
          */
-        extend: function (extender) {
-            var parent      = this,
+        extend: function(extender) {
+            let parent = this,
                 parentProto = parent.prototype,
-                childProto  = Object.create(parentProto),
-                child       = createConstructor(childProto, getOwn(extender, 'constructor')),
+                childProto = Object.create(parentProto),
+                child = createConstructor(childProto, getOwn(extender, 'constructor')),
                 defaults;
 
             extender = extender || {};
@@ -122,7 +121,7 @@ define([
 
             delete extender.defaults;
 
-            _.each(extender, function (method, name) {
+            _.each(extender, function(method, name) {
                 childProto[name] = wrapper.wrapSuper(parentProto[name], method);
             });
 
@@ -134,10 +133,10 @@ define([
             }
 
             return _.extend(child, {
-                __super__:  parentProto,
-                extend:     parent.extend
+                __super__: parentProto,
+                extend: parent.extend,
             });
-        }
+        },
     });
 
     return Class;

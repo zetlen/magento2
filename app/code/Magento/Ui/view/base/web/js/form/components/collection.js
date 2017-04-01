@@ -12,28 +12,28 @@ define([
     'uiRegistry',
     'uiComponent',
     'uiLayout',
-    'Magento_Ui/js/modal/confirm'
-], function (_, utils, registry, Component, layout, confirm) {
+    'Magento_Ui/js/modal/confirm',
+], function(_, utils, registry, Component, layout, confirm) {
     'use strict';
 
-    var childTemplate = {
+    let childTemplate = {
         parent: '${ $.$data.name }',
         name: '${ $.$data.childIndex }',
         dataScope: '${ $.name }',
-        nodeTemplate: '${ $.$data.name }.${ $.$data.itemTemplate }'
+        nodeTemplate: '${ $.$data.name }.${ $.$data.itemTemplate }',
     };
 
     return Component.extend({
         defaults: {
             lastIndex: 0,
-            template: 'ui/form/components/collection'
+            template: 'ui/form/components/collection',
         },
 
         /**
          * Extends instance with default config, calls initialize of parent
          * class, calls initChildren method.
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .initChildren();
 
@@ -45,7 +45,7 @@ define([
          *
          * @param {Object} elem - Incoming child.
          */
-        initElement: function (elem) {
+        initElement: function(elem) {
             this._super();
 
             elem.activate();
@@ -61,11 +61,11 @@ define([
          *
          * @returns {Collection} Chainable.
          */
-        initChildren: function () {
-            var children = this.source.get(this.dataScope),
+        initChildren: function() {
+            let children = this.source.get(this.dataScope),
                 initial = this.initialItems = [];
 
-            _.each(children, function (item, index) {
+            _.each(children, function(item, index) {
                 initial.push(index);
                 this.addChild(index);
             }, this);
@@ -80,7 +80,7 @@ define([
          * @param {String|Object} [index] - Index of a child.
          * @returns {Collection} Chainable.
          */
-        addChild: function (index) {
+        addChild: function(index) {
             this.childIndex = !_.isString(index) ?
                 'new_' + this.lastIndex++ :
                 index;
@@ -96,12 +96,12 @@ define([
          *
          * @returns {Boolean}
          */
-        hasChanged: function () {
-            var initial = this.initialItems,
+        hasChanged: function() {
+            let initial = this.initialItems,
                 current = this.elems.pluck('index'),
                 changed = !utils.equalArrays(initial, current);
 
-            return changed || this.elems.some(function (elem) {
+            return changed || this.elems.some(function(elem) {
                 return _.some(elem.delegate('hasChanged'));
             });
         },
@@ -111,12 +111,12 @@ define([
          *
          * @returns {Array} An array of validation results.
          */
-        validate: function () {
-            var elems;
+        validate: function() {
+            let elems;
 
             this.allValid = true;
 
-            elems = this.elems.sortBy(function (elem) {
+            elems = this.elems.sortBy(function(elem) {
                 return !elem.active();
             });
 
@@ -132,11 +132,11 @@ define([
          * @param {Object} elem - Element to run validation on.
          * @returns {Array} An array of validation results.
          */
-        _validate: function (elem) {
-            var result = elem.delegate('validate'),
+        _validate: function(elem) {
+            let result = elem.delegate('validate'),
                 invalid;
 
-            invalid = _.some(result, function (item) {
+            invalid = _.some(result, function(item) {
                 return !item.valid;
             });
 
@@ -154,17 +154,17 @@ define([
          * from collection using '_removeChild' method.
          * @param  {Object} elem - Element that should be removed.
          */
-        removeAddress: function (elem) {
-            var self = this;
+        removeAddress: function(elem) {
+            let self = this;
 
             confirm({
                 content: this.removeMessage,
                 actions: {
                     /** @inheritdoc */
-                    confirm: function () {
+                    confirm: function() {
                         self._removeAddress(elem);
-                    }
-                }
+                    },
+                },
             });
         },
 
@@ -175,8 +175,8 @@ define([
          *
          * @param {Object} elem - Element to remove.
          */
-        _removeAddress: function (elem) {
-            var isActive = elem.active(),
+        _removeAddress: function(elem) {
+            let isActive = elem.active(),
                 first;
 
             elem.destroy();
@@ -188,6 +188,6 @@ define([
             }
 
             this.bubble('update');
-        }
+        },
     });
 });

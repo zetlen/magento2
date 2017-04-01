@@ -11,18 +11,18 @@
 define([
     'underscore',
     'Magento_Customer/js/customer-data',
-    'mageUtils'
-], function (_, storage, utils) {
+    'mageUtils',
+], function(_, storage, utils) {
     'use strict';
 
-    var cacheKey = 'cart-data',
+    let cacheKey = 'cart-data',
         cartData = {
             totals: null,
             address: null,
             cartVersion: null,
             shippingMethodCode: null,
             shippingCarrierCode: null,
-            rates: null
+            rates: null,
         },
 
         /**
@@ -31,7 +31,7 @@ define([
          * @param {String} [key]
          * @returns {*}
          */
-        getData = function (key) {
+        getData = function(key) {
             return key ? storage.get(cacheKey)()[key] : storage.get(cacheKey)();
         },
 
@@ -40,7 +40,7 @@ define([
          *
          * @param {Object} checkoutData
          */
-        setData = function (checkoutData) {
+        setData = function(checkoutData) {
             storage.set(cacheKey, checkoutData);
         },
 
@@ -52,7 +52,7 @@ define([
          * @param {String} suffix
          * @return {String}
          */
-        getMethodName = function (name, prefix, suffix) {
+        getMethodName = function(name, prefix, suffix) {
             prefix = prefix || '';
             suffix = suffix || '';
 
@@ -82,8 +82,8 @@ define([
          * @param {String} key
          * @return {*}
          */
-        get: function (key) {
-            var methodName = getMethodName(key, '_get');
+        get: function(key) {
+            let methodName = getMethodName(key, '_get');
 
             if (key === cacheKey) {
                 return getData();
@@ -107,12 +107,12 @@ define([
          * @param {String} key
          * @param {*} value
          */
-        set: function (key, value) {
-            var methodName = getMethodName(key, '_set'),
+        set: function(key, value) {
+            let methodName = getMethodName(key, '_set'),
                 obj;
 
             if (key === cacheKey) {
-                _.each(value, function (val, k) {
+                _.each(value, function(val, k) {
                     this.set(k, val);
                 }, this);
 
@@ -138,8 +138,8 @@ define([
          *
          * @param {String} key
          */
-        clear: function (key) {
-            var methodName = getMethodName(key, '_clear');
+        clear: function(key) {
+            let methodName = getMethodName(key, '_clear');
 
             if (key === cacheKey) {
                 setData(this.cartData);
@@ -166,8 +166,8 @@ define([
          * @param {*} value
          * @return {Boolean}
          */
-        isChanged: function (key, value) {
-            var methodName = getMethodName(key, '_is', 'Changed');
+        isChanged: function(key, value) {
+            let methodName = getMethodName(key, '_is', 'Changed');
 
             if (this[methodName]) {
                 return this[methodName](value);
@@ -183,9 +183,9 @@ define([
          * @param {Object} address
          * @returns {Boolean}
          */
-        _isAddressChanged: function (address) {
+        _isAddressChanged: function(address) {
             return JSON.stringify(_.pick(this.get('address'), this.requiredFields)) !==
                 JSON.stringify(_.pick(address, this.requiredFields));
-        }
+        },
     };
 });

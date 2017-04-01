@@ -9,23 +9,23 @@
 define([
     'underscore',
     'uiRegistry',
-    './select'
-], function (_, registry, Select) {
+    './select',
+], function(_, registry, Select) {
     'use strict';
 
     return Select.extend({
         defaults: {
             skipValidation: false,
             imports: {
-                update: '${ $.parentName }.country_id:value'
-            }
+                update: '${ $.parentName }.country_id:value',
+            },
         },
 
         /**
          * @param {String} value
          */
-        update: function (value) {
-            var country = registry.get(this.parentName + '.' + 'country_id'),
+        update: function(value) {
+            let country = registry.get(this.parentName + '.' + 'country_id'),
                 options = country.indexedOptions,
                 isRegionRequired,
                 option;
@@ -48,7 +48,7 @@ define([
                 }
 
                 if (option && !this.options().length) {
-                    registry.get(this.customName, function (input) {
+                    registry.get(this.customName, function(input) {
                         isRegionRequired = !!option['is_region_required'];
                         input.validation['required-entry'] = isRegionRequired;
                         input.required(isRegionRequired);
@@ -66,8 +66,8 @@ define([
          * @param {*} value
          * @param {String} field
          */
-        filter: function (value, field) {
-            var country = registry.get(this.parentName + '.' + 'country_id'),
+        filter: function(value, field) {
+            let country = registry.get(this.parentName + '.' + 'country_id'),
                 option;
 
             if (country) {
@@ -84,7 +84,7 @@ define([
                     }
                 }
             }
-        }
+        },
     });
 });
 

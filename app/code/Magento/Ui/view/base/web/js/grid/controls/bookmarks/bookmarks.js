@@ -12,8 +12,8 @@ define([
     'mage/translate',
     'rjsResolver',
     'uiLayout',
-    'uiCollection'
-], function (_, utils, $t, resolver, layout, Collection) {
+    'uiCollection',
+], function(_, utils, $t, resolver, layout, Collection) {
     'use strict';
 
     /**
@@ -43,14 +43,14 @@ define([
             storageConfig: {
                 provider: '${ $.storageConfig.name }',
                 name: '${ $.name }_storage',
-                component: 'Magento_Ui/js/grid/controls/bookmarks/storage'
+                component: 'Magento_Ui/js/grid/controls/bookmarks/storage',
             },
             views: {
                 default: {
                     label: $t('Default View'),
                     index: 'default',
-                    editable: false
-                }
+                    editable: false,
+                },
             },
             tracks: {
                 editing: true,
@@ -58,13 +58,13 @@ define([
                 activeView: true,
                 hasChanges: true,
                 customLabel: true,
-                customVisible: true
+                customVisible: true,
             },
             listens: {
                 activeIndex: 'onActiveIndexChange',
                 activeView: 'checkState',
-                current: 'onStateChange'
-            }
+                current: 'onStateChange',
+            },
         },
 
         /**
@@ -72,7 +72,7 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             utils.limit(this, 'checkState', 5);
             utils.limit(this, 'saveState', 2000);
 
@@ -89,7 +89,7 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        initStorage: function () {
+        initStorage: function() {
             layout([this.storageConfig]);
 
             return this;
@@ -101,8 +101,8 @@ define([
          * @private
          * @returns {Bookmarks} Chainbale.
          */
-        initDefaultView: function () {
-            var data = this.getViewData(this.defaultIndex);
+        initDefaultView: function() {
+            let data = this.getViewData(this.defaultIndex);
 
             if (!_.size(data)) {
                 this.setViewData(this.defaultIndex, this.current)
@@ -119,8 +119,8 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        initViews: function () {
-            _.each(this.views, function (config) {
+        initViews: function() {
+            _.each(this.views, function(config) {
                 this.addView(config);
             }, this);
 
@@ -135,17 +135,17 @@ define([
          * @param {Object} [config] - Additional configuration object.
          * @returns {Object}
          */
-        buildView: function (config) {
-            var view = {
+        buildView: function(config) {
+            let view = {
                 label: this.newViewLabel,
                 index: '_' + Date.now(),
-                editable: true
+                editable: true,
             };
 
             utils.extend(view, config || {});
 
-            view.data   = view.data || utils.copy(this.current);
-            view.value  = view.label;
+            view.data = view.data || utils.copy(this.current);
+            view.value = view.label;
 
             this.observe.call(view, true, 'label value');
 
@@ -160,9 +160,9 @@ define([
          * @param {Boolean} [applyView=false] - Whether to apply created view automatically or not.
          * @returns {View} Created view.
          */
-        addView: function (config, saveView, applyView) {
-            var view    = this.buildView(config),
-                index   = view.index;
+        addView: function(config, saveView, applyView) {
+            let view = this.buildView(config),
+                index = view.index;
 
             this.views[index] = view;
 
@@ -185,8 +185,8 @@ define([
          * @param {String} index - Index of a view to be removed.
          * @returns {Bookmarks} Chainable.
          */
-        removeView: function (index) {
-            var viewPath = this.getViewPath(index);
+        removeView: function(index) {
+            let viewPath = this.getViewPath(index);
 
             if (this.isViewActive(index)) {
                 this.applyView(this.defaultIndex);
@@ -206,8 +206,8 @@ define([
          * @param {String} index - Index of a view to be saved.
          * @returns {Bookmarks} Chainable.
          */
-        saveView: function (index) {
-            var viewPath = this.getViewPath(index);
+        saveView: function(index) {
+            let viewPath = this.getViewPath(index);
 
             this.updateViewLabel(index)
                 .endEdit(index)
@@ -224,7 +224,7 @@ define([
          * @param {String} index - Index of a view to be applied.
          * @returns {Bookmarks} Chainable.
          */
-        applyView: function (index) {
+        applyView: function(index) {
             this.applyStateOf(index)
                 .set('activeIndex', index);
 
@@ -238,7 +238,7 @@ define([
          * @param {String} index - Index of a view.
          * @returns {Bookmarks} Chainable.
          */
-        updateAndSave: function (index) {
+        updateAndSave: function(index) {
             if (this.isViewActive(index)) {
                 this.updateActiveView(index);
             }
@@ -254,7 +254,7 @@ define([
          * @param {String} index - Index of a view to be retrieved.
          * @returns {View}
          */
-        getView: function (index) {
+        getView: function(index) {
             return this.views[index];
         },
 
@@ -263,7 +263,7 @@ define([
          *
          * @returns {View}
          */
-        getActiveView: function () {
+        getActiveView: function() {
             return this.views[this.activeIndex];
         },
 
@@ -273,7 +273,7 @@ define([
          * @param {String} index - Index of a view to be checked.
          * @returns {Boolean}
          */
-        isViewActive: function (index) {
+        isViewActive: function(index) {
             return this.activeView === this.getView(index);
         },
 
@@ -282,7 +282,7 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        updateActiveView: function () {
+        updateActiveView: function() {
             this.setViewData(this.activeIndex, this.current);
 
             return this;
@@ -297,8 +297,8 @@ define([
          * @param {String} [label=view.value] - New labels' value.
          * @returns {Bookmarks} Chainable.
          */
-        updateViewLabel: function (index, label) {
-            var view    = this.getView(index),
+        updateViewLabel: function(index, label) {
+            let view = this.getView(index),
                 current = view.label;
 
             label = (label || view.value).trim() || current;
@@ -316,8 +316,8 @@ define([
          * @param {String} [property] - If not specified then whole views' data will be retrieved.
          * @returns {Object} Views' data.
          */
-        getViewData: function (index, property) {
-            var view = this.getView(index),
+        getViewData: function(index, property) {
+            let view = this.getView(index),
                 data = view.data;
 
             if (property) {
@@ -334,8 +334,8 @@ define([
          * @param {Object} data - New view data.
          * @returns {Bookmarks} Chainable.
          */
-        setViewData: function (index, data) {
-            var path = this.getViewPath(index) + '.data';
+        setViewData: function(index, data) {
+            let path = this.getViewPath(index) + '.data';
 
             this.set(path, utils.copy(data));
 
@@ -348,7 +348,7 @@ define([
          * @param {String} index - Index of a view.
          * @returns {Bookmarks} Chainable.
          */
-        editView: function (index) {
+        editView: function(index) {
             this.editing = index;
 
             return this;
@@ -361,15 +361,15 @@ define([
          * @param {String} index - Index of a view.
          * @returns {Bookmarks} Chainable.
          */
-        endEdit: function (index) {
-            var view;
+        endEdit: function(index) {
+            let view;
 
             if (!this.isEditing(index)) {
                 return this;
             }
 
-            index   = index || this.editing;
-            view    = this.getView(index);
+            index = index || this.editing;
+            view = this.getView(index);
 
             view.value = view.label;
 
@@ -384,7 +384,7 @@ define([
          * @param {String} index - Index of a view to be checked.
          * @returns {Bollean}
          */
-        isEditing: function (index) {
+        isEditing: function(index) {
             return this.editing === index;
         },
 
@@ -396,10 +396,10 @@ define([
          * @param {String} [exclude]
          * @returns {String}
          */
-        uniqueLabel: function (label, exclude) {
-            var labels      = _.pluck(this.views, 'label'),
-                hasParenth  = _.last(label) === ')',
-                index       = 2,
+        uniqueLabel: function(label, exclude) {
+            let labels = _.pluck(this.views, 'label'),
+                hasParenth = _.last(label) === ')',
+                index = 2,
                 result,
                 suffix;
 
@@ -427,8 +427,8 @@ define([
          * @param {String} [property]
          * @returns {Bookmarks} Chainable.
          */
-        applyStateOf: function (state, property) {
-            var index    = state || this.activeIndex,
+        applyStateOf: function(state, property) {
+            let index = state || this.activeIndex,
                 dataPath = removeStateNs(property),
                 viewData = this.getViewData(index, dataPath);
 
@@ -446,7 +446,7 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        saveState: function () {
+        saveState: function() {
             this.store('current');
 
             return this;
@@ -457,7 +457,7 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        resetState: function () {
+        resetState: function() {
             this.applyStateOf(this.activeIndex);
 
             return this;
@@ -469,9 +469,9 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        checkState: function () {
-            var viewData = this.getViewData(this.activeIndex),
-                diff     = utils.compare(viewData, this.current);
+        checkState: function() {
+            let viewData = this.getViewData(this.activeIndex),
+                diff = utils.compare(viewData, this.current);
 
             this.hasChanges = !diff.equal;
 
@@ -485,7 +485,7 @@ define([
          * @param {String} index - Index of a view.
          * @returns {String}
          */
-        getViewPath: function (index) {
+        getViewPath: function(index) {
             return 'views.' + index;
         },
 
@@ -494,7 +494,7 @@ define([
          *
          * @returns {Bookmarks} Chainable
          */
-        updateArray: function () {
+        updateArray: function() {
             this.viewsArray = _.values(this.views);
 
             return this;
@@ -505,9 +505,9 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        showCustom: function () {
-            this.customLabel    = this.uniqueLabel();
-            this.customVisible  = true;
+        showCustom: function() {
+            this.customLabel = this.uniqueLabel();
+            this.customVisible = true;
 
             return this;
         },
@@ -517,7 +517,7 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        hideCustom: function () {
+        hideCustom: function() {
             this.customVisible = false;
 
             return this;
@@ -528,7 +528,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isCustomVisible: function () {
+        isCustomVisible: function() {
             return this.customVisible;
         },
 
@@ -538,12 +538,12 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        applyCustom: function () {
-            var label = this.customLabel.trim();
+        applyCustom: function() {
+            let label = this.customLabel.trim();
 
             this.hideCustom()
                 .addView({
-                    label: this.uniqueLabel(label)
+                    label: this.uniqueLabel(label),
                 }, true, true);
 
             return this;
@@ -552,7 +552,7 @@ define([
         /**
          * Listener of the activeIndex property.
          */
-        onActiveIndexChange: function () {
+        onActiveIndexChange: function() {
             this.activeView = this.getActiveView();
 
             this.store('activeIndex');
@@ -561,13 +561,13 @@ define([
         /**
          * Listener of the activeIndex property.
          */
-        onStateChange: function () {
+        onStateChange: function() {
             this.checkState();
             this.saveState();
 
             if (!this.defaultDefined) {
                 resolver(this.initDefaultView, this);
             }
-        }
+        },
     });
 });

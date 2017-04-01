@@ -4,8 +4,8 @@
  */
 define([
     'ko',
-    '../template/renderer'
-], function (ko, renderer) {
+    '../template/renderer',
+], function(ko, renderer) {
     'use strict';
 
     ko.bindingHandlers.afterRender = {
@@ -13,13 +13,13 @@ define([
         /**
          * Binding init callback.
          */
-        init: function (element, valueAccessor, allBindings, viewModel) {
-            var callback = valueAccessor();
+        init: function(element, valueAccessor, allBindings, viewModel) {
+            let callback = valueAccessor();
 
             if (typeof callback === 'function') {
                 callback.call(viewModel, element, viewModel);
             }
-        }
+        },
     };
 
     renderer.addAttribute('afterRender');

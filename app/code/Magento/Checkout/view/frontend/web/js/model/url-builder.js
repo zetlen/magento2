@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery'], function ($) {
+define(['jquery'], function($) {
     'use strict';
 
     return {
@@ -17,8 +17,8 @@ define(['jquery'], function ($) {
          * @param {Object} params
          * @return {*}
          */
-        createUrl: function (url, params) {
-            var completeUrl = this.serviceUrl + url;
+        createUrl: function(url, params) {
+            let completeUrl = this.serviceUrl + url;
 
             return this.bindParams(completeUrl, params);
         },
@@ -28,8 +28,8 @@ define(['jquery'], function ($) {
          * @param {Object} params
          * @return {*}
          */
-        bindParams: function (url, params) {
-            var urlParts;
+        bindParams: function(url, params) {
+            let urlParts;
 
             params.method = this.method;
             params.storeCode = this.storeCode;
@@ -38,15 +38,15 @@ define(['jquery'], function ($) {
             urlParts = url.split('/');
             urlParts = urlParts.filter(Boolean);
 
-            $.each(urlParts, function (key, part) {
+            $.each(urlParts, function(key, part) {
                 part = part.replace(':', '');
 
-                if (params[part] != undefined) { //eslint-disable-line eqeqeq
+                if (params[part] != undefined) { // eslint-disable-line eqeqeq
                     urlParts[key] = params[part];
                 }
             });
 
             return urlParts.join('/');
-        }
+        },
     };
 });

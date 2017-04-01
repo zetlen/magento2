@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
-    var validators = [];
+    let validators = [];
 
     return {
         /**
@@ -14,7 +14,7 @@ define([], function () {
          *
          * @param {*} validator
          */
-        registerValidator: function (validator) {
+        registerValidator: function(validator) {
             validators.push(validator);
         },
 
@@ -23,7 +23,7 @@ define([], function () {
          *
          * @returns {Array}
          */
-        getValidators: function () {
+        getValidators: function() {
             return validators;
         },
 
@@ -32,15 +32,15 @@ define([], function () {
          *
          * @returns {Boolean}
          */
-        validate: function () {
-            var validationResult = true;
+        validate: function() {
+            let validationResult = true;
 
             if (validators.length <= 0) {
                 return validationResult;
             }
 
-            validators.forEach(function (item) {
-                if (item.validate() == false) { //eslint-disable-line eqeqeq
+            validators.forEach(function(item) {
+                if (item.validate() == false) { // eslint-disable-line eqeqeq
                     validationResult = false;
 
                     return false;
@@ -48,6 +48,6 @@ define([], function () {
             });
 
             return validationResult;
-        }
+        },
     };
 });

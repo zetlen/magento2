@@ -10,12 +10,12 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Customer/js/model/customer',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function ($, quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+], function($, quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader) {
     'use strict';
 
-    return function (messageContainer) {
-        var serviceUrl,
+    return function(messageContainer) {
+        let serviceUrl,
             payload,
             method = 'put',
             paymentData = quote.paymentMethod();
@@ -25,19 +25,19 @@ define([
          */
         if (!customer.isLoggedIn()) {
             serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/set-payment-information', {
-                cartId: quote.getQuoteId()
+                cartId: quote.getQuoteId(),
             });
             payload = {
                 cartId: quote.getQuoteId(),
                 email: quote.guestEmail,
-                paymentMethod: paymentData
+                paymentMethod: paymentData,
             };
             method = 'post';
         } else {
             serviceUrl = urlBuilder.createUrl('/carts/mine/selected-payment-method', {});
             payload = {
                 cartId: quote.getQuoteId(),
-                method: paymentData
+                method: paymentData,
             };
         }
         fullScreenLoader.startLoader();
@@ -45,7 +45,7 @@ define([
         return storage[method](
             serviceUrl, JSON.stringify(payload)
         ).fail(
-            function (response) {
+            function(response) {
                 errorProcessor.process(response, messageContainer);
                 fullScreenLoader.stopLoader();
             }

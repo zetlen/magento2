@@ -5,8 +5,8 @@
 define([
     'ko',
     'jquery',
-    'underscore'
-], function (ko, $, _) {
+    'underscore',
+], function(ko, $, _) {
     'use strict';
 
     /**
@@ -27,12 +27,12 @@ define([
      * @returns {Array}
      */
     function normalize(nodes) {
-        var result;
+        let result;
 
-        nodes   = _.toArray(nodes);
-        result  = nodes.slice();
+        nodes = _.toArray(nodes);
+        result = nodes.slice();
 
-        nodes.forEach(function (node) {
+        nodes.forEach(function(node) {
             if (node.nodeType === 8) {
                 result = !ko.virtualElements.hasBindingValue(node) ?
                     _.without(result, node) :
@@ -49,15 +49,15 @@ define([
      * @param {...Object} extenders - Multiple extender objects to be applied to the context.
      * @returns {jQueryCollection} Chainable.
      */
-    $.fn.extendCtx = function () {
-        var nodes       = normalize(this),
-            extenders   = _.toArray(arguments);
+    $.fn.extendCtx = function() {
+        let nodes = normalize(this),
+            extenders = _.toArray(arguments);
 
-        nodes.forEach(function (node) {
-            var ctx  = ko.contextFor(node),
+        nodes.forEach(function(node) {
+            let ctx = ko.contextFor(node),
                 data = [ctx].concat(extenders);
 
-            _.extend.apply(_, data);
+            _.extend(...data);
         });
 
         return this;
@@ -70,15 +70,15 @@ define([
      *      If not specified then current context of a collections' item will be used.
      * @returns {jQueryCollection} Chainable.
      */
-    $.fn.applyBindings = function (ctx) {
-        var nodes = normalize(this),
+    $.fn.applyBindings = function(ctx) {
+        let nodes = normalize(this),
             nodeCtx;
 
         if (isDomElement(ctx)) {
             ctx = ko.contextFor(ctx);
         }
 
-        nodes.forEach(function (node) {
+        nodes.forEach(function(node) {
             nodeCtx = ctx || ko.contextFor(node);
 
             ko.applyBindings(nodeCtx, node);
@@ -97,8 +97,8 @@ define([
      *      If not specified then current context of a collections' item will be used.
      * @returns {jQueryCollection} Chainable.
      */
-    $.fn.bindings = function (data, ctx) {
-        var nodes    = normalize(this),
+    $.fn.bindings = function(data, ctx) {
+        let nodes = normalize(this),
             bindings = data,
             nodeCtx;
 
@@ -106,7 +106,7 @@ define([
             ctx = ko.contextFor(ctx);
         }
 
-        nodes.forEach(function (node) {
+        nodes.forEach(function(node) {
             nodeCtx = ctx || ko.contextFor(node);
 
             if (_.isFunction(data)) {

@@ -7,8 +7,8 @@
 define([
     'mageUtils',
     'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator/luhn10-validator',
-    'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator/credit-card-type'
-], function (utils, luhn10, creditCardTypes) {
+    'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator/credit-card-type',
+], function(utils, luhn10, creditCardTypes) {
     'use strict';
 
     /**
@@ -21,12 +21,12 @@ define([
         return {
             card: card,
             isValid: isValid,
-            isPotentiallyValid: isPotentiallyValid
+            isPotentiallyValid: isPotentiallyValid,
         };
     }
 
-    return function (value) {
-        var potentialTypes,
+    return function(value) {
+        let potentialTypes,
             cardType,
             valid,
             i,

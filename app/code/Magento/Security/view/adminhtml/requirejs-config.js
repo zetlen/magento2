@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            popupWindow:            'mage/popup-window',
-            confirmRedirect:        'Magento_Security/js/confirm-redirect'
-        }
-    }
+            popupWindow: 'mage/popup-window',
+            confirmRedirect: 'Magento_Security/js/confirm-redirect',
+        },
+    },
 };

@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define(['Magento_Ui/js/lib/validation/utils'], function (utils) {
+define(['Magento_Ui/js/lib/validation/utils'], function(utils) {
     'use strict';
 
     /**
@@ -14,8 +14,8 @@ define(['Magento_Ui/js/lib/validation/utils'], function (utils) {
      *
      * @returns {String}
      */
-    return function (price, input) {
-        var result,
+    return function(price, input) {
+        let result,
             lastInputSymbol = input.slice(-1),
             inputPercent = input.slice(0, -1),
             parsedPercent = utils.parseNumber(inputPercent),

@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            folderTree: 'Magento_Cms/js/folder-tree'
-        }
-    }
+            folderTree: 'Magento_Cms/js/folder-tree',
+        },
+    },
 };

@@ -12,16 +12,16 @@ define([
     'mage/template',
     'text!Magento_Ui/templates/grid/cells/thumbnail/preview.html',
     'Magento_Ui/js/modal/modal',
-    'mage/translate'
-], function (Column, $, mageTemplate, thumbnailPreviewTemplate) {
+    'mage/translate',
+], function(Column, $, mageTemplate, thumbnailPreviewTemplate) {
     'use strict';
 
     return Column.extend({
         defaults: {
             bodyTmpl: 'ui/grid/cells/thumbnail',
             fieldClass: {
-                'data-grid-thumbnail-cell': true
-            }
+                'data-grid-thumbnail-cell': true,
+            },
         },
 
         /**
@@ -30,7 +30,7 @@ define([
          * @param {Object} row
          * @returns {String}
          */
-        getSrc: function (row) {
+        getSrc: function(row) {
             return row[this.index + '_src'];
         },
 
@@ -40,7 +40,7 @@ define([
          * @param {Object} row
          * @returns {String}
          */
-        getOrigSrc: function (row) {
+        getOrigSrc: function(row) {
             return row[this.index + '_orig_src'];
         },
 
@@ -50,7 +50,7 @@ define([
          * @param {Object} row
          * @returns {String}
          */
-        getLink: function (row) {
+        getLink: function(row) {
             return row[this.index + '_link'];
         },
 
@@ -60,7 +60,7 @@ define([
          * @param {Object} row
          * @returns {String}
          */
-        getAlt: function (row) {
+        getAlt: function(row) {
             return row[this.index + '_alt'];
         },
 
@@ -69,7 +69,7 @@ define([
          *
          * @returns {Boolean}
          */
-        isPreviewAvailable: function () {
+        isPreviewAvailable: function() {
             return this['has_preview'] || false;
         },
 
@@ -78,12 +78,12 @@ define([
          *
          * @param {Object} row
          */
-        preview: function (row) {
-            var modalHtml = mageTemplate(
+        preview: function(row) {
+            let modalHtml = mageTemplate(
                     thumbnailPreviewTemplate,
                     {
                         src: this.getOrigSrc(row), alt: this.getAlt(row), link: this.getLink(row),
-                        linkText: $.mage.__('Go to Details Page')
+                        linkText: $.mage.__('Go to Details Page'),
                     }
                 ),
                 previewPopup = $('<div/>').html(modalHtml);
@@ -92,7 +92,7 @@ define([
                 title: this.getAlt(row),
                 innerScroll: true,
                 modalClass: '_image-box',
-                buttons: []
+                buttons: [],
             }).trigger('openModal');
         },
 
@@ -102,10 +102,10 @@ define([
          * @param {Object} row
          * @returns {Function}
          */
-        getFieldHandler: function (row) {
+        getFieldHandler: function(row) {
             if (this.isPreviewAvailable()) {
                 return this.preview.bind(this, row);
             }
-        }
+        },
     });
 });

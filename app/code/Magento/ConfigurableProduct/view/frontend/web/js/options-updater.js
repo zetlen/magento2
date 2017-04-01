@@ -1,12 +1,12 @@
 define([
     'jquery',
-    'Magento_Customer/js/customer-data'
-], function ($, customerData) {
+    'Magento_Customer/js/customer-data',
+], function($, customerData) {
     'use strict';
 
     var selectors = {
         formSelector: '#product_addtocart_form',
-        productIdSelector: '#product_addtocart_form [name="product"]'
+        productIdSelector: '#product_addtocart_form [name="product"]',
     },
     cartData = customerData.get('cart'),
     productId = $(selectors.productIdSelector).val(),
@@ -17,17 +17,17 @@ define([
     * @param {Object} data - cart data from customer-data
     * @returns {Boolean} - whether the new options differ from previous
     */
-    setProductOptions = function (data) {
-        var changedProductOptions;
+    setProductOptions = function(data) {
+        let changedProductOptions;
 
         if (!(data && data.items && data.items.length && productId)) {
             return false;
         }
-        changedProductOptions = data.items.find(function (item) {
+        changedProductOptions = data.items.find(function(item) {
             return item['product_id'] === productId;
         });
         changedProductOptions = changedProductOptions && changedProductOptions.options &&
-            changedProductOptions.options.reduce(function (obj, val) {
+            changedProductOptions.options.reduce(function(obj, val) {
                 obj[val['option_id']] = val['option_value'];
 
                 return obj;
@@ -46,13 +46,13 @@ define([
     * Listens to update of cart data or options initialization and update selected option according to customer data
     *
     */
-    listen = function () {
-        cartData.subscribe(function (updateCartData) {
+    listen = function() {
+        cartData.subscribe(function(updateCartData) {
             if (this.setProductOptions(updateCartData)) {
                 this.updateOptions();
             }
         }.bind(this));
-        $(selectors.formSelector).on(this.eventName, function () {
+        $(selectors.formSelector).on(this.eventName, function() {
             this.setProductOptions(cartData());
             this.updateOptions();
         }.bind(this));
@@ -62,7 +62,7 @@ define([
     * Updater constructor function
     *
     */
-    Updater = function (eventName, updateOptionsCallback) {
+    Updater = function(eventName, updateOptionsCallback) {
         if (this instanceof Updater) {
             this.eventName = eventName;
             this.updateOptions = updateOptionsCallback;

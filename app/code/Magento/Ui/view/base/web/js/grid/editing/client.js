@@ -10,8 +10,8 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiClass'
-], function ($, _, utils, Class) {
+    'uiClass',
+], function($, _, utils, Class) {
     'use strict';
 
     return Class.extend({
@@ -19,8 +19,8 @@ define([
             validateBeforeSave: true,
             requestConfig: {
                 dataType: 'json',
-                type: 'POST'
-            }
+                type: 'POST',
+            },
         },
 
         /**
@@ -28,7 +28,7 @@ define([
          *
          * @returns {Client} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             _.bindAll(this, 'onSuccess', 'onError');
 
             return this._super();
@@ -40,8 +40,8 @@ define([
          * @param {Object} config - Configuration of request.
          * @returns {jQueryPromise}
          */
-        send: function (config) {
-            var deffer  = $.Deferred();
+        send: function(config) {
+            let deffer = $.Deferred();
 
             config = utils.extend({}, this.requestConfig, config);
 
@@ -59,8 +59,8 @@ define([
          * @param {Object} data - Data to be processed.
          * @returns {jQueryPromise}
          */
-        save: function (data) {
-            var save = this._save.bind(this, data);
+        save: function(data) {
+            let save = this._save.bind(this, data);
 
             return this.validateBeforeSave ?
                 this.validate(data).pipe(save) :
@@ -73,10 +73,10 @@ define([
          * @param {Object} data - Data to be validated.
          * @returns {jQueryPromise}
          */
-        validate: function (data) {
+        validate: function(data) {
             return this.send({
                 url: this.validateUrl,
-                data: data
+                data: data,
             });
         },
 
@@ -87,10 +87,10 @@ define([
          * @param {Object} data - Data to be validated.
          * @returns {jQueryPromise}
          */
-        _save: function (data) {
+        _save: function(data) {
             return this.send({
                 url: this.saveUrl,
-                data: data
+                data: data,
             });
         },
 
@@ -100,10 +100,10 @@ define([
          * @param {String} msg - Errors' message.
          * @returns {Object}
          */
-        createError: function (msg) {
+        createError: function(msg) {
             return {
                 type: 'error',
-                message: msg
+                message: msg,
             };
         },
 
@@ -115,8 +115,8 @@ define([
          * @param {String} status - See 'jquery' ajax error callback.
          * @param {(String|Object)} err - See 'jquery' ajax error callback.
          */
-        onError: function (promise, xhr, status, err) {
-            var msg;
+        onError: function(promise, xhr, status, err) {
+            let msg;
 
             msg = xhr.status !== 200 ?
                 xhr.status + ' (' + xhr.statusText + ')' :
@@ -131,8 +131,8 @@ define([
          * @param {jQueryPromise} promise - Promise to be resoloved.
          * @param {*} data - See 'jquery' ajax success callback.
          */
-        onSuccess: function (promise, data) {
-            var errors;
+        onSuccess: function(promise, data) {
+            let errors;
 
             if (data.error) {
                 errors = _.map(data.messages, this.createError, this);
@@ -141,6 +141,6 @@ define([
             } else {
                 promise.resolve(data);
             }
-        }
+        },
     });
 });

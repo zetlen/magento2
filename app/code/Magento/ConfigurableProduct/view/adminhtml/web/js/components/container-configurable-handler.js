@@ -4,28 +4,28 @@
  */
 
 define([
-    'uiComponent'
-], function (Element) {
+    'uiComponent',
+], function(Element) {
     'use strict';
 
     return Element.extend({
         defaults: {
             listens: {
-                '${ $.provider }:data.is_downloadable': 'handleProductType'
+                '${ $.provider }:data.is_downloadable': 'handleProductType',
             },
             links: {
-                isDownloadable: '${ $.provider }:data.is_downloadable'
+                isDownloadable: '${ $.provider }:data.is_downloadable',
             },
             modules: {
-                createConfigurableButton: '${$.createConfigurableButton}'
-            }
+                createConfigurableButton: '${$.createConfigurableButton}',
+            },
         },
 
         /**
          * Invokes initialize method of parent class,
          * contains initialization logic
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.handleProductType(this.isDownloadable);
 
@@ -37,7 +37,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe(['content']);
 
@@ -49,7 +49,7 @@ define([
          *
          * @param {String} isDownloadable
          */
-        handleProductType: function (isDownloadable) {
+        handleProductType: function(isDownloadable) {
             if (isDownloadable === '1') {
                 this.content(this.content2);
 
@@ -63,6 +63,6 @@ define([
                     this.createConfigurableButton().visible(true);
                 }
             }
-        }
+        },
     });
 });

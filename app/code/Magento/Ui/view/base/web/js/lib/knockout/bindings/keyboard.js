@@ -4,8 +4,8 @@
  */
 define([
     'ko',
-    '../template/renderer'
-], function (ko, renderer) {
+    '../template/renderer',
+], function(ko, renderer) {
     'use strict';
 
     ko.bindingHandlers.keyboard = {
@@ -17,17 +17,17 @@ define([
          * @param  {Object} allBindings - all bindings object
          * @param  {Object} viewModel - reference to viewmodel
          */
-        init: function (el, valueAccessor, allBindings, viewModel) {
-            var map = valueAccessor();
+        init: function(el, valueAccessor, allBindings, viewModel) {
+            let map = valueAccessor();
 
-            ko.utils.registerEventHandler(el, 'keyup', function (e) {
-                var callback = map[e.keyCode];
+            ko.utils.registerEventHandler(el, 'keyup', function(e) {
+                let callback = map[e.keyCode];
 
                 if (callback) {
                     return callback.call(viewModel, e);
                 }
             });
-        }
+        },
     };
 
     renderer.addAttribute('keyboard');

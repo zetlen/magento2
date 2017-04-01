@@ -10,11 +10,11 @@ define([
     'Magento_Customer/js/model/customer',
     'mage/validation',
     'Magento_Checkout/js/model/authentication-messages',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function ($, Component, loginAction, customer, validation, messageContainer, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+], function($, Component, loginAction, customer, validation, messageContainer, fullScreenLoader) {
     'use strict';
 
-    var checkoutConfig = window.checkoutConfig;
+    let checkoutConfig = window.checkoutConfig;
 
     return Component.extend({
         isGuestCheckoutAllowed: checkoutConfig.isGuestCheckoutAllowed,
@@ -23,7 +23,7 @@ define([
         forgotPasswordUrl: checkoutConfig.forgotPasswordUrl,
         autocomplete: checkoutConfig.autocomplete,
         defaults: {
-            template: 'Magento_Checkout/authentication'
+            template: 'Magento_Checkout/authentication',
         },
 
         /**
@@ -31,7 +31,7 @@ define([
          *
          * @return {Boolean}
          */
-        isActive: function () {
+        isActive: function() {
             return !customer.isLoggedIn();
         },
 
@@ -40,11 +40,11 @@ define([
          *
          * @param {HTMLElement} loginForm
          */
-        login: function (loginForm) {
-            var loginData = {},
+        login: function(loginForm) {
+            let loginData = {},
                 formDataArray = $(loginForm).serializeArray();
 
-            formDataArray.forEach(function (entry) {
+            formDataArray.forEach(function(entry) {
                 loginData[entry.name] = entry.value;
             });
 
@@ -52,10 +52,10 @@ define([
                 $(loginForm).validation('isValid')
             ) {
                 fullScreenLoader.startLoader();
-                loginAction(loginData, checkoutConfig.checkoutUrl, undefined, messageContainer).always(function () {
+                loginAction(loginData, checkoutConfig.checkoutUrl, undefined, messageContainer).always(function() {
                     fullScreenLoader.stopLoader();
                 });
             }
-        }
+        },
     });
 });

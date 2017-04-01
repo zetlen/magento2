@@ -8,8 +8,8 @@
  */
 define([
     'underscore',
-    './rules'
-], function (_, rulesList) {
+    './rules',
+], function(_, rulesList) {
     'use strict';
 
     /**
@@ -22,13 +22,13 @@ define([
      * @returns {Object}
      */
     function validate(id, value, params, additionalParams) {
-        var rule,
+        let rule,
             message,
             valid,
             result = {
                 rule: id,
                 passed: true,
-                message: ''
+                message: '',
             };
 
         if (_.isObject(params)) {
@@ -39,16 +39,16 @@ define([
             return result;
         }
 
-        rule    = rulesList[id];
+        rule = rulesList[id];
         message = message || rule.message;
-        valid   = rule.handler(value, params, additionalParams);
+        valid = rule.handler(value, params, additionalParams);
 
         if (!valid) {
             params = Array.isArray(params) ?
                 params :
                 [params];
 
-            message = params.reduce(function (msg, param, idx) {
+            message = params.reduce(function(msg, param, idx) {
                 return msg.replace(new RegExp('\\{' + idx + '\\}', 'g'), param);
             }, message);
 
@@ -68,14 +68,14 @@ define([
      * @returns {Object}
      */
     function validator(rules, value, additionalParams) {
-        var result;
+        let result;
 
         if (typeof rules === 'object') {
             result = {
-                passed: true
+                passed: true,
             };
 
-            _.every(rules, function (ruleParams, id) {
+            _.every(rules, function(ruleParams, id) {
                 if (ruleParams.validate || ruleParams !== false || additionalParams) {
                     result = validate(id, value, ruleParams, additionalParams);
 
@@ -88,7 +88,7 @@ define([
             return result;
         }
 
-        return validate.apply(null, arguments);
+        return validate(...arguments);
     }
 
     /**
@@ -98,10 +98,10 @@ define([
      * @param {Function} handler - Validation function.
      * @param {String} message - Error message.
      */
-    validator.addRule = function (id, handler, message) {
+    validator.addRule = function(id, handler, message) {
         rulesList[id] = {
             handler: handler,
-            message: message
+            message: message,
         };
     };
 
@@ -111,7 +111,7 @@ define([
      * @param {String} id - Rule identifier.
      * @returns {Object}
      */
-    validator.getRule = function (id) {
+    validator.getRule = function(id) {
         return rulesList[id];
     };
 

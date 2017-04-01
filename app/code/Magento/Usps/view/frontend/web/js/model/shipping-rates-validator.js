@@ -7,11 +7,11 @@ define([
     'jquery',
     'mageUtils',
     './shipping-rates-validation-rules',
-    'mage/translate'
-], function ($, utils, validationRules, $t) {
+    'mage/translate',
+], function($, utils, validationRules, $t) {
     'use strict';
 
-    var checkoutConfig = window.checkoutConfig;
+    let checkoutConfig = window.checkoutConfig;
 
     return {
         validationErrors: [],
@@ -20,12 +20,12 @@ define([
          * @param {Object} address
          * @return {Boolean}
          */
-        validate: function (address) {
-            var rules = validationRules.getRules(),
+        validate: function(address) {
+            let rules = validationRules.getRules(),
                 self = this;
 
-            $.each(rules, function (field, rule) {
-                var message;
+            $.each(rules, function(field, rule) {
+                let message;
 
                 if (rule.required && utils.isEmpty(address[field])) {
                     message = $t('Field ') + field + $t(' is required.');
@@ -33,8 +33,8 @@ define([
                 }
             });
 
-            if (!Boolean(this.validationErrors.length)) {
-                if (address['country_id'] == checkoutConfig.originCountryCode) { //eslint-disable-line eqeqeq
+            if (!this.validationErrors.length) {
+                if (address['country_id'] == checkoutConfig.originCountryCode) { // eslint-disable-line eqeqeq
                     return !utils.isEmpty(address.postcode);
                 }
 
@@ -42,6 +42,6 @@ define([
             }
 
             return false;
-        }
+        },
     };
 });

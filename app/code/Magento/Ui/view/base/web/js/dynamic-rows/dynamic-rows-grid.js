@@ -8,8 +8,8 @@
  */
 define([
     'underscore',
-    './dynamic-rows'
-], function (_, dynamicRows) {
+    './dynamic-rows',
+], function(_, dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
@@ -25,12 +25,12 @@ define([
             identificationDRProperty: 'id',
             listens: {
                 'insertData': 'processingInsertData',
-                'recordData': 'initElements setToInsertData'
+                'recordData': 'initElements setToInsertData',
             },
             mappingSettings: {
                 enabled: true,
-                distinct: true
-            }
+                distinct: true,
+            },
         },
 
         /**
@@ -38,10 +38,10 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe([
-                    'insertData'
+                    'insertData',
                 ]);
 
             return this;
@@ -50,12 +50,12 @@ define([
         /**
          * Set data from recordData to insertData
          */
-        setToInsertData: function () {
-            var insertData = [],
+        setToInsertData: function() {
+            let insertData = [],
                 obj;
 
             if (this.recordData().length && !this.update) {
-                _.each(this.recordData(), function (recordData) {
+                _.each(this.recordData(), function(recordData) {
                     obj = {};
                     obj[this.map[this.identificationProperty]] = recordData[this.identificationProperty];
                     insertData.push(obj);
@@ -72,8 +72,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initChildren: function () {
-            this.getChildItems().forEach(function (data, index) {
+        initChildren: function() {
+            this.getChildItems().forEach(function(data, index) {
                 this.processingAddChild(data, this.startIndex + index, data[this.identificationDRProperty]);
             }, this);
 
@@ -87,8 +87,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initElements: function (data) {
-            var newData = this.getNewData(data);
+        initElements: function(data) {
+            let newData = this.getNewData(data);
 
             this.parsePagesData(data);
 
@@ -108,7 +108,7 @@ define([
          * @param {String|Number} index - record index
          * @param {String|Number} recordId
          */
-        deleteRecord: function (index, recordId) {
+        deleteRecord: function(index, recordId) {
             this._super();
 
             this.updateInsertData(recordId);
@@ -119,11 +119,11 @@ define([
          *
          * @param {String|Number} recordId
          */
-        updateInsertData: function (recordId) {
-            var data = this.getElementData(this.insertData(), recordId),
+        updateInsertData: function(recordId) {
+            let data = this.getElementData(this.insertData(), recordId),
             prop = this.map[this.identificationDRProperty];
 
-            this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
+            this.insertData(_.reject(this.source.get(this.dataProvider), function(recordData) {
                 return ~~recordData[prop] === ~~data[prop];
             }, this));
         },
@@ -137,8 +137,8 @@ define([
          *
          * @returns {Object} data object
          */
-        getElementData: function (array, index, property) {
-            var obj = {},
+        getElementData: function(array, index, property) {
+            let obj = {},
                 result;
 
             property ? obj[property] = index : obj[this.map[this.identificationDRProperty]] = index;
@@ -162,7 +162,7 @@ define([
          * @param {Number|String} index - element index
          * @param {Number|String} prop - additional property to element
          */
-        processingAddChild: function (ctx, index, prop) {
+        processingAddChild: function(ctx, index, prop) {
             if (this._elems.length > this.pageSize) {
                 return false;
             }
@@ -178,12 +178,12 @@ define([
          *
          * @returns {Array} changed data
          */
-        getNewData: function (data) {
-            var changes = [],
+        getNewData: function(data) {
+            let changes = [],
                 tmpObj = {};
 
             if (data.length !== this.relatedData.length) {
-                _.each(data, function (obj) {
+                _.each(data, function(obj) {
                     tmpObj[this.identificationDRProperty] = obj[this.identificationDRProperty];
 
                     if (!_.findWhere(this.relatedData, tmpObj)) {
@@ -200,8 +200,8 @@ define([
          *
          * @param {Object} data
          */
-        processingInsertData: function (data) {
-            var changes,
+        processingInsertData: function(data) {
+            let changes,
                 obj = {};
 
             changes = this._checkGridData(data);
@@ -214,7 +214,7 @@ define([
                     return false;
                 }
 
-                changes.each(function (changedObject) {
+                changes.each(function(changedObject) {
                     this.mappingValue(changedObject);
                 }, this);
             }
@@ -225,12 +225,12 @@ define([
          *
          * @param {Array} data
          */
-        mappingValue: function (data) {
-            var obj = {},
+        mappingValue: function(data) {
+            let obj = {},
                 tmpObj = {};
 
             if (this.mappingSettings.enabled) {
-                _.each(this.map, function (prop, index) {
+                _.each(this.map, function(prop, index) {
                     obj[index] = !_.isUndefined(data[prop]) ? data[prop] : '';
                 }, this);
             } else {
@@ -259,14 +259,14 @@ define([
          * @param {Array} data - array with records data
          * @returns {Array} Changed records
          */
-        _checkGridData: function (data) {
-            var cacheLength = this.cacheGridData.length,
+        _checkGridData: function(data) {
+            let cacheLength = this.cacheGridData.length,
                 curData = data.length,
                 max = cacheLength > curData ? this.cacheGridData : data,
                 changes = [],
                 obj = {};
 
-            max.each(function (record, index) {
+            max.each(function(record, index) {
                 obj[this.map[this.identificationDRProperty]] = record[this.map[this.identificationDRProperty]];
 
                 if (!_.where(this.cacheGridData, obj).length) {
@@ -275,6 +275,6 @@ define([
             }, this);
 
             return changes;
-        }
+        },
     });
 });

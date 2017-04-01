@@ -3,13 +3,13 @@
  * See COPYING.txt for license details.
  */
 require([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
-    $('body').on('catalogCategoryAddToCartRedirect', function (event, data) {
-        $(data.form).find('[name*="super"]').each(function (index, item) {
-            var $item = $(item);
+    $('body').on('catalogCategoryAddToCartRedirect', function(event, data) {
+        $(data.form).find('[name*="super"]').each(function(index, item) {
+            let $item = $(item);
 
             data.redirectParameters.push($item.attr('data-attr-name') + '=' + $item.val());
         });

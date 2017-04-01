@@ -4,8 +4,8 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/ui-select'
-], function (Select) {
+    'Magento_Ui/js/form/element/ui-select',
+], function(Select) {
     'use strict';
 
     return Select.extend({
@@ -16,8 +16,8 @@ define([
          * @param {Object} data - Response data object.
          * @returns {Object}
          */
-        setParsed: function (data) {
-            var option = this.parseData(data);
+        setParsed: function(data) {
+            let option = this.parseData(data);
 
             if (data.error) {
                 return this;
@@ -34,14 +34,14 @@ define([
          * @param {Object} data - Option object.
          * @returns {Object}
          */
-        parseData: function (data) {
+        parseData: function(data) {
             return {
                 'is_active': data.category['is_active'],
-                level: data.category.level,
-                value: data.category['entity_id'],
-                label: data.category.name,
-                parent: data.category.parent
+                "level": data.category.level,
+                "value": data.category['entity_id'],
+                "label": data.category.name,
+                "parent": data.category.parent,
             };
-        }
+        },
     });
 });

@@ -9,11 +9,11 @@ define([
     'underscore',
     'mage/template',
     'text!ui/template/tooltip/tooltip.html',
-    '../template/renderer'
-], function ($, ko, _, template, tooltipTmpl, renderer) {
+    '../template/renderer',
+], function($, ko, _, template, tooltipTmpl, renderer) {
     'use strict';
 
-    var tooltip,
+    let tooltip,
         defaults,
         positions,
         transformProp,
@@ -23,10 +23,10 @@ define([
         tooltipData,
         positionData = {},
         tooltipsCollection = {},
-        isTouchDevice = (function () {
+        isTouchDevice = (function() {
             return 'ontouchstart' in document.documentElement;
         })(),
-        CLICK_EVENT = (function () {
+        CLICK_EVENT = (function() {
             return isTouchDevice ? 'touchstart' : 'click';
         })();
 
@@ -44,7 +44,7 @@ define([
         showed: false,
         strict: true,
         center: false,
-        closeOnScroll: true
+        closeOnScroll: true,
     };
 
     tooltipData = {
@@ -55,14 +55,14 @@ define([
         event: false,
         targetElement: {},
         showed: false,
-        currentID: 0
+        currentID: 0,
     };
 
     /**
      * Polyfill for css transform
      */
-    transformProp = (function () {
-        var style = document.createElement('div').style,
+    transformProp = (function() {
+        let style = document.createElement('div').style,
             base = 'Transform',
             vendors = ['webkit', 'moz', 'ms', 'o'],
             vi = vendors.length,
@@ -83,17 +83,17 @@ define([
 
     positions = {
 
-        /*eslint max-depth: [0, 0]*/
+        /* eslint max-depth: [0, 0]*/
 
         map: {
             horizontal: {
                 s: 'w',
-                p: 'left'
+                p: 'left',
             },
             vertical: {
                 s: 'h',
-                p: 'top'
-            }
+                p: 'top',
+            },
         },
 
         /**
@@ -102,7 +102,7 @@ define([
          * @param {Object} s - object with sizes and positions elements
          * @returns {Object} tooltip data (position, className, etc)
          */
-        top: function (s) {
+        top: function(s) {
             return positions._topLeftChecker(s, positions.map, 'vertical', '_bottom', 'top', 'right');
         },
 
@@ -112,7 +112,7 @@ define([
          * @param {Object} s - object with sizes and positions elements
          * @returns {Object} tooltip data (position, className, etc)
          */
-        left: function (s) {
+        left: function(s) {
             return positions._topLeftChecker(s, positions.map, 'horizontal', '_right', 'left', 'top');
         },
 
@@ -122,7 +122,7 @@ define([
          * @param {Object} s - object with sizes and positions elements
          * @returns {Object} tooltip data (position, className, etc)
          */
-        bottom: function (s) {
+        bottom: function(s) {
             return positions._bottomRightChecker(s, positions.map, 'vertical', '_top', 'bottom', 'left');
         },
 
@@ -132,7 +132,7 @@ define([
          * @param {Object} s - object with sizes and positions elements
          * @returns {Object} tooltip data (position, className, etc)
          */
-        right: function (s) {
+        right: function(s) {
             return positions._bottomRightChecker(s, positions.map, 'horizontal', '_left', 'right', 'bottom');
         },
 
@@ -147,9 +147,9 @@ define([
          * @param {String} delegate - method name if tooltip can't be setted in current position
          * @returns {Object} tooltip data (position, className, etc)
          */
-        _topLeftChecker: function (s, map, direction, className, side, delegate) {
-            var result = {
-                    position: {}
+        _topLeftChecker: function(s, map, direction, className, side, delegate) {
+            let result = {
+                    position: {},
                 },
                 config = tooltip.getTooltip(tooltipData.currentID),
                 startPosition = !config.strict ? s.eventPosition : s.elementPosition,
@@ -187,14 +187,14 @@ define([
          * @param {String} delegate - method name if tooltip can't be setted in current position
          * @returns {Object} tooltip data (position, className, etc)
          */
-        _bottomRightChecker: function (s, map, direction, className, side, delegate) {
-            var result = {
-                    position: {}
+        _bottomRightChecker: function(s, map, direction, className, side, delegate) {
+            let result = {
+                    position: {},
                 },
                 config = tooltip.getTooltip(tooltipData.currentID),
                 startPosition = !config.strict ? s.eventPosition : {
                     top: s.elementPosition.top + s.elementSize.h,
-                    left: s.elementPosition.left + s.elementSize.w
+                    left: s.elementPosition.left + s.elementSize.w,
                 },
                 changedDirection;
 
@@ -225,7 +225,7 @@ define([
          * @param {Object} data - current data (position, className, etc)
          * @returns {Object} tooltip data (position, className, etc)
          */
-        positionCenter: function (s, data) {
+        positionCenter: function(s, data) {
             data = positions._positionCenter(s, data, 'horizontal', positions.map);
             data = positions._positionCenter(s, data, 'vertical', positions.map);
 
@@ -241,7 +241,7 @@ define([
          * @param {Object} map - mapping for get direction positions
          * @returns {Object} tooltip data (position, className, etc)
          */
-        _positionCenter: function (s, data, direction, map) {
+        _positionCenter: function(s, data, direction, map) {
             if (s.tooltipSize[map[direction].s] < s.windowSize[map[direction].s]) {
                 data.position[map[direction].p] = (s.windowSize[map[direction].s] -
                     s.tooltipSize[map[direction].s]) / 2 + s.scrollPosition[map[direction].p];
@@ -265,10 +265,10 @@ define([
          * @param {String} direction - vertical or horizontal
          * @returns {Object} tooltip data (position, className, etc)
          */
-        _normalize: function (s, data, config, delegate, map, direction) {
-            var startPosition = !config.center ? s.eventPosition : {
+        _normalize: function(s, data, config, delegate, map, direction) {
+            let startPosition = !config.center ? s.eventPosition : {
                     left: s.elementPosition.left + s.elementSize.w / 2,
-                    top: s.elementPosition.top + s.elementSize.h / 2
+                    top: s.elementPosition.top + s.elementSize.h / 2,
                 },
                 depResult;
 
@@ -279,8 +279,7 @@ define([
             ) {
                 data.position[map[direction].p] = startPosition[map[direction].p] - s.tooltipSize[map[direction].s] / 2;
             } else {
-
-                /*eslint-disable no-lonely-if*/
+                /* eslint-disable no-lonely-if*/
                 if (!checkedPositions[delegate]) {
                     depResult = positions[delegate].apply(null, arguments);
 
@@ -309,11 +308,10 @@ define([
          * @param {Object} startPosition - start position
          * @returns {Object} tooltip data (position, className, etc)
          */
-        _normalizeTail: function (s, data, config, delegate, map, direction, startPosition) {
+        _normalizeTail: function(s, data, config, delegate, map, direction, startPosition) {
             data.tail = {};
 
             if (s.tooltipSize[map[direction].s] < s.windowSize[map[direction].s]) {
-
                 if (
                     startPosition[map[direction].p] >
                     s.windowSize[map[direction].s] / 2 + s.scrollPosition[map[direction].p]
@@ -335,7 +333,7 @@ define([
             }
 
             return data;
-        }
+        },
     };
 
     tooltip = {
@@ -346,8 +344,8 @@ define([
          * @param {Object} config - tooltip config
          * @returns {String} tooltip id
          */
-        setTooltip: function (config) {
-            var property = 'id-' + iterator;
+        setTooltip: function(config) {
+            let property = 'id-' + iterator;
 
             tooltipsCollection[property] = config;
             iterator++;
@@ -361,7 +359,7 @@ define([
          * @param {String} id - tooltip id
          * @returns {Object} tooltip config
          */
-        getTooltip: function (id) {
+        getTooltip: function(id) {
             return tooltipsCollection[id];
         },
 
@@ -374,8 +372,8 @@ define([
          * @param {Object} bindingCtx - tooltip context
          * @param {Object} event - action event
          */
-        setContent: function (tooltipElement, viewModel, id, bindingCtx, event) {
-            var html = $(tooltipElement).html(),
+        setContent: function(tooltipElement, viewModel, id, bindingCtx, event) {
+            let html = $(tooltipElement).html(),
                 config = tooltip.getTooltip(id),
                 body = $('body');
 
@@ -385,7 +383,7 @@ define([
             body.on('mousemove.setTargetData', tooltip.setTargetData);
             tooltip.clearTimeout(id);
 
-            tooltipData.timeout = _.delay(function () {
+            tooltipData.timeout = _.delay(function() {
                 body.off('mousemove.setTargetData', tooltip.setTargetData);
 
                 if (tooltipData.trigger[0] === tooltipData.targetElement) {
@@ -398,7 +396,6 @@ define([
                     tooltip.setPosition(tooltipElement, id);
                     previousTooltip = id;
                 }
-
             }, config.delay);
         },
 
@@ -408,28 +405,28 @@ define([
          * @param {Object} tooltipElement - tooltip element
          * @param {String} id - tooltip id
          */
-        setPosition: function (tooltipElement, id) {
-            var config = tooltip.getTooltip(id);
+        setPosition: function(tooltipElement, id) {
+            let config = tooltip.getTooltip(id);
 
             tooltip.sizeData = {
                 windowSize: {
                     h: $(window).outerHeight(),
-                    w: $(window).outerWidth()
+                    w: $(window).outerWidth(),
                 },
                 scrollPosition: {
                     top: $(window).scrollTop(),
-                    left: $(window).scrollLeft()
+                    left: $(window).scrollLeft(),
                 },
                 tooltipSize: {
                     h: tooltipElement.outerHeight(),
-                    w: tooltipElement.outerWidth()
+                    w: tooltipElement.outerWidth(),
                 },
                 elementSize: {
                     h: tooltipData.trigger.outerHeight(),
-                    w: tooltipData.trigger.outerWidth()
+                    w: tooltipData.trigger.outerWidth(),
                 },
                 elementPosition: tooltipData.trigger.offset(),
-                eventPosition: this.getEventPosition(tooltipData.event)
+                eventPosition: this.getEventPosition(tooltipData.event),
             };
 
             _.extend(positionData, positions[config.position](tooltip.sizeData));
@@ -446,7 +443,7 @@ define([
          * @param {Object} data - position data
          * @param {Object} tooltipElement - tooltip element
          */
-        _setTooltipSize: function (data, tooltipElement) {
+        _setTooltipSize: function(data, tooltipElement) {
             if (data.tooltipSize) {
                 data.tooltipSize.w ?
                     tooltipElement.css('width', data.tooltipSize.w) :
@@ -460,8 +457,8 @@ define([
          * @param {Object} data - position data
          * @param {Object} tooltipElement - tooltip element
          */
-        _setTailPosition: function (data, tooltipElement) {
-            var tail,
+        _setTailPosition: function(data, tooltipElement) {
+            let tail,
                 tailMargin;
 
             if (data.tail) {
@@ -483,10 +480,10 @@ define([
          * @param {Object} event
          * @returns {Object}
          */
-        getEventPosition: function (event) {
-            var position = {
+        getEventPosition: function(event) {
+            let position = {
                 left: event.originalEvent && event.originalEvent.pageX || 0,
-                top: event.originalEvent && event.originalEvent.pageY || 0
+                top: event.originalEvent && event.originalEvent.pageY || 0,
             };
 
             if (position.left === 0 && position.top === 0) {
@@ -502,8 +499,8 @@ define([
          * @param {String} id - tooltip id
          * @param {Object} event - action event
          */
-        outerClick: function (id, event) {
-            var tooltipElement = $(event.target).parents(defaults.tooltipWrapper)[0],
+        outerClick: function(id, event) {
+            let tooltipElement = $(event.target).parents(defaults.tooltipWrapper)[0],
                 isTrigger = event.target === tooltipData.trigger[0] || $.contains(tooltipData.trigger[0], event.target);
 
             if (tooltipData.showed && tooltipElement !== tooltipData.element[0] && !isTrigger) {
@@ -516,7 +513,7 @@ define([
          *
          * @param {Object} event - action event
          */
-        keydownHandler: function (event) {
+        keydownHandler: function(event) {
             if (tooltipData.showed && event.keyCode === 27) {
                 tooltip.destroy(tooltipData.currentID);
             }
@@ -527,20 +524,20 @@ define([
          *
          * @param {Object} event - current event
          */
-        track: function (event) {
-            var inequality = {},
+        track: function(event) {
+            let inequality = {},
                 map = positions.map,
                 translate = {
                     left: 'translateX',
-                    top: 'translateY'
+                    top: 'translateY',
                 },
                 eventPosition = {
                     left: event.pageX,
-                    top: event.pageY
+                    top: event.pageY,
                 },
                 tooltipSize = {
                     w: tooltipData.element.outerWidth(),
-                    h: tooltipData.element.outerHeight()
+                    h: tooltipData.element.outerHeight(),
                 },
                 direction = positionData.side === 'bottom' || positionData.side === 'top' ? 'horizontal' : 'vertical';
 
@@ -552,7 +549,6 @@ define([
                 tooltip.sizeData.windowSize[map[direction].s] + tooltip.sizeData.scrollPosition[map[direction].p] ||
                 inequality[map[direction].p] + positionData.position[map[direction].p] <
                 tooltip.sizeData.scrollPosition[map[direction].p]) {
-
                 return false;
             }
 
@@ -565,8 +561,8 @@ define([
          *
          * @param {String} id - tooltip id
          */
-        setHandlers: function (id) {
-            var config = tooltip.getTooltip(id);
+        setHandlers: function(id) {
+            let config = tooltip.getTooltip(id);
 
             if (config.track) {
                 tooltipData.trigger.on('mousemove.track', tooltip.track);
@@ -596,7 +592,7 @@ define([
          * @param {Object} viewModel - tooltip view model
          * @param {String} id - tooltip id
          */
-        toggleTooltip: function (tooltipElement, viewModel, id) {
+        toggleTooltip: function(tooltipElement, viewModel, id) {
             if (previousTooltip === id && tooltipData.showed) {
                 tooltip.destroy(id);
 
@@ -614,12 +610,12 @@ define([
          * @param {String} id - tooltip id
          * @returns {Object} tooltip element
          */
-        createTooltip: function (id) {
-            var body = $('body'),
+        createTooltip: function(id) {
+            let body = $('body'),
                 config = tooltip.getTooltip(id);
 
             $(template(tooltipTmpl, {
-                data: config
+                data: config,
             })).appendTo(body);
 
             tooltipData.showed = true;
@@ -633,8 +629,8 @@ define([
          *
          * @param {String} id - tooltip id
          */
-        clearTimeout: function (id) {
-            var config = tooltip.getTooltip(id);
+        clearTimeout: function(id) {
+            let config = tooltip.getTooltip(id);
 
             if (config.action === 'hover') {
                 clearTimeout(tooltipData.timeout);
@@ -644,7 +640,7 @@ define([
         /**
          * Check previous tooltip
          */
-        checkPreviousTooltip: function () {
+        checkPreviousTooltip: function() {
             if (!tooltipData.timeout) {
                 tooltip.destroy();
             }
@@ -653,7 +649,7 @@ define([
         /**
          * Destroy tooltip instance
          */
-        destroy: function () {
+        destroy: function() {
             if (tooltipData.element) {
                 tooltipData.element.remove();
                 tooltipData.showed = false;
@@ -667,7 +663,7 @@ define([
         /**
          * Remove tooltip handlers
          */
-        removeHandlers: function () {
+        removeHandlers: function() {
             $('.' + defaults.closeButtonClass).off('click.closeButton');
             tooltipData.trigger.off('mousemove.track');
             document.removeEventListener('scroll', tooltip.destroy, true);
@@ -682,10 +678,10 @@ define([
          *
          * @param {Object} event - current event
          */
-        setTargetData: function (event) {
+        setTargetData: function(event) {
             tooltipData.event = event;
 
-            //TODO: bug chrome v.49; Link to issue https://bugs.chromium.org/p/chromium/issues/detail?id=161464
+            // TODO: bug chrome v.49; Link to issue https://bugs.chromium.org/p/chromium/issues/detail?id=161464
             if (event.timeStamp - (tooltipData.timestamp || 0) < 1) {
                 return;
             }
@@ -704,9 +700,9 @@ define([
          * @param {Object} config - user config
          * @returns {Object} merged config
          */
-        processingConfig: function (config) {
+        processingConfig: function(config) {
             return _.extend({}, defaults, config);
-        }
+        },
     };
 
     ko.bindingHandlers.tooltip = {
@@ -720,8 +716,8 @@ define([
          * @param {Object} viewModel - current element viewModel
          * @param {Object} bindingCtx - current element binding context
          */
-        init: function (elem, valueAccessor, allBindings, viewModel, bindingCtx) {
-            var config = tooltip.processingConfig(valueAccessor()),
+        init: function(elem, valueAccessor, allBindings, viewModel, bindingCtx) {
+            let config = tooltip.processingConfig(valueAccessor()),
                 $parentScope = config.parentScope ? $(config.parentScope) : $(elem).parent(),
                 tooltipId;
 
@@ -752,9 +748,9 @@ define([
             }
 
             return {
-                controlsDescendantBindings: true
+                controlsDescendantBindings: true,
             };
-        }
+        },
     };
 
     renderer.addAttribute('tooltip');

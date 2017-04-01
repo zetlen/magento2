@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            downloadable: 'Magento_Downloadable/downloadable'
-        }
-    }
+            downloadable: 'Magento_Downloadable/downloadable',
+        },
+    },
 };

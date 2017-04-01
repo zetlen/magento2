@@ -8,23 +8,23 @@ define([
     'underscore',
     'uiRegistry',
     'jquery/ui',
-    'mage/translate'
-], function ($, _, registry) {
+    'mage/translate',
+], function($, _, registry) {
     'use strict';
 
     $.widget('mage.productAttributes', {
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._on({
-                'click': '_showPopup'
+                'click': '_showPopup',
             });
         },
 
         /**
          * @private
          */
-        _initModal: function () {
-            var self = this;
+        _initModal: function() {
+            let self = this;
 
             this.modal = $('<div id="create_new_attribute"/>').modal({
                 title: $.mage.__('New Attribute'),
@@ -32,11 +32,11 @@ define([
                 buttons: [],
 
                 /** @inheritdoc */
-                opened: function () {
+                opened: function() {
                     $(this).parent().addClass('modal-content-new-attribute');
                     self.iframe = $('<iframe id="create_new_attribute_container">').attr({
                         src: self._prepareUrl(),
-                        frameborder: 0
+                        frameborder: 0,
                     });
                     self.modal.append(self.iframe);
                     self._changeIframeSize();
@@ -44,17 +44,17 @@ define([
                 },
 
                 /** @inheritdoc */
-                closed: function () {
-                    var doc = self.iframe.get(0).document;
+                closed: function() {
+                    let doc = self.iframe.get(0).document;
 
                     if (doc && $.isFunction(doc.execCommand)) {
-                        //IE9 break script loading but not execution on iframe removing
+                        // IE9 break script loading but not execution on iframe removing
                         doc.execCommand('stop');
                         self.iframe.remove();
                     }
                     self.modal.data('modal').modal.remove();
                     $(window).off('resize.modal');
-                }
+                },
             });
         },
 
@@ -62,8 +62,8 @@ define([
          * @return {Number}
          * @private
          */
-        _getHeight: function () {
-            var modal = this.modal.data('modal').modal,
+        _getHeight: function() {
+            let modal = this.modal.data('modal').modal,
                 modalHead = modal.find('header'),
                 modalHeadHeight = modalHead.outerHeight(),
                 modalHeight = modal.outerHeight(),
@@ -76,26 +76,25 @@ define([
          * @return {Number}
          * @private
          */
-        _getWidth: function () {
+        _getWidth: function() {
             return this.modal.width();
         },
 
         /**
          * @private
          */
-        _changeIframeSize: function () {
+        _changeIframeSize: function() {
             this.modal.parent().outerHeight(this._getHeight());
             this.iframe.outerHeight(this._getHeight());
             this.iframe.outerWidth(this._getWidth());
-
         },
 
         /**
          * @return {String}
          * @private
          */
-        _prepareUrl: function () {
-            var productSource,
+        _prepareUrl: function() {
+            let productSource,
                 attributeSetId = '';
 
             if (this.options.dataProvider) {
@@ -113,10 +112,10 @@ define([
         /**
          * @private
          */
-        _showPopup: function () {
+        _showPopup: function() {
             this._initModal();
             this.modal.modal('openModal');
-        }
+        },
     });
 
     return $.mage.productAttributes;

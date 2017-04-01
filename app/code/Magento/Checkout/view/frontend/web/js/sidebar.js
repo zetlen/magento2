@@ -12,16 +12,16 @@ define([
     'jquery/ui',
     'mage/decorate',
     'mage/collapsible',
-    'mage/cookies'
-], function ($, authenticationPopup, customerData, alert, confirm) {
+    'mage/cookies',
+], function($, authenticationPopup, customerData, alert, confirm) {
     'use strict';
 
     $.widget('mage.sidebar', {
         options: {
             isRecursive: true,
             minicart: {
-                maxItemsVisible: 3
-            }
+                maxItemsVisible: 3,
+            },
         },
         scrollHeight: 0,
 
@@ -29,14 +29,14 @@ define([
          * Create sidebar.
          * @private
          */
-        _create: function () {
+        _create: function() {
             this._initContent();
         },
 
         /**
          * Update sidebar block.
          */
-        update: function () {
+        update: function() {
             $(this.options.targetElement).trigger('contentUpdated');
             this._calcHeight();
             this._isOverflowed();
@@ -45,8 +45,8 @@ define([
         /**
          * @private
          */
-        _initContent: function () {
-            var self = this,
+        _initContent: function() {
+            let self = this,
                 events = {};
 
             this.element.decorate('list', this.options.isRecursive);
@@ -54,12 +54,12 @@ define([
             /**
              * @param {jQuery.Event} event
              */
-            events['click ' + this.options.button.close] = function (event) {
+            events['click ' + this.options.button.close] = function(event) {
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog('close');
             };
-            events['click ' + this.options.button.checkout] = $.proxy(function () {
-                var cart = customerData.get('cart'),
+            events['click ' + this.options.button.checkout] = $.proxy(function() {
+                let cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
                 if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
@@ -80,35 +80,35 @@ define([
             /**
              * @param {jQuery.Event} event
              */
-            events['click ' + this.options.button.remove] =  function (event) {
+            events['click ' + this.options.button.remove] = function(event) {
                 event.stopPropagation();
                 confirm({
                     content: self.options.confirmMessage,
                     actions: {
                         /** @inheritdoc */
-                        confirm: function () {
+                        confirm: function() {
                             self._removeItem($(event.currentTarget));
                         },
 
                         /** @inheritdoc */
-                        always: function (e) {
+                        always: function(e) {
                             e.stopImmediatePropagation();
-                        }
-                    }
+                        },
+                    },
                 });
             };
 
             /**
              * @param {jQuery.Event} event
              */
-            events['keyup ' + this.options.item.qty] = function (event) {
+            events['keyup ' + this.options.item.qty] = function(event) {
                 self._showItemButton($(event.target));
             };
 
             /**
              * @param {jQuery.Event} event
              */
-            events['click ' + this.options.item.button] = function (event) {
+            events['click ' + this.options.item.button] = function(event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
             };
@@ -116,7 +116,7 @@ define([
             /**
              * @param {jQuery.Event} event
              */
-            events['focusout ' + this.options.item.qty] = function (event) {
+            events['focusout ' + this.options.item.qty] = function(event) {
                 self._validateQty($(event.currentTarget));
             };
 
@@ -130,8 +130,8 @@ define([
          *
          * @private
          */
-        _isOverflowed: function () {
-            var list = $(this.options.minicart.list),
+        _isOverflowed: function() {
+            let list = $(this.options.minicart.list),
                 cssOverflowClass = 'overflowed';
 
             if (this.scrollHeight > list.innerHeight()) {
@@ -145,13 +145,13 @@ define([
          * @param {HTMLElement} elem
          * @private
          */
-        _showItemButton: function (elem) {
-            var itemId = elem.data('cart-item'),
+        _showItemButton: function(elem) {
+            let itemId = elem.data('cart-item'),
                 itemQty = elem.data('item-qty');
 
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
-            } else if (elem.val() == 0) { //eslint-disable-line eqeqeq
+            } else if (elem.val() == 0) { // eslint-disable-line eqeqeq
                 this._hideItemButton(elem);
             } else {
                 this._hideItemButton(elem);
@@ -164,10 +164,10 @@ define([
          * @returns {Boolean}
          * @private
          */
-        _isValidQty: function (origin, changed) {
-            return origin != changed && //eslint-disable-line eqeqeq
+        _isValidQty: function(origin, changed) {
+            return origin != changed && // eslint-disable-line eqeqeq
                 changed.length > 0 &&
-                changed - 0 == changed && //eslint-disable-line eqeqeq
+                changed - 0 == changed && // eslint-disable-line eqeqeq
                 changed - 0 > 0;
         },
 
@@ -175,8 +175,8 @@ define([
          * @param {Object} elem
          * @private
          */
-        _validateQty: function (elem) {
-            var itemQty = elem.data('item-qty');
+        _validateQty: function(elem) {
+            let itemQty = elem.data('item-qty');
 
             if (!this._isValidQty(itemQty, elem.val())) {
                 elem.val(itemQty);
@@ -187,8 +187,8 @@ define([
          * @param {HTMLElement} elem
          * @private
          */
-        _hideItemButton: function (elem) {
-            var itemId = elem.data('cart-item');
+        _hideItemButton: function(elem) {
+            let itemId = elem.data('cart-item');
 
             $('#update-cart-item-' + itemId).hide('fade', 300);
         },
@@ -197,12 +197,12 @@ define([
          * @param {HTMLElement} elem
          * @private
          */
-        _updateItemQty: function (elem) {
-            var itemId = elem.data('cart-item');
+        _updateItemQty: function(elem) {
+            let itemId = elem.data('cart-item');
 
             this._ajax(this.options.url.update, {
                 'item_id': itemId,
-                'item_qty': $('#cart-item-' + itemId + '-qty').val()
+                'item_qty': $('#cart-item-' + itemId + '-qty').val(),
             }, elem, this._updateItemQtyAfter);
         },
 
@@ -211,7 +211,7 @@ define([
          *
          * @param {HTMLElement} elem
          */
-        _updateItemQtyAfter: function (elem) {
+        _updateItemQtyAfter: function(elem) {
             this._hideItemButton(elem);
         },
 
@@ -219,11 +219,11 @@ define([
          * @param {HTMLElement} elem
          * @private
          */
-        _removeItem: function (elem) {
-            var itemId = elem.data('cart-item');
+        _removeItem: function(elem) {
+            let itemId = elem.data('cart-item');
 
             this._ajax(this.options.url.remove, {
-                'item_id': itemId
+                'item_id': itemId,
             }, elem, this._removeItemAfter);
         },
 
@@ -231,7 +231,7 @@ define([
          * Update content after item remove.
          * @private
          */
-        _removeItemAfter: function () {
+        _removeItemAfter: function() {
         },
 
         /**
@@ -240,9 +240,9 @@ define([
          * @param {Object} elem - element that initiated the event
          * @param {Function} callback - callback method to execute after AJAX success
          */
-        _ajax: function (url, data, elem, callback) {
+        _ajax: function(url, data, elem, callback) {
             $.extend(data, {
-                'form_key': $.mage.cookies.get('form_key')
+                'form_key': $.mage.cookies.get('form_key'),
             });
 
             $.ajax({
@@ -253,17 +253,17 @@ define([
                 context: this,
 
                 /** @inheritdoc */
-                beforeSend: function () {
+                beforeSend: function() {
                     elem.attr('disabled', 'disabled');
                 },
 
                 /** @inheritdoc */
-                complete: function () {
+                complete: function() {
                     elem.attr('disabled', null);
-                }
+                },
             })
-                .done(function (response) {
-                    var msg;
+                .done(function(response) {
+                    let msg;
 
                     if (response.success) {
                         callback.call(this, elem, response);
@@ -272,12 +272,12 @@ define([
 
                         if (msg) {
                             alert({
-                                content: msg
+                                content: msg,
                             });
                         }
                     }
                 })
-                .fail(function (error) {
+                .fail(function(error) {
                     console.log(JSON.stringify(error));
                 });
         },
@@ -287,16 +287,15 @@ define([
          *
          * @private
          */
-        _calcHeight: function () {
-            var self = this,
+        _calcHeight: function() {
+            let self = this,
                 height = 0,
                 counter = this.options.minicart.maxItemsVisible,
                 target = $(this.options.minicart.list),
                 outerHeight;
 
             self.scrollHeight = 0;
-            target.children().each(function () {
-
+            target.children().each(function() {
                 if ($(this).find('.options').length > 0) {
                     $(this).collapsible();
                 }
@@ -309,7 +308,7 @@ define([
             });
 
             target.parent().height(height);
-        }
+        },
     });
 
     return $.mage.sidebar;

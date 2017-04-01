@@ -5,8 +5,8 @@
 
 define([
     'Magento_Checkout/js/view/summary/shipping',
-    'Magento_Checkout/js/model/quote'
-], function (Component, quote) {
+    'Magento_Checkout/js/model/quote',
+], function(Component, quote) {
     'use strict';
 
     return Component.extend({
@@ -14,8 +14,8 @@ define([
         /**
          * @override
          */
-        isCalculated: function () {
+        isCalculated: function() {
             return !!quote.shippingMethod();
-        }
+        },
     });
 });

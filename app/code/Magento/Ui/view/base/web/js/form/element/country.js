@@ -9,15 +9,15 @@
 define([
     'underscore',
     'uiRegistry',
-    './select'
-], function (_, registry, Select) {
+    './select',
+], function(_, registry, Select) {
     'use strict';
 
     return Select.extend({
         defaults: {
             imports: {
-                update: '${ $.parentName }.website_id:value'
-            }
+                update: '${ $.parentName }.website_id:value',
+            },
         },
 
         /**
@@ -27,16 +27,15 @@ define([
          * @param {*} value
          * @param {String} field
          */
-        filter: function (value, field) {
-            var result;
+        filter: function(value, field) {
+            let result;
 
-            if (!field) { //validate field, if we are on update
+            if (!field) { // validate field, if we are on update
                 field = this.filterBy.field;
             }
 
             this._super(value, field);
-            result = _.filter(this.initialOptions, function (item) {
-
+            result = _.filter(this.initialOptions, function(item) {
                 if (item[field]) {
                     return ~item[field].indexOf(value);
                 }
@@ -46,7 +45,7 @@ define([
 
             this.setOptions(result);
             this.reset();
-        }
+        },
     });
 });
 

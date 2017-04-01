@@ -9,13 +9,13 @@ define([
     'mage/template',
     'priceUtils',
     'priceBox',
-    'jquery/ui'
-], function ($, _, mageTemplate, utils) {
+    'jquery/ui',
+], function($, _, mageTemplate, utils) {
     'use strict';
 
-    var globalOptions = {
+    let globalOptions = {
         productId: null,
-        priceHolderSelector: '.price-box', //data-role="priceBox"
+        priceHolderSelector: '.price-box', // data-role="priceBox"
         optionsSelector: '.product-custom-option',
         optionConfig: {},
         optionHandlers: {},
@@ -23,7 +23,7 @@ define([
         '<% if (data.finalPrice.value) { %>' +
         ' +<%- data.finalPrice.formatted %>' +
         '<% } %>',
-        controlContainer: 'dd'
+        controlContainer: 'dd',
     };
 
     /**
@@ -33,7 +33,7 @@ define([
      * @return {Object}
      */
     function defaultGetOptionValue(element, optionsConfig) {
-        var changes = {},
+        let changes = {},
             optionValue = element.val(),
             optionId = utils.findOptionId(element[0]),
             optionName = element.prop('name'),
@@ -59,7 +59,7 @@ define([
                 break;
 
             case 'select-multiple':
-                _.each(optionConfig, function (row, optionValueCode) {
+                _.each(optionConfig, function(row, optionValueCode) {
                     optionHash = optionName + '##' + optionValueCode;
                     changes[optionHash] = _.contains(optionValue, optionValueCode) ? row.prices : {};
                 });
@@ -95,7 +95,7 @@ define([
          * @private
          */
         _create: function createPriceOptions() {
-            var form = this.element,
+            let form = this.element,
                 options = $(this.options.optionsSelector, form),
                 priceBox = $(this.options.priceHolderSelector, $(this.options.optionsSelector).element);
 
@@ -120,7 +120,7 @@ define([
          * @private
          */
         _onOptionChanged: function onOptionChanged(event) {
-            var changes,
+            let changes,
                 option = $(event.target),
                 handler = this.options.optionHandlers[option.data('role')];
 
@@ -142,18 +142,18 @@ define([
          * @private
          */
         _applyOptionNodeFix: function applyOptionNodeFix(options) {
-            var config = this.options,
+            let config = this.options,
                 format = config.priceFormat,
                 template = config.optionTemplate;
 
             template = mageTemplate(template);
-            options.filter('select').each(function (index, element) {
-                var $element = $(element),
+            options.filter('select').each(function(index, element) {
+                let $element = $(element),
                     optionId = utils.findOptionId($element),
                     optionConfig = config.optionConfig && config.optionConfig[optionId];
 
-                $element.find('option').each(function (idx, option) {
-                    var $option,
+                $element.find('option').each(function(idx, option) {
+                    let $option,
                         optionValue,
                         toTemplate,
                         prices;
@@ -167,21 +167,21 @@ define([
 
                     toTemplate = {
                         data: {
-                            label: optionConfig[optionValue] && optionConfig[optionValue].name
-                        }
+                            label: optionConfig[optionValue] && optionConfig[optionValue].name,
+                        },
                     };
                     prices = optionConfig[optionValue] ? optionConfig[optionValue].prices : null;
 
                     if (prices) {
-                        _.each(prices, function (price, type) {
-                            var value = +price.amount;
+                        _.each(prices, function(price, type) {
+                            let value = +price.amount;
 
                             value += _.reduce(price.adjustments, function (sum, x) { //eslint-disable-line
                                 return sum + x;
                             }, 0);
                             toTemplate.data[type] = {
                                 value: value,
-                                formatted: utils.formatPrice(value, format)
+                                formatted: utils.formatPrice(value, format),
                             };
                         });
 
@@ -203,7 +203,7 @@ define([
             this._super(options);
 
             return this;
-        }
+        },
     });
 
     return $.mage.priceOptions;

@@ -9,9 +9,9 @@ define(
         'uiComponent',
         'paypalInContextExpressCheckout',
         'Magento_Customer/js/customer-data',
-        'domReady!'
+        'domReady!',
     ],
-    function (
+    function(
         _,
         $,
         Component,
@@ -28,7 +28,7 @@ define(
                     /**
                      * @param {Object} event
                      */
-                    click: function (event) {
+                    click: function(event) {
                         $('body').trigger('processStart');
 
                         event.preventDefault();
@@ -38,10 +38,10 @@ define(
                         $.get(
                             this.path,
                             {
-                                button: 1
+                                button: 1,
                             }
                         ).done(
-                            function (response) {
+                            function(response) {
                                 if (response && response.url) {
                                     paypalExpressCheckout.checkout.startFlow(response.url);
 
@@ -51,23 +51,23 @@ define(
                                 paypalExpressCheckout.checkout.closeFlow();
                             }
                         ).fail(
-                            function () {
+                            function() {
                                 $('body').trigger('processStop');
                                 paypalExpressCheckout.checkout.closeFlow();
                             }
                         ).always(
-                            function () {
+                            function() {
                                 customerData.invalidate(['cart']);
                             }
                         );
-                    }
-                }
+                    },
+                },
             },
 
             /**
              * @returns {Object}
              */
-            initialize: function () {
+            initialize: function() {
                 this._super();
 
                 return this.initClient();
@@ -76,8 +76,8 @@ define(
             /**
              * @returns {Object}
              */
-            initClient: function () {
-                _.each(this.clientConfig, function (fn, name) {
+            initClient: function() {
+                _.each(this.clientConfig, function(fn, name) {
                     if (typeof fn === 'function') {
                         this.clientConfig[name] = fn.bind(this);
                     }
@@ -86,7 +86,7 @@ define(
                 paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
 
                 return this;
-            }
+            },
         });
     }
 );

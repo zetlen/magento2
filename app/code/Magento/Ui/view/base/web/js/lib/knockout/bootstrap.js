@@ -11,8 +11,8 @@ define([
     './bindings/bootstrap',
     './extender/observable_array',
     './extender/bound-nodes',
-    'domReady!'
-], function (ko, templateEngine) {
+    'domReady!',
+], function(ko, templateEngine) {
     'use strict';
 
     ko.uid = 0;

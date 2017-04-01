@@ -3,19 +3,19 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
     return {
         /**
          * @return {Object}
          */
-        getRules: function () {
+        getRules: function() {
             return {
                 'country_id': {
-                    'required': true
-                }
+                    'required': true,
+                },
             };
-        }
+        },
     };
 });

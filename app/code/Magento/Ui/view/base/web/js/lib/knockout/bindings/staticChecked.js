@@ -4,8 +4,8 @@
  */
 define([
     'ko',
-    '../template/renderer'
-], function (ko, renderer) {
+    '../template/renderer',
+], function(ko, renderer) {
     'use strict';
 
     ko.bindingHandlers.staticChecked = {
@@ -16,8 +16,8 @@ define([
          * but with a difference that it wont' change values array if
          * value of DOM element changes.
          */
-        init: function (element, valueAccessor, allBindings) {
-            var isCheckbox = element.type === 'checkbox',
+        "init": function(element, valueAccessor, allBindings) {
+            let isCheckbox = element.type === 'checkbox',
                 isRadio = element.type === 'radio',
                 isValueArray,
                 oldElemValue,
@@ -30,7 +30,7 @@ define([
                 return;
             }
 
-            checkedValue = ko.pureComputed(function () {
+            checkedValue = ko.pureComputed(function() {
                 if (allBindings.has('checkedValue')) {
                     return ko.utils.unwrapObservable(allBindings.get('checkedValue'));
                 } else if (allBindings.has('value')) {
@@ -47,8 +47,8 @@ define([
             /**
              * Updates values array if it's necessary.
              */
-            updateModel = function () {
-                var isChecked = element.checked,
+            updateModel = function() {
+                let isChecked = element.checked,
                     elemValue = useCheckedValue ? checkedValue() : isChecked,
                     modelValue;
 
@@ -76,8 +76,8 @@ define([
             /**
              * Updates checkbox state.
              */
-            updateView = function () {
-                var modelValue = ko.utils.unwrapObservable(valueAccessor());
+            updateView = function() {
+                let modelValue = ko.utils.unwrapObservable(valueAccessor());
 
                 if (isValueArray) {
                     element.checked = ko.utils.arrayIndexOf(modelValue, checkedValue()) >= 0;
@@ -89,15 +89,15 @@ define([
             };
 
             ko.computed(updateModel, null, {
-                disposeWhenNodeIsRemoved: element
+                disposeWhenNodeIsRemoved: element,
             });
 
             ko.utils.registerEventHandler(element, 'click', updateModel);
 
             ko.computed(updateView, null, {
-                disposeWhenNodeIsRemoved: element
+                disposeWhenNodeIsRemoved: element,
             });
-        }
+        },
     };
 
     ko.expressionRewriting.twoWayBindings.staticChecked = true;

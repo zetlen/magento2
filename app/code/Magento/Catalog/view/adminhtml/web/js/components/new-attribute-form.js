@@ -7,19 +7,19 @@ define([
     'jquery',
     'Magento_Ui/js/form/form',
     'Magento_Ui/js/modal/prompt',
-    'Magento_Ui/js/modal/alert'
-], function ($, Form, prompt, alert) {
+    'Magento_Ui/js/modal/alert',
+], function($, Form, prompt, alert) {
     'use strict';
 
     return Form.extend({
         defaults: {
             newSetPromptMessage: '',
             listens: {
-                responseData: 'processResponseData'
+                responseData: 'processResponseData',
             },
             modules: {
-                productForm: 'product_form.product_form'
-            }
+                productForm: 'product_form.product_form',
+            },
         },
 
         /**
@@ -27,10 +27,10 @@ define([
          *
          * @param {Object} data
          */
-        processResponseData: function (data) {
+        processResponseData: function(data) {
             if (data.params['new_attribute_set_id']) {
                 this.productForm().params = {
-                    set: data.params['new_attribute_set_id']
+                    set: data.params['new_attribute_set_id'],
                 };
             }
         },
@@ -38,9 +38,8 @@ define([
         /**
          * Process Save In New Attribute Set prompt
          */
-        saveAttributeInNewSet: function () {
-
-            var self = this;
+        saveAttributeInNewSet: function() {
+            let self = this;
 
             prompt({
                 content: this.newSetPromptMessage,
@@ -50,8 +49,8 @@ define([
                      * @param {String} val
                      * @this {actions}
                      */
-                    confirm: function (val) {
-                        var rules = ['required-entry', 'validate-no-html-tags'],
+                    confirm: function(val) {
+                        let rules = ['required-entry', 'validate-no-html-tags'],
                             editForm = self,
                             newAttributeSetName = val,
                             i,
@@ -64,7 +63,7 @@ define([
                         for (i = 0; i < rules.length; i++) {
                             if (!$.validator.methods[rules[i]](newAttributeSetName)) {
                                 alert({
-                                    content: $.validator.messages[rules[i]]
+                                    content: $.validator.messages[rules[i]],
                                 });
 
                                 return;
@@ -74,9 +73,9 @@ define([
                         params['new_attribute_set_name'] = newAttributeSetName;
                         editForm.setAdditionalData(params);
                         editForm.save();
-                    }
-                }
+                    },
+                },
             });
-        }
+        },
     });
 });

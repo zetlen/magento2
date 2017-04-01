@@ -6,8 +6,8 @@
 define([
     'jquery',
     'uiComponent',
-    'Magento_Ui/js/model/messageList'
-], function ($, Component, messageList) {
+    'Magento_Ui/js/model/messageList',
+], function($, Component, messageList) {
     'use strict';
 
     return Component.extend({
@@ -15,13 +15,13 @@ define([
             template: 'Magento_Checkout/registration',
             accountCreated: false,
             creationStarted: false,
-            isFormVisible: true
+            isFormVisible: true,
         },
 
         /**
          * @inheritdoc
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('accountCreated')
                 .observe('isFormVisible')
@@ -33,21 +33,20 @@ define([
         /**
          * @return {*}
          */
-        getEmailAddress: function () {
+        getEmailAddress: function() {
             return this.email;
         },
 
         /**
          * Create new user account
          */
-        createAccount: function () {
+        createAccount: function() {
             this.creationStarted(true);
             $.post(
                 this.registrationUrl
             ).done(
-                function (response) {
-
-                    if (response.errors == false) { //eslint-disable-line eqeqeq
+                function(response) {
+                    if (response.errors == false) { // eslint-disable-line eqeqeq
                         this.accountCreated(true);
                     } else {
                         messageList.addErrorMessage(response);
@@ -55,12 +54,12 @@ define([
                     this.isFormVisible(false);
                 }.bind(this)
             ).fail(
-                function (response) {
+                function(response) {
                     this.accountCreated(false);
                     this.isFormVisible(false);
                     messageList.addErrorMessage(response);
                 }.bind(this)
             );
-        }
+        },
     });
 });

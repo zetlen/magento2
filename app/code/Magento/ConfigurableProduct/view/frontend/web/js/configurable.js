@@ -11,8 +11,8 @@ define([
     'priceUtils',
     'priceBox',
     'jquery/ui',
-    'jquery/jquery.parsequery'
-], function ($, _, mageTemplate, $t, priceUtils) {
+    'jquery/jquery.parsequery',
+], function($, _, mageTemplate, $t, priceUtils) {
     'use strict';
 
     $.widget('mage.configurable', {
@@ -42,14 +42,14 @@ define([
             gallerySwitchStrategy: 'replace',
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
         },
 
         /**
          * Creates widget
          * @private
          */
-        _create: function () {
+        _create: function() {
             // Initial setting of various option values
             this._initializeOptions();
 
@@ -75,8 +75,8 @@ define([
          * Initialize tax configuration, initial settings, and options values.
          * @private
          */
-        _initializeOptions: function () {
-            var options = this.options,
+        _initializeOptions: function() {
+            let options = this.options,
                 gallery = $(options.mediaGallerySelector),
                 priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option').priceConfig || null;
 
@@ -102,7 +102,6 @@ define([
             gallery.data('gallery') ?
                 this._onGalleryLoaded(gallery) :
                 gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
-
         },
 
         /**
@@ -110,8 +109,8 @@ define([
          * initialized inputs values.
          * @private
          */
-        _overrideDefaults: function () {
-            var hashIndex = window.location.href.indexOf('#');
+        _overrideDefaults: function() {
+            let hashIndex = window.location.href.indexOf('#');
 
             if (hashIndex !== -1) {
                 this._parseQueryParams(window.location.href.substr(hashIndex + 1));
@@ -128,12 +127,12 @@ define([
          * @param {*} queryString - URL query string containing query parameters.
          * @private
          */
-        _parseQueryParams: function (queryString) {
-            var queryParams = $.parseQuery({
-                query: queryString
+        _parseQueryParams: function(queryString) {
+            let queryParams = $.parseQuery({
+                query: queryString,
             });
 
-            $.each(queryParams, $.proxy(function (key, value) {
+            $.each(queryParams, $.proxy(function(key, value) {
                 this.options.values[key] = value;
             }, this));
         },
@@ -143,10 +142,10 @@ define([
          * identifier.
          * @private
          */
-        _setValuesByAttribute: function () {
+        _setValuesByAttribute: function() {
             this.options.values = {};
-            $.each(this.options.settings, $.proxy(function (index, element) {
-                var attributeId;
+            $.each(this.options.settings, $.proxy(function(index, element) {
+                let attributeId;
 
                 if (element.value) {
                     attributeId = element.id.replace(/[a-z]*/, '');
@@ -159,8 +158,8 @@ define([
          * Set up .on('change') events for each option element to configure the option.
          * @private
          */
-        _setupChangeEvents: function () {
-            $.each(this.options.settings, $.proxy(function (index, element) {
+        _setupChangeEvents: function() {
+            $.each(this.options.settings, $.proxy(function(index, element) {
                 $(element).on('change', this, this._configure);
             }, this));
         },
@@ -170,9 +169,9 @@ define([
          * attribute identifier. Set the state based on the attribute identifier.
          * @private
          */
-        _fillState: function () {
-            $.each(this.options.settings, $.proxy(function (index, element) {
-                var attributeId = element.id.replace(/[a-z]*/, '');
+        _fillState: function() {
+            $.each(this.options.settings, $.proxy(function(index, element) {
+                let attributeId = element.id.replace(/[a-z]*/, '');
 
                 if (attributeId && this.options.spConfig.attributes[attributeId]) {
                     element.config = this.options.spConfig.attributes[attributeId];
@@ -187,8 +186,8 @@ define([
          * an option's list of selections as needed or disable an option's setting.
          * @private
          */
-        _setChildSettings: function () {
-            var childSettings = [],
+        _setChildSettings: function() {
+            let childSettings = [],
                 settings = this.options.settings,
                 index = settings.length,
                 option;
@@ -205,7 +204,7 @@ define([
                 _.extend(option, {
                     childSettings: childSettings.slice(),
                     prevSetting: settings[index - 1],
-                    nextSetting: settings[index + 1]
+                    nextSetting: settings[index + 1],
                 });
 
                 childSettings.push(option);
@@ -217,10 +216,10 @@ define([
          * the option, which sets its state, and initializes the option's choices, etc.
          * @private
          */
-        _configureForValues: function () {
+        _configureForValues: function() {
             if (this.options.values) {
-                this.options.settings.each($.proxy(function (index, element) {
-                    var attributeId = element.attributeId;
+                this.options.settings.each($.proxy(function(index, element) {
+                    let attributeId = element.attributeId;
 
                     element.value = this.options.values[attributeId] || '';
                     this._configureElement(element);
@@ -233,7 +232,7 @@ define([
          * @private
          * @param {Object} event - Event triggered to configure an option.
          */
-        _configure: function (event) {
+        _configure: function(event) {
             event.data._configureElement(this);
         },
 
@@ -243,7 +242,7 @@ define([
          * @private
          * @param {*} element - The element associated with a configurable option.
          */
-        _configureElement: function (element) {
+        _configureElement: function(element) {
             this.simpleProduct = this._getSimpleProductId(element);
 
             if (element.value) {
@@ -273,8 +272,8 @@ define([
          * Change displayed product image according to chosen options of configurable product
          * @private
          */
-        _changeProductImage: function () {
-            var images,
+        _changeProductImage: function() {
+            let images,
                 initialImages = this.options.mediaGalleryInitial,
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
@@ -291,7 +290,7 @@ define([
 
                 images = $.extend(true, [], images);
 
-                images.forEach(function (img) {
+                images.forEach(function(img) {
                     img.type = 'image';
                 });
 
@@ -310,9 +309,9 @@ define([
          * @private
          * @param {*} element - The element associated with a configurable option.
          */
-        _resetChildren: function (element) {
+        _resetChildren: function(element) {
             if (element.childSettings) {
-                _.each(element.childSettings, function (set) {
+                _.each(element.childSettings, function(set) {
                     set.selectedIndex = 0;
                     set.disabled = true;
                 });
@@ -328,8 +327,8 @@ define([
          * @private
          * @param {*} element - Element associated with a configurable option.
          */
-        _fillSelect: function (element) {
-            var attributeId = element.id.replace(/[a-z]*/, ''),
+        _fillSelect: function(element) {
+            let attributeId = element.id.replace(/[a-z]*/, ''),
                 options = this._getAttributeOptions(attributeId),
                 prevConfig,
                 index = 1,
@@ -388,7 +387,7 @@ define([
          * @param {*} option - A single choice among a group of choices for a configurable option.
          * @return {String} The option label with option value and price (e.g. Black +1.99)
          */
-        _getOptionLabel: function (option) {
+        _getOptionLabel: function(option) {
             return option.label;
         },
 
@@ -397,8 +396,8 @@ define([
          * @private
          * @param {*} element - The element associated with a configurable option.
          */
-        _clearSelect: function (element) {
-            var i;
+        _clearSelect: function(element) {
+            let i;
 
             for (i = element.options.length - 1; i >= 0; i--) {
                 element.remove(i);
@@ -411,7 +410,7 @@ define([
          * @param {Number} attributeId - The id of the attribute whose configurable options are sought.
          * @return {Object} Object containing the attribute options.
          */
-        _getAttributeOptions: function (attributeId) {
+        _getAttributeOptions: function(attributeId) {
             if (this.options.spConfig.attributes[attributeId]) {
                 return this.options.spConfig.attributes[attributeId].options;
             }
@@ -421,7 +420,7 @@ define([
          * Reload the price of the configurable product incorporating the prices of all of the
          * configurable product's option selections.
          */
-        _reloadPrice: function () {
+        _reloadPrice: function() {
             $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices());
         },
 
@@ -430,13 +429,13 @@ define([
          * @returns {{}}
          * @private
          */
-        _getPrices: function () {
-            var prices = {},
+        _getPrices: function() {
+            let prices = {},
                 elements = _.toArray(this.options.settings),
                 hasProductPrice = false;
 
-            _.each(elements, function (element) {
-                var selected = element.options[element.selectedIndex],
+            _.each(elements, function(element) {
+                let selected = element.options[element.selectedIndex],
                     config = selected && selected.config,
                     priceValue = {};
 
@@ -458,11 +457,11 @@ define([
          * @returns {*}
          * @private
          */
-        _calculatePrice: function (config) {
-            var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
+        _calculatePrice: function(config) {
+            let displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
                 newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)];
 
-            _.each(displayPrices, function (price, code) {
+            _.each(displayPrices, function(price, code) {
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
@@ -479,14 +478,14 @@ define([
          * @param {HTMLElement} element
          * @returns {String|undefined}
          */
-        _getSimpleProductId: function (element) {
+        _getSimpleProductId: function(element) {
             // TODO: Rewrite algorithm. It should return ID of
             //        simple product based on selected options.
-            var allOptions = element.config.options,
+            let allOptions = element.config.options,
                 value = element.value,
                 config;
 
-            config = _.filter(allOptions, function (option) {
+            config = _.filter(allOptions, function(option) {
                 return option.id === value;
             });
             config = _.first(config);
@@ -494,7 +493,6 @@ define([
             return _.isEmpty(config) ?
                 undefined :
                 _.first(config.allowedProducts);
-
         },
 
         /**
@@ -503,9 +501,9 @@ define([
          * @param {*} optionId
          * @private
          */
-        _displayRegularPriceBlock: function (optionId) {
+        _displayRegularPriceBlock: function(optionId) {
             if (typeof optionId != 'undefined' &&
-                this.options.spConfig.optionPrices[optionId].oldPrice.amount != //eslint-disable-line eqeqeq
+                this.options.spConfig.optionPrices[optionId].oldPrice.amount != // eslint-disable-line eqeqeq
                 this.options.spConfig.optionPrices[optionId].finalPrice.amount
             ) {
                 $(this.options.slyOldPriceSelector).show();
@@ -519,8 +517,8 @@ define([
          *
          * @param {HTMLElement} element - DOM element associated with gallery.
          */
-        _onGalleryLoaded: function (element) {
-            var galleryObject = element.data('gallery');
+        _onGalleryLoaded: function(element) {
+            let galleryObject = element.data('gallery');
 
             this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
         },
@@ -531,8 +529,8 @@ define([
          * @param {*} optionId
          * @private
          */
-        _displayTierPriceBlock: function (optionId) {
-            var options, tierPriceHtml;
+        _displayTierPriceBlock: function(optionId) {
+            let options, tierPriceHtml;
 
             if (typeof optionId != 'undefined' &&
                 this.options.spConfig.optionPrices[optionId].tierPrices != [] // eslint-disable-line eqeqeq
@@ -544,14 +542,14 @@ define([
                         'tierPrices': options.tierPrices,
                         '$t': $t,
                         'currencyFormat': this.options.spConfig.currencyFormat,
-                        'priceUtils': priceUtils
+                        'priceUtils': priceUtils,
                     });
                     $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
                 }
             } else {
                 $(this.options.tierPriceBlockSelector).hide();
             }
-        }
+        },
     });
 
     return $.mage.configurable;

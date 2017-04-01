@@ -7,8 +7,8 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
-    'Magento_Bundle/js/price-bundle'
-], function ($, mageTemplate) {
+    'Magento_Bundle/js/price-bundle',
+], function($, mageTemplate) {
     'use strict';
 
     /**
@@ -17,14 +17,14 @@ define([
      */
     $.widget('mage.productSummary', {
         options: {
-            mainContainer:          '#product_addtocart_form',
+            mainContainer: '#product_addtocart_form',
             templates: {
-                summaryBlock:       '[data-template="bundle-summary"]',
-                optionBlock:        '[data-template="bundle-option"]'
+                summaryBlock: '[data-template="bundle-summary"]',
+                optionBlock: '[data-template="bundle-option"]',
             },
-            optionSelector:         '[data-container="options"]',
-            summaryContainer:       '[data-container="product-summary"]',
-            bundleSummaryContainer: '.bundle-summary'
+            optionSelector: '[data-container="options"]',
+            summaryContainer: '[data-container="product-summary"]',
+            bundleSummaryContainer: '.bundle-summary',
         },
         cache: {},
 
@@ -32,7 +32,7 @@ define([
          * Method attaches event observer to the product form
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.element
                 .closest(this.options.mainContainer)
                 .on('updateProductSummary', $.proxy(this._renderSummaryBox, this))
@@ -47,7 +47,7 @@ define([
          * @param {Object} data
          * @private
          */
-        _renderSummaryBox: function (event, data) {
+        _renderSummaryBox: function(event, data) {
             this.cache.currentElement = data.config;
             this.cache.currentElementCount = 0;
 
@@ -65,8 +65,8 @@ define([
          * @param {String} row
          * @private
          */
-        _renderOption: function (key, row) {
-            var template;
+        _renderOption: function(key, row) {
+            let template;
 
             if (row && row.length > 0 && row[0] !== null) {
                 template = this.element
@@ -75,8 +75,8 @@ define([
                     .html();
                 template = mageTemplate($.trim(template), {
                     data: {
-                        _label_: this.cache.currentElement.options[key].title
-                    }
+                        _label_: this.cache.currentElement.options[key].title,
+                    },
                 });
 
                 this.cache.currentKey = key;
@@ -86,7 +86,7 @@ define([
                 $.each(row, this._renderOptionRow.bind(this));
                 this.cache.currentElementCount += row.length;
 
-                //Reset Cache
+                // Reset Cache
                 this.cache.currentKey = null;
             }
         },
@@ -96,8 +96,8 @@ define([
          * @param {String} optionIndex
          * @private
          */
-        _renderOptionRow: function (key, optionIndex) {
-            var template;
+        _renderOptionRow: function(key, optionIndex) {
+            let template;
 
             template = this.element
                 .closest(this.options.summaryContainer)
@@ -106,13 +106,13 @@ define([
             template = mageTemplate($.trim(template), {
                 data: {
                     _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty,
-                    _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name
-                }
+                    _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name,
+                },
             });
             this.cache.summaryContainer
                 .find(this.options.optionSelector)
                 .append(template);
-        }
+        },
     });
 
     return $.mage.productSummary;

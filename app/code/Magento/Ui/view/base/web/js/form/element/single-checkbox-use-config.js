@@ -7,8 +7,8 @@
  * @api
  */
 define([
-    'Magento_Ui/js/form/element/single-checkbox'
-], function (Component) {
+    'Magento_Ui/js/form/element/single-checkbox',
+], function(Component) {
     'use strict';
 
     return Component.extend({
@@ -17,15 +17,14 @@ define([
             isUseConfig: false,
             listens: {
                 'isUseConfig': 'toggleElement',
-                'isUseDefault': 'toggleElement'
-            }
+                'isUseDefault': 'toggleElement',
+            },
         },
 
         /**
          * @inheritdoc
          */
-        initObservable: function () {
-
+        initObservable: function() {
             return this
                 ._super()
                 .observe('isUseConfig');
@@ -34,8 +33,8 @@ define([
         /**
          * Toggle element
          */
-        toggleElement: function () {
+        toggleElement: function() {
             this.disabled(this.isUseDefault() || this.isUseConfig());
-        }
+        },
     });
 });

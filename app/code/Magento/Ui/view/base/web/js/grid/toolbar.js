@@ -11,19 +11,19 @@ define([
     'Magento_Ui/js/lib/view/utils/async',
     'Magento_Ui/js/lib/view/utils/raf',
     'rjsResolver',
-    'uiCollection'
-], function (_, $, raf, resolver, Collection) {
+    'uiCollection',
+], function(_, $, raf, resolver, Collection) {
     'use strict';
 
-    var transformProp;
+    let transformProp;
 
     /**
      * Defines supported css 'transform' property.
      *
      * @returns {String|Undefined}
      */
-    transformProp = (function () {
-        var style = document.documentElement.style,
+    transformProp = (function() {
+        let style = document.documentElement.style,
             base = 'Transform',
             vendors = ['webkit', 'moz', 'ms', 'o'],
             vi = vendors.length,
@@ -50,7 +50,7 @@ define([
      * @param {Number} y - Y coordinate.
      */
     function locate(elem, x, y) {
-        var value = 'translate(' + x + 'px,' + y + 'px)';
+        let value = 'translate(' + x + 'px,' + y + 'px)';
 
         elem.style[transformProp] = value;
     }
@@ -71,11 +71,11 @@ define([
                 '$stickyToolbar': true,
                 '$stickyTable': true,
                 '$table': true,
-                '$sticky': true
+                '$sticky': true,
             },
             stickyClass: {
-                'sticky-header': true
-            }
+                'sticky-header': true,
+            },
         },
 
         /**
@@ -83,7 +83,7 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             if (this.sticky) {
@@ -100,21 +100,21 @@ define([
          * @returns {jQueryPromise} Promise which will be resolved
          *      when all of the required DOM elements are defined.
          */
-        waitDOMElements: function () {
-            var _domPromise = $.Deferred();
+        waitDOMElements: function() {
+            let _domPromise = $.Deferred();
 
             _.bindAll(this, 'setStickyTable', 'setTableNode');
 
             $.async({
                 ctx: ':not([data-role="sticky-el-root"])',
                 component: this.columnsProvider,
-                selector: this.tableSelector
+                selector: this.tableSelector,
             }, this.setTableNode);
 
             $.async({
                 ctx: '[data-role="sticky-el-root"]',
                 component: this.columnsProvider,
-                selector: this.tableSelector
+                selector: this.tableSelector,
             }, this.setStickyTable);
 
             this._domPromise = _domPromise;
@@ -127,7 +127,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        setLeftCap: function (node) {
+        setLeftCap: function(node) {
             this.$leftCap = node;
         },
 
@@ -136,7 +136,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        setRightCap: function (node) {
+        setRightCap: function(node) {
             this.$rightCap = node;
         },
 
@@ -145,7 +145,7 @@ define([
          *
          * @param {HTMLTableElement} node
          */
-        setTableNode: function (node) {
+        setTableNode: function(node) {
             this.$cols = node.tHead.children[0].cells;
             this.$tableContainer = node.parentNode;
 
@@ -157,7 +157,7 @@ define([
          *
          * @param {HTMLTableElement} node
          */
-        setStickyTable: function (node) {
+        setStickyTable: function(node) {
             this.$stickyCols = node.tHead.children[0].cells;
 
             this.setNode('$stickyTable', node);
@@ -168,7 +168,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        setStickyToolbarNode: function (node) {
+        setStickyToolbarNode: function(node) {
             this.setNode('$stickyToolbar', node);
         },
 
@@ -177,7 +177,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        setStickyNode: function (node) {
+        setStickyNode: function(node) {
             this.setNode('$sticky', node);
         },
 
@@ -186,7 +186,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        setToolbarNode: function (node) {
+        setToolbarNode: function(node) {
             this.$toolbar = node;
         },
 
@@ -197,14 +197,14 @@ define([
          * @param {String} key - Properties key.
          * @param {HTMLElement} node - DOM element.
          */
-        setNode: function (key, node) {
-            var nodes = this._requiredNodes,
+        setNode: function(key, node) {
+            let nodes = this._requiredNodes,
                 promise = this._domPromise,
                 defined;
 
             this[key] = node;
 
-            defined = _.every(nodes, function (enabled, name) {
+            defined = _.every(nodes, function(enabled, name) {
                 return enabled ? this[name] : true;
             }, this);
 
@@ -217,7 +217,7 @@ define([
          * Starts refresh process of the sticky element
          * and assigns DOM elements events handlers.
          */
-        run: function () {
+        run: function() {
             _.bindAll(
                 this,
                 'refresh',
@@ -228,7 +228,7 @@ define([
 
             $(window).on({
                 scroll: this._onWindowScroll,
-                resize: this._onWindowResize
+                resize: this._onWindowResize,
             });
 
             $(this.$tableContainer).on('scroll', this._onTableScroll);
@@ -242,7 +242,7 @@ define([
          * invokes DOM elements events handlers
          * if corresponding event has been triggered.
          */
-        refresh: function () {
+        refresh: function() {
             if (!raf(this.refresh, this.refreshFPS)) {
                 return;
             }
@@ -269,7 +269,7 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        show: function () {
+        show: function() {
             this.visible = true;
 
             this.$sticky.style.display = '';
@@ -283,7 +283,7 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        hide: function () {
+        hide: function() {
             this.visible = false;
 
             this.$sticky.style.display = 'none';
@@ -297,8 +297,8 @@ define([
          *
          * @returns {Boolean}
          */
-        isCovered: function () {
-            var stickyTop = this._stickyTableTop + this._wScrollTop;
+        isCovered: function() {
+            let stickyTop = this._stickyTableTop + this._wScrollTop;
 
             return stickyTop > this._tableTop;
         },
@@ -308,8 +308,8 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateStickyTableOffset: function () {
-            var style,
+        updateStickyTableOffset: function() {
+            let style,
                 top;
 
             if (this.visible) {
@@ -336,8 +336,8 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateTableOffset: function () {
-            var box = this.$table.getBoundingClientRect(),
+        updateTableOffset: function() {
+            let box = this.$table.getBoundingClientRect(),
                 top = box.top + this._wScrollTop;
 
             if (this._tableTop !== top) {
@@ -354,11 +354,11 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        checkTableWidth: function () {
-            var cols        = this.$cols,
-                total       = cols.length,
+        checkTableWidth: function() {
+            let cols = this.$cols,
+                total = cols.length,
                 rightBorder = cols[total - 2].offsetLeft,
-                tableWidth  = this.$table.offsetWidth;
+                tableWidth = this.$table.offsetWidth;
 
             if (this._tableWidth !== tableWidth) {
                 this._tableWidth = tableWidth;
@@ -380,7 +380,7 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateTableWidth: function () {
+        updateTableWidth: function() {
             this.$stickyTable.style.width = this._tableWidth + 'px';
 
             if (this._tableWidth < this._toolbarWidth) {
@@ -395,10 +395,10 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateColumnsWidth: function () {
-            var cols        = this.$cols,
-                index       = cols.length,
-                stickyCols  = this.$stickyCols;
+        updateColumnsWidth: function() {
+            let cols = this.$cols,
+                index = cols.length,
+                stickyCols = this.$stickyCols;
 
             while (index--) {
                 stickyCols[index].width = cols[index].offsetWidth;
@@ -413,8 +413,8 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        checkToolbarSize: function () {
-            var width = this.$tableContainer.offsetWidth;
+        checkToolbarSize: function() {
+            let width = this.$tableContainer.offsetWidth;
 
             if (this._toolbarWidth !== width) {
                 this._toolbarWidth = width;
@@ -430,7 +430,7 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateVisibility: function () {
+        updateVisibility: function() {
             if (this.visible !== this.isCovered()) {
                 this.visible ? this.hide() : this.show();
             }
@@ -443,7 +443,7 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateLeftCap: function () {
+        updateLeftCap: function() {
             locate(this.$leftCap, -this._wScrollLeft, 0);
 
             return this;
@@ -454,8 +454,8 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateRightCap: function () {
-            var left = this._toolbarWidth - this._wScrollLeft;
+        updateRightCap: function() {
+            let left = this._toolbarWidth - this._wScrollLeft;
 
             locate(this.$rightCap, left, 0);
 
@@ -467,8 +467,8 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateTableScroll: function () {
-            var container = this.$tableContainer,
+        updateTableScroll: function() {
+            let container = this.$tableContainer,
                 left = container.scrollLeft + this._wScrollLeft;
 
             locate(this.$stickyTable, -left, 0);
@@ -481,7 +481,7 @@ define([
          *
          * @returns {Sticky} Chainable.
          */
-        updateToolbarWidth: function () {
+        updateToolbarWidth: function() {
             this.$stickyToolbar.style.width = this._toolbarWidth + 'px';
 
             return this;
@@ -490,7 +490,7 @@ define([
         /**
          * Handles changes of the toolbar element's width.
          */
-        onToolbarWidthChange: function () {
+        onToolbarWidthChange: function() {
             this.updateToolbarWidth()
                 .updateRightCap();
         },
@@ -498,28 +498,28 @@ define([
         /**
          * Handles changes of the table top position.
          */
-        onTableTopChange: function () {
+        onTableTopChange: function() {
             this.updateStickyTableOffset();
         },
 
         /**
          * Handles change of the table width.
          */
-        onTableWidthChange: function () {
+        onTableWidthChange: function() {
             this.updateTableWidth();
         },
 
         /**
          * Handles change of the table columns width.
          */
-        onColumnsWidthChange: function () {
+        onColumnsWidthChange: function() {
             this.updateColumnsWidth();
         },
 
         /**
          * Handles changes of the window's size.
          */
-        onWindowResize: function () {
+        onWindowResize: function() {
             this.checkToolbarSize();
 
             this._resized = false;
@@ -528,7 +528,7 @@ define([
         /**
          * Handles changes of the original table scroll position.
          */
-        onTableScroll: function () {
+        onTableScroll: function() {
             this.updateTableScroll();
 
             this._tableScrolled = false;
@@ -537,8 +537,8 @@ define([
         /**
          * Handles changes of window's scroll position.
          */
-        onWindowScroll: function () {
-            var scrollTop = window.pageYOffset,
+        onWindowScroll: function() {
+            let scrollTop = window.pageYOffset,
                 scrollLeft = window.pageXOffset;
 
             if (this._wScrollTop !== scrollTop) {
@@ -559,7 +559,7 @@ define([
         /**
          * Handles changes of windows' top scroll postion.
          */
-        onWindowScrollTop: function () {
+        onWindowScrollTop: function() {
             this.updateTableOffset()
                 .updateVisibility();
         },
@@ -567,7 +567,7 @@ define([
         /**
          * Handles changes of windows' left scroll position.
          */
-        onWindowScrollLeft: function () {
+        onWindowScrollLeft: function() {
             this.updateRightCap()
                 .updateLeftCap()
                 .updateTableScroll();
@@ -579,7 +579,7 @@ define([
          *
          * @private
          */
-        _onWindowScroll: function () {
+        _onWindowScroll: function() {
             this._scrolled = true;
         },
 
@@ -589,7 +589,7 @@ define([
          *
          * @private
          */
-        _onWindowResize: function () {
+        _onWindowResize: function() {
             this._resized = true;
         },
 
@@ -599,8 +599,8 @@ define([
          *
          * @private
          */
-        _onTableScroll: function () {
+        _onTableScroll: function() {
             this._tableScrolled = true;
-        }
+        },
     });
 });

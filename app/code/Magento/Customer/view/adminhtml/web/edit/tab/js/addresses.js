@@ -8,8 +8,8 @@ define([
     'mage/template',
     'Magento_Ui/js/modal/confirm',
     'jquery/ui',
-    'mage/backend/tabs'
-], function ($, mageTemplate, confirm) {
+    'mage/backend/tabs',
+], function($, mageTemplate, confirm) {
     'use strict';
 
     $.widget('mage.addressTabs', $.mage.tabs, {
@@ -38,14 +38,14 @@ define([
             accountWebsiteIdSelector: ':input' +
                 '[data-ui-id="store-switcher-form-renderer-fieldset-element-select-account-website-id"]',
             formCountrySelector: 'customer-edit-tab-addresses-fieldset-element-form-field-country-id',
-            addAddressButtonSelector: ':button[data-ui-id="adminhtml-edit-tab-addresses-add-address-button"]'
+            addAddressButtonSelector: ':button[data-ui-id="adminhtml-edit-tab-addresses-add-address-button"]',
         },
 
         /**
          * This method adds a new address - tab and form to the widget.
          */
-        _addNewAddress: function () {
-            var formName, newForm, formTemplate, itemTemplate, firstname, accountWebsiteId;
+        _addNewAddress: function() {
+            let formName, newForm, formTemplate, itemTemplate, firstname, accountWebsiteId;
 
             this.options.itemCount++;
 
@@ -62,14 +62,14 @@ define([
             formTemplate = mageTemplate(formTemplate, {
                 data: {
                     formName: formName,
-                    itemCount: this.options.itemCount
-                }
+                    itemCount: this.options.itemCount,
+                },
             });
 
             itemTemplate = mageTemplate(itemTemplate, {
                 data: {
-                    'itemId': this.options.itemCount
-                }
+                    'itemId': this.options.itemCount,
+                },
             });
 
             this.element.find(this.options.formsSelector).append(this._prepareTemplate(formTemplate));
@@ -106,25 +106,25 @@ define([
         /**
          * This method is used to bind events associated with this widget.
          */
-        _bind: function () {
+        _bind: function() {
             this._on(this.element.find(this.options.addAddressButtonSelector), {
-                'click': '_addNewAddress'
+                'click': '_addNewAddress',
             });
             this._on({
                 'formchange': '_updateAddress',
-                'dataItemDelete': '_deleteItemPrompt'
+                'dataItemDelete': '_deleteItemPrompt',
             });
             this.element.find('.countries').addressCountry({
                 regionsUrl: this.options.regionsUrl,
                 optionalZipCountries: this.options.optionalZipCountries,
-                requiredStateForCountries: this.options.requiredStateForCountries
+                requiredStateForCountries: this.options.requiredStateForCountries,
             });
         },
 
         /**
          * Create, Initialize this widget.
          */
-        _create: function () {
+        _create: function() {
             this._super();
             this._bind();
         },
@@ -133,7 +133,7 @@ define([
          * This method deletes the item in the list.
          * @private
          */
-        _deleteItem: function (dataItem) {
+        _deleteItem: function(dataItem) {
             // remove the elements from the page
             this.element.find('[data-item="' + dataItem + '"]').remove();
 
@@ -145,18 +145,18 @@ define([
          * This method prompts the user to confirm the deletion of the item in the list.
          * @private
          */
-        _deleteItemPrompt: function (event, data) {
-            var self = this;
+        _deleteItemPrompt: function(event, data) {
+            let self = this;
 
             confirm({
                 content: this.options.deleteConfirmPrompt,
                 actions: {
 
                     /** @inheritdoc */
-                    confirm: function () {
+                    confirm: function() {
                         self._deleteItem(data.item);
-                    }
-                }
+                    },
+                },
             });
         },
 
@@ -165,8 +165,8 @@ define([
          * @param {Element} template - Address form html 'template'.
          * @private
          */
-        _prepareTemplate: function (template) {
-            var re = new RegExp(this.options.templatePrefix, 'g');
+        _prepareTemplate: function(template) {
+            let re = new RegExp(this.options.templatePrefix, 'g');
 
             return template.replace(re, '_item' + this.options.itemCount);
         },
@@ -176,13 +176,13 @@ define([
          * @param {Element} container - Address form container.
          * @private
          */
-        _syncFormData: function (container) {
-            var data = {},
+        _syncFormData: function(container) {
+            let data = {},
                 itemContainer, tmpl;
 
             if (container) {
-                $(container).find(':input').each(function (index, inputField) {
-                    var id = inputField.id,
+                $(container).find(':input').each(function(index, inputField) {
+                    let id = inputField.id,
                         value, tagName, values, l, j, o, option, text;
 
                     if (id) {
@@ -192,14 +192,14 @@ define([
                         tagName = inputField.tagName.toLowerCase();
 
                         if (tagName === 'select') {
-                            if (inputField.multiple) { //eslint-disable-line max-depth
+                            if (inputField.multiple) { // eslint-disable-line max-depth
                                 values = $([]);
                                 l = inputField.options.length;
 
-                                for (j = 0; j < l; j++) { //eslint-disable-line max-depth
+                                for (j = 0; j < l; j++) { // eslint-disable-line max-depth
                                     o = inputField.options[j];
 
-                                    if (o.selected === true) { //eslint-disable-line max-depth
+                                    if (o.selected === true) { // eslint-disable-line max-depth
                                         values[values.length] = o.text.escapeHTML();
                                     }
                                 }
@@ -226,7 +226,7 @@ define([
 
                 if (itemContainer.length && itemContainer[0]) {
                     tmpl = mageTemplate(this.options.tabAddressTemplateSelector, {
-                        data: data
+                        data: data,
                     });
 
                     itemContainer[0].innerHTML = tmpl;
@@ -239,7 +239,7 @@ define([
          * @param {EventObject} event - Event occurring.
          * @private
          */
-        _updateAddress: function (event) {
+        _updateAddress: function(event) {
             this._syncFormData(this._getFormContainer(event.target));
         },
 
@@ -248,7 +248,7 @@ define([
          * @param {JQuery|Element} element - JQuery object or DOM element.
          * @private
          */
-        _getFormContainer: function (element) {
+        _getFormContainer: function(element) {
             if (!(element instanceof $)) {
                 element = $(element);
             }
@@ -261,13 +261,13 @@ define([
          * @param {JQuery} formElement - The form containing the country.
          * @private
          */
-        _bindCountryRegionRelation: function (formElement) {
+        _bindCountryRegionRelation: function(formElement) {
             $(formElement).find('.countries').addressCountry({
                 regionsUrl: this.options.regionsUrl,
                 optionalZipCountries: this.options.optionalZipCountries,
-                requiredStateForCountries: this.options.requiredStateForCountries
+                requiredStateForCountries: this.options.requiredStateForCountries,
             });
-        }
+        },
     });
 
     $.widget('mage.addressCountry', {
@@ -277,22 +277,22 @@ define([
             requiredStateForCountries: [],
             countryElement: null,
             regionIdElement: null,
-            regionElement: null
+            regionElement: null,
         },
 
         /**
          * This method is used to bind events associated with this widget.
          */
-        _bind: function () {
+        _bind: function() {
             this._on({
-                'change': '_onAddressCountryChange'
+                'change': '_onAddressCountryChange',
             });
         },
 
         /**
          * Create, Initialize this widget.
          */
-        _create: function () {
+        _create: function() {
             this._bind();
         },
 
@@ -301,8 +301,8 @@ define([
          * @param {Event} event - Change event occurring.
          * @private
          */
-        _onAddressCountryChange: function (event) {
-            var countryElement = event.target,
+        _onAddressCountryChange: function(event) {
+            let countryElement = event.target,
                 formElement = $(countryElement).closest('[data-item]'),
                 fieldElement = $(formElement).find('.field-region'),
                 regionElement = $(fieldElement).find('.input-text');
@@ -325,10 +325,10 @@ define([
                     dataType: 'json',
                     showLoader: true,
                     data: {
-                        parent: countryElement.value
+                        parent: countryElement.value,
                     },
                     context: this,
-                    success: $.proxy(this._refreshRegionField, this)
+                    success: $.proxy(this._refreshRegionField, this),
                 });
             } else {
                 // Set empty text field in region
@@ -343,8 +343,8 @@ define([
          * @param {Object} data - Regions (state/province) or empty if regions n/a for the country.
          * @private
          */
-        _refreshRegionField: function (data) {
-            var regionField = $(this.options.regionElement).closest('div.field'),
+        _refreshRegionField: function(data) {
+            let regionField = $(this.options.regionElement).closest('div.field'),
                 regionControl = regionField.find('.control'),
                 regionInput,
                 regionIdInput,
@@ -360,15 +360,15 @@ define([
                     'name': this.options.regionIdElement.attr('name'),
                     'id': this.options.regionIdElement.attr('id'),
                     'class': 'required-entry input-text select',
-                    'title': this.options.regionIdElement.attr('title')
+                    'title': this.options.regionIdElement.attr('title'),
                 }).appendTo(regionControl);
 
                 regionValue = this.options.regionElement.attr('value');
 
-                $.each(data, function (idx, item) {
-                    var regionOption = $('<option />').val(item.value).text(item.label);
+                $.each(data, function(idx, item) {
+                    let regionOption = $('<option />').val(item.value).text(item.label);
 
-                    if (regionValue && regionValue == item.label) { //eslint-disable-line eqeqeq
+                    if (regionValue && regionValue == item.label) { // eslint-disable-line eqeqeq
                         regionOption.attr('selected', 'selected');
                     }
 
@@ -378,7 +378,7 @@ define([
                 regionInput = $('<input>').attr({
                     'name': this.options.regionElement.attr('name'),
                     'id': this.options.regionElement.attr('id'),
-                    'type': 'hidden'
+                    'type': 'hidden',
                 }).appendTo(regionControl);
 
                 newInput = regionIdInput;
@@ -389,13 +389,13 @@ define([
                     'name': this.options.regionElement.attr('name'),
                     'id': this.options.regionElement.attr('id'),
                     'class': 'input-text',
-                    'title': this.options.regionElement.attr('title')
+                    'title': this.options.regionElement.attr('title'),
                 }).appendTo(regionControl);
 
                 regionIdInput = $('<input>').attr({
                     'type': 'hidden',
                     'name': this.options.regionIdElement.attr('name'),
-                    'id': this.options.regionIdElement.attr('id')
+                    'id': this.options.regionIdElement.attr('id'),
                 }).appendTo(regionControl);
 
                 newInput = regionInput;
@@ -416,7 +416,7 @@ define([
         /**
          * This method is used to trigger a change element for a given element.
          */
-        _triggerFormChange: function (element) {
+        _triggerFormChange: function(element) {
             element.trigger('formchange');
         },
 
@@ -427,11 +427,11 @@ define([
          * @param {Element} regionField - Region section element
          * @private
          */
-        _checkRegionRequired: function (elements, activeElement, regionField) {
-            var regionRequired = this.options.requiredStateForCountries.indexOf(this.options.countryElement.value) >= 0;
+        _checkRegionRequired: function(elements, activeElement, regionField) {
+            let regionRequired = this.options.requiredStateForCountries.indexOf(this.options.countryElement.value) >= 0;
 
-            elements.each(function (currentElement) {
-                var form = $(currentElement).closest('form'),
+            elements.each(function(currentElement) {
+                let form = $(currentElement).closest('form'),
                     validationInstance = form ? $(form).data('validation') : null;
 
                 if (validationInstance) {
@@ -456,12 +456,12 @@ define([
                         regionField.addClass('required');
                     }
 
-                    if (activeElement == currentElement) { //eslint-disable-line eqeqeq
-                        if (!currentElement.hasClass('required-entry')) { //eslint-disable-line max-depth
+                    if (activeElement == currentElement) { // eslint-disable-line eqeqeq
+                        if (!currentElement.hasClass('required-entry')) { // eslint-disable-line max-depth
                             currentElement.addClass('required-entry');
                         }
 
-                        if (currentElement.prop('tagName').toLowerCase() === 'select' && //eslint-disable-line max-depth
+                        if (currentElement.prop('tagName').toLowerCase() === 'select' && // eslint-disable-line max-depth
                             !currentElement.hasClass('validate-select')) {
                             currentElement.addClass('validate-select');
                         }
@@ -475,8 +475,8 @@ define([
          * @param {Element} countryElement
          * @private
          */
-        _setPostcodeOptional: function (countryElement) {
-            var formElement = $(countryElement).closest('[data-item]'),
+        _setPostcodeOptional: function(countryElement) {
+            let formElement = $(countryElement).closest('[data-item]'),
                 fieldElement = $(formElement).find('.field-postcode'),
                 zipElement = $(fieldElement).find('.input-text'),
                 zipField = $(zipElement).closest('.field-postcode');
@@ -490,25 +490,25 @@ define([
                 $(zipElement).addClass('required-entry');
                 $(zipField).addClass('required');
             }
-        }
+        },
     });
 
     $.widget('mage.observableInputs', {
         options: {
-            name: ''
+            name: '',
         },
 
         /**
          * This method is used to bind events associated with this widget.
          */
-        _bind: function () {
+        _bind: function() {
             this._on(this.element.find(':input').not('.countries'), {
-                'change': '_triggerChange'
+                'change': '_triggerChange',
             });
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this._super();
             this._bind();
         },
@@ -516,13 +516,13 @@ define([
         /**
          * This method is used to trigger a change element for a given entity.
          */
-        _triggerChange: function (element) {
+        _triggerChange: function(element) {
             // send the name of the captor and the field that changed
             this.element.trigger('formchange', {
                 'name': this.options.name,
-                'element': element.target
+                'element': element.target,
             });
-        }
+        },
     });
 
     /**
@@ -530,21 +530,21 @@ define([
      */
     $.widget('mage.dataItemDeleteButton', {
         options: {
-            item: ''
+            item: '',
         },
 
         /**
          * This method is used to bind events associated with this widget.
          */
-        _bind: function () {
+        _bind: function() {
             this._on(this.element.find('[data-role="delete"]'), {
-                'click': '_triggerDelete'
+                'click': '_triggerDelete',
             });
         },
 
         /** @inheritdoc */
-        _create: function () {
-            var dataItemContainer;
+        _create: function() {
+            let dataItemContainer;
 
             this._super();
             this._bind();
@@ -562,21 +562,21 @@ define([
         /**
          * This method is used to trigger a delete message for this item.
          */
-        _triggerDelete: function () {
+        _triggerDelete: function() {
             // send the name of the captor and the field that changed
             this.element.trigger('dataItemDelete', {
-                'item': this.options.item
+                'item': this.options.item,
             });
 
             // we are handling the click, so stop processing
             return false;
-        }
+        },
     });
 
     return {
         addressTabs: $.mage.addressTabs,
         addressCountry: $.mage.addressCountry,
         observableInputs: $.mage.observableInputs,
-        dataItemDeleteButton: $.mage.dataItemDeleteButton
+        dataItemDeleteButton: $.mage.dataItemDeleteButton,
     };
 });

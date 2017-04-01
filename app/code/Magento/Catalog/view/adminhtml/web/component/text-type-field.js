@@ -5,8 +5,8 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/form/element/abstract'
-], function ($, Abstract) {
+    'Magento_Ui/js/form/element/abstract',
+], function($, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -17,7 +17,7 @@ define([
          * @param {*} value
          * @returns {Boolean}
          */
-        isRelevant: function (value) {
+        isRelevant: function(value) {
             if ($.inArray(value, ['field', 'area']) !== -1) {
                 this.disabled(false);
                 this.visible(true);
@@ -30,6 +30,6 @@ define([
             this.visible(false);
 
             return false;
-        }
+        },
     });
 });

@@ -8,14 +8,14 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
-    'mage/adminhtml/form'
-], function ($, mageTemplate) {
+    'mage/adminhtml/form',
+], function($, mageTemplate) {
     'use strict';
 
     $.widget('mage.fptAttribute', {
         /** @inheritdoc */
-        _create: function () {
-            var widget = this;
+        _create: function() {
+            let widget = this;
 
             this.rowTmpl = mageTemplate(this.element.find('[data-role="row-template"]').html());
 
@@ -25,7 +25,7 @@ define([
                 this.element.hide();
             }
 
-            $.each(this.options.itemsData, function () {
+            $.each(this.options.itemsData, function() {
                 widget.addItem(this);
             });
         },
@@ -33,8 +33,8 @@ define([
         /**
          * @private
          */
-        _initOptionItem: function () {
-            var widget = this,
+        _initOptionItem: function() {
+            let widget = this,
                 isOriginalRequired = $(widget.element).hasClass('required');
 
             this._on({
@@ -43,7 +43,7 @@ define([
                  *
                  * @param {jQuery.Event} event
                  */
-                'click [data-action=add-fpt-item]': function (event) {
+                'click [data-action=add-fpt-item]': function(event) {
                     this.addItem(event);
                 },
 
@@ -52,8 +52,8 @@ define([
                  *
                  * @param {jQuery.Event} event
                  */
-                'click [data-action=delete-fpt-item]': function (event) {
-                    var parent = $(event.target).closest('[data-role="fpt-item-row"]');
+                'click [data-action=delete-fpt-item]': function(event) {
+                    let parent = $(event.target).closest('[data-role="fpt-item-row"]');
 
                     parent.find('[data-role="delete-fpt-item"]').val(1);
                     parent.addClass('ignore-validate').hide();
@@ -65,8 +65,8 @@ define([
                  * @param {jQuery.Event} event
                  * @param {Object} data
                  */
-                'change [data-role="select-country"]': function (event, data) {
-                    var currentElement = event.target || event.srcElement || event.currentTarget,
+                'change [data-role="select-country"]': function(event, data) {
+                    let currentElement = event.target || event.srcElement || event.currentTarget,
                         parentElement = $(currentElement).closest('[data-role="fpt-item-row"]'),
                         updater;
 
@@ -77,7 +77,7 @@ define([
                         widget.options.region, 'disable', true
                     );
                     updater.update();
-                    //set selected state value if set
+                    // set selected state value if set
                     if (data.state) {
                         parentElement.find('[data-role="select-state"]').val(data.state);
                     }
@@ -85,20 +85,20 @@ define([
                     if (!isOriginalRequired && $(widget.element).hasClass('required')) {
                         $(widget.element).removeClass('required');
                     }
-                }
+                },
             });
 
-            $(this.options.bundlePriceType).on('change', function (event) {
-                var attributeItems = widget.element.find('[data-role="delete-fpt-item"]');
+            $(this.options.bundlePriceType).on('change', function(event) {
+                let attributeItems = widget.element.find('[data-role="delete-fpt-item"]');
 
                 if ($(event.target).val() === '0') {
                     widget.element.hide();
-                    attributeItems.each(function () {
+                    attributeItems.each(function() {
                         $(this).val(1);
                     });
                 } else {
                     widget.element.show();
-                    attributeItems.each(function () {
+                    attributeItems.each(function() {
                         if ($(this).closest('[data-role="fpt-item-row"]').is(':visible')) {
                             $(this).val(0);
                         }
@@ -112,8 +112,8 @@ define([
          *
          * @param {jQuery.Event} event
          */
-        addItem: function (event) {
-            var data = {},
+        addItem: function(event) {
+            let data = {},
                 currentElement = event.target || event.srcElement || event.currentTarget,
                 tmpl;
 
@@ -126,23 +126,23 @@ define([
             data.index = this.element.find('[data-role="fpt-item-row"]').length;
 
             tmpl = this.rowTmpl({
-                data: data
+                data: data,
             });
 
             $(tmpl).appendTo(this.element.find('[data-role="fpt-item-container"]'));
 
-            //set selected website_id value if set
+            // set selected website_id value if set
             if (data['website_id']) {
                 this.element.find('[data-role="select-website"][id$="_' + data.index + '_website"]')
                     .val(data['website_id']);
             }
 
-            //set selected country value if set
+            // set selected country value if set
             if (data.country) {
                 this.element.find('[data-role="select-country"][id$="_' + data.index + '_country"]')
                     .val(data.country).trigger('change', data);
             }
-        }
+        },
     });
 
     return $.mage.fptAttribute;

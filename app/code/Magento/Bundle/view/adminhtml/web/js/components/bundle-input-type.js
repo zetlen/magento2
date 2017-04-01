@@ -5,8 +5,8 @@
 
 define([
     'Magento_Ui/js/form/element/select',
-    'uiRegistry'
-], function (Select, registry) {
+    'uiRegistry',
+], function(Select, registry) {
     'use strict';
 
     return Select.extend({
@@ -15,14 +15,14 @@ define([
             parentContainer: '',
             selections: '',
             targetIndex: '',
-            typeMap: {}
+            typeMap: {},
         },
 
         /**
          * @inheritdoc
          */
-        onUpdate: function () {
-            var type = this.typeMap[this.value()];
+        onUpdate: function() {
+            let type = this.typeMap[this.value()];
 
             if (type !== this.previousType) {
                 this.previousType = type;
@@ -36,21 +36,21 @@ define([
          * Toggle 'User Defined' column and clears values
          * @param {Boolean} isRadio
          */
-        processSelections: function (isRadio) {
-            var records = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.selections),
+        processSelections: function(isRadio) {
+            let records = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.selections),
                 checkedFound = false;
 
-            records.elems.each(function (record) {
-                record.elems.filter(function (comp) {
+            records.elems.each(function(record) {
+                record.elems.filter(function(comp) {
                     return comp.index === this.userDefinedIndex;
-                }, this).each(function (comp) {
+                }, this).each(function(comp) {
                     comp.visible(isRadio);
                 });
 
                 if (isRadio) {
-                    record.elems.filter(function (comp) {
+                    record.elems.filter(function(comp) {
                         return comp.index === this.isDefaultIndex;
-                    }, this).each(function (comp) {
+                    }, this).each(function(comp) {
                         if (comp.checked()) {
                             if (checkedFound) {
                                 comp.clearing = true;
@@ -71,8 +71,8 @@ define([
          * @param {String} parent - parent name.
          * @returns {String}
          */
-        retrieveParentName: function (parent) {
+        retrieveParentName: function(parent) {
             return this.name.replace(new RegExp('^(.+?\\.)?' + parent + '\\..+'), '$1' + parent);
-        }
+        },
     });
 });

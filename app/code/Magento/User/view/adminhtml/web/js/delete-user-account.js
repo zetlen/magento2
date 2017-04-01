@@ -3,21 +3,19 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+], function($) {
     'use strict';
 
-    var postData;
+    let postData;
 
-    return function (params, elem) {
-
-        elem.on('click', function () {
-
+    return function(params, elem) {
+        elem.on('click', function() {
             postData = {
                 'data': {
                     'user_id': params.objId,
-                    'current_password': $('[name="current_password"]').val()
-                }
+                    'current_password': $('[name="current_password"]').val(),
+                },
             };
 
             if ($.validator.validateElement($('[name="current_password"]'))) {

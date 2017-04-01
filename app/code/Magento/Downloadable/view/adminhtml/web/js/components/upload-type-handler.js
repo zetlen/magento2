@@ -4,25 +4,25 @@
  */
 define([
     'Magento_Ui/js/form/element/select',
-    'uiRegistry'
-], function (Select, registry) {
+    'uiRegistry',
+], function(Select, registry) {
     'use strict';
 
     return Select.extend({
         defaults: {
             listens: {
-                value: 'changeTypeUpload'
+                value: 'changeTypeUpload',
             },
             typeUrl: 'file',
             typeFile: 'link_url',
-            filterPlaceholder: 'ns = ${ $.ns }, parentScope = ${ $.parentScope }'
+            filterPlaceholder: 'ns = ${ $.ns }, parentScope = ${ $.parentScope }',
         },
 
         /**
          * Initialize component.
          * @returns {Element}
          */
-        initialize: function () {
+        initialize: function() {
             return this
                 ._super()
                 .changeTypeUpload(this.initialValue);
@@ -34,7 +34,7 @@ define([
          * @param {String} currentValue
          * @returns {*}
          */
-        onUpdate: function (currentValue) {
+        onUpdate: function(currentValue) {
             this.changeTypeUpload(currentValue);
 
             return this._super();
@@ -45,8 +45,8 @@ define([
          *
          * @param {String} currentValue
          */
-        changeTypeUpload: function (currentValue) {
-            var componentFile = this.filterPlaceholder + ', index=' + this.typeFile,
+        changeTypeUpload: function(currentValue) {
+            let componentFile = this.filterPlaceholder + ', index=' + this.typeFile,
                 componentUrl = this.filterPlaceholder + ', index=' + this.typeUrl;
 
             switch (currentValue) {
@@ -69,12 +69,12 @@ define([
          * @param {String} filter
          * @param {Boolean} visible
          */
-        changeVisible: function (filter, visible) {
+        changeVisible: function(filter, visible) {
             registry.async(filter)(
-                function (currentComponent) {
+                function(currentComponent) {
                     currentComponent.visible(visible);
                 }
             );
-        }
+        },
     });
 });

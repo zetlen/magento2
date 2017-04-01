@@ -10,17 +10,17 @@ define([
     'mage/translate',
     'mage/calendar',
     'moment',
-    'mageUtils'
-], function (ko, _, $, $t, calendar, moment, utils) {
+    'mageUtils',
+], function(ko, _, $, $t, calendar, moment, utils) {
     'use strict';
 
-    var defaults = {
+    let defaults = {
         dateFormat: 'mm\/dd\/yyyy',
         showsTime: false,
         timeFormat: null,
         buttonImage: null,
         buttonImageOnly: null,
-        buttonText: $t('Select Date')
+        buttonText: $t('Select Date'),
     };
 
     ko.bindingHandlers.datepicker = {
@@ -32,8 +32,8 @@ define([
          * @param {HTMLElement} el - Element, that binding is applied to
          * @param {Function} valueAccessor - Function that returns value, passed to binding
          */
-        init: function (el, valueAccessor) {
-            var config = valueAccessor(),
+        init: function(el, valueAccessor) {
+            let config = valueAccessor(),
                 observable,
                 options = {};
 
@@ -61,9 +61,9 @@ define([
 
             $(el).blur();
 
-            ko.utils.registerEventHandler(el, 'change', function () {
+            ko.utils.registerEventHandler(el, 'change', function() {
                 observable(this.value);
             });
-        }
+        },
     };
 });

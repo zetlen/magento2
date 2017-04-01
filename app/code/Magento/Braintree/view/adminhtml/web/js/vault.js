@@ -2,34 +2,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define([
     'jquery',
     'uiComponent',
-    'Magento_Ui/js/modal/alert'
-], function ($, Class, alert) {
+    'Magento_Ui/js/modal/alert',
+], function($, Class, alert) {
     'use strict';
 
     return Class.extend({
         defaults: {
             $selector: null,
             selector: 'edit_form',
-            $container: null
+            $container: null,
         },
 
         /**
          * Set list of observable attributes
          * @returns {exports.initObservable}
          */
-        initObservable: function () {
-            var self = this;
+        initObservable: function() {
+            let self = this;
 
             self.$selector = $('#' + self.selector);
-            self.$container =  $('#' + self.container);
+            self.$container = $('#' + self.container);
             self.$selector.on(
                 'setVaultNotActive.' + self.getCode(),
-                function () {
+                function() {
                     self.$selector.off('submitOrder.' + self.getCode());
                 }
             );
@@ -44,14 +44,14 @@ define([
          * Get payment code
          * @returns {String}
          */
-        getCode: function () {
+        getCode: function() {
             return this.code;
         },
 
         /**
          * Init event handlers
          */
-        initEventHandlers: function () {
+        initEventHandlers: function() {
             $(this.$container).find('[name="payment[token_switcher]"]')
                 .on('click', this.selectPaymentMethod.bind(this));
         },
@@ -59,7 +59,7 @@ define([
         /**
          * Select current payment token
          */
-        selectPaymentMethod: function () {
+        selectPaymentMethod: function() {
             this.disableEventListeners();
             this.enableEventListeners();
         },
@@ -67,14 +67,14 @@ define([
         /**
          * Enable form event listeners
          */
-        enableEventListeners: function () {
+        enableEventListeners: function() {
             this.$selector.on('submitOrder.' + this.getCode(), this.submitOrder.bind(this));
         },
 
         /**
          * Disable form event listeners
          */
-        disableEventListeners: function () {
+        disableEventListeners: function() {
             this.$selector.off('submitOrder');
         },
 
@@ -82,7 +82,7 @@ define([
          * Pre submit for order
          * @returns {Boolean}
          */
-        submitOrder: function () {
+        submitOrder: function() {
             this.$selector.validate().form();
             this.$selector.trigger('afterValidate.beforeSubmit');
             $('body').trigger('processStop');
@@ -97,28 +97,28 @@ define([
         /**
          * Place order
          */
-        placeOrder: function () {
+        placeOrder: function() {
             this.$selector.trigger('realOrder');
         },
 
         /**
          * Send request to get payment method nonce
          */
-        getPaymentMethodNonce: function () {
-            var self = this;
+        getPaymentMethodNonce: function() {
+            let self = this;
 
             $('body').trigger('processStart');
 
             $.get(self.nonceUrl, {
-                'public_hash': self.publicHash
-            }).done(function (response) {
+                'public_hash': self.publicHash,
+            }).done(function(response) {
                 self.setPaymentDetails(response.paymentMethodNonce);
                 self.placeOrder();
-            }).fail(function (response) {
-                var failed = JSON.parse(response.responseText);
+            }).fail(function(response) {
+                let failed = JSON.parse(response.responseText);
 
                 self.error(failed.message);
-            }).always(function () {
+            }).always(function() {
                 $('body').trigger('processStop');
             });
         },
@@ -127,7 +127,7 @@ define([
          * Store payment details
          * @param {String} nonce
          */
-        setPaymentDetails: function (nonce) {
+        setPaymentDetails: function(nonce) {
             this.createPublicHashSelector();
 
             this.$selector.find('[name="payment[public_hash]"]').val(this.publicHash);
@@ -137,15 +137,15 @@ define([
         /**
          * Creates public hash selector
          */
-        createPublicHashSelector: function () {
-            var $input;
+        createPublicHashSelector: function() {
+            let $input;
 
             if (this.$container.find('#' + this.getNonceSelectorName()).size() === 0) {
                 $input = $('<input>').attr(
                     {
                         type: 'hidden',
                         id: this.getNonceSelectorName(),
-                        name: 'payment[payment_method_nonce]'
+                        name: 'payment[payment_method_nonce]',
                     }
                 );
 
@@ -158,9 +158,9 @@ define([
          * Show alert message
          * @param {String} message
          */
-        error: function (message) {
+        error: function(message) {
             alert({
-                content: message
+                content: message,
             });
         },
 
@@ -168,8 +168,8 @@ define([
          * Get selector name for nonce input
          * @returns {String}
          */
-        getNonceSelectorName: function () {
+        getNonceSelectorName: function() {
             return 'nonce_' + this.getCode();
-        }
+        },
     });
 });

@@ -7,8 +7,8 @@ define([
     'jquery',
     'matchMedia',
     'mage/tabs',
-    'domReady!'
-], function ($, mediaCheck) {
+    'domReady!',
+], function($, mediaCheck) {
     'use strict';
 
     mediaCheck({
@@ -17,19 +17,17 @@ define([
         /**
          * Switch to Desktop Version.
          */
-        entry: function () {
-            var galleryElement;
+        entry: function() {
+            let galleryElement;
 
-            (function () {
-
-                var productInfoMain = $('.product-info-main'),
+            (function() {
+                let productInfoMain = $('.product-info-main'),
                     productInfoAdditional = $('#product-info-additional');
 
                 if (productInfoAdditional.length) {
                     productInfoAdditional.addClass('hidden');
                     productInfoMain.removeClass('responsive');
                 }
-
             })();
 
             galleryElement = $('[data-role=media-gallery]');
@@ -48,25 +46,25 @@ define([
         /**
          * Switch to Mobile Version.
          */
-        exit: function () {
-            var galleryElement;
+        exit: function() {
+            let galleryElement;
 
-            $('.action.toggle.checkout.progress').on('click.gotoCheckoutProgress', function () {
-                var myWrapper = '#checkout-progress-wrapper';
+            $('.action.toggle.checkout.progress').on('click.gotoCheckoutProgress', function() {
+                let myWrapper = '#checkout-progress-wrapper';
 
                 scrollTo(myWrapper + ' .title');
                 $(myWrapper + ' .title').addClass('active');
                 $(myWrapper + ' .content').show();
             });
 
-            $('body').on('click.checkoutProgress', '#checkout-progress-wrapper .title', function () {
+            $('body').on('click.checkoutProgress', '#checkout-progress-wrapper .title', function() {
                 $(this).toggleClass('active');
                 $('#checkout-progress-wrapper .content').toggle();
             });
 
             galleryElement = $('[data-role=media-gallery]');
 
-            setTimeout(function () {
+            setTimeout(function() {
                 if (galleryElement.length && galleryElement.data('mageZoom')) {
                     galleryElement.zoom('disable');
                 }
@@ -77,6 +75,6 @@ define([
                     galleryElement.gallery('option', 'showThumbs', false);
                 }
             }, 2000);
-        }
+        },
     });
 });

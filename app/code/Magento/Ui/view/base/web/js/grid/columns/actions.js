@@ -11,8 +11,8 @@ define([
     'mageUtils',
     'uiRegistry',
     './column',
-    'Magento_Ui/js/modal/confirm'
-], function (_, utils, registry, Column, confirm) {
+    'Magento_Ui/js/modal/confirm',
+], function(_, utils, registry, Column, confirm) {
     'use strict';
 
     return Column.extend({
@@ -24,17 +24,17 @@ define([
             rows: [],
             rowsProvider: '${ $.parentName }',
             fieldClass: {
-                'data-grid-actions-cell': true
+                'data-grid-actions-cell': true,
             },
             templates: {
-                actions: {}
+                actions: {},
             },
             imports: {
-                rows: '${ $.rowsProvider }:rows'
+                rows: '${ $.rowsProvider }:rows',
             },
             listens: {
-                rows: 'updateActions'
-            }
+                rows: 'updateActions',
+            },
         },
 
         /**
@@ -42,7 +42,7 @@ define([
          *
          * @returns {ActionsColumn} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track('actions');
 
@@ -57,8 +57,8 @@ define([
          * @param {String} [actionIndex] - Action identifier.
          * @returns {Array|Object}
          */
-        getAction: function (rowIndex, actionIndex) {
-            var rowActions = this.actions[rowIndex];
+        getAction: function(rowIndex, actionIndex) {
+            let rowActions = this.actions[rowIndex];
 
             return rowActions && actionIndex ?
                 rowActions[actionIndex] :
@@ -71,8 +71,8 @@ define([
          * @param {Number} rowIndex - Index of a row.
          * @returns {Array} Visible actions.
          */
-        getVisibleActions: function (rowIndex) {
-            var rowActions = this.getAction(rowIndex);
+        getVisibleActions: function(rowIndex) {
+            let rowActions = this.getAction(rowIndex);
 
             return _.filter(rowActions, this.isActionVisible, this);
         },
@@ -85,8 +85,8 @@ define([
          * @param {Object} action - Actions' data.
          * @returns {ActionsColumn} Chainable.
          */
-        addAction: function (index, action) {
-            var actionTmpls = this.templates.actions;
+        addAction: function(index, action) {
+            let actionTmpls = this.templates.actions;
 
             actionTmpls[index] = action;
 
@@ -100,7 +100,7 @@ define([
          *
          * @returns {ActionsColumn} Chainable.
          */
-        updateActions: function () {
+        updateActions: function() {
             this.actions = this.rows.map(this._formatActions, this);
 
             return this;
@@ -115,10 +115,10 @@ define([
          * @param {Number} rowIndex - Index of a row.
          * @returns {Array}
          */
-        _formatActions: function (row, rowIndex) {
-            var rowActions      = row[this.index] || {},
-                recordId        = row[this.indexField],
-                customActions   = this.templates.actions;
+        _formatActions: function(row, rowIndex) {
+            let rowActions = row[this.index] || {},
+                recordId = row[this.indexField],
+                customActions = this.templates.actions;
 
             /**
              * Actions iterator.
@@ -127,16 +127,16 @@ define([
                 action = utils.extend({
                     index: index,
                     rowIndex: rowIndex,
-                    recordId: recordId
+                    recordId: recordId,
                 }, action);
 
                 return utils.template(action, row, true);
             }
 
-            rowActions      = _.mapObject(rowActions, iterate);
-            customActions   = _.map(customActions, iterate);
+            rowActions = _.mapObject(rowActions, iterate);
+            customActions = _.map(customActions, iterate);
 
-            customActions.forEach(function (action) {
+            customActions.forEach(function(action) {
                 rowActions[action.index] = action;
             });
 
@@ -150,8 +150,8 @@ define([
          * @param {Number} rowIndex - Index of a row.
          * @returns {ActionsColumn} Chainable.
          */
-        applyAction: function (actionIndex, rowIndex) {
-            var action = this.getAction(rowIndex, actionIndex),
+        applyAction: function(actionIndex, rowIndex) {
+            let action = this.getAction(rowIndex, actionIndex),
                 callback = this._getCallback(action);
 
             action.confirm ?
@@ -167,8 +167,8 @@ define([
          * @param {Object} action - Action object.
          * @returns {Function|Undefined}
          */
-        getActionHandler: function (action) {
-            var index = action.index,
+        getActionHandler: function(action) {
+            let index = action.index,
                 rowIndex = action.rowIndex;
 
             if (this.isHandlerRequired(index, rowIndex)) {
@@ -183,8 +183,8 @@ define([
          * @param {Number} rowIndex - Index of a row.
          * @returns {Boolean}
          */
-        isHandlerRequired: function (actionIndex, rowIndex) {
-            var action = this.getAction(rowIndex, actionIndex);
+        isHandlerRequired: function(actionIndex, rowIndex) {
+            let action = this.getAction(rowIndex, actionIndex);
 
             return _.isObject(action.callback) || action.confirm || !action.href;
         },
@@ -197,8 +197,8 @@ define([
          * @param {Object} action - Actions' object.
          * @returns {Function} Callback function.
          */
-        _getCallback: function (action) {
-            var args = [action.index, action.recordId, action],
+        _getCallback: function(action) {
+            let args = [action.index, action.recordId, action],
                 callback = action.callback;
 
             if (utils.isObject(callback)) {
@@ -211,7 +211,7 @@ define([
                 callback = this.defaultCallback.bind(this);
             }
 
-            return function () {
+            return function() {
                 callback.apply(callback, args);
             };
         },
@@ -223,21 +223,21 @@ define([
          * @param {Object} action - Actions' object.
          * @returns {Function} Callback function.
          */
-        _getCallbacks: function (action) {
-            var callback = action.callback,
+        _getCallbacks: function(action) {
+            let callback = action.callback,
                 callbacks = [],
                 tmpCallback;
 
-            _.each(callback, function (cb) {
+            _.each(callback, function(cb) {
                 tmpCallback = {
                     action: registry.async(cb.provider),
-                    args: _.compact([cb.target, cb.params])
+                    args: _.compact([cb.target, cb.params]),
                 };
                 callbacks.push(tmpCallback);
             });
 
-            return function () {
-                _.each(callbacks, function (cb) {
+            return function() {
+                _.each(callbacks, function(cb) {
                     cb.action.apply(cb.action, cb.args);
                 });
             };
@@ -252,7 +252,7 @@ define([
          *      with a specfied action.
          * @param {Object} action - Actions' data.
          */
-        defaultCallback: function (actionIndex, recordId, action) {
+        defaultCallback: function(actionIndex, recordId, action) {
             window.location.href = action.href;
         },
 
@@ -263,15 +263,15 @@ define([
          * @param {Function} callback - Callback that will be
          *      invoked if action is confirmed.
          */
-        _confirm: function (action, callback) {
-            var confirmData = action.confirm;
+        _confirm: function(action, callback) {
+            let confirmData = action.confirm;
 
             confirm({
                 title: confirmData.title,
                 content: confirmData.message,
                 actions: {
-                    confirm: callback
-                }
+                    confirm: callback,
+                },
             });
         },
 
@@ -281,7 +281,7 @@ define([
          * @param {Number} rowIndex - Row index.
          * @returns {Boolean}
          */
-        isSingle: function (rowIndex) {
+        isSingle: function(rowIndex) {
             return this.getVisibleActions(rowIndex).length === 1;
         },
 
@@ -291,7 +291,7 @@ define([
          * @param {Number} rowIndex - Row index.
          * @returns {Boolean}
          */
-        isMultiple: function (rowIndex) {
+        isMultiple: function(rowIndex) {
             return this.getVisibleActions(rowIndex).length > 1;
         },
 
@@ -301,7 +301,7 @@ define([
          * @param {Object} action - Action object.
          * @returns {Boolean}
          */
-        isActionVisible: function (action) {
+        isActionVisible: function(action) {
             return action.hidden !== true;
         },
 
@@ -311,8 +311,8 @@ define([
          *
          * @returns {Boolean} False.
          */
-        hasFieldAction: function () {
+        hasFieldAction: function() {
             return false;
-        }
+        },
     });
 });

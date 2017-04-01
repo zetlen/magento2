@@ -8,14 +8,14 @@
  */
 define([
     'underscore',
-    'uiCollection'
-], function (_, Collection) {
+    'uiCollection',
+], function(_, Collection) {
     'use strict';
 
     return Collection.extend({
         defaults: {
             template: 'ui/grid/filters/chips',
-            componentType: 'filtersChips'
+            componentType: 'filtersChips',
         },
 
         /**
@@ -23,8 +23,8 @@ define([
          *
          * @returns {Boolean}
          */
-        hasPreviews: function () {
-            return this.elems().some(function (elem) {
+        hasPreviews: function() {
+            return this.elems().some(function(elem) {
                 return !!elem.previews.length;
             });
         },
@@ -34,10 +34,10 @@ define([
          *
          * @returns {Chips} Chainable.
          */
-        clear: function () {
+        clear: function() {
             _.invoke(this.elems(), 'clear');
 
             return this;
-        }
+        },
     });
 });

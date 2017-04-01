@@ -2,16 +2,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 define([
     'jquery',
     'uiComponent',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/view/utils/dom-observer',
     'mage/translate',
-    'Magento_Braintree/js/validator'
-], function ($, Class, alert, domObserver, $t, validator) {
+    'Magento_Braintree/js/validator',
+], function($, Class, alert, domObserver, $t, validator) {
     'use strict';
 
     return Class.extend({
@@ -25,16 +25,16 @@ define([
             braintree: null,
             selectedCardType: null,
             imports: {
-                onActiveChange: 'active'
-            }
+                onActiveChange: 'active',
+            },
         },
 
         /**
          * Set list of observable attributes
          * @returns {exports.initObservable}
          */
-        initObservable: function () {
-            var self = this;
+        initObservable: function() {
+            let self = this;
 
             validator.setConfig(this);
 
@@ -43,7 +43,7 @@ define([
                 .observe([
                     'active',
                     'scriptLoaded',
-                    'selectedCardType'
+                    'selectedCardType',
                 ]);
 
             // re-init payment method events
@@ -51,7 +51,7 @@ define([
                 .on('changePaymentMethod.' + this.code, this.changePaymentMethod.bind(this));
 
             // listen block changes
-            domObserver.get('#' + self.container, function () {
+            domObserver.get('#' + self.container, function() {
                 if (self.scriptLoaded()) {
                     self.$selector.off('submit');
                     self.initBraintree();
@@ -67,7 +67,7 @@ define([
          * @param {String} method
          * @returns {exports.changePaymentMethod}
          */
-        changePaymentMethod: function (event, method) {
+        changePaymentMethod: function(event, method) {
             this.active(method === this.code);
 
             return this;
@@ -77,7 +77,7 @@ define([
          * Triggered when payment changed
          * @param {Boolean} isActive
          */
-        onActiveChange: function (isActive) {
+        onActiveChange: function(isActive) {
             if (!isActive) {
                 this.$selector.off('submitOrder.braintree');
 
@@ -102,12 +102,12 @@ define([
         /**
          * Load external Braintree SDK
          */
-        loadScript: function () {
-            var self = this,
+        loadScript: function() {
+            let self = this,
                 state = self.scriptLoaded;
 
             $('body').trigger('processStart');
-            require([this.sdkUrl], function (braintree) {
+            require([this.sdkUrl], function(braintree) {
                 state(true);
                 self.braintree = braintree;
                 self.initBraintree();
@@ -118,8 +118,8 @@ define([
         /**
          * Setup Braintree SDK
          */
-        initBraintree: function () {
-            var self = this;
+        initBraintree: function() {
+            let self = this;
 
             try {
                 $('body').trigger('processStart');
@@ -131,7 +131,7 @@ define([
                     /**
                      * Triggered when sdk was loaded
                      */
-                    onReady: function () {
+                    onReady: function() {
                         $('body').trigger('processStop');
                     },
 
@@ -139,7 +139,7 @@ define([
                      * Callback for success response
                      * @param {Object} response
                      */
-                    onPaymentMethodReceived: function (response) {
+                    onPaymentMethodReceived: function(response) {
                         if (self.validateCardType()) {
                             self.setPaymentDetails(response.nonce);
                             self.placeOrder();
@@ -150,9 +150,9 @@ define([
                      * Error callback
                      * @param {Object} response
                      */
-                    onError: function (response) {
+                    onError: function(response) {
                         self.error(response.message);
-                    }
+                    },
                 });
             } catch (e) {
                 $('body').trigger('processStop');
@@ -164,33 +164,33 @@ define([
          * Get hosted fields configuration
          * @returns {Object}
          */
-        getHostedFields: function () {
-            var self = this,
+        getHostedFields: function() {
+            let self = this,
                 fields = {
                     number: {
-                        selector: self.getSelector('cc_number')
+                        selector: self.getSelector('cc_number'),
                     },
                     expirationMonth: {
                         selector: self.getSelector('cc_exp_month'),
-                        placeholder: $t('MM')
+                        placeholder: $t('MM'),
                     },
                     expirationYear: {
                         selector: self.getSelector('cc_exp_year'),
-                        placeholder: $t('YY')
+                        placeholder: $t('YY'),
                     },
 
                     /**
                      * Triggered when hosted field is changed
                      * @param {Object} event
                      */
-                    onFieldEvent: function (event) {
+                    onFieldEvent: function(event) {
                         return self.fieldEventHandler(event);
-                    }
+                    },
                 };
 
             if (self.useCvv) {
                 fields.cvv = {
-                    selector: self.getSelector('cc_cid')
+                    selector: self.getSelector('cc_cid'),
                 };
             }
 
@@ -202,8 +202,8 @@ define([
          * @param {Object} event
          * @returns {Boolean}
          */
-        fieldEventHandler: function (event) {
-            var self = this,
+        fieldEventHandler: function(event) {
+            let self = this,
                 $cardType = $('#' + self.container).find('.icon-type');
 
             if (event.isEmpty === false) {
@@ -211,7 +211,6 @@ define([
             }
 
             if (event.type !== 'fieldStateChange') {
-
                 return false;
             }
 
@@ -235,23 +234,23 @@ define([
          * Show alert message
          * @param {String} message
          */
-        error: function (message) {
+        error: function(message) {
             alert({
-                content: message
+                content: message,
             });
         },
 
         /**
          * Enable form event listeners
          */
-        enableEventListeners: function () {
+        enableEventListeners: function() {
             this.$selector.on('submitOrder.braintree', this.submitOrder.bind(this));
         },
 
         /**
          * Disable form event listeners
          */
-        disableEventListeners: function () {
+        disableEventListeners: function() {
             this.$selector.off('submitOrder');
             this.$selector.off('submit');
         },
@@ -260,8 +259,8 @@ define([
          * Store payment details
          * @param {String} nonce
          */
-        setPaymentDetails: function (nonce) {
-            var $container = $('#' + this.container);
+        setPaymentDetails: function(nonce) {
+            let $container = $('#' + this.container);
 
             $container.find('[name="payment[payment_method_nonce]"]').val(nonce);
         },
@@ -269,7 +268,7 @@ define([
         /**
          * Trigger order submit
          */
-        submitOrder: function () {
+        submitOrder: function() {
             this.$selector.validate().form();
             this.$selector.trigger('afterValidate.beforeSubmit');
             $('body').trigger('processStop');
@@ -285,7 +284,7 @@ define([
         /**
          * Place order
          */
-        placeOrder: function () {
+        placeOrder: function() {
             $('#' + this.selector).trigger('realOrder');
         },
 
@@ -293,11 +292,11 @@ define([
          * Get list of currently available card types
          * @returns {Array}
          */
-        getCcAvailableTypes: function () {
-            var types = [],
+        getCcAvailableTypes: function() {
+            let types = [],
                 $options = $(this.getSelector('cc_type')).find('option');
 
-            $.map($options, function (option) {
+            $.map($options, function(option) {
                 types.push($(option).val());
             });
 
@@ -308,8 +307,8 @@ define([
          * Validate current entered card type
          * @returns {Boolean}
          */
-        validateCardType: function () {
-            var $input = $(this.getSelector('cc_number'));
+        validateCardType: function() {
+            let $input = $(this.getSelector('cc_number'));
 
             $input.removeClass('braintree-hosted-fields-invalid');
 
@@ -328,8 +327,8 @@ define([
          * @param {String} field
          * @returns {String}
          */
-        getSelector: function (field) {
+        getSelector: function(field) {
             return '#' + this.code + '_' + field;
-        }
+        },
     });
 });

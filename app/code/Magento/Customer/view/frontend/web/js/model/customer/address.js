@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
     /**
@@ -12,8 +12,8 @@ define([], function () {
      * @param {Object} addressData
      * @return {Object}
      */
-    return function (addressData) {
-        var regionId;
+    return function(addressData) {
+        let regionId;
 
         if (addressData.region['region_id'] && addressData.region['region_id'] !== '0') {
             regionId = addressData.region['region_id'] + '';
@@ -46,58 +46,58 @@ define([], function () {
             /**
              * @return {*}
              */
-            isDefaultShipping: function () {
+            isDefaultShipping: function() {
                 return addressData['default_shipping'];
             },
 
             /**
              * @return {*}
              */
-            isDefaultBilling: function () {
+            isDefaultBilling: function() {
                 return addressData['default_billing'];
             },
 
             /**
              * @return {*}
              */
-            getAddressInline: function () {
+            getAddressInline: function() {
                 return addressData.inline;
             },
 
             /**
              * @return {String}
              */
-            getType: function () {
+            getType: function() {
                 return 'customer-address';
             },
 
             /**
              * @return {String}
              */
-            getKey: function () {
+            getKey: function() {
                 return this.getType() + this.customerAddressId;
             },
 
             /**
              * @return {String}
              */
-            getCacheKey: function () {
+            getCacheKey: function() {
                 return this.getKey();
             },
 
             /**
              * @return {Boolean}
              */
-            isEditable: function () {
+            isEditable: function() {
                 return false;
             },
 
             /**
              * @return {Boolean}
              */
-            canUseForBilling: function () {
+            canUseForBilling: function() {
                 return true;
-            }
+            },
         };
     };
 });

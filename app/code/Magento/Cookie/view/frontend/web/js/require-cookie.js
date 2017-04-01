@@ -5,22 +5,22 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.requireCookie', {
         options: {
             event: 'click',
             noCookieUrl: 'enable-cookies',
-            triggers: ['.action.login', '.action.submit']
+            triggers: ['.action.login', '.action.submit'],
         },
 
         /**
          * Constructor
          * @private
          */
-        _create: function () {
+        _create: function() {
             this._bind();
         },
 
@@ -28,10 +28,10 @@ define([
          * This method binds elements found in this widget.
          * @private
          */
-        _bind: function () {
-            var events = {};
+        _bind: function() {
+            let events = {};
 
-            $.each(this.options.triggers, function (index, value) {
+            $.each(this.options.triggers, function(index, value) {
                 events['click ' + value] = '_checkCookie';
             });
             this._on(events);
@@ -42,13 +42,13 @@ define([
          * @param {jQuery.Event} event
          * @private
          */
-        _checkCookie: function (event) {
+        _checkCookie: function(event) {
             if (navigator.cookieEnabled) {
                 return;
             }
             event.preventDefault();
             window.location = this.options.noCookieUrl;
-        }
+        },
     });
 
     return $.mage.requireCookie;

@@ -3,19 +3,19 @@
  * See COPYING.txt for license details.
  */
 
-(function (factory) {
+(function(factory) {
     'use strict';
 
     if (typeof define === 'function' && define.amd) {
         define([
             'jquery',
             'jquery/ui',
-            'mage/validation/validation'
+            'mage/validation/validation',
         ], factory);
     } else {
         factory(jQuery);
     }
-}(function ($) {
+}(function($) {
     'use strict';
 
     $.widget('mage.validation', $.mage.validation, {
@@ -26,8 +26,8 @@
              * @param {*} error
              * @param {HTMLElement} element
              */
-            errorPlacement: function (error, element) {
-                var messageBox,
+            errorPlacement: function(error, element) {
+                let messageBox,
                     dataValidate;
 
                 if ($(element).hasClass('datetime-picker')) {
@@ -60,11 +60,11 @@
              * @param {HTMLElement} element
              * @param {String} errorClass
              */
-            highlight: function (element, errorClass) {
-                var dataValidate = $(element).attr('data-validate');
+            highlight: function(element, errorClass) {
+                let dataValidate = $(element).attr('data-validate');
 
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
-                    $(element).parent().find('.datetime-picker').each(function () {
+                    $(element).parent().find('.datetime-picker').each(function() {
                         $(this).removeClass(errorClass);
 
                         if ($(this).val().length === 0) {
@@ -82,8 +82,8 @@
              * @param {HTMLElement} element
              * @param {String} errorClass
              */
-            unhighlight: function (element, errorClass) {
-                var dataValidate = $(element).attr('data-validate');
+            unhighlight: function(element, errorClass) {
+                let dataValidate = $(element).attr('data-validate');
 
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
@@ -92,8 +92,8 @@
                 } else {
                     $(element).removeClass(errorClass);
                 }
-            }
-        }
+            },
+        },
     });
 
     return $.mage.validation;

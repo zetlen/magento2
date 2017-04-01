@@ -11,8 +11,8 @@ define([
     'underscore',
     'jquery/ui',
     'Magento_Ui/js/modal/confirm',
-    'mage/translate'
-], function ($, _) {
+    'mage/translate',
+], function($, _) {
     'use strict';
 
     $.widget('mage.alert', $.mage.confirm, {
@@ -24,7 +24,7 @@ define([
                 /**
                  * Callback always - called on all actions.
                  */
-                always: function () {}
+                always: function() {},
             },
             buttons: [{
                 text: $.mage.__('OK'),
@@ -33,24 +33,24 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
+                click: function() {
                     this.closeModal(true);
-                }
-            }]
+                },
+            }],
         },
 
         /**
          * Close modal window.
          */
-        closeModal: function () {
+        closeModal: function() {
             this.options.actions.always();
             this.element.bind('alertclosed', _.bind(this._remove, this));
 
             return this._super();
-        }
+        },
     });
 
-    return function (config) {
+    return function(config) {
         return $('<div></div>').html(config.content).alert(config);
     };
 });

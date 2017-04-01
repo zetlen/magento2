@@ -2,16 +2,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+/* browser:true*/
+/* global define*/
 
 define([
     'jquery',
     'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
-    'mage/translate'
-], function ($, Component, validator, VaultEnabler, $t) {
+    'mage/translate',
+], function($, Component, validator, VaultEnabler, $t) {
     'use strict';
 
     return Component.extend({
@@ -23,15 +23,15 @@ define([
                 /**
                  * {String}
                  */
-                id: 'co-transparent-form-braintree'
+                id: 'co-transparent-form-braintree',
             },
-            isValidCardNumber: false
+            isValidCardNumber: false,
         },
 
         /**
          * @returns {exports.initialize}
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.vaultEnabler = new VaultEnabler();
             this.vaultEnabler.setPaymentCode(this.getVaultCode());
@@ -42,7 +42,7 @@ define([
         /**
          * Init config
          */
-        initClientConfig: function () {
+        initClientConfig: function() {
             this._super();
 
             // Hosted fields settings
@@ -52,8 +52,8 @@ define([
         /**
          * @returns {Object}
          */
-        getData: function () {
-            var data = this._super();
+        getData: function() {
+            let data = this._super();
 
             this.vaultEnabler.visitAdditionalData(data);
 
@@ -63,7 +63,7 @@ define([
         /**
          * @returns {Bool}
          */
-        isVaultEnabled: function () {
+        isVaultEnabled: function() {
             return this.vaultEnabler.isVaultEnabled();
         },
 
@@ -71,25 +71,25 @@ define([
          * Get Braintree Hosted Fields
          * @returns {Object}
          */
-        getHostedFields: function () {
-            var self = this,
+        getHostedFields: function() {
+            let self = this,
                 fields = {
                     number: {
-                        selector: self.getSelector('cc_number')
+                        selector: self.getSelector('cc_number'),
                     },
                     expirationMonth: {
                         selector: self.getSelector('expirationMonth'),
-                        placeholder: $t('MM')
+                        placeholder: $t('MM'),
                     },
                     expirationYear: {
                         selector: self.getSelector('expirationYear'),
-                        placeholder: $t('YY')
-                    }
+                        placeholder: $t('YY'),
+                    },
                 };
 
             if (self.hasVerification()) {
                 fields.cvv = {
-                    selector: self.getSelector('cc_cid')
+                    selector: self.getSelector('cc_cid'),
                 };
             }
 
@@ -98,13 +98,12 @@ define([
              * @param {Object} event
              * @returns {Boolean}
              */
-            fields.onFieldEvent = function (event) {
+            fields.onFieldEvent = function(event) {
                 if (event.isEmpty === false) {
                     self.validateCardType();
                 }
 
                 if (event.type !== 'fieldStateChange') {
-
                     return false;
                 }
 
@@ -128,8 +127,8 @@ define([
          * Validate current credit card type
          * @returns {Boolean}
          */
-        validateCardType: function () {
-            var $selector = $(this.getSelector('cc_number')),
+        validateCardType: function() {
+            let $selector = $(this.getSelector('cc_number')),
                 invalidClass = 'braintree-hosted-fields-invalid';
 
             $selector.removeClass(invalidClass);
@@ -146,7 +145,7 @@ define([
         /**
          * Trigger order placing
          */
-        placeOrderClick: function () {
+        placeOrderClick: function() {
             if (this.validateCardType()) {
                 $(this.getSelector('submit')).trigger('click');
             }
@@ -155,8 +154,8 @@ define([
         /**
          * @returns {String}
          */
-        getVaultCode: function () {
+        getVaultCode: function() {
             return window.checkoutConfig.payment[this.getCode()].ccVaultCode;
-        }
+        },
     });
 });

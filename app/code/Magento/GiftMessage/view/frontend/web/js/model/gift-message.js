@@ -6,14 +6,14 @@
 define([
     'uiElement',
     'underscore',
-    'mage/url'
-], function (uiElement, _, url) {
+    'mage/url',
+], function(uiElement, _, url) {
     'use strict';
 
-    var provider = uiElement();
+    let provider = uiElement();
 
-    return function (itemId) {
-        var model = {
+    return function(itemId) {
+        let model = {
             id: 'message-' + itemId,
             itemId: itemId,
             observables: {},
@@ -21,18 +21,18 @@ define([
             submitParams: [
                 'recipient',
                 'sender',
-                'message'
+                'message',
             ],
 
             /**
              * Initialize.
              */
-            initialize: function () {
-                var message = false;
+            initialize: function() {
+                let message = false;
 
                 this.getObservable('alreadyAdded')(false);
 
-                if (this.itemId == 'orderLevel') { //eslint-disable-line eqeqeq
+                if (this.itemId == 'orderLevel') { // eslint-disable-line eqeqeq
                     message = window.giftOptionsConfig.giftMessage.hasOwnProperty(this.itemId) ?
                         window.giftOptionsConfig.giftMessage[this.itemId] :
                         null;
@@ -56,7 +56,7 @@ define([
              * @param {String} key
              * @return {*}
              */
-            getObservable: function (key) {
+            getObservable: function(key) {
                 this.initObservable(this.id, key);
 
                 return provider[this.getUniqueKey(this.id, key)];
@@ -66,7 +66,7 @@ define([
              * @param {String} node
              * @param {String} key
              */
-            initObservable: function (node, key) {
+            initObservable: function(node, key) {
                 if (node && !this.observables.hasOwnProperty(node)) {
                     this.observables[node] = [];
                 }
@@ -82,7 +82,7 @@ define([
              * @param {String} key
              * @return {String}
              */
-            getUniqueKey: function (node, key) {
+            getUniqueKey: function(node, key) {
                 return node + '-' + key;
             },
 
@@ -90,7 +90,7 @@ define([
              * @param {String} key
              * @return {null}
              */
-            getConfigValue: function (key) {
+            getConfigValue: function(key) {
                 return window.giftOptionsConfig.hasOwnProperty(key) ?
                     window.giftOptionsConfig[key]
                     : null;
@@ -99,18 +99,18 @@ define([
             /**
              * Reset.
              */
-            reset: function () {
+            reset: function() {
                 this.getObservable('isClear')(true);
             },
 
             /**
              * @return {Array}
              */
-            getAfterSubmitCallbacks: function () {
-                var callbacks = [];
+            getAfterSubmitCallbacks: function() {
+                let callbacks = [];
 
                 callbacks.push(this.afterSubmit);
-                _.each(this.additionalOptions, function (option) {
+                _.each(this.additionalOptions, function(option) {
                     if (_.isFunction(option.afterSubmit)) {
                         callbacks.push(option.afterSubmit);
                     }
@@ -122,7 +122,7 @@ define([
             /**
              * After submit.
              */
-            afterSubmit: function () {
+            afterSubmit: function() {
                 window.location.href = url.build('checkout/cart/updatePost') +
                     '?form_key=' + window.checkoutConfig.formKey +
                     '&cart[]';
@@ -132,12 +132,12 @@ define([
              * @param {Boolean} remove
              * @return {Object}
              */
-            getSubmitParams: function (remove) {
-                var params = {},
+            getSubmitParams: function(remove) {
+                let params = {},
                     self = this;
 
-                _.each(this.submitParams, function (key) {
-                    var observable = provider[self.getUniqueKey(self.id, key)];
+                _.each(this.submitParams, function(key) {
+                    let observable = provider[self.getUniqueKey(self.id, key)];
 
                     if (_.isFunction(observable)) {
                         params[key] = remove ? null : observable();
@@ -147,7 +147,7 @@ define([
                 if (this.additionalOptions.length) {
                     params['extension_attributes'] = {};
                 }
-                _.each(this.additionalOptions, function (option) {
+                _.each(this.additionalOptions, function(option) {
                     if (_.isFunction(option.getSubmitParams)) {
                         params['extension_attributes'] = _.extend(
                             params['extension_attributes'],
@@ -164,8 +164,8 @@ define([
              *
              * @returns {Boolean}
              */
-            isGiftMessageAvailable: function () {
-                var isGloballyAvailable,
+            isGiftMessageAvailable: function() {
+                let isGloballyAvailable,
                     giftMessageConfig,
                     itemConfig;
 
@@ -183,7 +183,7 @@ define([
                     {};
 
                 return itemConfig.hasOwnProperty('is_available') ? itemConfig['is_available'] : isGloballyAvailable;
-            }
+            },
         };
 
         model.initialize();

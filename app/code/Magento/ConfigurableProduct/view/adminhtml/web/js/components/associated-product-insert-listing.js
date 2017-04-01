@@ -5,8 +5,8 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/form/components/insert-listing'
-], function (_, insertListing) {
+    'Magento_Ui/js/form/components/insert-listing',
+], function(_, insertListing) {
     'use strict';
 
     return insertListing.extend({
@@ -25,19 +25,19 @@ define([
                 productsColumns: '${ $.productsColumns }',
                 productsMassAction: '${ $.productsMassAction }',
                 modalWithGrid: '${ $.modalWithGrid }',
-                productsFilters: '${ $.productsFilters }'
+                productsFilters: '${ $.productsFilters }',
             },
             exports: {
-                externalProviderParams: '${ $.externalProvider }:params'
+                externalProviderParams: '${ $.externalProvider }:params',
             },
             links: {
-                changeProductData: '${ $.provider }:${ $.changeProductProvider }'
+                changeProductData: '${ $.provider }:${ $.changeProductProvider }',
             },
             listens: {
                 '${ $.externalProvider }:params': '_setFilters _setVisibilityMassActionColumn',
                 '${ $.productsProvider }:data': '_handleManualGridOpening',
-                '${ $.productsMassAction }:selected': '_handleManualGridSelect'
-            }
+                '${ $.productsMassAction }:selected': '_handleManualGridSelect',
+            },
         },
 
         /**
@@ -45,7 +45,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super().observe(
                 'changeProductData'
             );
@@ -58,8 +58,8 @@ define([
          *
          * @returns {Array}
          */
-        getUsedProductIds: function () {
-            var usedProductsIds = this.source.get(this.dataScopeAssociatedProduct);
+        getUsedProductIds: function() {
+            let usedProductsIds = this.source.get(this.dataScopeAssociatedProduct);
 
             return usedProductsIds.slice();
         },
@@ -69,7 +69,7 @@ define([
          *
          * @returns {Object}
          */
-        doRender: function (showMassActionColumn, typeGrid) {
+        doRender: function(showMassActionColumn, typeGrid) {
             this.typeGrid = typeGrid;
             this.showMassActionColumn = showMassActionColumn;
 
@@ -88,7 +88,7 @@ define([
          *
          * @returns {Object}
          */
-        showGridAssignProduct: function () {
+        showGridAssignProduct: function() {
             this.product = {};
             this.rowIndexForChange = undefined;
 
@@ -101,7 +101,7 @@ define([
          * @param {String} rowIndex
          * @param {String} product
          */
-        showGridChangeProduct: function (rowIndex, product) {
+        showGridChangeProduct: function(rowIndex, product) {
             this.rowIndexForChange = rowIndex;
             this.product = product;
             this.doRender(false, 'changeProduct');
@@ -112,10 +112,10 @@ define([
          *
          * @param {String} rowIndex
          */
-        selectProduct: function (rowIndex) {
+        selectProduct: function(rowIndex) {
             this.changeProductData({
                 rowIndex: this.rowIndexForChange,
-                product: this.productsProvider().data.items[rowIndex]
+                product: this.productsProvider().data.items[rowIndex],
             });
             this.modalWithGrid().closeModal();
         },
@@ -125,9 +125,9 @@ define([
          *
          * @private
          */
-        _setVisibilityMassActionColumn: function () {
-            this.productsMassAction(function (massActionComponent) {
-                this.productsColumns().elems().each(function (rowElement) {
+        _setVisibilityMassActionColumn: function() {
+            this.productsMassAction(function(massActionComponent) {
+                this.productsColumns().elems().each(function(rowElement) {
                     rowElement.disableAction = this.showMassActionColumn;
                 }, this);
                 massActionComponent.visible = this.showMassActionColumn;
@@ -140,8 +140,8 @@ define([
          * @param {Object} params
          * @private
          */
-        _setFilters: function (params) {
-            var filterModifier = {},
+        _setFilters: function(params) {
+            let filterModifier = {},
                 attrCodes,
                 usedProductIds,
                 attributes;
@@ -160,21 +160,21 @@ define([
                 }
 
                 filterModifier['entity_id'] = {
-                    'condition_type': 'nin', value: usedProductIds
+                    'condition_type': 'nin', "value": usedProductIds,
                 };
-                attrCodes.each(function (code) {
+                attrCodes.each(function(code) {
                     filterModifier[code] = {
-                        'condition_type': 'notnull'
+                        'condition_type': 'notnull',
                     };
                 });
 
                 if (this.typeGrid === 'changeProduct') {
                     attributes = JSON.parse(this.product.attributes);
 
-                    filterModifier = _.extend(filterModifier, _.mapObject(attributes, function (value) {
+                    filterModifier = _.extend(filterModifier, _.mapObject(attributes, function(value) {
                         return {
                             'condition_type': 'eq',
-                            'value': value
+                            'value': value,
                         };
                     }));
 
@@ -196,8 +196,8 @@ define([
          * @returns {Array}
          * @private
          */
-        _getAttributesCodes: function () {
-            var attrCodes = this.source.get('data.attribute_codes');
+        _getAttributesCodes: function() {
+            let attrCodes = this.source.get('data.attribute_codes');
 
             return attrCodes ? attrCodes : [];
         },
@@ -208,8 +208,8 @@ define([
          * @returns {Array}
          * @private
          */
-        _getProductVariations: function () {
-            var matrix = this.source.get('data.configurable-matrix');
+        _getProductVariations: function() {
+            let matrix = this.source.get('data.configurable-matrix');
 
             return matrix ? matrix : [];
         },
@@ -218,9 +218,9 @@ define([
          * Handle manual grid after opening
          * @private
          */
-        _handleManualGridOpening: function (data) {
+        _handleManualGridOpening: function(data) {
             if (data.items.length && this.typeGrid === 'assignProduct') {
-                this.productsColumns().elems().each(function (rowElement) {
+                this.productsColumns().elems().each(function(rowElement) {
                     rowElement.disableAction = true;
                 });
 
@@ -234,12 +234,12 @@ define([
          * @param {Array} selected
          * @private
          */
-        _handleManualGridSelect: function (selected) {
-            var selectedRows,
+        _handleManualGridSelect: function(selected) {
+            let selectedRows,
                 selectedVariationKeys;
 
             if (this.typeGrid === 'assignProduct') {
-                selectedRows = _.filter(this.productsProvider().data.items, function (row) {
+                selectedRows = _.filter(this.productsProvider().data.items, function(row) {
                     return selected.indexOf(row['entity_id']) !== -1;
                 });
                 selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
@@ -255,18 +255,18 @@ define([
          * @param {Array} selected
          * @private
          */
-        _disableRows: function (items, selectedVariationKeys, selected) {
+        _disableRows: function(items, selectedVariationKeys, selected) {
             selectedVariationKeys = selectedVariationKeys === undefined ? [] : selectedVariationKeys;
             selected = selected === undefined ? [] : selected;
-            this.productsMassAction(function (massaction) {
-                var configurableVariationKeys = _.union(
+            this.productsMassAction(function(massaction) {
+                let configurableVariationKeys = _.union(
                     selectedVariationKeys,
                     _.pluck(this._getProductVariations(), 'variationKey')
                     ),
                     variationKeyMap = this._getVariationKeyMap(items),
                     rowsForDisable = _.keys(_.pick(
                         variationKeyMap,
-                        function (variationKey) {
+                        function(variationKey) {
                             return configurableVariationKeys.indexOf(variationKey) !== -1;
                         }
                     ));
@@ -282,17 +282,16 @@ define([
          * @returns {Array} [{entity_id: variation-key}, ...]
          * @private
          */
-        _getVariationKeyMap: function (items) {
-            var variationKeyMap = {};
+        _getVariationKeyMap: function(items) {
+            let variationKeyMap = {};
 
-            _.each(items, function (row) {
+            _.each(items, function(row) {
                 variationKeyMap[row['entity_id']] = _.values(
                     _.pick(row, this._getAttributesCodes())
                 ).sort().join('-');
-
             }, this);
 
             return variationKeyMap;
-        }
+        },
     });
 });

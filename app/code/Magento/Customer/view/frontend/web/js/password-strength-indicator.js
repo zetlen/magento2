@@ -10,8 +10,8 @@ define([
     'jquery',
     'Magento_Customer/js/zxcvbn',
     'mage/translate',
-    'mage/validation'
-], function ($, zxcvbn, $t) {
+    'mage/validation',
+], function($, zxcvbn, $t) {
     'use strict';
 
     $.widget('mage.passwordStrengthIndicator', {
@@ -19,14 +19,14 @@ define([
             cache: {},
             passwordSelector: '[type=password]',
             passwordStrengthMeterSelector: '[data-role=password-strength-meter]',
-            passwordStrengthMeterLabelSelector: '[data-role=password-strength-meter-label]'
+            passwordStrengthMeterLabelSelector: '[data-role=password-strength-meter-label]',
         },
 
         /**
          * Widget initialization
          * @private
          */
-        _create: function () {
+        _create: function() {
             this.options.cache.input = $(this.options.passwordSelector, this.element);
             this.options.cache.meter = $(this.options.passwordStrengthMeterSelector, this.element);
             this.options.cache.label = $(this.options.passwordStrengthMeterLabelSelector, this.element);
@@ -37,11 +37,11 @@ define([
          * Event binding, will monitor scroll and resize events (resize events left for backward compat)
          * @private
          */
-        _bind: function () {
+        _bind: function() {
             this._on(this.options.cache.input, {
                 'change': this._calculateStrength,
                 'keyup': this._calculateStrength,
-                'paste': this._calculateStrength
+                'paste': this._calculateStrength,
             });
         },
 
@@ -49,8 +49,8 @@ define([
          * Calculate password strength
          * @private
          */
-        _calculateStrength: function () {
-            var password = this._getPassword(),
+        _calculateStrength: function() {
+            let password = this._getPassword(),
                 isEmpty = password.length === 0,
                 zxcvbnScore = zxcvbn(password).score,
                 displayScore,
@@ -60,7 +60,7 @@ define([
             if (isEmpty) {
                 displayScore = 0;
             } else {
-                isValid  = $.validator.validateSingleElement(this.options.cache.input);
+                isValid = $.validator.validateSingleElement(this.options.cache.input);
                 displayScore = isValid ? zxcvbnScore : 1;
             }
 
@@ -73,8 +73,8 @@ define([
          * @param {Number} displayScore
          * @private
          */
-        _displayStrength: function (displayScore) {
-            var strengthLabel = '',
+        _displayStrength: function(displayScore) {
+            let strengthLabel = '',
                 className = 'password-';
 
             switch (displayScore) {
@@ -115,9 +115,9 @@ define([
          * @returns {*}
          * @private
          */
-        _getPassword: function () {
+        _getPassword: function() {
             return this.options.cache.input.val();
-        }
+        },
     });
 
     return $.mage.passwordStrengthIndicator;

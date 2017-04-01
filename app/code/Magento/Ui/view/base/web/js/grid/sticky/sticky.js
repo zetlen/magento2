@@ -10,8 +10,8 @@ define([
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'uiComponent',
-    'Magento_Ui/js/lib/view/utils/raf'
-], function ($, _, Component, raf) {
+    'Magento_Ui/js/lib/view/utils/raf',
+], function($, _, Component, raf) {
     'use strict';
 
     return Component.extend({
@@ -35,7 +35,7 @@ define([
             enableHeader: true,
             modules: {
                 toolbar: '${ $.toolbarProvider }',
-                listing: '${ $.listingProvider }'
+                listing: '${ $.listingProvider }',
             },
             otherStickyElsSize: 77,
             containerNode: null,
@@ -46,7 +46,7 @@ define([
             storedOriginalToolbarElements: [],
             cache: {},
             flags: {},
-            dirtyFlag: 'dirty'
+            dirtyFlag: 'dirty',
         },
 
         /**
@@ -54,7 +54,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             _.bindAll(this,
                 'adjustStickyElems',
@@ -85,7 +85,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .track('visible');
 
@@ -97,7 +97,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        initListingNode: function (node) {
+        initListingNode: function(node) {
             if ($(node).is(this.stickyElementSelector)) {
                 return;
             }
@@ -110,7 +110,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        initToolbarNode: function (node) {
+        initToolbarNode: function(node) {
             if ($(node).is(this.stickyElementSelector)) {
                 return;
             }
@@ -122,7 +122,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        initStickyListingNode: function (node) {
+        initStickyListingNode: function(node) {
             this.stickyListingNode = $(node);
             this.checkPos();
             this.initListeners();
@@ -133,7 +133,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        initStickyToolbarNode: function (node) {
+        initStickyToolbarNode: function(node) {
             this.stickyToolbarNode = $(node);
         },
 
@@ -142,7 +142,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        initContainerNode: function (node) {
+        initContainerNode: function(node) {
             this.containerNode = $(node);
 
             $.async(this.leftDataGridCapSelector,
@@ -164,7 +164,7 @@ define([
          * Init columns (each time when amount of columns is changed)
          *
          */
-        initColumns: function () {
+        initColumns: function() {
             this.columns = this.listingNode.find(this.columnSelector);
         },
 
@@ -173,7 +173,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        initLeftDataGridCap: function (node) {
+        initLeftDataGridCap: function(node) {
             this.leftDataGridCap = $(node);
         },
 
@@ -182,7 +182,7 @@ define([
          *
          * @param {HTMLElement} node
          */
-        initRightDataGridCap: function (node) {
+        initRightDataGridCap: function(node) {
             this.rightDataGridCap = $(node);
         },
 
@@ -191,7 +191,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initListeners: function () {
+        initListeners: function() {
             this.adjustStickyElems();
             this.initOnResize()
                 .initOnScroll()
@@ -205,9 +205,9 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initOnScroll: function () {
+        initOnScroll: function() {
             this.lastHorizontalScrollPos = $(window).scrollLeft();
-            document.addEventListener('scroll', function () {
+            document.addEventListener('scroll', function() {
                 this.flags.scrolled = true;
             }.bind(this));
 
@@ -219,8 +219,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initOnListingScroll: function () {
-            $(this.listingNode).scroll(function (e) {
+        initOnListingScroll: function() {
+            $(this.listingNode).scroll(function(e) {
                 this.flags.listingScrolled = true;
                 this.flags.listingScrolledValue = $(e.target).scrollLeft();
             }.bind(this));
@@ -233,8 +233,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initOnResize: function () {
-            $(window).resize(function () {
+        initOnResize: function() {
+            $(window).resize(function() {
                 this.flags.resized = true;
             }.bind(this));
 
@@ -244,7 +244,7 @@ define([
         /**
          * Adjust sticky header elements according to flags of the events that have happened in the endless RAF loop
          */
-        adjustStickyElems: function () {
+        adjustStickyElems: function() {
             if (this.flags.resized ||
                 this.flags.scrolled) {
                 this.checkPos();
@@ -269,7 +269,7 @@ define([
                     this.onListingScroll(this.flags.listingScrolledValue);
                 }
             }
-            _.each(this.flags, function (val, key) {
+            _.each(this.flags, function(val, key) {
                 if (val === this.dirtyFlag) {
                     this.flags[key] = false;
                 } else if (val) {
@@ -283,8 +283,8 @@ define([
         /**
          * Handles window scroll
          */
-        onWindowScroll: function () {
-            var scrolled = $(window).scrollLeft(),
+        onWindowScroll: function() {
+            let scrolled = $(window).scrollLeft(),
                 horizontal = this.lastHorizontalScrollPos !== scrolled;
 
             if (horizontal) {
@@ -301,14 +301,14 @@ define([
          *
          * @param {Number} scrolled
          */
-        onListingScroll: function (scrolled) {
+        onListingScroll: function(scrolled) {
             this.adjustOffset(scrolled);
         },
 
         /**
          * Handles window resize
          */
-        onResize: function () {
+        onResize: function() {
             this.checkPos();
             this.adjustContainerElemsWidth()
                 .adjustDataGridCapPositions();
@@ -317,8 +317,8 @@ define([
         /**
          * Check if original table or columns change it dimensions and sets appropriate flag
          */
-        checkTableElemsWidth: function () {
-            var newWidth = this.getTableWidth();
+        checkTableElemsWidth: function() {
+            let newWidth = this.getTableWidth();
 
             if (this.cache.tableWidth !== newWidth) {
                 this.cache.tableWidth = newWidth;
@@ -334,9 +334,9 @@ define([
          *
          * @returns {Number}.
          */
-        getColsChecksum: function () {
+        getColsChecksum: function() {
             return _.reduce(this.columns,
-            function (pv, cv) {
+            function(pv, cv) {
                 return ($(pv).width() || pv) + '' + $(cv).width();
             });
         },
@@ -346,7 +346,7 @@ define([
          *
          * @returns {Number}.
          */
-        getListingWidth: function () {
+        getListingWidth: function() {
             return this.listingNode.width();
         },
 
@@ -355,7 +355,7 @@ define([
          *
          * @returns {Number}.
          */
-        getTableWidth: function () {
+        getTableWidth: function() {
             return this.listingNode.find(this.tableSelector).width();
         },
 
@@ -364,7 +364,7 @@ define([
          *
          * @returns {HTMLElement}.
          */
-        getTopElement: function () {
+        getTopElement: function() {
             return this.toolbarNode || this.listingNode;
         },
 
@@ -373,7 +373,7 @@ define([
          *
          * @returns {Number}.
          */
-        getOtherStickyElementsSize: function () {
+        getOtherStickyElementsSize: function() {
             return this.otherStickyElsSize;
         },
 
@@ -382,7 +382,7 @@ define([
          *
          * @returns {Number}.
          */
-        getBulkRowHeight: function () {
+        getBulkRowHeight: function() {
             return this.listingNode.find(this.bulkRowSelector).filter(':visible').height();
         },
 
@@ -391,8 +391,8 @@ define([
          *
          * @returns {Number}.
          */
-        getListingTopYCoord: function () {
-            var bulkRowHeight = this.getBulkRowHeight();
+        getListingTopYCoord: function() {
+            let bulkRowHeight = this.getBulkRowHeight();
 
             return this.listingNode.find('tbody').offset().top -
                 this.containerNode.height() -
@@ -405,8 +405,8 @@ define([
          *
          * @returns {Boolean}.
          */
-        getMustBeSticky: function () {
-            var stickyTopCondition = this.getListingTopYCoord() - this.getOtherStickyElementsSize(),
+        getMustBeSticky: function() {
+            let stickyTopCondition = this.getListingTopYCoord() - this.getOtherStickyElementsSize(),
                 stickyBottomCondition = this.listingNode.offset().top +
                     this.listingNode.height() -
                     $(window).scrollTop() +
@@ -421,7 +421,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        adjustContainerElemsWidth: function () {
+        adjustContainerElemsWidth: function() {
             this.resizeContainer()
                 .resizeCols()
                 .resizeBulk();
@@ -434,8 +434,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        resizeContainer: function () {
-            var listingWidth = this.getListingWidth();
+        resizeContainer: function() {
+            let listingWidth = this.getListingWidth();
 
             this.stickyListingNode.innerWidth(listingWidth);
             this.stickyListingNode.find(this.tableSelector).innerWidth(this.getTableWidth());
@@ -452,11 +452,11 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        resizeCols: function () {
-            var cols = this.listingNode.find(this.columnSelector);
+        resizeCols: function() {
+            let cols = this.listingNode.find(this.columnSelector);
 
-            this.stickyListingNode.find(this.columnSelector).each(function (ind) {
-                var originalColWidth =  $(cols[ind]).width();
+            this.stickyListingNode.find(this.columnSelector).each(function(ind) {
+                let originalColWidth = $(cols[ind]).width();
 
                 $(this).width(originalColWidth);
             });
@@ -469,8 +469,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        resizeBulk: function () {
-            var bulk = this.containerNode.find(this.bulkRowHeaderSelector)[0];
+        resizeBulk: function() {
+            let bulk = this.containerNode.find(this.bulkRowHeaderSelector)[0];
 
             if (bulk) {
                 $(bulk).innerWidth(this.getListingWidth());
@@ -482,8 +482,8 @@ define([
         /**
          * Reset viewport to the top of listing
          */
-        resetToTop: function () {
-            var posOfTopEl = this.getTopElement().offset().top - this.getOtherStickyElementsSize() || 0;
+        resetToTop: function() {
+            let posOfTopEl = this.getTopElement().offset().top - this.getOtherStickyElementsSize() || 0;
 
             $(window).scrollTop(posOfTopEl);
         },
@@ -494,10 +494,10 @@ define([
          * @param {Number} val
          * @returns {Object} Chainable.
          */
-        adjustOffset: function (val) {
+        adjustOffset: function(val) {
             val = val || this.listingNode.scrollLeft();
             this.stickyListingNode.offset({
-                left: this.listingNode.offset().left - val
+                left: this.listingNode.offset().left - val,
             });
 
             return this;
@@ -508,7 +508,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        adjustDataGridCapPositions: function () {
+        adjustDataGridCapPositions: function() {
             this.adjustLeftDataGridCapPos()
                 .adjustRightDataGridCapPos();
 
@@ -520,9 +520,9 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        adjustLeftDataGridCapPos: function () {
+        adjustLeftDataGridCapPos: function() {
             this.leftDataGridCap.offset({
-                left: this.listingNode.offset().left - this.leftDataGridCap.width()
+                left: this.listingNode.offset().left - this.leftDataGridCap.width(),
             });
 
             return this;
@@ -533,9 +533,9 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        adjustRightDataGridCapPos: function () {
+        adjustRightDataGridCapPos: function() {
             this.rightDataGridCap.offset({
-                left: this.listingNode.offset().left + this.listingNode.width()
+                left: this.listingNode.offset().left + this.listingNode.width(),
             });
 
             return this;
@@ -544,7 +544,7 @@ define([
         /**
          * Hides the oiginal toolbar opened dropdowns/collapsibles etc
          */
-        collapseOriginalElements: function () {
+        collapseOriginalElements: function() {
             this.toolbarNode
                 .find(this.toolbarCollapsiblesSelector)
                 .css('visibility', 'hidden');
@@ -554,7 +554,7 @@ define([
         /**
          * Restores the oiginal toolbar opened dropdowns/collapsibles etc
          */
-        restoreOriginalElements: function () {
+        restoreOriginalElements: function() {
             this.toolbarNode
                 .find(this.toolbarCollapsiblesSelector)
                 .css('visibility', 'visible');
@@ -566,7 +566,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        toggleContainerVisibility: function () {
+        toggleContainerVisibility: function() {
             this.visible = !this.visible;
 
             return this;
@@ -577,8 +577,8 @@ define([
          *
          * @returns {Boolean} whether the visibility of the sticky header was toggled.
          */
-        checkPos: function () {
-            var isSticky = this.visible,
+        checkPos: function() {
+            let isSticky = this.visible,
                 mustBeSticky = this.getMustBeSticky(),
                 needChange = isSticky !== mustBeSticky;
 
@@ -589,7 +589,6 @@ define([
                     this.adjustContainerElemsWidth()
                         .adjustOffset()
                         .adjustDataGridCapPositions();
-
                 } else {
                     this.toggleContainerVisibility();
                     this.restoreOriginalElements();
@@ -597,6 +596,6 @@ define([
             }
 
             return needChange;
-        }
+        },
     });
 });

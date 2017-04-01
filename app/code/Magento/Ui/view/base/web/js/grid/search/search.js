@@ -11,8 +11,8 @@ define([
     'uiLayout',
     'mage/translate',
     'mageUtils',
-    'uiElement'
-], function (_, layout, $t, utils, Element) {
+    'uiElement',
+], function(_, layout, $t, utils, Element) {
     'use strict';
 
     return Element.extend({
@@ -24,23 +24,23 @@ define([
             previews: [],
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             statefull: {
-                value: true
+                value: true,
             },
             tracks: {
                 value: true,
                 previews: true,
-                inputValue: true
+                inputValue: true,
             },
             imports: {
                 inputValue: 'value',
-                updatePreview: 'value'
+                updatePreview: 'value',
             },
             exports: {
-                value: '${ $.provider }:params.search'
+                value: '${ $.provider }:params.search',
             },
             modules: {
-                chips: '${ $.chipsProvider }'
-            }
+                chips: '${ $.chipsProvider }',
+            },
         },
 
         /**
@@ -48,8 +48,8 @@ define([
          *
          * @returns {Search} Chainable.
          */
-        initialize: function () {
-            var urlParams = window.location.href.slice(window.location.href.search('[\&\?](search=)')).split('&'),
+        initialize: function() {
+            let urlParams = window.location.href.slice(window.location.href.search('[\&\?](search=)')).split('&'),
                 searchTerm = [];
 
             this._super()
@@ -71,7 +71,7 @@ define([
          *
          * @returns {Search} Chainbale.
          */
-        initChips: function () {
+        initChips: function() {
             this.chips('insertChild', this, 0);
 
             return this;
@@ -82,7 +82,7 @@ define([
          *
          * @returns {Search} Chainable.
          */
-        clear: function () {
+        clear: function() {
             this.value = '';
 
             return this;
@@ -93,7 +93,7 @@ define([
          *
          * @returns {Search} Chainable.
          */
-        cancel: function () {
+        cancel: function() {
             this.inputValue = this.value;
 
             return this;
@@ -106,7 +106,7 @@ define([
          *      value of the input field will be used.
          * @returns {Search} Chainable.
          */
-        apply: function (value) {
+        apply: function(value) {
             value = value || this.inputValue;
 
             this.value = this.inputValue = value.trim();
@@ -119,20 +119,20 @@ define([
          *
          * @returns {Search} Chainable.
          */
-        updatePreview: function () {
-            var preview = [];
+        updatePreview: function() {
+            let preview = [];
 
             if (this.value) {
                 preview.push({
                     elem: this,
                     label: this.label,
-                    preview: this.value
+                    preview: this.value,
                 });
             }
 
             this.previews = preview;
 
             return this;
-        }
+        },
     });
 });

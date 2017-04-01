@@ -6,8 +6,8 @@
 define([
     'Magento_Ui/js/form/element/abstract',
     'underscore',
-    'uiRegistry'
-], function (Abstract, _, registry) {
+    'uiRegistry',
+], function(Abstract, _, registry) {
     'use strict';
 
     return Abstract.extend({
@@ -16,11 +16,11 @@ define([
             autoImportIfEmpty: false,
             values: {},
             mask: '',
-            queryTemplate: 'ns = ${ $.ns }, index = '
+            queryTemplate: 'ns = ${ $.ns }, index = ',
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
 
             if (this.allowImport) {
@@ -31,16 +31,16 @@ define([
         /**
          * Split mask placeholder and attach events to placeholder fields.
          */
-        setHandlers: function () {
-            var str = this.mask || '',
+        setHandlers: function() {
+            let str = this.mask || '',
                 placeholders;
 
             placeholders = str.match(/{{(.*?)}}/g); // Get placeholders
 
-            _.each(placeholders, function (placeholder) {
+            _.each(placeholders, function(placeholder) {
                 placeholder = placeholder.replace(/[{{}}]/g, ''); // Remove curly braces
 
-                registry.get(this.queryTemplate + placeholder, function (component) {
+                registry.get(this.queryTemplate + placeholder, function(component) {
                     this.values[placeholder] = component.getPreview();
                     component.on('value', this.updateValue.bind(this, placeholder, component));
                     component.valueUpdate = 'keyup';
@@ -54,8 +54,8 @@ define([
          * @param {Object} placeholder
          * @param {Object} component
          */
-        updateValue: function (placeholder, component) {
-            var string = this.mask || '',
+        updateValue: function(placeholder, component) {
+            let string = this.mask || '',
                 nonEmptyValueFlag = false;
 
             if (placeholder) {
@@ -66,7 +66,7 @@ define([
                 return;
             }
 
-            _.each(this.values, function (propertyValue, propertyName) {
+            _.each(this.values, function(propertyValue, propertyName) {
                 string = string.replace('{{' + propertyName + '}}', propertyValue);
                 nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
             });
@@ -84,7 +84,7 @@ define([
          *
          * @returns {*}
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             this._super();
 
             if (this.initialValue !== '') {
@@ -98,13 +98,12 @@ define([
          *  Callback when value is changed by user,
          *  and disallow/allow import value
          */
-        userChanges: function () {
-
+        userChanges: function() {
             /**
              *  As userChanges is called before updateValue,
              *  we forced to get value from component by reference
              */
-            var actualValue = arguments[1].currentTarget.value;
+            let actualValue = arguments[1].currentTarget.value;
 
             this._super();
 
@@ -117,6 +116,6 @@ define([
             } else {
                 this.allowImport = false;
             }
-        }
+        },
     });
 });

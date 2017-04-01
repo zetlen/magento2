@@ -7,16 +7,16 @@
  * @api
  */
 define([
-    'Magento_Ui/js/form/element/single-checkbox'
-], function (SingleCheckbox) {
+    'Magento_Ui/js/form/element/single-checkbox',
+], function(SingleCheckbox) {
     'use strict';
 
     return SingleCheckbox.extend({
         defaults: {
             notices: [],
             tracks: {
-                notice: true
-            }
+                notice: true,
+            },
         },
 
         /**
@@ -24,7 +24,7 @@ define([
          *
          * @returns {*|void|Element}
          */
-        initialize: function () {
+        initialize: function() {
             this._super()
                 .chooseNotice();
 
@@ -36,8 +36,8 @@ define([
          *
          * @returns void
          */
-        chooseNotice: function () {
-            var checkedNoticeNumber = Number(this.checked());
+        chooseNotice: function() {
+            let checkedNoticeNumber = Number(this.checked());
 
             this.notice = this.notices[checkedNoticeNumber];
         },
@@ -47,9 +47,9 @@ define([
          *
          * @returns void
          */
-        onUpdate: function () {
+        onUpdate: function() {
             this._super();
             this.chooseNotice();
-        }
+        },
     });
 });

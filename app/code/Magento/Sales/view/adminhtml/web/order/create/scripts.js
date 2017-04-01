@@ -4,28 +4,27 @@
  */
 
 define([
-    "jquery",
+    'jquery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
-    "mage/translate",
-    "prototype",
-    "Magento_Catalog/catalog/product/composite/configure",
-    'Magento_Ui/js/lib/view/utils/async'
-], function(jQuery, confirm, alert){
-
+    'mage/translate',
+    'prototype',
+    'Magento_Catalog/catalog/product/composite/configure',
+    'Magento_Ui/js/lib/view/utils/async',
+], function(jQuery, confirm, alert) {
     window.AdminOrder = new Class.create();
 
     AdminOrder.prototype = {
-        initialize : function(data){
+        initialize: function(data) {
             if(!data) data = {};
-            this.loadBaseUrl    = false;
-            this.customerId     = data.customer_id ? data.customer_id : false;
-            this.storeId        = data.store_id ? data.store_id : false;
-            this.currencyId     = false;
+            this.loadBaseUrl = false;
+            this.customerId = data.customer_id ? data.customer_id : false;
+            this.storeId = data.store_id ? data.store_id : false;
+            this.currencyId = false;
             this.currencySymbol = data.currency_symbol ? data.currency_symbol : '';
-            this.addresses      = data.addresses ? data.addresses : $H({});
+            this.addresses = data.addresses ? data.addresses : $H({});
             this.shippingAsBilling = data.shippingAsBilling ? data.shippingAsBilling : false;
-            this.gridProducts   = $H({});
+            this.gridProducts = $H({});
             this.gridProductsGift = $H({});
             this.billingAddressContainer = '';
             this.shippingAddressContainer= '';
@@ -38,29 +37,33 @@ define([
             this.isOnlyVirtualProduct = false;
             this.excludedPaymentMethods = [];
             this.summarizePrice = true;
-            jQuery.async('#order-items', (function(){
+            jQuery.async('#order-items', function() {
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
-                    addControlButton: function(button){
-                        var controlButtonArea = $(this.node).select('.actions')[0];
+                    addControlButton: function(button) {
+                        let controlButtonArea = $(this.node).select('.actions')[0];
+
                         if (typeof controlButtonArea != 'undefined') {
-                            var buttons = controlButtonArea.childElements();
-                            for (var i = 0; i < buttons.length; i++) {
+                            let buttons = controlButtonArea.childElements();
+
+                            for (let i = 0; i < buttons.length; i++) {
                                 if (buttons[i].innerHTML.include(button.label)) {
-                                    return ;
+                                    return;
                                 }
                             }
                             button.insertIn(controlButtonArea, 'top');
                         }
-                    }
+                    },
                 });
 
-                var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
+                let searchButton = new ControlButton(jQuery.mage.__('Add Products')),
                     searchAreaId = this.getAreaId('search');
+
                 searchButton.onClick = function() {
                     $(searchAreaId).show();
-                    var el = this;
-                    window.setTimeout(function () {
+                    let el = this;
+
+                    window.setTimeout(function() {
                         el.remove();
                     }, 10);
                 };
@@ -81,38 +84,38 @@ define([
                     this.areasLoaded();
                     this.itemsArea.onLoad();
                 }
-            }).bind(this));
+            }.bind(this));
 
             jQuery('#edit_form')
-                .on('submitOrder', function(){
+                .on('submitOrder', function() {
                     jQuery(this).trigger('realOrder');
                 })
                 .on('realOrder', this._realSubmit.bind(this));
         },
 
-        areasLoaded: function(){
+        areasLoaded: function() {
         },
 
-        itemsLoaded: function(){
+        itemsLoaded: function() {
         },
 
-        dataLoaded: function(){
+        dataLoaded: function() {
             this.dataShow();
         },
 
-        setLoadBaseUrl : function(url){
+        setLoadBaseUrl: function(url) {
             this.loadBaseUrl = url;
         },
 
-        setAddresses : function(addresses){
+        setAddresses: function(addresses) {
             this.addresses = addresses;
         },
 
-        addExcludedPaymentMethod : function(method){
+        addExcludedPaymentMethod: function(method) {
             this.excludedPaymentMethods.push(method);
         },
 
-        setCustomerId : function(id){
+        setCustomerId: function(id) {
             this.customerId = id;
             this.loadArea('header', true);
             $(this.getAreaId('header')).callback = 'setCustomerAfter';
@@ -120,99 +123,97 @@ define([
             $('reset_order_top_button').show();
         },
 
-        setCustomerAfter : function () {
+        setCustomerAfter: function() {
             this.customerSelectorHide();
             if (this.storeId) {
                 $(this.getAreaId('data')).callback = 'dataLoaded';
                 this.loadArea(['data'], true);
-            }
-            else {
+            }            else {
                 this.storeSelectorShow();
             }
         },
 
-        setStoreId : function(id){
+        setStoreId: function(id) {
             this.storeId = id;
             this.storeSelectorHide();
             this.sidebarShow();
-            //this.loadArea(['header', 'sidebar','data'], true);
+            // this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
             this.loadArea(['header', 'data'], true);
         },
 
-        setCurrencyId : function(id){
+        setCurrencyId: function(id) {
             this.currencyId = id;
-            //this.loadArea(['sidebar', 'data'], true);
+            // this.loadArea(['sidebar', 'data'], true);
             this.loadArea(['data'], true);
         },
 
-        setCurrencySymbol : function(symbol){
+        setCurrencySymbol: function(symbol) {
             this.currencySymbol = symbol;
         },
 
-        selectAddress : function(el, container){
+        selectAddress: function(el, container) {
             id = el.value;
             if (id.length == 0) {
                 id = '0';
             }
-            if(this.addresses[id]){
+            if(this.addresses[id]) {
                 this.fillAddressFields(container, this.addresses[id]);
-            }
-            else{
+            }            else{
                 this.fillAddressFields(container, {});
             }
 
-            var data = this.serializeData(container);
+            let data = this.serializeData(container);
+
             data[el.name] = id;
-            if(this.isShippingField(container) && !this.isShippingMethodReseted){
+            if(this.isShippingField(container) && !this.isShippingMethodReseted) {
                 this.resetShippingMethod(data);
-            }
-            else{
+            }            else{
                 this.saveData(data);
             }
         },
 
-        isShippingField : function(fieldId){
-            if(this.shippingAsBilling){
+        isShippingField: function(fieldId) {
+            if(this.shippingAsBilling) {
                 return fieldId.include('billing');
             }
             return fieldId.include('shipping');
         },
 
-        isBillingField : function(fieldId){
+        isBillingField: function(fieldId) {
             return fieldId.include('billing');
         },
 
-        bindAddressFields : function(container) {
-            var fields = $(container).select('input', 'select', 'textarea');
-            for(var i=0;i<fields.length;i++){
+        bindAddressFields: function(container) {
+            let fields = $(container).select('input', 'select', 'textarea');
+
+            for(let i=0; i<fields.length; i++) {
                 Event.observe(fields[i], 'change', this.changeAddressField.bind(this));
             }
         },
 
-        changeAddressField : function(event){
-            var field = Event.element(event);
-            var re = /[^\[]*\[([^\]]*)_address\]\[([^\]]*)\](\[(\d)\])?/;
-            var matchRes = field.name.match(re);
+        changeAddressField: function(event) {
+            let field = Event.element(event);
+            let re = /[^\[]*\[([^\]]*)_address\]\[([^\]]*)\](\[(\d)\])?/;
+            let matchRes = field.name.match(re);
 
             if (!matchRes) {
                 return;
             }
 
-            var type = matchRes[1];
-            var name = matchRes[2];
-            var data;
+            let type = matchRes[1];
+            let name = matchRes[2];
+            let data;
 
-            if(this.isBillingField(field.id)){
-                data = this.serializeData(this.billingAddressContainer)
-            }
-            else{
-                data = this.serializeData(this.shippingAddressContainer)
+            if(this.isBillingField(field.id)) {
+                data = this.serializeData(this.billingAddressContainer);
+            }            else{
+                data = this.serializeData(this.shippingAddressContainer);
             }
             data = data.toObject();
 
-            if( (type == 'billing' && this.shippingAsBilling)
-                || (type == 'shipping' && !this.shippingAsBilling) ) {
+            if( type == 'billing' && this.shippingAsBilling
+                || type == 'shipping' && !this.shippingAsBilling ) {
                 data['reset_shipping'] = true;
             }
 
@@ -226,32 +227,35 @@ define([
                     this.loadArea(['shipping_method', 'billing_method', 'totals', 'items'], true, data);
                 }
                 // added for reloading of default sender and default recipient for giftmessages
-                //this.loadArea(['giftmessage'], true, data);
+                // this.loadArea(['giftmessage'], true, data);
             }
         },
 
-        fillAddressFields : function(container, data){
-            var regionIdElem = false;
-            var regionIdElemValue = false;
+        fillAddressFields: function(container, data) {
+            let regionIdElem = false;
+            let regionIdElemValue = false;
 
-            var fields = $(container).select('input', 'select', 'textarea');
-            var re = /[^\[]*\[[^\]]*\]\[([^\]]*)\](\[(\d)\])?/;
-            for(var i=0;i<fields.length;i++){
+            let fields = $(container).select('input', 'select', 'textarea');
+            let re = /[^\[]*\[[^\]]*\]\[([^\]]*)\](\[(\d)\])?/;
+
+            for(let i=0; i<fields.length; i++) {
                 // skip input type file @Security error code: 1000
                 if (fields[i].tagName.toLowerCase() == 'input' && fields[i].type.toLowerCase() == 'file') {
                     continue;
                 }
-                var matchRes = fields[i].name.match(re);
+                let matchRes = fields[i].name.match(re);
+
                 if (matchRes === null) {
                     continue;
                 }
-                var name = matchRes[1];
-                var index = matchRes[3];
+                let name = matchRes[1];
+                let index = matchRes[3];
 
-                if (index){
+                if (index) {
                     // multiply line
-                    if (data[name]){
-                        var values = data[name].split("\n");
+                    if (data[name]) {
+                        var values = data[name].split('\n');
+
                         fields[i].value = values[index] ? values[index] : '';
                     } else {
                         fields[i].value = '';
@@ -272,19 +276,20 @@ define([
                 }
 
                 if (fields[i].changeUpdater) fields[i].changeUpdater();
-                if (name == 'region' && data['region_id'] && !data['region']){
+                if (name == 'region' && data['region_id'] && !data['region']) {
                     fields[i].value = data['region_id'];
                 }
             }
         },
 
-        disableShippingAddress : function(flag) {
+        disableShippingAddress: function(flag) {
             this.shippingAsBilling = flag;
             if ($('order-shipping_address_customer_address_id')) {
                 $('order-shipping_address_customer_address_id').disabled = flag;
             }
             if ($(this.shippingAddressContainer)) {
-                var dataFields = $(this.shippingAddressContainer).select('input', 'select', 'textarea');
+                let dataFields = $(this.shippingAddressContainer).select('input', 'select', 'textarea');
+
                 for (var i = 0; i < dataFields.length; i++) {
                     dataFields[i].disabled = flag;
 
@@ -292,8 +297,9 @@ define([
                         dataFields[i].setValue('');
                     }
                 }
-                var buttons = $(this.shippingAddressContainer).select('button');
+                let buttons = $(this.shippingAddressContainer).select('button');
                 // Add corresponding class to buttons while disabling them
+
                 for (i = 0; i < buttons.length; i++) {
                     buttons[i].disabled = flag;
                     if (flag) {
@@ -305,11 +311,12 @@ define([
             }
         },
 
-        setShippingAsBilling : function(flag){
-            var data;
-            var areasToLoad = ['billing_method', 'shipping_address', 'totals', 'giftmessage'];
+        setShippingAsBilling: function(flag) {
+            let data;
+            let areasToLoad = ['billing_method', 'shipping_address', 'totals', 'giftmessage'];
+
             this.disableShippingAddress(flag);
-            if(flag){
+            if(flag) {
                 data = this.serializeData(this.billingAddressContainer);
             } else {
                 data = this.serializeData(this.shippingAddressContainer);
@@ -321,8 +328,9 @@ define([
             this.loadArea( areasToLoad, true, data);
         },
 
-        resetShippingMethod : function(data){
-            var areasToLoad = ['billing_method', 'shipping_address', 'totals', 'giftmessage', 'items'];
+        resetShippingMethod: function(data) {
+            let areasToLoad = ['billing_method', 'shipping_address', 'totals', 'giftmessage', 'items'];
+
             if(!this.isOnlyVirtualProduct) {
                 areasToLoad.push('shipping_method');
                 areasToLoad.push('shipping_address');
@@ -333,35 +341,39 @@ define([
             this.loadArea(areasToLoad, true, data);
         },
 
-        loadShippingRates : function(){
+        loadShippingRates: function() {
             this.isShippingMethodReseted = false;
             this.loadArea(['shipping_method', 'totals'], true, {collect_shipping_rates: 1});
         },
 
-        setShippingMethod : function(method){
-            var data = {};
+        setShippingMethod: function(method) {
+            let data = {};
+
             data['order[shipping_method]'] = method;
             this.loadArea(['shipping_method', 'totals', 'billing_method'], true, data);
         },
 
-        switchPaymentMethod : function(method){
+        switchPaymentMethod: function(method) {
             jQuery('#edit_form')
                 .off('submitOrder')
-                .on('submitOrder', function(){
+                .on('submitOrder', function() {
                     jQuery(this).trigger('realOrder');
                 });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
-            var data = {};
+            let data = {};
+
             data['order[payment_method]'] = method;
             this.loadArea(['card_validation'], true, data);
         },
 
-        setPaymentMethod : function(method){
+        setPaymentMethod: function(method) {
             if (this.paymentMethod && $('payment_form_'+this.paymentMethod)) {
                 var form = 'payment_form_'+this.paymentMethod;
+
                 [form + '_before', form, form + '_after'].each(function(el) {
-                    var block = $(el);
+                    let block = $(el);
+
                     if (block) {
                         block.hide();
                         block.select('input', 'select', 'textarea').each(function(field) {
@@ -371,18 +383,20 @@ define([
                 });
             }
 
-            if(!this.paymentMethod || method){
-                $('order-billing_method_form').select('input', 'select', 'textarea').each(function(elem){
+            if(!this.paymentMethod || method) {
+                $('order-billing_method_form').select('input', 'select', 'textarea').each(function(elem) {
                     if(elem.type != 'radio') elem.disabled = true;
-                })
+                });
             }
 
-            if ($('payment_form_'+method)){
+            if ($('payment_form_'+method)) {
                 jQuery('#' + this.getAreaId('billing_method')).trigger('contentUpdated');
                 this.paymentMethod = method;
                 var form = 'payment_form_'+method;
+
                 [form + '_before', form, form + '_after'].each(function(el) {
-                    var block = $(el);
+                    let block = $(el);
+
                     if (block) {
                         block.show();
                         block.select('input', 'select', 'textarea').each(function(field) {
@@ -391,18 +405,20 @@ define([
                                 field.bindChange = true;
                                 field.paymentContainer = form;
                                 field.method = method;
-                                field.observe('change', this.changePaymentData.bind(this))
+                                field.observe('change', this.changePaymentData.bind(this));
                             }
-                        },this);
+                        }, this);
                     }
-                },this);
+                }, this);
             }
         },
 
-        changePaymentData : function(event){
-            var elem = Event.element(event);
-            if(elem && elem.method){
-                var data = this.getPaymentData(elem.method);
+        changePaymentData: function(event) {
+            let elem = Event.element(event);
+
+            if(elem && elem.method) {
+                let data = this.getPaymentData(elem.method);
+
                 if (data) {
                     this.loadArea(['card_validation'], true, data);
                 } else {
@@ -411,8 +427,8 @@ define([
             }
         },
 
-        getPaymentData : function(currentMethod){
-            if (typeof(currentMethod) == 'undefined') {
+        getPaymentData: function(currentMethod) {
+            if (typeof currentMethod == 'undefined') {
                 if (this.paymentMethod) {
                     currentMethod = this.paymentMethod;
                 } else {
@@ -422,54 +438,59 @@ define([
             if (this.isPaymentValidationAvailable() == false) {
                 return false;
             }
-            var data = {};
-            var fields = $('payment_form_' + currentMethod).select('input', 'select');
-            for(var i=0;i<fields.length;i++){
+            let data = {};
+            let fields = $('payment_form_' + currentMethod).select('input', 'select');
+
+            for(let i=0; i<fields.length; i++) {
                 data[fields[i].name] = fields[i].getValue();
             }
-            if ((typeof data['payment[cc_type]']) != 'undefined' && (!data['payment[cc_type]'] || !data['payment[cc_number]'])) {
+            if (typeof data['payment[cc_type]'] != 'undefined' && (!data['payment[cc_type]'] || !data['payment[cc_number]'])) {
                 return false;
             }
             return data;
         },
 
-        applyCoupon : function(code){
-            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
+        applyCoupon: function(code) {
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]': code, "reset_shipping": 0});
             this.orderItemChanged = false;
         },
 
-        addProduct : function(id){
-            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {add_product:id, reset_shipping: true});
+        addProduct: function(id) {
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {add_product: id, reset_shipping: true});
         },
 
-        removeQuoteItem : function(id){
+        removeQuoteItem: function(id) {
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true,
-                {remove_item:id, from:'quote',reset_shipping: true});
+                {remove_item: id, from: 'quote', reset_shipping: true});
         },
 
-        moveQuoteItem : function(id, to){
+        moveQuoteItem: function(id, to) {
             this.loadArea(['sidebar_'+to, 'items', 'shipping_method', 'totals', 'billing_method'], this.getAreaId('items'),
-                {move_item:id, to:to, reset_shipping: true});
+                {move_item: id, to: to, reset_shipping: true});
         },
 
-        productGridShow : function(buttonElement){
+        productGridShow: function(buttonElement) {
             this.productGridShowButton = buttonElement;
             Element.hide(buttonElement);
             this.showArea('search');
         },
 
-        productGridRowInit : function(grid, row){
-            var checkbox = $(row).select('.checkbox')[0];
-            var inputs = $(row).select('.input-text');
+        productGridRowInit: function(grid, row) {
+            let checkbox = $(row).select('.checkbox')[0];
+            let inputs = $(row).select('.input-text');
+
             if (checkbox && inputs.length > 0) {
                 checkbox.inputElements = inputs;
-                for (var i = 0; i < inputs.length; i++) {
-                    var input = inputs[i];
+                for (let i = 0; i < inputs.length; i++) {
+                    let input = inputs[i];
+
                     input.checkboxElement = checkbox;
 
-                    var product = this.gridProducts.get(checkbox.value);
+                    let product = this.gridProducts.get(checkbox.value);
+
                     if (product) {
-                        var defaultValue = product[input.name];
+                        let defaultValue = product[input.name];
+
                         if (defaultValue) {
                             if (input.name == 'giftmessage') {
                                 input.checked = true;
@@ -481,65 +502,73 @@ define([
 
                     input.disabled = !checkbox.checked || input.hasClassName('input-inactive');
 
-                    Event.observe(input,'keyup', this.productGridRowInputChange.bind(this));
-                    Event.observe(input,'change',this.productGridRowInputChange.bind(this));
+                    Event.observe(input, 'keyup', this.productGridRowInputChange.bind(this));
+                    Event.observe(input, 'change', this.productGridRowInputChange.bind(this));
                 }
             }
         },
 
-        productGridRowInputChange : function(event){
-            var element = Event.element(event);
-            if (element && element.checkboxElement && element.checkboxElement.checked){
+        productGridRowInputChange: function(event) {
+            let element = Event.element(event);
+
+            if (element && element.checkboxElement && element.checkboxElement.checked) {
                 if (element.name!='giftmessage' || element.checked) {
                     this.gridProducts.get(element.checkboxElement.value)[element.name] = element.value;
                 } else if (element.name=='giftmessage' && this.gridProducts.get(element.checkboxElement.value)[element.name]) {
-                    delete(this.gridProducts.get(element.checkboxElement.value)[element.name]);
+                    delete this.gridProducts.get(element.checkboxElement.value)[element.name];
                 }
             }
         },
 
-        productGridRowClick : function(grid, event){
-            var trElement = Event.findElement(event, 'tr');
-            var qtyElement = trElement.select('input[name="qty"]')[0];
-            var eventElement = Event.element(event);
-            var isInputCheckbox = eventElement.tagName == 'INPUT' && eventElement.type == 'checkbox';
-            var isInputQty = eventElement.tagName == 'INPUT' && eventElement.name == 'qty';
+        productGridRowClick: function(grid, event) {
+            let trElement = Event.findElement(event, 'tr');
+            let qtyElement = trElement.select('input[name="qty"]')[0];
+            let eventElement = Event.element(event);
+            let isInputCheckbox = eventElement.tagName == 'INPUT' && eventElement.type == 'checkbox';
+            let isInputQty = eventElement.tagName == 'INPUT' && eventElement.name == 'qty';
+
             if (trElement && !isInputQty) {
-                var checkbox = Element.select(trElement, 'input[type="checkbox"]')[0];
-                var confLink = Element.select(trElement, 'a')[0];
-                var priceColl = Element.select(trElement, '.price')[0];
+                let checkbox = Element.select(trElement, 'input[type="checkbox"]')[0];
+                let confLink = Element.select(trElement, 'a')[0];
+                let priceColl = Element.select(trElement, '.price')[0];
+
                 if (checkbox) {
                     // processing non composite product
                     if (confLink.readAttribute('disabled')) {
-                        var checked = isInputCheckbox ? checkbox.checked : !checkbox.checked;
+                        let checked = isInputCheckbox ? checkbox.checked : !checkbox.checked;
+
                         grid.setCheckboxChecked(checkbox, checked);
                         // processing composite product
                     } else if (isInputCheckbox && !checkbox.checked) {
                         grid.setCheckboxChecked(checkbox, false);
                         // processing composite product
-                    } else if (!isInputCheckbox || (isInputCheckbox && checkbox.checked)) {
-                        var listType = confLink.readAttribute('list_type');
-                        var productId = confLink.readAttribute('product_id');
+                    } else if (!isInputCheckbox || isInputCheckbox && checkbox.checked) {
+                        let listType = confLink.readAttribute('list_type');
+                        let productId = confLink.readAttribute('product_id');
+
                         if (typeof this.productPriceBase[productId] == 'undefined') {
-                            var priceBase = priceColl.innerHTML.match(/.*?([\d,]+\.?\d*)/);
+                            let priceBase = priceColl.innerHTML.match(/.*?([\d,]+\.?\d*)/);
+
                             if (!priceBase) {
                                 this.productPriceBase[productId] = 0;
                             } else {
-                                this.productPriceBase[productId] = parseFloat(priceBase[1].replace(/,/g,''));
+                                this.productPriceBase[productId] = parseFloat(priceBase[1].replace(/,/g, ''));
                             }
                         }
                         productConfigure.setConfirmCallback(listType, function() {
                             // sync qty of popup and qty of grid
-                            var confirmedCurrentQty = productConfigure.getCurrentConfirmedQtyElement();
+                            let confirmedCurrentQty = productConfigure.getCurrentConfirmedQtyElement();
+
                             if (qtyElement && confirmedCurrentQty && !isNaN(confirmedCurrentQty.value)) {
                                 qtyElement.value = confirmedCurrentQty.value;
                             }
                             // calc and set product price
-                            var productPrice = this._calcProductPrice();
+                            let productPrice = this._calcProductPrice();
+
                             if (this._isSummarizePrice()) {
                                 productPrice += this.productPriceBase[productId];
                             }
-                            productPrice = parseFloat(Math.round(productPrice + "e+2") + "e-2");
+                            productPrice = parseFloat(Math.round(productPrice + 'e+2') + 'e-2');
                             priceColl.innerHTML = this.currencySymbol + productPrice.toFixed(2);
                             // and set checkbox checked
                             grid.setCheckboxChecked(checkbox, true);
@@ -551,11 +580,12 @@ define([
                         });
                         productConfigure.setShowWindowCallback(listType, function() {
                             // sync qty of grid and qty of popup
-                            var formCurrentQty = productConfigure.getCurrentFormQtyElement();
+                            let formCurrentQty = productConfigure.getCurrentFormQtyElement();
+
                             if (formCurrentQty && qtyElement && !isNaN(qtyElement.value)) {
                                 formCurrentQty.value = qtyElement.value;
                             }
-                        }.bind(this));
+                        });
                         productConfigure.showItemConfiguration(listType, productId);
                     }
                 }
@@ -571,30 +601,32 @@ define([
             }
             return this.summarizePrice;
         },
+
         /**
          * Calc product price through its options
          */
-        _calcProductPrice: function () {
-            var productPrice = 0;
-            var getPriceFields = function (elms) {
-                var productPrice = 0;
-                var getPrice = function (elm) {
-                    var optQty = 1;
+        _calcProductPrice: function() {
+            let productPrice = 0;
+            let getPriceFields = function(elms) {
+                let productPrice = 0;
+                let getPrice = function(elm) {
+                    let optQty = 1;
+
                     if (elm.hasAttribute('qtyId')) {
                         if (!$(elm.getAttribute('qtyId')).value) {
                             return 0;
-                        } else {
-                            optQty = parseFloat($(elm.getAttribute('qtyId')).value);
                         }
+                            optQty = parseFloat($(elm.getAttribute('qtyId')).value);
                     }
                     if (elm.hasAttribute('price') && !elm.disabled) {
                         return parseFloat(elm.readAttribute('price')) * optQty;
                     }
                     return 0;
                 };
-                for(var i = 0; i < elms.length; i++) {
+
+                for(let i = 0; i < elms.length; i++) {
                     if (elms[i].type == 'select-one' || elms[i].type == 'select-multiple') {
-                        for(var ii = 0; ii < elms[i].options.length; ii++) {
+                        for(let ii = 0; ii < elms[i].options.length; ii++) {
                             if (elms[i].options[ii].selected) {
                                 if (this._isSummarizePrice(elms[i].options[ii])) {
                                     productPrice += getPrice(elms[i].options[ii]);
@@ -603,10 +635,9 @@ define([
                                 }
                             }
                         }
-                    }
-                    else if (((elms[i].type == 'checkbox' || elms[i].type == 'radio') && elms[i].checked)
-                        || ((elms[i].type == 'file' || elms[i].type == 'text' || elms[i].type == 'textarea' || elms[i].type == 'hidden')
-                        && Form.Element.getValue(elms[i]))
+                    }                    else if ((elms[i].type == 'checkbox' || elms[i].type == 'radio') && elms[i].checked
+                        || (elms[i].type == 'file' || elms[i].type == 'text' || elms[i].type == 'textarea' || elms[i].type == 'hidden')
+                        && Form.Element.getValue(elms[i])
                     ) {
                         if (this._isSummarizePrice(elms[i])) {
                             productPrice += getPrice(elms[i]);
@@ -617,19 +648,22 @@ define([
                 }
                 return productPrice;
             }.bind(this);
+
             productPrice += getPriceFields($(productConfigure.confirmedCurrentId).getElementsByTagName('input'));
             productPrice += getPriceFields($(productConfigure.confirmedCurrentId).getElementsByTagName('select'));
             productPrice += getPriceFields($(productConfigure.confirmedCurrentId).getElementsByTagName('textarea'));
             return productPrice;
         },
 
-        productGridCheckboxCheck : function(grid, element, checked){
+        productGridCheckboxCheck: function(grid, element, checked) {
             if (checked) {
                 if(element.inputElements) {
                     this.gridProducts.set(element.value, {});
-                    var product = this.gridProducts.get(element.value);
+                    let product = this.gridProducts.get(element.value);
+
                     for (var i = 0; i < element.inputElements.length; i++) {
-                        var input = element.inputElements[i];
+                        let input = element.inputElements[i];
+
                         if (!input.hasClassName('input-inactive')) {
                             input.disabled = false;
                             if (input.name == 'qty' && !input.value) {
@@ -640,35 +674,37 @@ define([
                         if (input.checked || input.name != 'giftmessage') {
                             product[input.name] = input.value;
                         } else if (product[input.name]) {
-                            delete(product[input.name]);
+                            delete product[input.name];
                         }
                     }
                 }
             } else {
-                if(element.inputElements){
+                if(element.inputElements) {
                     for(var i = 0; i < element.inputElements.length; i++) {
                         element.inputElements[i].disabled = true;
                     }
                 }
                 this.gridProducts.unset(element.value);
             }
-            grid.reloadParams = {'products[]':this.gridProducts.keys()};
+            grid.reloadParams = {'products[]': this.gridProducts.keys()};
         },
 
         /**
          * Submit configured products to quote
          */
-        productGridAddSelected : function(){
+        productGridAddSelected: function() {
             if(this.productGridShowButton) Element.show(this.productGridShowButton);
-            var area = ['search', 'items', 'shipping_method', 'totals', 'giftmessage','billing_method'];
+            let area = ['search', 'items', 'shipping_method', 'totals', 'giftmessage', 'billing_method'];
             // prepare additional fields and filtered items of products
-            var fieldsPrepare = {};
-            var itemsFilter = [];
-            var products = this.gridProducts.toObject();
-            for (var productId in products) {
+            let fieldsPrepare = {};
+            let itemsFilter = [];
+            let products = this.gridProducts.toObject();
+
+            for (let productId in products) {
                 itemsFilter.push(productId);
-                var paramKey = 'item['+productId+']';
-                for (var productParamKey in products[productId]) {
+                let paramKey = 'item['+productId+']';
+
+                for (let productParamKey in products[productId]) {
                     paramKey += '['+productParamKey+']';
                     fieldsPrepare[paramKey] = products[productId][productParamKey];
                 }
@@ -679,42 +715,43 @@ define([
             this.gridProducts = $H({});
         },
 
-        selectCustomer : function(grid, event){
-            var element = Event.findElement(event, 'tr');
-            if (element.title){
+        selectCustomer: function(grid, event) {
+            let element = Event.findElement(event, 'tr');
+
+            if (element.title) {
                 this.setCustomerId(element.title);
             }
         },
 
-        customerSelectorHide : function(){
+        customerSelectorHide: function() {
             this.hideArea('customer-selector');
         },
 
-        customerSelectorShow : function(){
+        customerSelectorShow: function() {
             this.showArea('customer-selector');
         },
 
-        storeSelectorHide : function(){
+        storeSelectorHide: function() {
             this.hideArea('store-selector');
         },
 
-        storeSelectorShow : function(){
+        storeSelectorShow: function() {
             this.showArea('store-selector');
         },
 
-        dataHide : function(){
+        dataHide: function() {
             this.hideArea('data');
         },
 
-        dataShow : function(){
+        dataShow: function() {
             if ($('submit_order_top_button')) {
                 $('submit_order_top_button').show();
             }
             this.showArea('data');
         },
 
-        clearShoppingCart : function(confirmMessage){
-            var self = this;
+        clearShoppingCart: function(confirmMessage) {
+            let self = this;
 
             confirm({
                 content: confirmMessage,
@@ -723,42 +760,44 @@ define([
                         self.collectElementsValue = false;
                         order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
                         self.collectElementsValue = true;
-                    }
-                }
+                    },
+                },
             });
         },
 
-        sidebarApplyChanges : function(auxiliaryParams) {
+        sidebarApplyChanges: function(auxiliaryParams) {
             if ($(this.getAreaId('sidebar'))) {
-                var data = {};
+                let data = {};
+
                 if (this.collectElementsValue) {
-                    var elems = $(this.getAreaId('sidebar')).select('input');
-                    for (var i=0; i < elems.length; i++) {
+                    let elems = $(this.getAreaId('sidebar')).select('input');
+
+                    for (let i=0; i < elems.length; i++) {
                         if (elems[i].getValue()) {
                             data[elems[i].name] = elems[i].getValue();
                         }
                     }
                 }
                 if (auxiliaryParams instanceof Object) {
-                    for (var paramName in auxiliaryParams) {
+                    for (let paramName in auxiliaryParams) {
                         data[paramName] = String(auxiliaryParams[paramName]);
                     }
                 }
                 data.reset_shipping = true;
-                this.loadArea(['sidebar', 'items', 'shipping_method', 'billing_method','totals', 'giftmessage'], true, data);
+                this.loadArea(['sidebar', 'items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'], true, data);
             }
         },
 
-        sidebarHide : function(){
-            if(this.storeId === false && $('page:left') && $('page:container')){
+        sidebarHide: function() {
+            if(this.storeId === false && $('page:left') && $('page:container')) {
                 $('page:left').hide();
                 $('page:container').removeClassName('container');
                 $('page:container').addClassName('container-collapsed');
             }
         },
 
-        sidebarShow : function(){
-            if($('page:left') && $('page:container')){
+        sidebarShow: function() {
+            if($('page:left') && $('page:container')) {
                 $('page:left').show();
                 $('page:container').removeClassName('container-collapsed');
                 $('page:container').addClassName('container');
@@ -770,33 +809,35 @@ define([
          *
          * @param productId
          */
-        sidebarConfigureProduct: function (listType, productId, itemId) {
+        sidebarConfigureProduct: function(listType, productId, itemId) {
             // create additional fields
-            var params = {};
+            let params = {};
+
             params.reset_shipping = true;
             params.add_product = productId;
             this.prepareParams(params);
-            for (var i in params) {
+            for (let i in params) {
                 if (params[i] === null) {
                     unset(params[i]);
-                } else if (typeof(params[i]) == 'boolean') {
+                } else if (typeof params[i] == 'boolean') {
                     params[i] = params[i] ? 1 : 0;
                 }
             }
-            var fields = [];
-            for (var name in params) {
+            let fields = [];
+
+            for (let name in params) {
                 fields.push(new Element('input', {type: 'hidden', name: name, value: params[name]}));
             }
             // add additional fields before triggered submit
             productConfigure.setBeforeSubmitCallback(listType, function() {
                 productConfigure.addFields(fields);
-            }.bind(this));
+            });
             // response handler
             productConfigure.setOnLoadIFrameCallback(listType, function(response) {
                 if (!response.ok) {
                     return;
                 }
-                this.loadArea(['items', 'shipping_method', 'billing_method','totals', 'giftmessage'], true);
+                this.loadArea(['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'], true);
             }.bind(this));
             // show item configuration
             itemId = itemId ? itemId : productId;
@@ -804,16 +845,17 @@ define([
             return false;
         },
 
-        removeSidebarItem : function(id, from){
-            this.loadArea(['sidebar_'+from], 'sidebar_data_'+from, {remove_item:id, from:from});
+        removeSidebarItem: function(id, from) {
+            this.loadArea(['sidebar_'+from], 'sidebar_data_'+from, {remove_item: id, from: from});
         },
 
-        itemsUpdate : function(){
-            var area = ['sidebar', 'items', 'shipping_method', 'billing_method','totals', 'giftmessage'];
+        itemsUpdate: function() {
+            let area = ['sidebar', 'items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
             // prepare additional fields
-            var fieldsPrepare = {update_items: 1};
-            var info = $('order-items_grid').select('input', 'select', 'textarea');
-            for(var i=0; i<info.length; i++){
+            let fieldsPrepare = {update_items: 1};
+            let info = $('order-items_grid').select('input', 'select', 'textarea');
+
+            for(let i=0; i<info.length; i++) {
                 if(!info[i].disabled && (info[i].type != 'checkbox' || info[i].checked)) {
                     fieldsPrepare[info[i].name] = info[i].getValue();
                 }
@@ -823,17 +865,18 @@ define([
             this.orderItemChanged = false;
         },
 
-        itemsOnchangeBind : function(){
-            var elems = $('order-items_grid').select('input', 'select', 'textarea');
-            for(var i=0; i<elems.length; i++){
-                if(!elems[i].bindOnchange){
+        itemsOnchangeBind: function() {
+            let elems = $('order-items_grid').select('input', 'select', 'textarea');
+
+            for(let i=0; i<elems.length; i++) {
+                if(!elems[i].bindOnchange) {
                     elems[i].bindOnchange = true;
-                    elems[i].observe('change', this.itemChange.bind(this))
+                    elems[i].observe('change', this.itemChange.bind(this));
                 }
             }
         },
 
-        itemChange : function(event){
+        itemChange: function(event) {
             this.giftmessageOnItemChange(event);
             this.orderItemChanged = true;
         },
@@ -846,11 +889,11 @@ define([
          * @param fieldsPrepare
          * @param itemsFilter
          */
-        productConfigureSubmit : function(listType, area, fieldsPrepare, itemsFilter) {
+        productConfigureSubmit: function(listType, area, fieldsPrepare, itemsFilter) {
             // prepare loading areas and build url
             area = this.prepareArea(area);
             this.loadingAreas = area;
-            var url = this.loadBaseUrl + 'block/' + area + '?isAjax=true';
+            let url = this.loadBaseUrl + 'block/' + area + '?isAjax=true';
 
             // prepare additional fields
             fieldsPrepare = this.prepareParams(fieldsPrepare);
@@ -858,8 +901,9 @@ define([
             fieldsPrepare.json = 1;
 
             // create fields
-            var fields = [];
-            for (var name in fieldsPrepare) {
+            let fields = [];
+
+            for (let name in fieldsPrepare) {
                 fields.push(new Element('input', {type: 'hidden', name: name, value: fieldsPrepare[name]}));
             }
             productConfigure.addFields(fields);
@@ -871,7 +915,7 @@ define([
 
             // prepare and do submit
             productConfigure.addListType(listType, {urlSubmit: url});
-            productConfigure.setOnLoadIFrameCallback(listType, function(response){
+            productConfigure.setOnLoadIFrameCallback(listType, function(response) {
                 this.loadAreaResponseHandler(response);
             }.bind(this));
             productConfigure.submit(listType);
@@ -884,85 +928,91 @@ define([
          *
          * @param itemId
          */
-        showQuoteItemConfiguration: function(itemId){
-            var listType = 'quote_items';
-            var qtyElement = $('order-items_grid').select('input[name="item\['+itemId+'\]\[qty\]"]')[0];
+        showQuoteItemConfiguration: function(itemId) {
+            let listType = 'quote_items';
+            let qtyElement = $('order-items_grid').select('input[name="item\['+itemId+'\]\[qty\]"]')[0];
+
             productConfigure.setConfirmCallback(listType, function() {
                 // sync qty of popup and qty of grid
-                var confirmedCurrentQty = productConfigure.getCurrentConfirmedQtyElement();
+                let confirmedCurrentQty = productConfigure.getCurrentConfirmedQtyElement();
+
                 if (qtyElement && confirmedCurrentQty && !isNaN(confirmedCurrentQty.value)) {
                     qtyElement.value = confirmedCurrentQty.value;
                 }
                 this.productConfigureAddFields['item['+itemId+'][configured]'] = 1;
-
             }.bind(this));
             productConfigure.setShowWindowCallback(listType, function() {
                 // sync qty of grid and qty of popup
-                var formCurrentQty = productConfigure.getCurrentFormQtyElement();
+                let formCurrentQty = productConfigure.getCurrentFormQtyElement();
+
                 if (formCurrentQty && qtyElement && !isNaN(qtyElement.value)) {
                     formCurrentQty.value = qtyElement.value;
                 }
-            }.bind(this));
+            });
             productConfigure.showItemConfiguration(listType, itemId);
         },
 
-        accountFieldsBind : function(container){
-            if($(container)){
-                var fields = $(container).select('input', 'select', 'textarea');
-                for(var i=0; i<fields.length; i++){
-                    if(fields[i].id == 'group_id'){
-                        fields[i].observe('change', this.accountGroupChange.bind(this))
-                    }
-                    else{
-                        fields[i].observe('change', this.accountFieldChange.bind(this))
+        accountFieldsBind: function(container) {
+            if($(container)) {
+                let fields = $(container).select('input', 'select', 'textarea');
+
+                for(let i=0; i<fields.length; i++) {
+                    if(fields[i].id == 'group_id') {
+                        fields[i].observe('change', this.accountGroupChange.bind(this));
+                    }                    else{
+                        fields[i].observe('change', this.accountFieldChange.bind(this));
                     }
                 }
             }
         },
 
-        accountGroupChange : function(){
+        accountGroupChange: function() {
             this.loadArea(['data'], true, this.serializeData('order-form_account').toObject());
         },
 
-        accountFieldChange : function(){
+        accountFieldChange: function() {
             this.saveData(this.serializeData('order-form_account'));
         },
 
-        commentFieldsBind : function(container){
-            if($(container)){
-                var fields = $(container).select('input', 'textarea');
-                for(var i=0; i<fields.length; i++)
-                    fields[i].observe('change', this.commentFieldChange.bind(this))
+        commentFieldsBind: function(container) {
+            if($(container)) {
+                let fields = $(container).select('input', 'textarea');
+
+                for(let i=0; i<fields.length; i++)
+                    fields[i].observe('change', this.commentFieldChange.bind(this));
             }
         },
 
-        commentFieldChange : function(){
+        commentFieldChange: function() {
             this.saveData(this.serializeData('order-comment'));
         },
 
-        giftmessageFieldsBind : function(container){
-            if($(container)){
-                var fields = $(container).select('input', 'textarea');
-                for(var i=0; i<fields.length; i++)
-                    fields[i].observe('change', this.giftmessageFieldChange.bind(this))
+        giftmessageFieldsBind: function(container) {
+            if($(container)) {
+                let fields = $(container).select('input', 'textarea');
+
+                for(let i=0; i<fields.length; i++)
+                    fields[i].observe('change', this.giftmessageFieldChange.bind(this));
             }
         },
 
-        giftmessageFieldChange : function(){
+        giftmessageFieldChange: function() {
             this.giftMessageDataChanged = true;
         },
 
-        giftmessageOnItemChange : function(event) {
-            var element = Event.element(event);
-            if(element.name.indexOf("giftmessage") != -1 && element.type == "checkbox" && !element.checked) {
-                var messages = $("order-giftmessage").select('textarea');
-                var name;
-                for(var i=0; i<messages.length; i++) {
-                    name = messages[i].id.split("_");
+        giftmessageOnItemChange: function(event) {
+            let element = Event.element(event);
+
+            if(element.name.indexOf('giftmessage') != -1 && element.type == 'checkbox' && !element.checked) {
+                let messages = $('order-giftmessage').select('textarea');
+                let name;
+
+                for(let i=0; i<messages.length; i++) {
+                    name = messages[i].id.split('_');
                     if(name.length < 2) continue;
-                    if (element.name.indexOf("[" + name[1] + "]") != -1 && messages[i].value != "") {
+                    if (element.name.indexOf('[' + name[1] + ']') != -1 && messages[i].value != '') {
                         alert({
-                            content: "First, clean the Message field in Gift Message form"
+                            content: 'First, clean the Message field in Gift Message form'
                         });
                         element.checked = true;
                     }
@@ -970,9 +1020,10 @@ define([
             }
         },
 
-        loadArea : function(area, indicator, params){
-            var deferred = new jQuery.Deferred();
-            var url = this.loadBaseUrl;
+        loadArea: function(area, indicator, params) {
+            let deferred = new jQuery.Deferred();
+            let url = this.loadBaseUrl;
+
             if (area) {
                 area = this.prepareArea(area);
                 url += 'block/' + area;
@@ -984,22 +1035,22 @@ define([
             if (indicator) {
                 this.loadingAreas = area;
                 new Ajax.Request(url, {
-                    parameters:params,
+                    parameters: params,
                     loaderArea: indicator,
                     onSuccess: function(transport) {
-                        var response = transport.responseText.evalJSON();
+                        let response = transport.responseText.evalJSON();
+
                         this.loadAreaResponseHandler(response);
                         deferred.resolve();
-                    }.bind(this)
+                    }.bind(this),
                 });
-            }
-            else {
+            }            else {
                 new Ajax.Request(url, {
-                    parameters:params,
+                    parameters: params,
                     loaderArea: indicator,
                     onSuccess: function(transport) {
                         deferred.resolve();
-                    }
+                    },
                 });
             }
             if (typeof productConfigure != 'undefined' && area instanceof Array && area.indexOf('items') != -1) {
@@ -1008,10 +1059,10 @@ define([
             return deferred.promise();
         },
 
-        loadAreaResponseHandler : function (response) {
+        loadAreaResponseHandler: function(response) {
             if (response.error) {
                 alert({
-                    content: response.message
+                    content: response.message,
                 });
             }
             if (response.ajaxExpired && response.ajaxRedirect) {
@@ -1030,8 +1081,9 @@ define([
                 jQuery('.page-actions-inner').attr('data-title', response.header);
             }
 
-            for (var i = 0; i < this.loadingAreas.length; i++) {
-                var id = this.loadingAreas[i];
+            for (let i = 0; i < this.loadingAreas.length; i++) {
+                let id = this.loadingAreas[i];
+
                 if ($(this.getAreaId(id))) {
                     if ('message' != id || response[id]) {
                         $(this.getAreaId(id)).update(response[id]);
@@ -1043,45 +1095,46 @@ define([
             }
         },
 
-        prepareArea : function(area) {
+        prepareArea: function(area) {
             if (this.giftMessageDataChanged) {
                 return area.without('giftmessage');
             }
             return area;
         },
 
-        saveData : function(data){
+        saveData: function(data) {
             this.loadArea(false, false, data);
         },
 
-        showArea : function(area){
-            var id = this.getAreaId(area);
+        showArea: function(area) {
+            let id = this.getAreaId(area);
+
             if($(id)) {
                 $(id).show();
                 this.areaOverlay();
             }
         },
 
-        hideArea : function(area){
-            var id = this.getAreaId(area);
+        hideArea: function(area) {
+            let id = this.getAreaId(area);
+
             if($(id)) {
                 $(id).hide();
                 this.areaOverlay();
             }
         },
 
-        areaOverlay : function()
-        {
-            $H(order.overlayData).each(function(e){
+        areaOverlay: function()        {
+            $H(order.overlayData).each(function(e) {
                 e.value.fx();
             });
         },
 
-        getAreaId : function(area){
+        getAreaId: function(area) {
             return 'order-'+area;
         },
 
-        prepareParams : function(params){
+        prepareParams: function(params) {
             if (!params) {
                 params = {};
             }
@@ -1099,7 +1152,8 @@ define([
             }
 
             if (this.isPaymentValidationAvailable()) {
-                var data = this.serializeData('order-billing_method');
+                let data = this.serializeData('order-billing_method');
+
                 if (data) {
                     data.each(function(value) {
                         params[value[0]] = value[1];
@@ -1116,14 +1170,14 @@ define([
          *
          * @returns {boolean}
          */
-        isPaymentValidationAvailable : function(){
-            return ((typeof this.paymentMethod) == 'undefined'
-            || this.excludedPaymentMethods.indexOf(this.paymentMethod) == -1);
+        isPaymentValidationAvailable: function() {
+            return typeof this.paymentMethod == 'undefined'
+            || this.excludedPaymentMethods.indexOf(this.paymentMethod) == -1;
         },
 
-        serializeData : function(container){
-            var fields = $(container).select('input', 'select', 'textarea');
-            var data = Form.serializeElements(fields, true);
+        serializeData: function(container) {
+            let fields = $(container).select('input', 'select', 'textarea');
+            let data = Form.serializeElements(fields, true);
 
             return $H(data);
         },
@@ -1133,22 +1187,20 @@ define([
                 $(elemId).disabled = false;
                 $(elemId).show();
                 if($(tierBlock)) $(tierBlock).hide();
-            }
-            else {
+            }            else {
                 $(elemId).disabled = true;
                 $(elemId).hide();
                 if($(tierBlock)) $(tierBlock).show();
             }
         },
 
-        submit : function()
-        {
+        submit: function()        {
             jQuery('#edit_form').trigger('processStart');
             jQuery('#edit_form').trigger('submitOrder');
         },
 
-        _realSubmit: function () {
-            var disableAndSave = function() {
+        _realSubmit: function() {
+            let disableAndSave = function() {
                 disableElements('save');
                 jQuery('#edit_form').on('invalid-form.validate', function() {
                     enableElements('save');
@@ -1156,9 +1208,10 @@ define([
                     jQuery('#edit_form').off('invalid-form.validate');
                 });
                 jQuery('#edit_form').triggerHandler('save');
-            }
+            };
+
             if (this.orderItemChanged) {
-                var self = this;
+                let self = this;
 
                 jQuery('#edit_form').trigger('processStop');
 
@@ -1171,19 +1224,22 @@ define([
                         },
                         cancel: function() {
                             self.itemsUpdate();
-                        }
-                    }
+                        },
+                    },
                 });
             } else {
                 disableAndSave();
             }
         },
 
-        overlay : function(elId, show, observe) {
-            if (typeof(show) == 'undefined') { show = true; }
+        overlay: function(elId, show, observe) {
+            if (typeof show == 'undefined') {
+ show = true; 
+}
 
-            var orderObj = this;
-            var obj = this.overlayData.get(elId);
+            let orderObj = this;
+            let obj = this.overlayData.get(elId);
+
             if (!obj) {
                 obj = {
                     show: show,
@@ -1191,7 +1247,7 @@ define([
                     order: orderObj,
                     fx: function(event) {
                         this.order.processOverlay(this.el, this.show);
-                    }
+                    },
                 };
                 obj.bfx = obj.fx.bindAsEventListener(obj);
                 this.overlayData.set(elId, obj);
@@ -1205,14 +1261,15 @@ define([
             this.processOverlay(elId, show);
         },
 
-        processOverlay : function(elId, show) {
-            var el = $(elId);
+        processOverlay: function(elId, show) {
+            let el = $(elId);
 
             if (!el) {
                 return;
             }
 
-            var parentEl = el.up(1);
+            let parentEl = el.up(1);
+
             if (show) {
                 parentEl.removeClassName('ignore-validate');
             } else {
@@ -1220,7 +1277,7 @@ define([
             }
 
             if (Prototype.Browser.IE) {
-                parentEl.select('select').each(function (elem) {
+                parentEl.select('select').each(function(elem) {
                     if (show) {
                         elem.needShowOnSuccess = false;
                         elem.style.visibility = '';
@@ -1233,28 +1290,28 @@ define([
 
             parentEl.setStyle({position: 'relative'});
             el.setStyle({
-                display: show ? 'none' : ''
+                display: show ? 'none' : '',
             });
         },
 
-        validateVat: function(parameters)
-        {
-            var params = {
+        validateVat: function(parameters)        {
+            let params = {
                 country: $(parameters.countryElementId).value,
-                vat: $(parameters.vatElementId).value
+                vat: $(parameters.vatElementId).value,
             };
 
             if (this.storeId !== false) {
                 params.store_id = this.storeId;
             }
 
-            var currentCustomerGroupId = $(parameters.groupIdHtmlId).value;
+            let currentCustomerGroupId = $(parameters.groupIdHtmlId).value;
 
             new Ajax.Request(parameters.validateUrl, {
                 parameters: params,
                 onSuccess: function(response) {
-                    var message = '';
-                    var groupActionRequired = null;
+                    let message = '';
+                    let groupActionRequired = null;
+
                     try {
                         response = response.responseText.evalJSON();
 
@@ -1266,8 +1323,7 @@ define([
                             } else {
                                 message = parameters.vatValidationFailedMessage;
                             }
-                        } else {
-                            if (true === response.valid) {
+                        } else if (true === response.valid) {
                                 message = parameters.vatValidAndGroupValidMessage;
                                 if (0 === response.group) {
                                     message = parameters.vatValidAndGroupInvalidMessage;
@@ -1283,16 +1339,14 @@ define([
                                 message = parameters.vatValidationFailedMessage;
                                 groupActionRequired = 'inform';
                             }
-                        }
                     } catch (e) {
                         message = parameters.vatValidationFailedMessage;
                     }
                     if (null === groupActionRequired) {
                         alert({
-                            content: message
+                            content: message,
                         });
-                    }
-                    else {
+                    }                    else {
                         this.processCustomerGroupChange(
                             parameters.groupIdHtmlId,
                             message,
@@ -1302,18 +1356,19 @@ define([
                             groupActionRequired
                         );
                     }
-                }.bind(this)
+                }.bind(this),
             });
         },
 
-        processCustomerGroupChange: function(groupIdHtmlId, message, customerGroupMessage, errorMessage, groupId, action)
-        {
-            var groupMessage = '';
+        processCustomerGroupChange: function(groupIdHtmlId, message, customerGroupMessage, errorMessage, groupId, action)        {
+            let groupMessage = '';
+
             try {
-                var currentCustomerGroupId = $(groupIdHtmlId).value;
+                let currentCustomerGroupId = $(groupIdHtmlId).value;
                 var currentCustomerGroupTitle =
                     $$('#' + groupIdHtmlId + ' > option[value=' + currentCustomerGroupId + ']')[0].text;
                 var customerGroupOption = $$('#' + groupIdHtmlId + ' > option[value=' + groupId + ']')[0];
+
                 groupMessage = customerGroupMessage.replace(/%s/, customerGroupOption.text);
             } catch (e) {
                 groupMessage = errorMessage;
@@ -1324,20 +1379,21 @@ define([
             }
 
             if (action === 'change') {
-                var confirmText = message.replace(/%s/, customerGroupOption.text);
+                let confirmText = message.replace(/%s/, customerGroupOption.text);
+
                 confirmText = confirmText.replace(/%s/, currentCustomerGroupTitle);
                 if (confirm(confirmText)) {
-                    $$('#' + groupIdHtmlId + ' option').each(function (o) {
+                    $$('#' + groupIdHtmlId + ' option').each(function(o) {
                         o.selected = o.readAttribute('value') == groupId;
                     });
                     this.accountGroupChange();
                 }
             } else if (action === 'inform') {
                 alert({
-                    content: message + '\n' + groupMessage
+                    content: message + '\n' + groupMessage,
                 });
             }
-        }
+        },
     };
 
     window.OrderFormArea = Class.create();
@@ -1347,7 +1403,7 @@ define([
         _parent: null,
         _callbackName: null,
 
-        initialize: function(name, node, parent){
+        initialize: function(name, node, parent) {
             if(!node)
                 return;
             this._name = name;
@@ -1357,23 +1413,23 @@ define([
                 this._callbackName = name + 'Loaded';
                 node.callback = this._callbackName;
             }
-            parent[this._callbackName] = parent[this._callbackName].wrap((function (proceed){
+            parent[this._callbackName] = parent[this._callbackName].wrap(function(proceed) {
                 proceed();
                 this.onLoad();
-            }).bind(this));
+            }.bind(this));
 
             this.setNode(node);
         },
 
-        setNode: function(node){
+        setNode: function(node) {
             if (!node.callback) {
                 node.callback = this._callbackName;
             }
             this.node = node;
         },
 
-        onLoad: function(){
-        }
+        onLoad: function() {
+        },
     };
 
     window.ControlButton = Class.create();
@@ -1382,26 +1438,26 @@ define([
         _label: '',
         _node: null,
 
-        initialize: function(label){
+        initialize: function(label) {
             this._label = label;
             this._node = new Element('button', {
                 'class': 'action-secondary action-add',
-                'type':  'button'
+                'type': 'button',
             });
         },
 
-        onClick: function(){
+        onClick: function() {
         },
 
-        insertIn: function(element, position){
-            var node = Object.extend(this._node),
+        insertIn: function(element, position) {
+            let node = Object.extend(this._node),
                 content = {};
+
             node.observe('click', this.onClick);
             node.update('<span>' + this._label + '</span>');
             content[position] = node;
             Element.insert(element, content);
-        }
+        },
     };
-
 });
 /* jshint ignore:end */

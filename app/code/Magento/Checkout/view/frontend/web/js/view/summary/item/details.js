@@ -4,21 +4,21 @@
  */
 
 define([
-    'uiComponent'
-], function (Component) {
+    'uiComponent',
+], function(Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/summary/item/details'
+            template: 'Magento_Checkout/summary/item/details',
         },
 
         /**
          * @param {Object} quoteItem
          * @return {String}
          */
-        getValue: function (quoteItem) {
+        getValue: function(quoteItem) {
             return quoteItem.name;
-        }
+        },
     });
 });

@@ -5,11 +5,11 @@
 
 define([
     'underscore',
-    'mageUtils'
-], function (_, utils) {
+    'mageUtils',
+], function(_, utils) {
     'use strict';
 
-    var store = {};
+    let store = {};
 
     /**
      * Flatten a nested data.
@@ -18,14 +18,14 @@ define([
      * @returns {Object}
      */
     function flatten(data) {
-        var extender = data.extends || [],
+        let extender = data.extends || [],
             result = {};
 
         extender = utils.stringToArray(extender);
 
         extender.push(data);
 
-        extender.forEach(function (item) {
+        extender.forEach(function(item) {
             if (_.isString(item)) {
                 item = store[item] || {};
             }
@@ -44,12 +44,12 @@ define([
          *
          * @param {Object} types
          */
-        set: function (types) {
+        set: function(types) {
             types = types || {};
 
             utils.extend(store, types);
 
-            _.each(types, function (data, type) {
+            _.each(types, function(data, type) {
                 store[type] = flatten(data);
             });
         },
@@ -60,8 +60,8 @@ define([
          * @param {String} type
          * @returns {*|{}}
          */
-        get: function (type) {
+        get: function(type) {
             return store[type] || {};
-        }
+        },
     };
 });

@@ -7,8 +7,8 @@
  */
 define([
     'ko',
-    'uiClass'
-], function (ko, Class) {
+    'uiClass',
+], function(ko, Class) {
     'use strict';
 
     return Class.extend({
@@ -18,7 +18,7 @@ define([
          *
          * @param  {template} template - identifier of template
          */
-        initialize: function (template) {
+        initialize: function(template) {
             this.templateName = template;
             this._data = {};
             this.nodes = ko.observable([]);
@@ -31,12 +31,12 @@ define([
          * @param  {*} value
          * @return {*} - if 1 arg provided, returnes _data[key] property
          */
-        data: function (key, value) {
+        data: function(key, value) {
             if (arguments.length === 1) {
                 return this._data[key];
             }
 
             this._data[key] = value;
-        }
+        },
     });
 });

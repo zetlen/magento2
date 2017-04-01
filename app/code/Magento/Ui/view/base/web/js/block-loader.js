@@ -7,19 +7,19 @@ define([
     'ko',
     'jquery',
     'Magento_Ui/js/lib/knockout/template/loader',
-    'mage/template'
-], function (ko, $, templateLoader, template) {
+    'mage/template',
+], function(ko, $, templateLoader, template) {
     'use strict';
 
-    var blockLoaderTemplatePath = 'ui/block-loader',
+    let blockLoaderTemplatePath = 'ui/block-loader',
         blockContentLoadingClass = '_block-content-loading',
         blockLoader,
         blockLoaderClass,
         loaderImageHref;
 
-    templateLoader.loadTemplate(blockLoaderTemplatePath).done(function (blockLoaderTemplate) {
+    templateLoader.loadTemplate(blockLoaderTemplatePath).done(function(blockLoaderTemplate) {
         blockLoader = template($.trim(blockLoaderTemplate), {
-            loaderImageHref: loaderImageHref
+            loaderImageHref: loaderImageHref,
         });
         blockLoader = $(blockLoader);
         blockLoaderClass = '.' + blockLoader.attr('class');
@@ -31,7 +31,7 @@ define([
      * @returns {Boolean}
      */
     function isLoadingClassRequired(element) {
-        var position = element.css('position');
+        let position = element.css('position');
 
         if (position === 'absolute' || position === 'fixed') {
             return false;
@@ -69,7 +69,7 @@ define([
         element.removeClass(blockContentLoadingClass);
     }
 
-    return function (loaderHref) {
+    return function(loaderHref) {
         loaderImageHref = loaderHref;
         ko.bindingHandlers.blockLoader = {
             /**
@@ -77,7 +77,7 @@ define([
              * @param {String} element
              * @param {Boolean} displayBlockLoader
              */
-            update: function (element, displayBlockLoader) {
+            update: function(element, displayBlockLoader) {
                 element = $(element);
 
                 if (ko.unwrap(displayBlockLoader())) {
@@ -85,7 +85,7 @@ define([
                 } else {
                     removeBlockLoader(element);
                 }
-            }
+            },
         };
     };
 });

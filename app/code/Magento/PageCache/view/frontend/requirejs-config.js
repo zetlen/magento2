@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            pageCache:  'Magento_PageCache/js/page-cache'
-        }
-    }
+            pageCache: 'Magento_PageCache/js/page-cache',
+        },
+    },
 };

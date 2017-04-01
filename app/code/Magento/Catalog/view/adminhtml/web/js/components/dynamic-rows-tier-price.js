@@ -5,8 +5,8 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, DynamicRows) {
+    'Magento_Ui/js/dynamic-rows/dynamic-rows',
+], function(_, DynamicRows) {
     'use strict';
 
     return DynamicRows.extend({
@@ -14,16 +14,16 @@ define([
         /**
          * Init header elements
          */
-        initHeader: function () {
-            var labels;
+        initHeader: function() {
+            let labels;
 
             this._super();
             labels = _.clone(this.labels());
-            labels = _.sortBy(labels, function (label) {
+            labels = _.sortBy(labels, function(label) {
                 return label.sortOrder;
             });
 
             this.labels(labels);
-        }
+        },
     });
 });

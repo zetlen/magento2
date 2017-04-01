@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
             rolesTree: 'Magento_User/js/roles-tree',
-            deleteUserAccount: 'Magento_User/js/delete-user-account'
-        }
-    }
+            deleteUserAccount: 'Magento_User/js/delete-user-account',
+        },
+    },
 };

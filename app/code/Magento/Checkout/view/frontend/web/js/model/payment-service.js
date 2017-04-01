@@ -7,11 +7,11 @@ define([
     'underscore',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/payment/method-list',
-    'Magento_Checkout/js/action/select-payment-method'
-], function (_, quote, methodList, selectPaymentMethod) {
+    'Magento_Checkout/js/action/select-payment-method',
+], function(_, quote, methodList, selectPaymentMethod) {
     'use strict';
 
-    var freeMethodCode = 'free';
+    let freeMethodCode = 'free';
 
     return {
         isFreeAvailable: false,
@@ -20,13 +20,13 @@ define([
          * Populate the list of payment methods
          * @param {Array} methods
          */
-        setPaymentMethods: function (methods) {
-            var self = this,
+        setPaymentMethods: function(methods) {
+            let self = this,
                 freeMethod,
                 filteredMethods,
                 methodIsAvailable;
 
-            freeMethod = _.find(methods, function (method) {
+            freeMethod = _.find(methods, function(method) {
                 return method.method === freeMethodCode;
             });
             this.isFreeAvailable = !!freeMethod;
@@ -40,10 +40,10 @@ define([
             if (filteredMethods.length === 1) {
                 selectPaymentMethod(filteredMethods[0]);
             } else if (quote.paymentMethod()) {
-                methodIsAvailable = methods.some(function (item) {
+                methodIsAvailable = methods.some(function(item) {
                     return item.method === quote.paymentMethod().method;
                 });
-                //Unset selected payment method if not available
+                // Unset selected payment method if not available
                 if (!methodIsAvailable) {
                     selectPaymentMethod(null);
                 }
@@ -55,11 +55,11 @@ define([
          * Get the list of available payment methods.
          * @returns {Array}
          */
-        getAvailablePaymentMethods: function () {
-            var methods = [],
+        getAvailablePaymentMethods: function() {
+            let methods = [],
                 self = this;
 
-            _.each(methodList(), function (method) {
+            _.each(methodList(), function(method) {
                 if (self.isFreeAvailable && (
                     quote.totals()['grand_total'] <= 0 && method.method === freeMethodCode ||
                     quote.totals()['grand_total'] > 0 && method.method !== freeMethodCode
@@ -70,6 +70,6 @@ define([
             });
 
             return methods;
-        }
+        },
     };
 });

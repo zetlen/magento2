@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
+define([], function() {
     'use strict';
 
     /**
@@ -14,12 +14,12 @@ define([], function () {
     function resultWrapper(isValid, isPotentiallyValid) {
         return {
             isValid: isValid,
-            isPotentiallyValid: isPotentiallyValid
+            isPotentiallyValid: isPotentiallyValid,
         };
     }
 
-    return function (value) {
-        var month,
+    return function(value) {
+        let month,
             monthValid;
 
         if (value.replace(/\s/g, '') === '' || value === '0') {

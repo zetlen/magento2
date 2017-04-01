@@ -3,14 +3,14 @@
  * See COPYING.txt for license details.
  */
 
-/**************************** CONFIGURABLE PRODUCT **************************/
+/** ************************** CONFIGURABLE PRODUCT **************************/
 /* global Product, optionsPrice */
 define([
     'jquery',
     'mage/template',
     'mage/translate',
-    'prototype'
-], function (jQuery, mageTemplate) {
+    'prototype',
+], function(jQuery, mageTemplate) {
     'use strict';
 
     if (typeof Product == 'undefined') {
@@ -24,28 +24,28 @@ define([
          *
          * @param {Object} config
          */
-        initialize: function (config) {
-            var separatorIndex, paramsStr, urlValues, i, childSettings, prevSetting, nextSetting;
+        initialize: function(config) {
+            let separatorIndex, paramsStr, urlValues, i, childSettings, prevSetting, nextSetting;
 
             // Magic preprocessing
             // TODO MAGETWO-31539
             config.taxConfig = {
                 showBothPrices: false,
-                inclTaxTitle: jQuery.mage.__('Incl. Tax')
+                inclTaxTitle: jQuery.mage.__('Incl. Tax'),
             };
 
-            this.config     = config;
-            this.taxConfig  = this.config.taxConfig;
+            this.config = config;
+            this.taxConfig = this.config.taxConfig;
 
             if (config.containerId) {
-                this.settings   = $$('#' + config.containerId + ' ' + '.super-attribute-select');
+                this.settings = $$('#' + config.containerId + ' ' + '.super-attribute-select');
             } else {
-                this.settings   = $$('.super-attribute-select');
+                this.settings = $$('.super-attribute-select');
             }
-            this.state      = new Hash();
+            this.state = new Hash();
             this.priceTemplate = mageTemplate(this.config.template);
-            this.prices     = config.prices;
-            this.values     = {};
+            this.prices = config.prices;
+            this.values = {};
 
             // Set default values from config
             if (config.defaultValues) {
@@ -55,11 +55,11 @@ define([
             // Overwrite defaults by url
             separatorIndex = window.location.href.indexOf('#');
 
-            if (separatorIndex != -1) { //eslint-disable-line eqeqeq
+            if (separatorIndex != -1) { // eslint-disable-line eqeqeq
                 paramsStr = window.location.href.substr(separatorIndex + 1);
                 urlValues = paramsStr.toQueryParams();
 
-                for (i in urlValues) { //eslint-disable-line guard-for-in
+                for (i in urlValues) { // eslint-disable-line guard-for-in
                     this.values[i] = urlValues[i];
                 }
             }
@@ -67,8 +67,8 @@ define([
             // Overwrite defaults by inputs values if needed
             if (config.inputsInitialized) {
                 this.values = {};
-                this.settings.each(function (element) {
-                    var attributeId;
+                this.settings.each(function(element) {
+                    let attributeId;
 
                     if (element.value) {
                         attributeId = element.id.replace(/[a-z]*/, '');
@@ -78,13 +78,13 @@ define([
             }
 
             // Put events to check select reloads
-            this.settings.each(function (element) {
+            this.settings.each(function(element) {
                 Event.observe(element, 'change', this.configure.bind(this));
             }.bind(this));
 
             // fill state
-            this.settings.each(function (element) {
-                var attributeId = element.id.replace(/[a-z]*/, '');
+            this.settings.each(function(element) {
+                let attributeId = element.id.replace(/[a-z]*/, '');
 
                 if (attributeId && this.config.attributes[attributeId]) {
                     element.config = this.config.attributes[attributeId];
@@ -106,8 +106,8 @@ define([
                     this.settings[i].disabled = true;
                 }
                 $(this.settings[i]).childSettings = childSettings.clone();
-                $(this.settings[i]).prevSetting   = prevSetting;
-                $(this.settings[i]).nextSetting   = nextSetting;
+                $(this.settings[i]).prevSetting = prevSetting;
+                $(this.settings[i]).nextSetting = nextSetting;
                 childSettings.push(this.settings[i]);
             }
 
@@ -119,10 +119,10 @@ define([
         /**
          * Configure for values.
          */
-        configureForValues: function () {
+        configureForValues: function() {
             if (this.values) {
-                this.settings.each(function (element) {
-                    var attributeId = element.attributeId;
+                this.settings.each(function(element) {
+                    let attributeId = element.attributeId;
 
                     element.value = typeof this.values[attributeId] === 'undefined' ? '' : this.values[attributeId];
                     this.configureElement(element);
@@ -133,8 +133,8 @@ define([
         /**
          * @param {Object} event
          */
-        configure: function (event) {
-            var element = Event.element(event);
+        configure: function(event) {
+            let element = Event.element(event);
 
             this.configureElement(element);
         },
@@ -142,7 +142,7 @@ define([
         /**
          * @param {Object} element
          */
-        configureElement: function (element) {
+        configureElement: function(element) {
             this.reloadOptionLabels(element);
 
             if (element.value) {
@@ -162,8 +162,8 @@ define([
         /**
          * @param {Object} element
          */
-        reloadOptionLabels: function (element) {
-            var selectedPrice = 0,
+        reloadOptionLabels: function(element) {
+            let selectedPrice = 0,
                 option, i;
 
             if (element.options[element.selectedIndex] && element.options[element.selectedIndex].config) {
@@ -185,8 +185,8 @@ define([
         /**
          * @param {Object} element
          */
-        resetChildren: function (element) {
-            var i;
+        resetChildren: function(element) {
+            let i;
 
             if (element.childSettings) {
                 for (i = 0; i < element.childSettings.length; i++) {
@@ -203,8 +203,8 @@ define([
         /**
          * @param {Object} element
          */
-        fillSelect: function (element) {
-            var attributeId = element.id.replace(/[a-z]*/, ''),
+        fillSelect: function(element) {
+            let attributeId = element.id.replace(/[a-z]*/, ''),
                 options = this.getAttributeOptions(attributeId),
                 prevConfig = false,
                 index = 1,
@@ -248,11 +248,11 @@ define([
             }
         },
 
-        //eslint-enable max-depth
+        // eslint-enable max-depth
         /**
          * @param {Object} option
          */
-        getOptionLabel: function (option) {
+        getOptionLabel: function(option) {
             return option.label;
         },
 
@@ -261,8 +261,8 @@ define([
          * @param {Boolean} showSign
          * @return {String}
          */
-        formatPrice: function (price, showSign) {
-            var str = '',
+        formatPrice: function(price, showSign) {
+            let str = '',
                 roundedPrice;
 
             price = parseFloat(price);
@@ -283,8 +283,8 @@ define([
             } else {
                 str += this.priceTemplate({
                     data: {
-                        price: price.toFixed(2)
-                    }
+                        price: price.toFixed(2),
+                    },
                 });
             }
 
@@ -294,8 +294,8 @@ define([
         /**
          * @param {Object} element
          */
-        clearSelect: function (element) {
-            var i;
+        clearSelect: function(element) {
+            let i;
 
             for (i = element.options.length - 1; i >= 0; i--) {
                 element.remove(i);
@@ -306,7 +306,7 @@ define([
          * @param {*} attributeId
          * @return {*|undefined}
          */
-        getAttributeOptions: function (attributeId) {
+        getAttributeOptions: function(attributeId) {
             if (this.config.attributes[attributeId]) {
                 return this.config.attributes[attributeId].options;
             }
@@ -317,8 +317,8 @@ define([
          *
          * @return {undefined|Number}
          */
-        reloadPrice: function () {
-            var price = 0,
+        reloadPrice: function() {
+            let price = 0,
                 oldPrice = 0,
                 inclTaxPrice = 0,
                 exclTaxPrice = 0,
@@ -344,7 +344,7 @@ define([
                     'price': price,
                     'oldPrice': oldPrice,
                     'inclTaxPrice': inclTaxPrice,
-                    'exclTaxPrice': exclTaxPrice
+                    'exclTaxPrice': exclTaxPrice,
                 }
             );
             optionsPrice.reload();
@@ -355,15 +355,14 @@ define([
         /**
          * Reload old price.
          */
-        reloadOldPrice: function () {
-            var price, i, selected;
+        reloadOldPrice: function() {
+            let price, i, selected;
 
             if (this.config.disablePriceReload) {
                 return;
             }
 
             if ($('old-price-' + this.config.productId)) {
-
                 price = parseFloat(this.config.oldPrice);
 
                 for (i = this.settings.length - 1; i >= 0; i--) {
@@ -382,8 +381,7 @@ define([
                 if ($('old-price-' + this.config.productId)) {
                     $('old-price-' + this.config.productId).innerHTML = price;
                 }
-
             }
-        }
+        },
     };
 });

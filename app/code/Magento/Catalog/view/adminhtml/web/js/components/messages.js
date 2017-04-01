@@ -4,8 +4,8 @@
  */
 
 define([
-    'Magento_Ui/js/form/components/html'
-], function (Html) {
+    'Magento_Ui/js/form/components/html',
+], function(Html) {
     'use strict';
 
     return Html.extend({
@@ -15,25 +15,25 @@ define([
             imports: {
                 responseData: '${ $.form }:responseData',
                 visible: 'responseData.error',
-                content: 'responseData.messages'
+                content: 'responseData.messages',
             },
             listens: {
-                '${ $.provider }:data.reset': 'hide'
-            }
+                '${ $.provider }:data.reset': 'hide',
+            },
         },
 
         /**
          * Show messages.
          */
-        show: function () {
+        show: function() {
             this.visible(true);
         },
 
         /**
          * Hide messages.
          */
-        hide: function () {
+        hide: function() {
             this.visible(false);
-        }
+        },
     });
 });

@@ -9,18 +9,18 @@ define([
     'Magento_Paypal/js/action/set-payment-method',
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Checkout/js/model/quote',
-    'Magento_Customer/js/customer-data'
-], function ($, Component, setPaymentMethodAction, additionalValidators, quote, customerData) {
+    'Magento_Customer/js/customer-data',
+], function($, Component, setPaymentMethodAction, additionalValidators, quote, customerData) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Magento_Paypal/payment/paypal-express-bml',
-            billingAgreement: ''
+            billingAgreement: '',
         },
 
         /** Init observable variables */
-        initObservable: function () {
+        initObservable: function() {
             this._super()
                 .observe('billingAgreement');
 
@@ -28,7 +28,7 @@ define([
         },
 
         /** Open window with  */
-        showAcceptanceWindow: function (data, event) {
+        showAcceptanceWindow: function(data, event) {
             window.open(
                 $(event.target).attr('href'),
                 'olcwhatispaypal',
@@ -43,23 +43,23 @@ define([
         },
 
         /** Returns payment acceptance mark link path */
-        getPaymentAcceptanceMarkHref: function () {
+        getPaymentAcceptanceMarkHref: function() {
             return window.checkoutConfig.payment.paypalExpress.paymentAcceptanceMarkHref;
         },
 
         /** Returns payment acceptance mark image path */
-        getPaymentAcceptanceMarkSrc: function () {
+        getPaymentAcceptanceMarkSrc: function() {
             return window.checkoutConfig.payment.paypalExpress.paymentAcceptanceMarkSrc;
         },
 
         /** Returns billing agreement data */
-        getBillingAgreementCode: function () {
+        getBillingAgreementCode: function() {
             return window.checkoutConfig.payment.paypalExpress.billingAgreementCode[this.item.method];
         },
 
         /** Returns payment information data */
-        getData: function () {
-            var parent = this._super(),
+        getData: function() {
+            let parent = this._super(),
                 additionalData = null;
 
             if (this.getBillingAgreementCode()) {
@@ -68,17 +68,17 @@ define([
             }
 
             return $.extend(true, parent, {
-                'additional_data': additionalData
+                'additional_data': additionalData,
             });
         },
 
         /** Redirect to paypal */
-        continueToPayPal: function () {
+        continueToPayPal: function() {
             if (additionalValidators.validate()) {
-                //update payment method information if additional data was changed
+                // update payment method information if additional data was changed
                 this.selectPaymentMethod();
                 setPaymentMethodAction(this.messageContainer).done(
-                    function () {
+                    function() {
                         customerData.invalidate(['cart']);
                         $.mage.redirect(
                             window.checkoutConfig.payment.paypalExpress.redirectUrl[quote.paymentMethod().method]
@@ -88,6 +88,6 @@ define([
 
                 return false;
             }
-        }
+        },
     });
 });

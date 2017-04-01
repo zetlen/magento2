@@ -10,8 +10,8 @@ define([
     'jquery',
     'mageUtils',
     'Magento_Ui/js/lib/core/storage/local',
-    'uiClass'
-], function ($, utils, storage, Class) {
+    'uiClass',
+], function($, utils, storage, Class) {
     'use strict';
 
     /**
@@ -30,15 +30,15 @@ define([
             ajaxSettings: {
                 method: 'POST',
                 data: {
-                    namespace: '${ $.namespace }'
-                }
-            }
+                    namespace: '${ $.namespace }',
+                },
+            },
         },
 
         /**
          * Delegates call to the localStorage adapter.
          */
-        get: function () {
+        get: function() {
             return {};
         },
 
@@ -48,8 +48,8 @@ define([
          * @param {String} path - Path by which data should be stored.
          * @param {*} value - Value to be sent.
          */
-        set: function (path, value) {
-            var property = removeNs(this.namespace, path),
+        set: function(path, value) {
+            let property = removeNs(this.namespace, path),
                 data = {},
                 config;
 
@@ -58,8 +58,8 @@ define([
             config = utils.extend({
                 url: this.saveUrl,
                 data: {
-                    data: JSON.stringify(data)
-                }
+                    data: JSON.stringify(data),
+                },
             }, this.ajaxSettings);
 
             $.ajax(config);
@@ -70,18 +70,18 @@ define([
          *
          * @param {String} path - Path to the property to be removed.
          */
-        remove: function (path) {
-            var property = removeNs(this.namespace, path),
+        remove: function(path) {
+            let property = removeNs(this.namespace, path),
                 config;
 
             config = utils.extend({
                 url: this.deleteUrl,
                 data: {
-                    data: property
-                }
+                    data: property,
+                },
             }, this.ajaxSettings);
 
             $.ajax(config);
-        }
+        },
     });
 });

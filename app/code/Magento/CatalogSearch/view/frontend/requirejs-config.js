@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            catalogSearch: 'Magento_CatalogSearch/form-mini'
-        }
-    }
+            catalogSearch: 'Magento_CatalogSearch/form-mini',
+        },
+    },
 };

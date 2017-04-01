@@ -10,8 +10,8 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiClass'
-], function ($, _, utils, Class) {
+    'uiClass',
+], function($, _, utils, Class) {
     'use strict';
 
     return Class.extend({
@@ -22,10 +22,10 @@ define([
             requestConfig: {
                 url: '${ $.updateUrl }',
                 method: 'GET',
-                dataType: 'json'
+                dataType: 'json',
             },
             dataScope: '',
-            data: {}
+            data: {},
         },
 
         /**
@@ -33,8 +33,8 @@ define([
          *
          * @returns {DataStorage} Chainable.
          */
-        initConfig: function () {
-            var scope;
+        initConfig: function() {
+            let scope;
 
             this._super();
 
@@ -55,12 +55,12 @@ define([
          * @param {Array} ids - Records identifiers.
          * @returns {Array|Boolean}
          */
-        getByIds: function (ids) {
-            var result = [],
+        getByIds: function(ids) {
+            let result = [],
                 hasData;
 
-            hasData = ids.every(function (id) {
-                var item = this.data[id];
+            hasData = ids.every(function(id) {
+                let item = this.data[id];
 
                 return item ? result.push(item) : false;
             }, this);
@@ -76,7 +76,7 @@ define([
          * @param {Object|Array} [data=this.data]
          * @returns {Array}
          */
-        getIds: function (data) {
+        getIds: function(data) {
             data = data || this.data;
 
             return _.pluck(data, this.indexField);
@@ -89,8 +89,8 @@ define([
          * @param {Object} [options={}]
          * @returns {jQueryPromise}
          */
-        getData: function (params, options) {
-            var cachedRequest;
+        getData: function(params, options) {
+            let cachedRequest;
 
             if (this.hasScopeChanged(params)) {
                 this.clearRequests();
@@ -112,8 +112,8 @@ define([
          * @param {Object} params - Request parameters.
          * @returns {Boolean}
          */
-        hasScopeChanged: function (params) {
-            var lastRequest = _.last(this._requests),
+        hasScopeChanged: function(params) {
+            let lastRequest = _.last(this._requests),
                 keys,
                 diff;
 
@@ -136,8 +136,8 @@ define([
          * @param {Array} data - An array of records.
          * @returns {DataStorage} Chainable.
          */
-        updateData: function (data) {
-            var records = _.indexBy(data || [], this.indexField);
+        updateData: function(data) {
+            let records = _.indexBy(data || [], this.indexField);
 
             _.extend(this.data, records);
 
@@ -150,8 +150,8 @@ define([
          * @param {Object} params - Request parameters.
          * @returns {jQueryPromise}
          */
-        requestData: function (params) {
-            var query = utils.copy(params),
+        requestData: function(params) {
+            let query = utils.copy(params),
                 handler = this.onRequestComplete.bind(this, query),
                 request;
 
@@ -168,8 +168,8 @@ define([
          * @param {Object} params - Request parameters.
          * @returns {Object} Instance of request.
          */
-        getRequest: function (params) {
-            return _.find(this._requests, function (request) {
+        getRequest: function(params) {
+            return _.find(this._requests, function(request) {
                 return _.isEqual(params, request.params);
             }, this);
         },
@@ -180,15 +180,15 @@ define([
          * @param {Object} request - Request object.
          * @returns {jQueryPromise}
          */
-        getRequestData: function (request) {
-            var defer = $.Deferred(),
+        getRequestData: function(request) {
+            let defer = $.Deferred(),
                 resolve = defer.resolve.bind(defer),
                 delay = this.cachedRequestDelay,
                 result;
 
             result = {
                 items: this.getByIds(request.ids),
-                totalRecords: request.totalRecords
+                totalRecords: request.totalRecords,
             };
 
             delay ?
@@ -206,8 +206,8 @@ define([
          * @param {Object} params - Request parameters.
          * @returns {DataStorage} Chainable.
          */
-        cacheRequest: function (data, params) {
-            var cached = this.getRequest(params);
+        cacheRequest: function(data, params) {
+            let cached = this.getRequest(params);
 
             if (cached) {
                 this.removeRequest(cached);
@@ -216,7 +216,7 @@ define([
             this._requests.push({
                 ids: this.getIds(data.items),
                 params: params,
-                totalRecords: data.totalRecords
+                totalRecords: data.totalRecords,
             });
 
             return this;
@@ -227,7 +227,7 @@ define([
          *
          * @returns {DataStorage} Chainable.
          */
-        clearRequests: function () {
+        clearRequests: function() {
             this._requests.splice(0);
 
             return this;
@@ -239,8 +239,8 @@ define([
          * @param {Object} request - Request object.
          * @returns {DataStorage} Chainable.
          */
-        removeRequest: function (request) {
-            var requests = this._requests,
+        removeRequest: function(request) {
+            let requests = this._requests,
                 index = requests.indexOf(request);
 
             if (~index) {
@@ -256,7 +256,7 @@ define([
          * @param {Object} params - Parameters of the request.
          * @returns {Boolean}
          */
-        wasRequested: function (params) {
+        wasRequested: function(params) {
             return !!this.getRequest(params);
         },
 
@@ -266,12 +266,12 @@ define([
          * @param {Object} params - Request parameters.
          * @param {Object} data - Response data.
          */
-        onRequestComplete: function (params, data) {
+        onRequestComplete: function(params, data) {
             this.updateData(data.items);
 
             if (this.cacheRequests) {
                 this.cacheRequest(data, params);
             }
-        }
+        },
     });
 });

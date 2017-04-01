@@ -14,8 +14,8 @@ define([
     'underscore',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/view/utils/bindings',
-    'Magento_Ui/js/lib/view/utils/async'
-], function (Element, $, $t, utils, _, alert) {
+    'Magento_Ui/js/lib/view/utils/async',
+], function(Element, $, $t, utils, _, alert) {
     'use strict';
 
     return Element.extend({
@@ -29,29 +29,29 @@ define([
             contentSelector: '${$.name}',
             externalData: [],
             params: {
-                namespace: '${ $.ns }'
+                namespace: '${ $.ns }',
             },
             renderSettings: {
                 url: '${ $.render_url }',
-                dataType: 'html'
+                dataType: 'html',
             },
             updateSettings: {
                 url: '${ $.update_url }',
-                dataType: 'json'
+                dataType: 'json',
             },
             imports: {},
             exports: {},
             listens: {},
             links: {
-                value: '${ $.provider }:${ $.dataScope}'
+                value: '${ $.provider }:${ $.dataScope}',
             },
             modules: {
-                externalSource: '${ $.externalProvider }'
-            }
+                externalSource: '${ $.externalProvider }',
+            },
         },
 
         /** @inheritdoc */
-        initialize: function () {
+        initialize: function() {
             this._super();
             _.bindAll(this, 'onRender', 'onUpdate');
 
@@ -63,18 +63,18 @@ define([
         },
 
         /** @inheritdoc */
-        initObservable: function () {
+        initObservable: function() {
             return this._super()
                 .observe([
                     'visible',
                     'content',
                     'value',
-                    'loading'
+                    'loading',
                 ]);
         },
 
         /** @inheritdoc */
-        initConfig: function (config) {
+        initConfig: function(config) {
             this.initDataLink(config)._super();
             this.contentSelector = this.contentSelector.replace(/\./g, '_');
 
@@ -87,11 +87,11 @@ define([
          * @param {Object} config
          * @returns {Object}
          */
-        initDataLink: function (config) {
-            var key, value;
+        initDataLink: function(config) {
+            let key, value;
 
             if (config.dataLinks) {
-                _.each(config.externalData, function (val) {
+                _.each(config.externalData, function(val) {
                     value = val;
                     key = 'externalValue.' + val.replace('data.', '');
 
@@ -118,8 +118,8 @@ define([
          *
          * @returns {Object}
          */
-        render: function (params) {
-            var self = this,
+        render: function(params) {
+            let self = this,
                 request;
 
             if (this.isRendered) {
@@ -130,8 +130,8 @@ define([
 
             $.async({
                 component: this.name,
-                ctx: '.' + this.contentSelector
-            }, function (el) {
+                ctx: '.' + this.contentSelector,
+            }, function(el) {
                 self.contentEl = $(el);
                 self.startRender = true;
                 params = _.extend({}, self.params, params || {});
@@ -145,7 +145,7 @@ define([
         },
 
         /** @inheritdoc */
-        destroy: function () {
+        destroy: function() {
             this.destroyInserted()
                 ._super();
         },
@@ -155,7 +155,7 @@ define([
          *
          * @returns {Object}
          */
-        destroyInserted: function () {
+        destroyInserted: function() {
             if (this.isRendered) {
                 this.isRendered = false;
                 this.content('');
@@ -174,8 +174,8 @@ define([
          *
          * @returns {Object}
          */
-        initExternalLinks: function () {
-            var imports = this.filterExternalLinks(this.imports, this.ns),
+        initExternalLinks: function() {
+            let imports = this.filterExternalLinks(this.imports, this.ns),
                 exports = this.filterExternalLinks(this.exports, this.ns),
                 links = this.filterExternalLinks(this.links, this.ns);
 
@@ -184,7 +184,7 @@ define([
 
             _.each({
                 exports: exports,
-                imports: imports
+                imports: imports,
             }, this.setLinks, this);
 
             return this;
@@ -197,10 +197,10 @@ define([
          * @param {String }ns
          * @returns {Object}
          */
-        filterExternalLinks: function (data, ns) {
-            var links  = {};
+        filterExternalLinks: function(data, ns) {
+            let links = {};
 
-            _.each(data, function (value, key) {
+            _.each(data, function(value, key) {
                 if (value.split('.')[0] === ns) {
                     links[key] = value;
                 }
@@ -216,14 +216,14 @@ define([
          * @param {Object} ajaxSettings
          * @returns {Object}
          */
-        requestData: function (params, ajaxSettings) {
-            var query = utils.copy(params);
+        requestData: function(params, ajaxSettings) {
+            let query = utils.copy(params);
 
             ajaxSettings = _.extend({
                 url: this['update_url'],
                 method: 'GET',
                 data: query,
-                dataType: 'json'
+                dataType: 'json',
             }, ajaxSettings);
 
             this.loading(true);
@@ -236,7 +236,7 @@ define([
          *
          * @param {*} data
          */
-        onRender: function (data) {
+        onRender: function(data) {
             this.loading(false);
             this.set('content', data);
             this.isRendered = true;
@@ -248,13 +248,13 @@ define([
          *
          * @param {Object} xhr
          */
-        onError: function (xhr) {
+        onError: function(xhr) {
             if (xhr.statusText === 'abort') {
                 return;
             }
 
             alert({
-                content: $t('Something went wrong.')
+                content: $t('Something went wrong.'),
             });
         },
 
@@ -263,10 +263,10 @@ define([
          *
          * @returns {Object}
          */
-        getExternalData: function () {
-            var data = {};
+        getExternalData: function() {
+            let data = {};
 
-            _.each(this.externalData, function (path) {
+            _.each(this.externalData, function(path) {
                 utils.nested(data, path.replace('data.', ''), this.externalSource().get(path));
             }, this);
 
@@ -278,8 +278,8 @@ define([
          *
          * @returns {*|Object}
          */
-        updateData: function (params) {
-            var request;
+        updateData: function(params) {
+            let request;
 
             params = _.extend(params || {}, this.params);
 
@@ -300,10 +300,10 @@ define([
          *
          * @param {*} data
          */
-        onUpdate: function (data) {
+        onUpdate: function(data) {
             this.externalSource().set('data', data);
             this.externalSource().trigger('data.overload');
             this.loading(false);
-        }
+        },
     });
 });

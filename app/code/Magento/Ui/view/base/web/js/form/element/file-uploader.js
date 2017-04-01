@@ -13,8 +13,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/abstract',
-    'jquery/file-uploader'
-], function ($, _, utils, uiAlert, validator, Element) {
+    'jquery/file-uploader',
+], function($, _, utils, uiAlert, validator, Element) {
     'use strict';
 
     return Element.extend({
@@ -31,12 +31,12 @@ define([
                 dataType: 'json',
                 sequentialUploads: true,
                 formData: {
-                    'form_key': window.FORM_KEY
-                }
+                    'form_key': window.FORM_KEY,
+                },
             },
             tracks: {
-                isLoading: true
-            }
+                isLoading: true,
+            },
         },
 
         /**
@@ -45,17 +45,17 @@ define([
          * @param {HTMLInputElement} fileInput
          * @returns {FileUploader} Chainable.
          */
-        initUploader: function (fileInput) {
+        initUploader: function(fileInput) {
             this.$fileInput = fileInput;
 
             _.extend(this.uploaderConfig, {
-                dropZone:   $(fileInput).closest(this.dropZone),
-                change:     this.onFilesChoosed.bind(this),
-                drop:       this.onFilesChoosed.bind(this),
-                add:        this.onBeforeFileUpload.bind(this),
-                done:       this.onFileUploaded.bind(this),
-                start:      this.onLoadingStart.bind(this),
-                stop:       this.onLoadingStop.bind(this)
+                dropZone: $(fileInput).closest(this.dropZone),
+                change: this.onFilesChoosed.bind(this),
+                drop: this.onFilesChoosed.bind(this),
+                add: this.onBeforeFileUpload.bind(this),
+                done: this.onFileUploaded.bind(this),
+                start: this.onLoadingStart.bind(this),
+                stop: this.onLoadingStop.bind(this),
             });
 
             $(fileInput).fileupload(this.uploaderConfig);
@@ -68,8 +68,8 @@ define([
          *
          * @returns {FileUploader} Chainable.
          */
-        setInitialValue: function () {
-            var value = this.getInitialValue();
+        setInitialValue: function() {
+            let value = this.getInitialValue();
 
             value = value.map(this.processFile, this);
 
@@ -87,7 +87,7 @@ define([
          *
          * @returns {FileUploader} Chainable.
          */
-        clear: function () {
+        clear: function() {
             this.value.removeAll();
 
             return this;
@@ -98,7 +98,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasData: function () {
+        hasData: function() {
             return !!this.value().length;
         },
 
@@ -107,8 +107,8 @@ define([
          *
          * @returns {FileUploader}
          */
-        reset: function () {
-            var value = this.initialValue.slice();
+        reset: function() {
+            let value = this.initialValue.slice();
 
             this.value(value);
 
@@ -121,7 +121,7 @@ define([
          * @param {Object} file
          * @returns {FileUploder} Chainable.
          */
-        addFile: function (file) {
+        addFile: function(file) {
             file = this.processFile(file);
 
             this.isMultipleFiles ?
@@ -139,7 +139,7 @@ define([
          *      for each file in the list.
          * @returns {Object}
          */
-        getFile: function (fn) {
+        getFile: function(fn) {
             return _.find(this.value(), fn);
         },
 
@@ -149,7 +149,7 @@ define([
          * @param {Object} file
          * @returns {FileUploader} Chainable.
          */
-        removeFile: function (file) {
+        removeFile: function(file) {
             this.value.remove(file);
 
             return this;
@@ -162,12 +162,12 @@ define([
          * @param {Object} file
          * @returns {Object} Modified file object.
          */
-        processFile: function (file) {
+        processFile: function(file) {
             file.previewType = this.getFilePreviewType(file);
 
             this.observe.call(file, true, [
                 'previewWidth',
-                'previewHeight'
+                'previewHeight',
             ]);
 
             return file;
@@ -179,8 +179,8 @@ define([
          * @param {Number} bytes
          * @returns {String}
          */
-        formatSize: function (bytes) {
-            var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'],
+        formatSize: function(bytes) {
+            let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'],
                 i;
 
             if (bytes === 0) {
@@ -198,7 +198,7 @@ define([
          * @param {Object} file
          * @returns {String}
          */
-        getFilePreview: function (file) {
+        getFilePreview: function(file) {
             return file.url;
         },
 
@@ -207,7 +207,7 @@ define([
          *
          * @returns {String}
          */
-        getPreviewTmpl: function () {
+        getPreviewTmpl: function() {
             return this.previewTmpl;
         },
 
@@ -217,13 +217,13 @@ define([
          * @param {Object} file
          * @returns {Object} Validation result.
          */
-        isFileAllowed: function (file) {
-            var result;
+        isFileAllowed: function(file) {
+            let result;
 
             _.every([
                 this.isExtensionAllowed(file),
-                this.isSizeExceeded(file)
-            ], function (value) {
+                this.isSizeExceeded(file),
+            ], function(value) {
                 result = value;
 
                 return value.passed;
@@ -238,7 +238,7 @@ define([
          * @param {Object} file - File to be checked.
          * @returns {Boolean}
          */
-        isExtensionAllowed: function (file) {
+        isExtensionAllowed: function(file) {
             return validator('validate-file-type', file.name, this.allowedExtensions);
         },
 
@@ -248,8 +248,8 @@ define([
          * @param {Object} file - File to be checked.
          * @returns {String}
          */
-        getFilePreviewType: function (file) {
-            var type;
+        getFilePreviewType: function(file) {
+            let type;
 
             if (!file.type) {
                 return 'document';
@@ -267,7 +267,7 @@ define([
          * @param {Object} file - File to be checked.
          * @returns {Boolean}
          */
-        isSizeExceeded: function (file) {
+        isSizeExceeded: function(file) {
             return validator('validate-max-size', file.size, this.maxFileSize);
         },
 
@@ -277,9 +277,9 @@ define([
          * @param {String} msg
          * @returns {FileUploader} Chainable.
          */
-        notifyError: function (msg) {
+        notifyError: function(msg) {
             uiAlert({
-                content: msg
+                content: msg,
             });
 
             return this;
@@ -291,7 +291,7 @@ define([
          * @param {*} value
          * @returns {Array}
          */
-        normalizeData: function (value) {
+        normalizeData: function(value) {
             return utils.isEmpty(value) ? [] : value;
         },
 
@@ -301,8 +301,8 @@ define([
          *
          * @returns {Boolean}
          */
-        hasChanged: function () {
-            var value = this.value(),
+        hasChanged: function() {
+            let value = this.value(),
                 initial = this.initialValue;
 
             return !utils.equalArrays(value, initial);
@@ -315,7 +315,7 @@ define([
          *
          * @abstract
          */
-        onFilesChoosed: function () {},
+        onFilesChoosed: function() {},
 
         /**
          * Handler which is invoked prior to the start of a file upload.
@@ -323,17 +323,17 @@ define([
          * @param {Event} e - Event object.
          * @param {Object} data - File data that will be uploaded.
          */
-        onBeforeFileUpload: function (e, data) {
-            var file     = data.files[0],
-                allowed  = this.isFileAllowed(file),
-                target   = $(e.target);
+        onBeforeFileUpload: function(e, data) {
+            let file = data.files[0],
+                allowed = this.isFileAllowed(file),
+                target = $(e.target);
 
             if (allowed.passed) {
-                target.on('fileuploadsend', function (event, postData) {
+                target.on('fileuploadsend', function(event, postData) {
                     postData.data.set('param_name', this.paramName);
                 }.bind(data));
 
-                target.fileupload('process', data).done(function () {
+                target.fileupload('process', data).done(function() {
                     data.submit();
                 });
             } else {
@@ -347,9 +347,9 @@ define([
          * @param {Event} e
          * @param {Object} data
          */
-        onFileUploaded: function (e, data) {
-            var file    = data.result,
-                error   = file.error;
+        onFileUploaded: function(e, data) {
+            let file = data.result,
+                error = file.error;
 
             error ?
                 this.notifyError(error) :
@@ -359,14 +359,14 @@ define([
         /**
          * Load start event handler.
          */
-        onLoadingStart: function () {
+        onLoadingStart: function() {
             this.isLoading = true;
         },
 
         /**
          * Load stop event handler.
          */
-        onLoadingStop: function () {
+        onLoadingStop: function() {
             this.isLoading = false;
         },
 
@@ -376,7 +376,7 @@ define([
          *
          * @param {HTMLInputElement} fileInput
          */
-        onElementRender: function (fileInput) {
+        onElementRender: function(fileInput) {
             this.initUploader(fileInput);
         },
 
@@ -386,8 +386,8 @@ define([
          * @param {Object} file - File associated with an image.
          * @param {Event} e
          */
-        onPreviewLoad: function (file, e) {
-            var img = e.currentTarget;
+        onPreviewLoad: function(file, e) {
+            let img = e.currentTarget;
 
             file.previewWidth = img.naturalHeight;
             file.previewHeight = img.naturalWidth;
@@ -396,8 +396,8 @@ define([
         /**
          * Restore value to default
          */
-        restoreToDefault: function () {
-            var defaultValue = utils.copy(this.default);
+        restoreToDefault: function() {
+            let defaultValue = utils.copy(this.default);
 
             defaultValue.map(this.processFile, this);
             this.value(defaultValue);
@@ -406,10 +406,10 @@ define([
         /**
          * Update whether value differs from default value
          */
-        setDifferedFromDefault: function () {
-            var value = utils.copy(this.value());
+        setDifferedFromDefault: function() {
+            let value = utils.copy(this.value());
 
             this.isDifferedFromDefault(!_.isEqual(value, this.default));
-        }
+        },
     });
 });

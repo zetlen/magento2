@@ -5,17 +5,17 @@
 
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'jquery/ui',
+], function($) {
     'use strict';
 
     $.widget('mage.zoom', {
         options: {
-            sliderSpeed: 10
+            sliderSpeed: 10,
         },
 
         /** @inheritdoc */
-        _create: function () {
+        _create: function() {
             this.sliderMax = $(this.options.sliderSelector).width();
             this.image = this.element;
             this.imageWidth = this.image.width();
@@ -35,35 +35,35 @@ define([
                 value: 0,
                 min: 0,
                 max: this.sliderMax,
-                slide: $.proxy(function (event, ui) {
+                slide: $.proxy(function(event, ui) {
                     this._zoom(ui.value, this.sliderMax);
                 }, this),
-                change: $.proxy(function (event, ui) {
+                change: $.proxy(function(event, ui) {
                     this._zoom(ui.value, this.sliderMax);
-                }, this)
+                }, this),
             });
 
             // Mousedown on zoom in icon to zoom in picture
-            $(this.options.zoomInSelector).on('mousedown', $.proxy(function () {
-                this.intervalId = setInterval($.proxy(function () {
+            $(this.options.zoomInSelector).on('mousedown', $.proxy(function() {
+                this.intervalId = setInterval($.proxy(function() {
                     this.slider.slider('value', this.slider.slider('value') + 1);
                 }, this), this.options.sliderSpeed);
-            }, this)).on('mouseup mouseleave', $.proxy(function () {
+            }, this)).on('mouseup mouseleave', $.proxy(function() {
                 clearInterval(this.intervalId);
             }, this));
 
             // Mousedown on zoom out icon to zoom out picture
-            $(this.options.zoomOutSelector).on('mousedown', $.proxy(function () {
-                this.intervalId = setInterval($.proxy(function () {
+            $(this.options.zoomOutSelector).on('mousedown', $.proxy(function() {
+                this.intervalId = setInterval($.proxy(function() {
                     this.slider.slider('value', this.slider.slider('value') - 1);
                 }, this), this.options.sliderSpeed);
-            }, this)).on('mouseup mouseleave', $.proxy(function () {
+            }, this)).on('mouseup mouseleave', $.proxy(function() {
                 clearInterval(this.intervalId);
             }, this));
 
             // Double-click image to see full picture
-            this.element.on('dblclick', $.proxy(function () {
-                var ratio;
+            this.element.on('dblclick', $.proxy(function() {
+                let ratio;
 
                 this.showFullImage = !this.showFullImage;
                 ratio = this.showFullImage ? this.sliderMax : this.slider.slider('value');
@@ -75,7 +75,7 @@ define([
                     $(this.options.zoomOutSelector).hide();
                     this.imageParent.css({
                         'overflow': 'visible',
-                        'zIndex': '1000'
+                        'zIndex': '1000',
                     });
                 } else {
                     $(this.options.sliderSelector).show();
@@ -83,7 +83,7 @@ define([
                     $(this.options.zoomOutSelector).show();
                     this.imageParent.css({
                         'overflow': 'hidden',
-                        'zIndex': '9'
+                        'zIndex': '9',
                     });
                 }
             }, this));
@@ -98,7 +98,7 @@ define([
          * @private
          * @return {Boolean}
          */
-        _isZoomable: function () {
+        _isZoomable: function() {
             if (this.imageWidth <= this.imageParentWidth && this.imageHeight <= this.imageParentHeight) {
                 $(this.options.sliderSelector).parent().hide();
                 $(this.options.zoomNoticeSelector).hide();
@@ -113,7 +113,7 @@ define([
          * Resize image to fit parent container and set initial image dimension
          * @private
          */
-        _initialResize: function () {
+        _initialResize: function() {
             if (this.imageWidth > this.imageHeight) {
                 this.ceilingZoom = this.imageWidth / this.imageParentWidth;
                 this.image.width(this.imageParentWidth);
@@ -132,8 +132,8 @@ define([
          * Make Image draggable inside parent container dimension
          * @private
          */
-        _draggableImage: function () {
-            var topX = this.image.offset().left,
+        _draggableImage: function() {
+            let topX = this.image.offset().left,
                 topY = this.image.offset().top,
                 bottomX = this.image.offset().left,
                 bottomY = this.image.offset().top;
@@ -157,7 +157,7 @@ define([
             // containment field is used because image is larger than parent container
             this.element.draggable({
                 containment: [topX, topY, bottomX, bottomY],
-                scroll: false
+                scroll: false,
             });
         },
 
@@ -167,8 +167,8 @@ define([
          * @param {Number} sliderLength - slider track max length
          * @private
          */
-        _zoom: function (sliderPosition, sliderLength) {
-            var ratio = sliderPosition / sliderLength,
+        _zoom: function(sliderPosition, sliderLength) {
+            let ratio = sliderPosition / sliderLength,
                 floorZoom = 1,
                 imageOldLeft, imageOldTop, imageOldWidth, imageOldHeight, overSize, imageZoom, imageNewLeft,
                 imageNewTop;
@@ -179,7 +179,7 @@ define([
             imageOldWidth = this.image.width();
             imageOldHeight = this.image.height();
             overSize = this.imageWidth > this.imageParentWidth || this.imageHeight > this.imageParentHeight;
-            imageZoom = floorZoom + (ratio * (this.ceilingZoom - floorZoom)); //eslint-disable-line no-extra-parens
+            imageZoom = floorZoom + (ratio * (this.ceilingZoom - floorZoom)); // eslint-disable-line no-extra-parens
             // Zoomed image is larger than container, and resize image based on zoom ratio
             if (overSize) {
                 this.imageWidth > this.imageHeight ? this.image.width(imageZoom * this.imageParentWidth) :
@@ -208,10 +208,10 @@ define([
             }
             this.image.css({
                 'left': imageNewLeft + 'px',
-                'top': imageNewTop + 'px'
+                'top': imageNewTop + 'px',
             });
             // Because image size and position changed, we need to recalculate draggable image containment
             this._draggableImage();
-        }
+        },
     });
 });

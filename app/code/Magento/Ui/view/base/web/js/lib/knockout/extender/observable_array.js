@@ -5,8 +5,8 @@
 
 define([
     'ko',
-    'underscore'
-], function (ko, _) {
+    'underscore',
+], function(ko, _) {
     'use strict';
 
     /**
@@ -34,8 +34,8 @@ define([
      * @returns {Function}
      */
     function wrapper(method) {
-        return function (iteratee) {
-            var callback = iteratee,
+        return function(iteratee) {
+            let callback = iteratee,
                 elems = this(),
                 args = _.toArray(arguments);
 
@@ -47,7 +47,7 @@ define([
 
             args.unshift(elems);
 
-            return _[method].apply(_, args);
+            return _[method](...args);
         };
     }
 
@@ -72,7 +72,7 @@ define([
          * @param {Object} properties
          * @return {Object}
          */
-        findWhere: function (properties) {
+        findWhere: function(properties) {
             return _.findWhere(this(), properties);
         },
 
@@ -82,7 +82,7 @@ define([
          * @param {*} value
          * @return {Boolean}
          */
-        contains: function (value) {
+        contains: function(value) {
             return _.contains(this(), value);
         },
 
@@ -91,7 +91,7 @@ define([
          *
          * @return {Boolean}
          */
-        hasNo: function () {
+        hasNo: function() {
             return !this.contains.apply(this, arguments);
         },
 
@@ -100,7 +100,7 @@ define([
          *
          * @return {Number}
          */
-        getLength: function () {
+        getLength: function() {
             return this().length;
         },
 
@@ -109,7 +109,7 @@ define([
          *
          * @return {Object}
          */
-        indexBy: function (key) {
+        indexBy: function(key) {
             return _.indexBy(this(), key);
         },
 
@@ -118,12 +118,12 @@ define([
          *
          * @return {Array}
          */
-        without: function () {
-            var args = Array.prototype.slice.call(arguments);
+        without: function() {
+            let args = Array.prototype.slice.call(arguments);
 
             args.unshift(this());
 
-            return _.without.apply(_, args);
+            return _.without(...args);
         },
 
         /**
@@ -131,7 +131,7 @@ define([
          *
          * @return {*}
          */
-        first: function () {
+        first: function() {
             return _.first(this());
         },
 
@@ -140,7 +140,7 @@ define([
          *
          * @return {*}
          */
-        last: function () {
+        last: function() {
             return _.last(this());
         },
 
@@ -149,12 +149,12 @@ define([
          *
          * @return {Array}
          */
-        pluck: function () {
-            var args = Array.prototype.slice.call(arguments);
+        pluck: function() {
+            let args = Array.prototype.slice.call(arguments);
 
             args.unshift(this());
 
-            return _.pluck.apply(_, args);
-        }
+            return _.pluck(...args);
+        },
     });
 });

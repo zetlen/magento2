@@ -6,8 +6,8 @@ define([
     'jquery',
     'uiComponent',
     'Magento_Checkout/js/model/totals',
-    'Magento_Checkout/js/model/shipping-service'
-], function ($, Component, totalsService, shippingService) {
+    'Magento_Checkout/js/model/shipping-service',
+], function($, Component, totalsService, shippingService) {
     'use strict';
 
     return Component.extend({
@@ -16,14 +16,14 @@ define([
         /**
          * @override
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
-            totalsService.totals.subscribe(function () {
+            totalsService.totals.subscribe(function() {
                 $(window).trigger('resize');
             });
-            shippingService.getShippingRates().subscribe(function () {
+            shippingService.getShippingRates().subscribe(function() {
                 $(window).trigger('resize');
             });
-        }
+        },
     });
 });

@@ -8,21 +8,21 @@ define([
     'collapsible',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
-    'domReady!'
-], function ($, productType) {
+    'domReady!',
+], function($, productType) {
     'use strict';
 
     return {
-        $block: null,
-        hasVariations: null,
-        configurationSectionMessageHandler: (function () {
-            var title = $('[data-role="product-create-configuration-info"]'),
+        "$block": null,
+        "hasVariations": null,
+        "configurationSectionMessageHandler": (function() {
+            let title = $('[data-role="product-create-configuration-info"]'),
                 buttons = $('[data-action="product-create-configuration-buttons"]'),
                 newText = 'Configurations cannot be created for a standard product with downloadable files.' +
                 ' To create configurations, first remove all downloadable files.',
                 oldText = title.text();
 
-            return function (change) {
+            return function(change) {
                 if (change) {
                     title.text(newText);
                     buttons.hide();
@@ -40,7 +40,7 @@ define([
          * @param {Bool} triggerEvent
          * @private
          */
-        _setElementDisabled: function ($element, state, triggerEvent) {
+        "_setElementDisabled": function($element, state, triggerEvent) {
             if (!$element.is('[data-locked]')) {
                 $element.prop('disabled', state);
 
@@ -53,22 +53,22 @@ define([
         /**
          * Show
          */
-        show: function () {
+        "show": function() {
             this.configurationSectionMessageHandler(false);
         },
 
         /**
          * Hide
          */
-        hide: function () {
+        "hide": function() {
             this.configurationSectionMessageHandler(true);
         },
 
         /**
          * Bind all
          */
-        bindAll: function () {
-            $(document).on('changeConfigurableTypeProduct', function (event, isConfigurable) {
+        "bindAll": function() {
+            $(document).on('changeConfigurableTypeProduct', function(event, isConfigurable) {
                 $(document).trigger('setTypeProduct', isConfigurable ?
                     'configurable' :
                     productType.type.init === 'configurable' ? 'simple' : productType.type.init
@@ -81,9 +81,8 @@ define([
          * Init type
          * @private
          */
-        _initType: function () {
-
-            /*var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
+        "_initType": function() {
+            /* var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
 
 
             if (productType.type.current === 'configurable') {
@@ -100,7 +99,7 @@ define([
             }
             */
 
-            /*if (['simple', 'virtual', 'configurable'].indexOf(productType.type.current) < 0) {
+            /* if (['simple', 'virtual', 'configurable'].indexOf(productType.type.current) < 0) {
                 this.hide();
             } else {
                 this.show();
@@ -113,20 +112,20 @@ define([
          * Constructor component
          * @param {Object} data - this backend data
          */
-        'Magento_ConfigurableProduct/js/configurable-type-handler': function (data) {
+        'Magento_ConfigurableProduct/js/configurable-type-handler': function(data) {
             this.$block = $(data.blockId + ' input[name="attributes[]"]');
             this.hasVariations = data.hasVariations;
 
-            //advancedPricingHandler.init();
-            //priceTypeHandler.init();
+            // advancedPricingHandler.init();
+            // priceTypeHandler.init();
 
-            /*if (productType.type.init === 'configurable' && !this.hasVariations) {
+            /* if (productType.type.init === 'configurable' && !this.hasVariations) {
                 $(document).trigger('setTypeProduct', 'simple');
             }*/
             $(document).trigger('setTypeProduct', 'simple');
 
             this.bindAll();
             this._initType();
-        }
+        },
     };
 });

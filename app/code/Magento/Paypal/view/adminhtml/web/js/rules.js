@@ -4,8 +4,8 @@
  */
 define([
     'uiClass',
-    'Magento_Ui/js/modal/alert'
-], function (Class, alert) {
+    'Magento_Ui/js/modal/alert',
+], function(Class, alert) {
     'use strict';
 
     /**
@@ -15,7 +15,7 @@ define([
      * @param {String} enabler
      * @returns {Boolean}
      */
-    var isSolutionEnabled = function (solution, enabler) {
+    let isSolutionEnabled = function(solution, enabler) {
         return solution.find(enabler).val() === '1';
     },
 
@@ -25,8 +25,8 @@ define([
      * @param {Object} data
      * @returns {Boolean}
      */
-    hasRelationsEnabled = function (data) {
-        var name;
+    hasRelationsEnabled = function(data) {
+        let name;
 
         for (name in data.argument) {
             if (
@@ -47,7 +47,7 @@ define([
      * @param {String} enabler
      * @param {Boolean} enabled
      */
-    setSolutionSelectEnabled = function (solution, enabler, enabled) {
+    setSolutionSelectEnabled = function(solution, enabler, enabled) {
         enabled = !(enabled || typeof enabled === 'undefined') ? '0' : '1';
 
         solution.find(enabler + ' option[value=' + enabled + ']')
@@ -61,7 +61,7 @@ define([
      * @param {String} enabler
      * @param {Boolean} enabled
      */
-    setSolutionPropEnabled = function (solution, enabler, enabled) {
+    setSolutionPropEnabled = function(solution, enabler, enabled) {
         enabled = !(enabled || typeof enabled === 'undefined');
 
         solution.find(enabler).prop('disabled', enabled);
@@ -74,8 +74,8 @@ define([
      * @param {String} enabler
      * @param {Boolean} enabled
      */
-    setSolutionMarkEnabled = function (solution, enabler, enabled) {
-        var solutionEnabler = solution.find('label[for="' + solution.find(enabler).attr('id') + '"]');
+    setSolutionMarkEnabled = function(solution, enabler, enabled) {
+        let solutionEnabler = solution.find('label[for="' + solution.find(enabler).attr('id') + '"]');
 
         enabled || typeof enabled === 'undefined' ?
             solutionEnabler.addClass('enabled') :
@@ -88,8 +88,8 @@ define([
      * @param {*} solution
      * @param {Boolean} enabled
      */
-    setSolutionSectionMarkEnabled = function (solution, enabled) {
-        var solutionSection = solution.find('.section-config');
+    setSolutionSectionMarkEnabled = function(solution, enabled) {
+        let solutionSection = solution.find('.section-config');
 
         enabled || typeof enabled === 'undefined' ?
             solutionSection.addClass('enabled') :
@@ -102,8 +102,8 @@ define([
      * @param {*} solution
      * @param {Boolean} enabled
      */
-    setSolutionLabelsMarkEnabled = function (solution, enabled) {
-        var solutionLabels = solution.find('label.enabled');
+    setSolutionLabelsMarkEnabled = function(solution, enabled) {
+        let solutionLabels = solution.find('label.enabled');
 
         enabled || typeof enabled === 'undefined' ?
             solutionLabels.addClass('enabled') :
@@ -116,7 +116,7 @@ define([
      * @param {*} solution
      * @param {String} enabler
      */
-    disableSolution = function (solution, enabler) {
+    disableSolution = function(solution, enabler) {
         setSolutionMarkEnabled(solution, enabler, false);
         setSolutionSelectEnabled(solution, enabler, false);
         setSolutionPropEnabled(solution, enabler, false);
@@ -128,7 +128,7 @@ define([
      * @param {*} solution
      * @param {String} enabler
      */
-    enableSolution = function (solution, enabler) {
+    enableSolution = function(solution, enabler) {
         setSolutionPropEnabled(solution, enabler);
         setSolutionSelectEnabled(solution, enabler);
         setSolutionMarkEnabled(solution, enabler);
@@ -141,8 +141,8 @@ define([
      * @param {String} buttonConfiguration
      * @param {Boolean} unlock
      */
-    setSolutionConfigurationUnlock = function (solution, buttonConfiguration, unlock) {
-        var solutionConfiguration = solution.find(buttonConfiguration);
+    setSolutionConfigurationUnlock = function(solution, buttonConfiguration, unlock) {
+        let solutionConfiguration = solution.find(buttonConfiguration);
 
         unlock || typeof unlock === 'undefined' ?
             solutionConfiguration.removeClass('disabled').removeAttr('disabled') :
@@ -156,7 +156,7 @@ define([
      * @param {String} enabler
      * @param {Boolean} checked
      */
-    setSolutionUsedefaultEnabled = function (solution, enabler, checked) {
+    setSolutionUsedefaultEnabled = function(solution, enabler, checked) {
         checked = !(checked || typeof checked === 'undefined');
 
         solution.find('input[id="' + solution.find(enabler).attr('id') + '_inherit"]')
@@ -169,7 +169,7 @@ define([
      * @param {*} solution
      * @param {String} enabler
      */
-    forwardSolutionChange = function (solution, enabler) {
+    forwardSolutionChange = function(solution, enabler) {
         solution.find(enabler).change();
     },
 
@@ -180,7 +180,7 @@ define([
      * @param {String} identifier
      * @param {Boolean} show
      */
-    showDependsField = function (solution, identifier, show) {
+    showDependsField = function(solution, identifier, show) {
         show = show || typeof show === 'undefined';
 
         solution.find(identifier).toggle(show);
@@ -193,7 +193,7 @@ define([
             /**
              * Payment conflicts checker
              */
-            executed: false
+            executed: false,
         },
 
         /**
@@ -201,7 +201,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        simpleDisable: function ($target, $owner, data) {
+        simpleDisable: function($target, $owner, data) {
             setSolutionSelectEnabled($target, data.enableButton, false);
             setSolutionLabelsMarkEnabled($target, false);
             setSolutionSectionMarkEnabled($target, false);
@@ -210,7 +210,7 @@ define([
         /**
          * @param {*} $target
          */
-        simpleMarkEnable: function ($target) {
+        simpleMarkEnable: function($target) {
             setSolutionSectionMarkEnabled($target);
         },
 
@@ -219,7 +219,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        disable: function ($target, $owner, data) {
+        disable: function($target, $owner, data) {
             this.simpleDisable($target, $owner, data);
             forwardSolutionChange($target, data.enableButton);
         },
@@ -229,7 +229,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalExpressDisable: function ($target, $owner, data) {
+        paypalExpressDisable: function($target, $owner, data) {
             setSolutionSelectEnabled($target, data.enableButton, false);
             setSolutionLabelsMarkEnabled($target, false);
             forwardSolutionChange($target, data.enableButton);
@@ -240,7 +240,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalExpressLockConfiguration: function ($target, $owner, data) {
+        paypalExpressLockConfiguration: function($target, $owner, data) {
             setSolutionConfigurationUnlock($target, data.buttonConfiguration, false);
         },
 
@@ -249,7 +249,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalExpressLockConfigurationConditional: function ($target, $owner, data) {
+        paypalExpressLockConfigurationConditional: function($target, $owner, data) {
             if (
                 !isSolutionEnabled($target, data.enableInContextPayPal) &&
                 hasRelationsEnabled(data)
@@ -263,7 +263,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalExpressMarkDisable: function ($target, $owner, data) {
+        paypalExpressMarkDisable: function($target, $owner, data) {
             if (!hasRelationsEnabled(data)) {
                 this.simpleDisable($target, $owner, data);
             }
@@ -274,7 +274,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalExpressUnlockConfiguration: function ($target, $owner, data) {
+        paypalExpressUnlockConfiguration: function($target, $owner, data) {
             if (!hasRelationsEnabled(data)) {
                 setSolutionConfigurationUnlock($target, data.buttonConfiguration);
             }
@@ -285,7 +285,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalBmlDisable: function ($target, $owner, data) {
+        paypalBmlDisable: function($target, $owner, data) {
             disableSolution($target, data.enableBmlPayPal);
         },
 
@@ -294,7 +294,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalBmlDisableConditional: function ($target, $owner, data) {
+        paypalBmlDisableConditional: function($target, $owner, data) {
             if (!isSolutionEnabled($target, data.enableButton)) {
                 this.paypalBmlDisable($target, $owner, data);
             }
@@ -305,7 +305,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalBmlEnable: function ($target, $owner, data) {
+        paypalBmlEnable: function($target, $owner, data) {
             enableSolution($target, data.enableBmlPayPal);
         },
 
@@ -314,7 +314,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowExpressDisable: function ($target, $owner, data) {
+        payflowExpressDisable: function($target, $owner, data) {
             disableSolution($target, data.enableExpress);
         },
 
@@ -323,7 +323,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowExpressDisableConditional: function ($target, $owner, data) {
+        payflowExpressDisableConditional: function($target, $owner, data) {
             if (
                 !isSolutionEnabled($target, data.enableButton) ||
                 hasRelationsEnabled(data)
@@ -338,7 +338,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowExpressEnable: function ($target, $owner, data) {
+        payflowExpressEnable: function($target, $owner, data) {
             enableSolution($target, data.enableExpress);
             forwardSolutionChange($target, data.enableExpress);
         },
@@ -348,7 +348,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowExpressEnableConditional: function ($target, $owner, data) {
+        payflowExpressEnableConditional: function($target, $owner, data) {
             if (hasRelationsEnabled(data)) {
                 setSolutionPropEnabled($target, data.enableExpress, false);
                 setSolutionSelectEnabled($target, data.enableExpress);
@@ -363,7 +363,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowExpressLockConditional: function ($target, $owner, data) {
+        payflowExpressLockConditional: function($target, $owner, data) {
             if (!isSolutionEnabled($target, data.enableButton)) {
                 setSolutionPropEnabled($target, data.enableExpress, false);
             }
@@ -374,7 +374,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowExpressUsedefaultDisable: function ($target, $owner, data) {
+        payflowExpressUsedefaultDisable: function($target, $owner, data) {
             setSolutionUsedefaultEnabled($target, data.enableExpress, false);
             this.payflowExpressEnable($target, $owner, data);
             forwardSolutionChange($target, data.enableExpress);
@@ -385,7 +385,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowExpressUsedefaultEnable: function ($target, $owner, data) {
+        payflowExpressUsedefaultEnable: function($target, $owner, data) {
             setSolutionUsedefaultEnabled($target, data.enableExpress);
             this.payflowExpressDisable($target, $owner, data);
             forwardSolutionChange($target, data.enableExpress);
@@ -396,7 +396,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowBmlDisable: function ($target, $owner, data) {
+        payflowBmlDisable: function($target, $owner, data) {
             disableSolution($target, data.enableBml);
         },
 
@@ -405,7 +405,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowBmlDisableConditional: function ($target, $owner, data) {
+        payflowBmlDisableConditional: function($target, $owner, data) {
             if (
                 !isSolutionEnabled($target, data.enableButton) ||
                 hasRelationsEnabled(data)
@@ -419,7 +419,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowBmlDisableConditionalExpress: function ($target, $owner, data) {
+        payflowBmlDisableConditionalExpress: function($target, $owner, data) {
             if (!isSolutionEnabled($target, data.enableExpress)) {
                 this.payflowBmlDisable($target, $owner, data);
             }
@@ -430,7 +430,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowBmlEnable: function ($target, $owner, data) {
+        payflowBmlEnable: function($target, $owner, data) {
             enableSolution($target, data.enableBml);
         },
 
@@ -439,7 +439,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowBmlEnableConditional: function ($target, $owner, data) {
+        payflowBmlEnableConditional: function($target, $owner, data) {
             if (hasRelationsEnabled(data)) {
                 setSolutionPropEnabled($target, data.enableBml, false);
                 setSolutionSelectEnabled($target, data.enableBml);
@@ -454,7 +454,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowBmlLockConditional: function ($target, $owner, data) {
+        payflowBmlLockConditional: function($target, $owner, data) {
             if (!isSolutionEnabled($target, data.enableButton)) {
                 setSolutionPropEnabled($target, data.enableBml, false);
             }
@@ -465,7 +465,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        inContextEnable: function ($target, $owner, data) {
+        inContextEnable: function($target, $owner, data) {
             enableSolution($target, data.enableInContextPayPal);
         },
 
@@ -474,7 +474,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        inContextDisable: function ($target, $owner, data) {
+        inContextDisable: function($target, $owner, data) {
             disableSolution($target, data.enableInContextPayPal);
         },
 
@@ -483,7 +483,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        inContextShowMerchantId: function ($target, $owner, data) {
+        inContextShowMerchantId: function($target, $owner, data) {
             showDependsField($target, data.dependsMerchantId);
         },
 
@@ -492,7 +492,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        inContextHideMerchantId: function ($target, $owner, data) {
+        inContextHideMerchantId: function($target, $owner, data) {
             showDependsField($target, data.dependsMerchantId, false);
         },
 
@@ -501,7 +501,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowShowSortOrder: function ($target, $owner, data) {
+        payflowShowSortOrder: function($target, $owner, data) {
             showDependsField($target, data.dependsBmlSortOrder);
         },
 
@@ -510,7 +510,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        payflowHideSortOrder: function ($target, $owner, data) {
+        payflowHideSortOrder: function($target, $owner, data) {
             showDependsField($target, data.dependsBmlSortOrder, false);
         },
 
@@ -519,7 +519,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalShowSortOrder: function ($target, $owner, data) {
+        paypalShowSortOrder: function($target, $owner, data) {
             showDependsField($target, data.dependsBmlApiSortOrder);
         },
 
@@ -528,7 +528,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        paypalHideSortOrder: function ($target, $owner, data) {
+        paypalHideSortOrder: function($target, $owner, data) {
             showDependsField($target, data.dependsBmlApiSortOrder, false);
         },
 
@@ -537,7 +537,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        inContextActivate: function ($target, $owner, data) {
+        inContextActivate: function($target, $owner, data) {
             setSolutionMarkEnabled($target, data.enableInContextPayPal);
         },
 
@@ -546,7 +546,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        inContextDeactivate: function ($target, $owner, data) {
+        inContextDeactivate: function($target, $owner, data) {
             setSolutionMarkEnabled($target, data.enableInContextPayPal, false);
         },
 
@@ -555,7 +555,7 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        inContextDisableConditional: function ($target, $owner, data) {
+        inContextDisableConditional: function($target, $owner, data) {
             if (!isSolutionEnabled($target, data.enableButton)) {
                 this.inContextDisable($target, $owner, data);
             }
@@ -566,8 +566,8 @@ define([
          * @param {*} $owner
          * @param {Object} data
          */
-        conflict: function ($target, $owner, data) {
-            var newLine = String.fromCharCode(10, 13);
+        conflict: function($target, $owner, data) {
+            let newLine = String.fromCharCode(10, 13);
 
             if (
                 isSolutionEnabled($owner, data.enableButton) &&
@@ -580,9 +580,9 @@ define([
                     newLine +
                     'Some PayPal solutions conflict.' +
                     newLine +
-                    'Please re-enable the previously enabled payment solutions.'
+                    'Please re-enable the previously enabled payment solutions.',
                 });
             }
-        }
+        },
     });
 });

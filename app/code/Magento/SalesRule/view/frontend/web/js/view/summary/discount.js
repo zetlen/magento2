@@ -5,27 +5,27 @@
 
 define([
     'Magento_Checkout/js/view/summary/abstract-total',
-    'Magento_Checkout/js/model/quote'
-], function (Component, quote) {
+    'Magento_Checkout/js/model/quote',
+], function(Component, quote) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_SalesRule/summary/discount'
+            template: 'Magento_SalesRule/summary/discount',
         },
         totals: quote.getTotals(),
 
         /**
          * @return {*|Boolean}
          */
-        isDisplayed: function () {
-            return this.isFullMode() && this.getPureValue() != 0; //eslint-disable-line eqeqeq
+        isDisplayed: function() {
+            return this.isFullMode() && this.getPureValue() != 0; // eslint-disable-line eqeqeq
         },
 
         /**
          * @return {*}
          */
-        getCouponCode: function () {
+        getCouponCode: function() {
             if (!this.totals()) {
                 return null;
             }
@@ -36,8 +36,8 @@ define([
         /**
          * @return {Number}
          */
-        getPureValue: function () {
-            var price = 0;
+        getPureValue: function() {
+            let price = 0;
 
             if (this.totals() && this.totals()['discount_amount']) {
                 price = parseFloat(this.totals()['discount_amount']);
@@ -49,8 +49,8 @@ define([
         /**
          * @return {*|String}
          */
-        getValue: function () {
+        getValue: function() {
             return this.getFormattedPrice(this.getPureValue());
-        }
+        },
     });
 });

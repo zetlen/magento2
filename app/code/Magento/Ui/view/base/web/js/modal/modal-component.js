@@ -11,8 +11,8 @@ define([
     'uiCollection',
     'uiRegistry',
     'underscore',
-    './modal'
-], function ($, Collection, registry, _) {
+    './modal',
+], function($, Collection, registry, _) {
     'use strict';
 
     return Collection.extend({
@@ -25,20 +25,20 @@ define([
                 title: '',
                 subTitle: '',
                 buttons: [],
-                keyEventHandlers: {}
+                keyEventHandlers: {},
             },
             valid: true,
             links: {
                 title: 'options.title',
-                subTitle: 'options.subTitle'
+                subTitle: 'options.subTitle',
             },
             listens: {
-                state: 'onState',
-                title: 'setTitle',
-                'options.subTitle': 'setSubTitle'
+                "state": 'onState',
+                "title": 'setTitle',
+                'options.subTitle': 'setSubTitle',
             },
             modalClass: 'modal-component',
-            onCancel: 'closeModal'
+            onCancel: 'closeModal',
         },
 
         /**
@@ -46,7 +46,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             _.bindAll(this,
                 'initModal',
@@ -65,7 +65,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initConfig: function () {
+        initConfig: function() {
             return this._super()
                 .initSelector()
                 .initModalEvents();
@@ -76,8 +76,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initSelector: function () {
-            var modalClass = this.name.replace(/\./g, '_');
+        initSelector: function() {
+            let modalClass = this.name.replace(/\./g, '_');
 
             this.contentSelector = '.' + this.modalClass;
             this.options.modalClass = this.options.modalClass + ' ' + modalClass;
@@ -92,7 +92,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initModalEvents: function () {
+        initModalEvents: function() {
             this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this[this.onCancel].bind(this);
 
             return this;
@@ -101,16 +101,16 @@ define([
         /**
          * Initialize modal's content components
          */
-        initializeContent: function () {
+        initializeContent: function() {
             $.async({
-                component: this.name
+                component: this.name,
             }, this.initModal);
         },
 
         /**
          * Init toolbar section so other components will be able to place something in it
          */
-        initToolbarSection: function () {
+        initToolbarSection: function() {
             this.set('toolbarSection', this.modal.data('mage-modal').modal.find('header').get(0));
         },
 
@@ -119,7 +119,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initObservable: function () {
+        initObservable: function() {
             this._super();
             this.observe(['state', 'focused']);
 
@@ -132,7 +132,7 @@ define([
          * @param {HTMLElement} element
          * @returns {Object} Chainable.
          */
-        initModal: function (element) {
+        initModal: function(element) {
             if (!this.modal) {
                 this.overrideModalButtonCallback();
                 this.options.modalCloseBtnHandler = this[this.onCancel].bind(this);
@@ -151,7 +151,7 @@ define([
         /**
          * Open modal
          */
-        openModal: function () {
+        openModal: function() {
             if (this.modal) {
                 this.state(true);
             } else {
@@ -162,7 +162,7 @@ define([
         /**
          * Close modal
          */
-        closeModal: function () {
+        closeModal: function() {
             if (this.modal) {
                 this.state(false);
             } else {
@@ -173,7 +173,7 @@ define([
         /**
          * Toggle modal
          */
-        toggleModal: function () {
+        toggleModal: function() {
             if (this.modal) {
                 this.state(!this.state());
             } else {
@@ -186,7 +186,7 @@ define([
          *
          * @param {String} title
          */
-        setTitle: function (title) {
+        setTitle: function(title) {
             if (this.title !== title) {
                 this.title = title;
             }
@@ -201,7 +201,7 @@ define([
          *
          * @param {String} subTitle
          */
-        setSubTitle: function (subTitle) {
+        setSubTitle: function(subTitle) {
             if (this.subTitle !== subTitle) {
                 this.subTitle = subTitle;
             }
@@ -216,7 +216,7 @@ define([
          *
          * @param {Boolean} state
          */
-        onState: function (state) {
+        onState: function(state) {
             if (state) {
                 this.modal.modal('openModal');
                 this.applyData();
@@ -228,7 +228,7 @@ define([
         /**
          * Validate everything validatable in modal
          */
-        validate: function (elem) {
+        validate: function(elem) {
             if (typeof elem.validate === 'function') {
                 this.valid = this.valid & elem.validate().valid;
             } else if (elem.elems) {
@@ -239,15 +239,15 @@ define([
         /**
          * Reset data from provider
          */
-        resetData: function () {
+        resetData: function() {
             this.elems().forEach(this.resetValue, this);
         },
 
         /**
          * Update 'applied' property with data from modal content
          */
-        applyData: function () {
-            var applied = {};
+        applyData: function() {
+            let applied = {};
 
             this.elems().forEach(this.gatherValues.bind(this, applied), this);
             this.applied = applied;
@@ -259,7 +259,7 @@ define([
          * @param {Array} applied
          * @param {HTMLElement} elem
          */
-        gatherValues: function (applied, elem) {
+        gatherValues: function(applied, elem) {
             if (typeof elem.value === 'function') {
                 applied[elem.name] = elem.value();
             } else if (elem.elems) {
@@ -272,7 +272,7 @@ define([
          *
          * @param {HTMLElement} elem
          */
-        setPrevValues: function (elem) {
+        setPrevValues: function(elem) {
             if (typeof elem.value === 'function') {
                 this.modal.focus();
                 elem.value(this.applied[elem.name]);
@@ -288,8 +288,8 @@ define([
          * must contain actionName and targetName and
          * can contain params
          */
-        triggerAction: function (action) {
-            var targetName = action.targetName,
+        triggerAction: function(action) {
+            let targetName = action.targetName,
                 params = action.params || [],
                 actionName = action.actionName,
                 target;
@@ -305,11 +305,11 @@ define([
         /**
          * Override modal buttons callback placeholders with real callbacks
          */
-        overrideModalButtonCallback: function () {
-            var buttons = this.options.buttons;
+        overrideModalButtonCallback: function() {
+            let buttons = this.options.buttons;
 
             if (buttons && buttons.length) {
-                buttons.forEach(function (button) {
+                buttons.forEach(function(button) {
                     button.click = this.getButtonClickHandler(button.actions);
                 }, this);
             }
@@ -318,19 +318,19 @@ define([
         /**
          * Generate button click handler based on button's 'actions' configuration
          */
-        getButtonClickHandler: function (actionsConfig) {
-            var actions = actionsConfig.map(
-                function (actionConfig) {
+        getButtonClickHandler: function(actionsConfig) {
+            let actions = actionsConfig.map(
+                function(actionConfig) {
                     if (_.isObject(actionConfig)) {
                         return this.triggerAction.bind(this, actionConfig);
                     }
 
-                    return this[actionConfig] ? this[actionConfig].bind(this) : function () {};
+                    return this[actionConfig] ? this[actionConfig].bind(this) : function() {};
                 }, this);
 
-            return function () {
+            return function() {
                 actions.forEach(
-                    function (action) {
+                    function(action) {
                         action();
                     }
                 );
@@ -342,7 +342,7 @@ define([
          * returning elems values to the previous state,
          * and close modal
          */
-        actionCancel: function () {
+        actionCancel: function() {
             this.elems().forEach(this.setPrevValues, this);
             this.closeModal();
         },
@@ -351,13 +351,13 @@ define([
          * Accept changes in modal by not preventing them.
          * Can be extended by exporting 'gatherValues' result somewhere
          */
-        actionDone: function () {
+        actionDone: function() {
             this.valid = true;
             this.elems().forEach(this.validate, this);
 
             if (this.valid) {
                 this.closeModal();
             }
-        }
+        },
     });
 });

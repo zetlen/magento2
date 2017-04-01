@@ -16,14 +16,14 @@ define([
     'Magento_Checkout/js/action/get-payment-information',
     'Magento_Checkout/js/model/totals',
     'mage/translate',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function ($, quote, urlManager, errorProcessor, messageContainer, storage, getPaymentInformationAction, totals, $t,
+    'Magento_Checkout/js/model/full-screen-loader',
+], function($, quote, urlManager, errorProcessor, messageContainer, storage, getPaymentInformationAction, totals, $t,
   fullScreenLoader
 ) {
     'use strict';
 
-    return function (isApplied) {
-        var quoteId = quote.getQuoteId(),
+    return function(isApplied) {
+        let quoteId = quote.getQuoteId(),
             url = urlManager.getCancelCouponUrl(quoteId),
             message = $t('Your coupon was successfully removed.');
 
@@ -33,20 +33,20 @@ define([
         return storage.delete(
             url,
             false
-        ).done(function () {
-            var deferred = $.Deferred();
+        ).done(function() {
+            let deferred = $.Deferred();
 
             totals.isLoading(true);
             getPaymentInformationAction(deferred);
-            $.when(deferred).done(function () {
+            $.when(deferred).done(function() {
                 isApplied(false);
                 totals.isLoading(false);
                 fullScreenLoader.stopLoader();
             });
             messageContainer.addSuccessMessage({
-                'message': message
+                'message': message,
             });
-        }).fail(function (response) {
+        }).fail(function(response) {
             totals.isLoading(false);
             fullScreenLoader.stopLoader();
             errorProcessor.process(response, messageContainer);

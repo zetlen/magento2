@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+let config = {
     map: {
         '*': {
-            'taxToggle': 'Magento_Weee/tax-toggle'
-        }
-    }
+            'taxToggle': 'Magento_Weee/tax-toggle',
+        },
+    },
 };

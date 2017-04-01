@@ -15,10 +15,11 @@
  */
 window.SwaggerTranslator = {
 
-    _words:[],
+    _words: [],
 
     translate: function(sel) {
-      var $this = this;
+      let $this = this;
+
       sel = sel || '[data-sw-translate]';
 
       $(sel).each(function() {
@@ -35,5 +36,5 @@ window.SwaggerTranslator = {
 
     learn: function(wordsMap) {
       this._words = wordsMap;
-    }
+    },
 };

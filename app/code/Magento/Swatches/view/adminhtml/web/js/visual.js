@@ -11,12 +11,12 @@ define([
     'uiRegistry',
     'jquery/colorpicker/js/colorpicker',
     'prototype',
-    'jquery/ui'
-], function (jQuery, mageTemplate, rg) {
+    'jquery/ui',
+], function(jQuery, mageTemplate, rg) {
     'use strict';
 
-    return function (config) {
-        var swatchOptionVisualDefaultInputType = 'radio',
+    return function(config) {
+        let swatchOptionVisualDefaultInputType = 'radio',
             swatchVisualOption = {
                 table: $('swatch-visual-options-table'),
                 itemCount: 0,
@@ -31,15 +31,15 @@ define([
                  * @param {Object} data
                  * @param {Object} render
                  */
-                add: function (data, render) {
-                    var isNewOption = false,
+                add: function(data, render) {
+                    let isNewOption = false,
                         element;
 
                     if (typeof data.id == 'undefined') {
                         data = {
                             'id': 'option_' + this.itemCount,
                             'sort_order': this.itemCount + 1,
-                            'empty_class': 'unavailable'
+                            'empty_class': 'unavailable',
                         };
                         isNewOption = true;
                     } else if (data.defaultswatch0 === '') {
@@ -51,7 +51,7 @@ define([
                     }
 
                     element = this.template({
-                        data: data
+                        data: data,
                     });
 
                     if (isNewOption && !this.isReadOnly) {
@@ -69,8 +69,8 @@ define([
                 /**
                  * ColorPicker initialization process
                  */
-                initColorPicker: function () {
-                    var element = this,
+                initColorPicker: function() {
+                    let element = this,
                         hiddenColorPicker = !jQuery(element).data('colorpickerId');
 
                     jQuery(this).ColorPicker({
@@ -78,8 +78,8 @@ define([
                         /**
                          * ColorPicker onShow action
                          */
-                        onShow: function () {
-                            var color = jQuery(element).parent().parent().prev().prev('input').val(),
+                        onShow: function() {
+                            let color = jQuery(element).parent().parent().prev().prev('input').val(),
                                 menu = jQuery(this).parents('.swatch_sub-menu_container');
 
                             menu.hide();
@@ -94,14 +94,14 @@ define([
                          * @param {String} rgb
                          * @param {String} el
                          */
-                        onSubmit: function (hsb, hex, rgb, el) {
-                            var container = jQuery(el).parent().parent().prev();
+                        onSubmit: function(hsb, hex, rgb, el) {
+                            let container = jQuery(el).parent().parent().prev();
 
                             jQuery(el).ColorPickerHide();
                             container.parent().removeClass('unavailable');
                             container.prev('input').val('#' + hex);
                             container.css('background', '#' + hex);
-                        }
+                        },
                     });
 
                     if (hiddenColorPicker) {
@@ -114,12 +114,12 @@ define([
                  *
                  * @param {Object} event
                  */
-                remove: function (event) {
-                    var element = $(Event.findElement(event, 'tr')),
+                remove: function(event) {
+                    let element = $(Event.findElement(event, 'tr')),
                         elementFlags; // !!! Button already have table parent in safari
 
                     // Safari workaround
-                    element.ancestors().each(function (parentItem) {
+                    element.ancestors().each(function(parentItem) {
                         if (parentItem.hasClassName('option-row')) {
                             element = parentItem;
                             throw $break;
@@ -146,7 +146,7 @@ define([
                 /**
                  * Update items count field
                  */
-                updateItemsCountField: function () {
+                updateItemsCountField: function() {
                     $('swatch-visual-option-count-check').value = this.totalItems > 0 ? '1' : '';
                 },
 
@@ -155,8 +155,8 @@ define([
                  *
                  * @param {String} id
                  */
-                enableNewOptionDeleteButton: function (id) {
-                    $$('#delete_button_swatch_container_' + id + ' button').each(function (button) {
+                enableNewOptionDeleteButton: function(id) {
+                    $$('#delete_button_swatch_container_' + id + ' button').each(function(button) {
                         button.enable();
                         button.removeClassName('disabled');
                     });
@@ -165,14 +165,14 @@ define([
                 /**
                  * Bind remove button
                  */
-                bindRemoveButtons: function () {
+                bindRemoveButtons: function() {
                     jQuery('#swatch-visual-options-panel').on('click', '.delete-option', this.remove.bind(this));
                 },
 
                 /**
                  * Render options
                  */
-                render: function () {
+                render: function() {
                     Element.insert($$('[data-role=swatch-visual-options-container]')[0], this.elements);
                     this.elements = '';
                 },
@@ -186,8 +186,8 @@ define([
                  * @param {Number} delay
                  * @returns {Boolean}
                  */
-                renderWithDelay: function (data, from, step, delay) {
-                    var arrayLength = data.length,
+                renderWithDelay: function(data, from, step, delay) {
+                    let arrayLength = data.length,
                         len;
 
                     for (len = from + step; from < len && from < arrayLength; from++) {
@@ -208,13 +208,13 @@ define([
                 /**
                  * Ignore validate action
                  */
-                ignoreValidate: function () {
-                    var ignore = '.ignore-validate input, ' +
+                ignoreValidate: function() {
+                    let ignore = '.ignore-validate input, ' +
                         '.ignore-validate select, ' +
                         '.ignore-validate textarea';
 
                     jQuery('#edit_form').data('validator').settings.forceIgnore = ignore;
-                }
+                },
             };
 
         if ($('add_new_swatch_visual_option_button')) {
@@ -225,7 +225,7 @@ define([
             );
         }
 
-        jQuery('#swatch-visual-options-panel').on('render', function () {
+        jQuery('#swatch-visual-options-panel').on('render', function() {
             swatchVisualOption.ignoreValidate();
 
             if (swatchVisualOption.rendered) {
@@ -240,8 +240,8 @@ define([
                 swatchVisualOption.initColorPicker
             );
         });
-        jQuery('body').on('click', function (event) {
-            var element = jQuery(event.target);
+        jQuery('body').on('click', function(event) {
+            let element = jQuery(event.target);
 
             if (
                 element.parents('.swatch_sub-menu_container').length === 1 ||
@@ -253,7 +253,7 @@ define([
         });
 
         if (config.isSortable) {
-            jQuery(function ($) {
+            jQuery(function($) {
                 $('[data-role=swatch-visual-options-container]').sortable({
                     distance: 8,
                     tolerance: 'pointer',
@@ -263,13 +263,13 @@ define([
                     /**
                      * Update component
                      */
-                    update: function () {
+                    update: function() {
                         $('[data-role=swatch-visual-options-container] [data-role=order]').each(
-                            function (index, element) {
+                            function(index, element) {
                                 $(element).val(index + 1);
                             }
                         );
-                    }
+                    },
                 });
             });
         }
@@ -279,9 +279,8 @@ define([
 
         rg.set('swatch-visual-options-panel', swatchVisualOption);
 
-        jQuery(function ($) {
-
-            var swatchComponents = {
+        jQuery(function($) {
+            let swatchComponents = {
 
                 /**
                  * div wrapper for to hide all evement
@@ -309,14 +308,14 @@ define([
                  * @this {swatchComponents}
                  * @public
                  */
-                create: function () {
+                create: function() {
                     this.wrapper = $('<div>').css({
-                        display: 'none'
+                        display: 'none',
                     }).appendTo($('body'));
 
                     this.iframe = $('<iframe />', {
-                        id:  'upload_iframe',
-                        name: 'upload_iframe'
+                        id: 'upload_iframe',
+                        name: 'upload_iframe',
                     }).appendTo(this.wrapper);
 
                     this.form = $('<form />', {
@@ -326,21 +325,21 @@ define([
                         method: 'post',
                         enctype: 'multipart/form-data',
                         class: 'ignore-validate',
-                        action: config.uploadActionUrl
+                        action: config.uploadActionUrl,
                     }).appendTo(this.wrapper);
 
                     this.inputFile = $('<input />', {
                         type: 'file',
                         name: 'datafile',
-                        class: 'swatch_option_file'
+                        class: 'swatch_option_file',
                     }).appendTo(this.form);
 
                     $('<input />', {
                         type: 'hidden',
                         name: 'form_key',
-                        value: FORM_KEY
+                        value: FORM_KEY,
                     }).appendTo(this.form);
-                }
+                },
             };
 
             /**
@@ -351,20 +350,20 @@ define([
             /**
              * Register event for swatch input[type=file] change
              */
-            swatchComponents.inputFile.change(function () {
-                var container = $('#' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
+            swatchComponents.inputFile.change(function() {
+                let container = $('#' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
 
                     /**
                      * @this {iframe}
                      */
-                    iframeHandler = function () {
-                        var imageParams = $.parseJSON($(this).contents().find('body').html()),
+                    iframeHandler = function() {
+                        let imageParams = $.parseJSON($(this).contents().find('body').html()),
                             fullMediaUrl = imageParams['swatch_path'] + imageParams['file_path'];
 
                         container.prev('input').val(imageParams['file_path']);
                         container.css({
                             'background-image': 'url(' + fullMediaUrl + ')',
-                            'background-size': 'cover'
+                            'background-size': 'cover',
                         });
                         container.parent().removeClass('unavailable');
                     };
@@ -378,7 +377,7 @@ define([
             /**
              * Register event for choose "upload image" option
              */
-            $(document).on('click', '.btn_choose_file_upload', function () {
+            $(document).on('click', '.btn_choose_file_upload', function() {
                 swatchComponents.inputFile.attr('data-called-by', $(this).attr('id'));
                 swatchComponents.inputFile.click();
             });
@@ -386,8 +385,8 @@ define([
             /**
              * Register event for remove option
              */
-            $(document).on('click', '.btn_remove_swatch', function () {
-                var optionPanel = $(this).parents().eq(2);
+            $(document).on('click', '.btn_remove_swatch', function() {
+                let optionPanel = $(this).parents().eq(2);
 
                 optionPanel.children('input').val('');
                 optionPanel.children('.swatch_window').css('background', '');
@@ -400,7 +399,7 @@ define([
             /**
              * Toggle color upload chooser
              */
-            $(document).on('click', '.swatch_window', function () {
+            $(document).on('click', '.swatch_window', function() {
                 $(this).next('div').toggle();
             });
         });

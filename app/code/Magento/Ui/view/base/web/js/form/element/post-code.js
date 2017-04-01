@@ -9,22 +9,22 @@
 define([
     'underscore',
     'uiRegistry',
-    './abstract'
-], function (_, registry, Abstract) {
+    './abstract',
+], function(_, registry, Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             imports: {
-                update: '${ $.parentName }.country_id:value'
-            }
+                update: '${ $.parentName }.country_id:value',
+            },
         },
 
         /**
          * @param {String} value
          */
-        update: function (value) {
-            var country = registry.get(this.parentName + '.' + 'country_id'),
+        update: function(value) {
+            let country = registry.get(this.parentName + '.' + 'country_id'),
                 options = country.indexedOptions,
                 option;
 
@@ -42,6 +42,6 @@ define([
             }
 
             this.required(!option['is_zipcode_optional']);
-        }
+        },
     });
 });

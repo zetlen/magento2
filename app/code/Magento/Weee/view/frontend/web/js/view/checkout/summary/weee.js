@@ -7,13 +7,13 @@ define([
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/totals',
-    'Magento_Catalog/js/price-utils'
-], function (Component, quote, totals) {
+    'Magento_Catalog/js/price-utils',
+], function(Component, quote, totals) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Weee/checkout/summary/weee'
+            template: 'Magento_Weee/checkout/summary/weee',
         },
         isIncludedInSubtotal: window.checkoutConfig.isIncludedInSubtotal,
         totals: totals.totals,
@@ -21,8 +21,8 @@ define([
         /**
          * @returns {Number}
          */
-        getWeeeTaxSegment: function () {
-            var weee = totals.getSegment('weee_tax') || totals.getSegment('weee');
+        getWeeeTaxSegment: function() {
+            let weee = totals.getSegment('weee_tax') || totals.getSegment('weee');
 
             if (weee !== null && weee.hasOwnProperty('value')) {
                 return weee.value;
@@ -35,7 +35,7 @@ define([
          * Get weee value
          * @returns {String}
          */
-        getValue: function () {
+        getValue: function() {
             return this.getFormattedPrice(this.getWeeeTaxSegment());
         },
 
@@ -43,8 +43,8 @@ define([
          * Weee display flag
          * @returns {Boolean}
          */
-        isDisplayed: function () {
+        isDisplayed: function() {
             return this.isFullMode() && this.getWeeeTaxSegment() > 0;
-        }
+        },
     });
 });

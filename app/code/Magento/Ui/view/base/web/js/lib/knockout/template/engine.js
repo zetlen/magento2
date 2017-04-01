@@ -6,18 +6,18 @@ define([
     'ko',
     'underscore',
     './observable_source',
-    './renderer'
-], function (ko, _, Source, renderer) {
+    './renderer',
+], function(ko, _, Source, renderer) {
     'use strict';
 
-    var RemoteTemplateEngine,
+    let RemoteTemplateEngine,
         NativeTemplateEngine = ko.nativeTemplateEngine,
         sources = {};
 
     /**
      * Remote template engine class. Is used to be able to load remote templates via knockout template binding.
      */
-    RemoteTemplateEngine = function () {};
+    RemoteTemplateEngine = function() {};
 
     /**
      * Creates unique template identifier based on template name and it's extenders (optional)
@@ -38,8 +38,8 @@ define([
      * @param  {*} template
      * @returns {TemplateSource} Object with methods 'nodes' and 'data'.
      */
-    RemoteTemplateEngine.prototype.makeTemplateSource = function (template) {
-        var source,
+    RemoteTemplateEngine.prototype.makeTemplateSource = function(template) {
+        let source,
             templateId;
 
         if (typeof template === 'string') {
@@ -50,7 +50,7 @@ define([
                 source = new Source(template);
                 sources[templateId] = source;
 
-                renderer.render(template).done(function (rendered) {
+                renderer.render(template).done(function(rendered) {
                     source.nodes(rendered);
                 });
             }
@@ -71,8 +71,8 @@ define([
      * @param  {TemplateSource} templateSource - object with methods 'nodes' and 'data'.
      * @return {Array} - array of html elements
      */
-    RemoteTemplateEngine.prototype.renderTemplateSource = function (templateSource) {
-        var nodes = templateSource.nodes();
+    RemoteTemplateEngine.prototype.renderTemplateSource = function(templateSource) {
+        let nodes = templateSource.nodes();
 
         return ko.utils.cloneNodes(nodes);
     };
@@ -86,8 +86,8 @@ define([
      * @param  {HTMLElement} templateDocument - document
      * @return {Array} - array of html elements
      */
-    RemoteTemplateEngine.prototype.renderTemplate = function (template, bindingContext, options, templateDocument) {
-        var templateSource = this.makeTemplateSource(template, templateDocument, options);
+    RemoteTemplateEngine.prototype.renderTemplate = function(template, bindingContext, options, templateDocument) {
+        let templateSource = this.makeTemplateSource(template, templateDocument, options);
 
         return this.renderTemplateSource(templateSource, bindingContext, options);
     };

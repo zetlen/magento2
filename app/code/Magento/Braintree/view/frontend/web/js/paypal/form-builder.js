@@ -6,9 +6,9 @@ define(
     [
         'jquery',
         'underscore',
-        'mage/template'
+        'mage/template',
     ],
-    function ($, _, mageTemplate) {
+    function($, _, mageTemplate) {
         'use strict';
 
         return {
@@ -17,8 +17,8 @@ define(
              * @param {Object} formData
              * @returns {*|jQuery}
              */
-            build: function (formData) {
-                var formTmpl = mageTemplate('<form action="<%= data.action %>"' +
+            build: function(formData) {
+                let formTmpl = mageTemplate('<form action="<%= data.action %>"' +
                     ' method="POST" hidden enctype="application/x-www-form-urlencoded">' +
                         '<% _.each(data.fields, function(val, key){ %>' +
                             '<input value=\'<%= val %>\' name="<%= key %>" type="hidden">' +
@@ -28,10 +28,10 @@ define(
                 return $(formTmpl({
                     data: {
                         action: formData.action,
-                        fields: formData.fields
-                    }
+                        fields: formData.fields,
+                    },
                 })).appendTo($('[data-container="body"]'));
-            }
+            },
         };
     }
 );

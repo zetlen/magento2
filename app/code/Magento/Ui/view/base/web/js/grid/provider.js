@@ -14,8 +14,8 @@ define([
     'uiLayout',
     'Magento_Ui/js/modal/alert',
     'mage/translate',
-    'uiElement'
-], function ($, _, utils, resolver, layout, alert, $t, Element) {
+    'uiElement',
+], function($, _, utils, resolver, layout, alert, $t, Element) {
     'use strict';
 
     return Element.extend({
@@ -25,12 +25,12 @@ define([
                 component: 'Magento_Ui/js/grid/data-storage',
                 provider: '${ $.storageConfig.name }',
                 name: '${ $.name }_storage',
-                updateUrl: '${ $.update_url }'
+                updateUrl: '${ $.update_url }',
             },
             listens: {
                 params: 'onParamsChange',
-                requestConfig: 'updateRequestConfig'
-            }
+                requestConfig: 'updateRequestConfig',
+            },
         },
 
         /**
@@ -38,7 +38,7 @@ define([
          *
          * @returns {Provider} Chainable.
          */
-        initialize: function () {
+        initialize: function() {
             utils.limit(this, 'onParamsChange', 5);
             _.bindAll(this, 'onReload');
 
@@ -58,7 +58,7 @@ define([
          *
          * @returns {Provider} Chainable.
          */
-        initStorage: function () {
+        initStorage: function() {
             layout([this.storageConfig]);
 
             return this;
@@ -69,10 +69,10 @@ define([
          *
          * @returns {Provider} Chainable.
          */
-        clearData: function () {
+        clearData: function() {
             this.setData({
                 items: [],
-                totalRecords: 0
+                totalRecords: 0,
             });
 
             return this;
@@ -84,7 +84,7 @@ define([
          * @param {Object} data - New data object.
          * @returns {Provider} Chainable.
          */
-        setData: function (data) {
+        setData: function(data) {
             data = this.processData(data);
 
             this.set('data', data);
@@ -98,10 +98,10 @@ define([
          * @param {Object} data - Data to be processed.
          * @returns {Object}
          */
-        processData: function (data) {
-            var items = data.items;
+        processData: function(data) {
+            let items = data.items;
 
-            _.each(items, function (record, index) {
+            _.each(items, function(record, index) {
                 record._rowIndex = index;
             });
 
@@ -113,8 +113,8 @@ define([
          *
          * @returns {Promise} Reload promise object.
          */
-        reload: function (options) {
-            var request = this.storage().getData(this.params, options);
+        reload: function(options) {
+            let request = this.storage().getData(this.params, options);
 
             this.trigger('reload');
 
@@ -128,7 +128,7 @@ define([
         /**
          * Handles changes of 'params' object.
          */
-        onParamsChange: function () {
+        onParamsChange: function() {
             // It's necessary to make a reload only
             // after the initial loading has been made.
             if (!this.firstLoad) {
@@ -139,13 +139,13 @@ define([
         /**
          * Handles reload error.
          */
-        onError: function (xhr) {
+        onError: function(xhr) {
             if (xhr.statusText === 'abort') {
                 return;
             }
 
             alert({
-                content: $t('Something went wrong.')
+                content: $t('Something went wrong.'),
             });
         },
 
@@ -154,7 +154,7 @@ define([
          *
          * @param {Object} data - Retrieved data object.
          */
-        onReload: function (data) {
+        onReload: function(data) {
             this.firstLoad = false;
 
             this.setData(data)
@@ -166,10 +166,10 @@ define([
          *
          * @param {Object} requestConfig
          */
-        updateRequestConfig: function (requestConfig) {
+        updateRequestConfig: function(requestConfig) {
             if (this.storage()) {
                 _.extend(this.storage().requestConfig, requestConfig);
             }
-        }
+        },
     });
 });

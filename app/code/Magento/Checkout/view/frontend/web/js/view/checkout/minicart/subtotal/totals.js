@@ -5,8 +5,8 @@
 define([
     'ko',
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (ko, Component, customerData) {
+    'Magento_Customer/js/customer-data',
+], function(ko, Component, customerData) {
     'use strict';
 
     return Component.extend({
@@ -15,9 +15,9 @@ define([
         /**
          * @override
          */
-        initialize: function () {
+        initialize: function() {
             this._super();
             this.cart = customerData.get('cart');
-        }
+        },
     });
 });

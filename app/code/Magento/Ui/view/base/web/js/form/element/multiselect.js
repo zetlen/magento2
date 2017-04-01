@@ -9,8 +9,8 @@
 define([
     'underscore',
     'mageUtils',
-    './select'
-], function (_, utils, Select) {
+    './select',
+], function(_, utils, Select) {
     'use strict';
 
     return Select.extend({
@@ -18,14 +18,14 @@ define([
             size: 5,
             elementTmpl: 'ui/form/element/multiselect',
             listens: {
-                value: 'setDifferedFromDefault setPrepareToSendData'
-            }
+                value: 'setDifferedFromDefault setPrepareToSendData',
+            },
         },
 
         /**
          * @inheritdoc
          */
-        setInitialValue: function () {
+        setInitialValue: function() {
             this._super();
 
             this.initialValue = utils.copy(this.initialValue);
@@ -36,7 +36,7 @@ define([
         /**
          * @inheritdoc
          */
-        normalizeData: function (value) {
+        normalizeData: function(value) {
             if (utils.isEmpty(value)) {
                 value = [];
             }
@@ -51,7 +51,7 @@ define([
          *
          * @param {Array} data - current component value
          */
-        setPrepareToSendData: function (data) {
+        setPrepareToSendData: function(data) {
             if (!data.length) {
                 data = '';
             }
@@ -62,14 +62,14 @@ define([
         /**
          * @inheritdoc
          */
-        getInitialValue: function () {
-            var values = [
+        getInitialValue: function() {
+            let values = [
                     this.normalizeData(this.source.get(this.dataScope)),
-                    this.normalizeData(this.default)
+                    this.normalizeData(this.default),
                 ],
                 value;
 
-            values.some(function (v) {
+            values.some(function(v) {
                 return _.isArray(v) && (value = utils.copy(v)) && !_.isEmpty(v);
             });
 
@@ -79,8 +79,8 @@ define([
         /**
          * @inheritdoc
          */
-        hasChanged: function () {
-            var value = this.value(),
+        hasChanged: function() {
+            let value = this.value(),
                 initial = this.initialValue;
 
             return !utils.equalArrays(value, initial);
@@ -89,7 +89,7 @@ define([
         /**
          * @inheritdoc
          */
-        reset: function () {
+        reset: function() {
             this.value(utils.copy(this.initialValue));
             this.error(false);
 
@@ -99,11 +99,11 @@ define([
         /**
          * @inheritdoc
          */
-        clear: function () {
+        clear: function() {
             this.value([]);
             this.error(false);
 
             return this;
-        }
+        },
     });
 });
